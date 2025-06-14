@@ -17,26 +17,48 @@ const HomePage: React.FC = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [loadingError, setLoadingError] = useState<string | null>(null);
   const { fetchETFs, getETFCount, isLoading } = useETFData();
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Load top 50 ETFs for homepage and get total count
-        const [etfData, count] = await Promise.all([
-          fetchETFs(50),
-          getETFCount()
-        ]);
+        console.log('HomePage: Starting to load ETF data...');
+        setLoadingError(null);
         
-        setEtfs(etfData || []);
+        // Load top 100 ETFs for homepage to have more data to work with
+        const etfData = await fetchETFs(100);
+        console.log('HomePage: Received ETF data:', etfData?.length || 0, 'items');
+        
+        if (etfData && etfData.length > 0) {
+          setEtfs(etfData);
+          console.log('HomePage: ETF data set successfully');
+        } else {
+          console.warn('HomePage: No ETF data received');
+          setLoadingError('Žádná ETF data nebyla načtena');
+        }
+
+        // Get total count separately
+        const count = await getETFCount();
+        console.log('HomePage: Total ETF count:', count);
         setTotalCount(count);
+        
       } catch (error) {
-        console.error('Error loading homepage data:', error);
+        console.error('HomePage: Error loading data:', error);
+        setLoadingError(error instanceof Error ? error.message : 'Neznámá chyba');
       }
     };
     
     loadData();
   }, [fetchETFs, getETFCount]);
+
+  // Debug log when etfs change
+  useEffect(() => {
+    console.log('HomePage: ETFs state updated, length:', etfs.length);
+    if (etfs.length > 0) {
+      console.log('HomePage: First ETF:', etfs[0]);
+    }
+  }, [etfs]);
 
   // Get unique categories from loaded ETFs
   const categories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
@@ -51,7 +73,7 @@ const HomePage: React.FC = () => {
       const matchesCategory = categoryFilter === 'all' || etf.category === categoryFilter;
       return matchesSearch && matchesCategory;
     })
-    .slice(0, 10); // Show only top 10 on homepage
+    .slice(0, 15); // Show top 15 on homepage instead of 10
 
   const brokers = [
     {
@@ -217,6 +239,13 @@ const HomePage: React.FC = () => {
               <div className="text-center py-8">
                 <p>Načítání ETF fondů...</p>
               </div>
+            ) : loadingError ? (
+              <div className="text-center py-8">
+                <p className="text-red-600 mb-4">Chyba při načítání: {loadingError}</p>
+                <Button onClick={() => window.location.reload()}>
+                  Zkusit znovu
+                </Button>
+              </div>
             ) : filteredETFs.length > 0 ? (
               filteredETFs.map((etf) => (
                 <Card key={etf.isin} className="hover:shadow-md transition-shadow">
@@ -270,14 +299,24 @@ const HomePage: React.FC = () => {
                   </CardContent>
                 </Card>
               ))
+            ) : etfs.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Žádná ETF data nejsou k dispozici.</p>
+                <Button 
+                  onClick={() => window.location.reload()}
+                  className="mt-4"
+                >
+                  Obnovit stránku
+                </Button>
+              </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-600">Žádné ETF fondy nenalezeny.</p>
+                <p className="text-gray-600">Žádné ETF fondy nenalezeny podle zadaných kritérií.</p>
               </div>
             )}
           </div>
 
-          {totalCount > 10 && (
+          {totalCount > 15 && filteredETFs.length > 0 && (
             <div className="text-center mt-8">
               <Button asChild>
                 <Link to="/srovnani-etf">Zobrazit všech {totalCount.toLocaleString()} ETF fondů</Link>
