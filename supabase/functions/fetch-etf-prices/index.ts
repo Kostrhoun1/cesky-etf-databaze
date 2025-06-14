@@ -41,32 +41,39 @@ serve(async (req) => {
         ].filter(pair => pair.ticker && pair.ticker.trim() !== '');
 
         let priceData = null;
+        let triedVariants: Array<{attempt: string, ticker: string, exchange: string | null, suffix: string}> = [];
 
         for (const { ticker, exchange } of tickerPairs) {
           const suffix = getYahooSuffix(exchange);
 
-          // Nejprve zkusíme ticker+suffix
           if (suffix) {
             const tickerWithSuffix = `${ticker}${suffix}`;
+            triedVariants.push({ attempt: 'ticker+suffix', ticker: tickerWithSuffix, exchange, suffix });
+            console.log(`[ETF: ${etf.name}] Yahoo dotaz (ticker+suffix):`, tickerWithSuffix, `(exchange: ${exchange})`);
             priceData = await fetchYahooFinanceData(tickerWithSuffix);
             if (priceData && priceData.currentPrice) break;
             await delay(100);
           }
           // Pak čistý ticker bez suffixu
+          triedVariants.push({ attempt: 'tickerRaw', ticker, exchange, suffix: '' });
+          console.log(`[ETF: ${etf.name}] Yahoo dotaz (raw ticker):`, ticker, `(exchange: ${exchange})`);
           priceData = await fetchYahooFinanceData(ticker);
           if (priceData && priceData.currentPrice) break;
           await delay(100);
         }
 
         if (priceData && priceData.currentPrice) {
+          console.log(`[ETF: ${etf.name}] ÚSPĚCH - cena nalezena`, priceData.currentPrice);
           await updateEtfFund(etf.id, priceData);
           successCount++;
         } else {
+          console.error(`[ETF: ${etf.name}] CHYBA - cena nenalezena. Prozkoušeny varianty:`, JSON.stringify(triedVariants));
           errorCount++;
         }
 
         await delay(200);
-      } catch {
+      } catch (err) {
+        console.error(`[ETF: ${etf.name}] Neočekávaná chyba:`, err);
         errorCount++;
       }
     }
@@ -88,3 +95,4 @@ serve(async (req) => {
     });
   }
 });
+
