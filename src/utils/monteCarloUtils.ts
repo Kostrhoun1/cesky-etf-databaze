@@ -1,3 +1,4 @@
+
 import { AssetAllocation, AssetData, SimulationParameters, SimulationResult, PortfolioMetrics } from '@/types/monteCarlo';
 
 // Historická data aktiv za posledních 30 let (1985-2024)
@@ -59,7 +60,7 @@ const ASSET_DATA: Record<string, AssetData> = {
   }
 };
 
-// Korelační matice založená na historických datech (1985-2024)
+// Zjednodušená korelační matice (hlavní vztahy)
 const CORRELATION_MATRIX = {
   usLargeStocks: { 
     usLargeStocks: 1.00, usSmallStocks: 0.85, internationalStocks: 0.78, 
@@ -129,57 +130,18 @@ const CORRELATION_MATRIX = {
   }
 };
 
-// Box-Muller transformace pro generování normálního rozdělení
-function generateNormalRandom(): number {
-  let u = 0, v = 0;
-  while(u === 0) u = Math.random(); // Converting [0,1) to (0,1)
-  while(v === 0) v = Math.random();
-  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-}
-
-// Cholesky dekompozice pro korelované náhodné proměnné
-function choleskyDecomposition(correlationMatrix: number[][]): number[][] {
-  const n = correlationMatrix.length;
-  const L = Array(n).fill(0).map(() => Array(n).fill(0));
-  
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j <= i; j++) {
-      if (i === j) {
-        let sum = 0;
-        for (let k = 0; k < j; k++) {
-          sum += L[j][k] * L[j][k];
-        }
-        L[j][j] = Math.sqrt(correlationMatrix[j][j] - sum);
-      } else {
-        let sum = 0;
-        for (let k = 0; k < j; k++) {
-          sum += L[i][k] * L[j][k];
-        }
-        L[i][j] = (correlationMatrix[i][j] - sum) / L[j][j];
-      }
-    }
-  }
-  
-  return L;
-}
-
 // Výpočet očekávaného výnosu a volatility portfolia
 export function calculatePortfolioMetrics(allocation: AssetAllocation): PortfolioMetrics {
   const assets = Object.keys(allocation) as (keyof AssetAllocation)[];
   const weights = assets.map(asset => allocation[asset] / 100);
   
-  console.log('=== DEBUG: Portfolio Metrics Calculation ===');
+  console.log('=== Portfolio Metrics Calculation ===');
   console.log('Allocation:', allocation);
-  console.log('Weights:', weights);
   
   // Očekávaný výnos
   const expectedReturn = assets.reduce((sum, asset, i) => {
-    const contribution = weights[i] * ASSET_DATA[asset].annualReturn;
-    console.log(`${asset}: weight=${weights[i]}, return=${ASSET_DATA[asset].annualReturn}, contribution=${contribution}`);
-    return sum + contribution;
+    return sum + weights[i] * ASSET_DATA[asset].annualReturn;
   }, 0);
-  
-  console.log('Expected Annual Return:', expectedReturn);
   
   // Volatilita portfolia (s korelacemi)
   let variance = 0;
@@ -194,43 +156,40 @@ export function calculatePortfolioMetrics(allocation: AssetAllocation): Portfoli
   }
   
   const volatility = Math.sqrt(variance);
-  const sharpeRatio = expectedReturn / volatility; // Zjednodušený Sharpe ratio
+  const sharpeRatio = expectedReturn / volatility;
+  
+  console.log('Expected Return:', expectedReturn.toFixed(4));
+  console.log('Portfolio Volatility:', volatility.toFixed(4));
   
   return { expectedReturn, volatility, sharpeRatio };
 }
 
-// Generování korelovaných MĚSÍČNÍCH výnosů
-function generateCorrelatedMonthlyReturns(allocation: AssetAllocation): Record<string, number> {
+// Generování normálního rozdělení (Box-Muller)
+function generateNormalRandom(): number {
+  let u = 0, v = 0;
+  while(u === 0) u = Math.random();
+  while(v === 0) v = Math.random();
+  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}
+
+// Zjednodušené generování měsíčních výnosů (bez korelací pro začátek)
+function generateMonthlyReturns(allocation: AssetAllocation): Record<string, number> {
   const assets = Object.keys(allocation) as (keyof AssetAllocation)[];
+  const monthlyReturns: Record<string, number> = {};
   
-  // Vytvoř korelační matici
-  const correlationMatrix = assets.map(asset1 => 
-    assets.map(asset2 => CORRELATION_MATRIX[asset1][asset2])
-  );
-  
-  // Cholesky dekompozice
-  const L = choleskyDecomposition(correlationMatrix);
-  
-  // Generuj nezávislé náhodné proměnné
-  const independentReturns = assets.map(() => generateNormalRandom());
-  
-  // Aplikuj korelaci
-  const correlatedReturns: Record<string, number> = {};
-  assets.forEach((asset, i) => {
-    let correlatedReturn = 0;
-    for (let j = 0; j <= i; j++) {
-      correlatedReturn += L[i][j] * independentReturns[j];
-    }
-    
-    // Převeď na skutečný MĚSÍČNÍ výnos
+  assets.forEach(asset => {
     const assetData = ASSET_DATA[asset];
-    const monthlyExpectedReturn = assetData.annualReturn / 12;
-    const monthlyVolatility = assetData.volatility / Math.sqrt(12); // Škálování volatility na měsíc
     
-    correlatedReturns[asset] = monthlyExpectedReturn + correlatedReturn * monthlyVolatility;
+    // Převod na měsíční parametry
+    const monthlyExpectedReturn = assetData.annualReturn / 12;
+    const monthlyVolatility = assetData.volatility / Math.sqrt(12);
+    
+    // Generuj normálně distribuovaný náhodný výnos
+    const randomComponent = generateNormalRandom() * monthlyVolatility;
+    monthlyReturns[asset] = monthlyExpectedReturn + randomComponent;
   });
   
-  return correlatedReturns;
+  return monthlyReturns;
 }
 
 // Simulace jednoho scénáře
@@ -241,13 +200,9 @@ function simulateSinglePath(params: SimulationParameters): number[] {
   
   let currentValue = initialInvestment;
   
-  console.log('=== DEBUG: Single Path Simulation ===');
-  console.log('Parameters:', params);
-  
-  // Debug první pár měsíců
   for (let month = 1; month <= monthsTotal; month++) {
-    // Generuj měsíční výnosy (už jsou měsíční!)
-    const monthlyReturns = generateCorrelatedMonthlyReturns(allocation);
+    // Generuj měsíční výnosy
+    const monthlyReturns = generateMonthlyReturns(allocation);
     
     // Spočítej vážený výnos portfolia pro tento měsíc
     let portfolioReturn = 0;
@@ -256,25 +211,19 @@ function simulateSinglePath(params: SimulationParameters): number[] {
       portfolioReturn += weight * monthlyReturns[asset];
     });
     
-    if (month <= 3) { // Debug pouze první 3 měsíce
+    // Debug pro první simulaci a první 3 měsíce
+    if (month <= 3) {
       console.log(`Month ${month}:`);
-      console.log('  Monthly returns:', monthlyReturns);
-      console.log('  Portfolio monthly return:', portfolioReturn);
-      console.log('  Portfolio annual return equivalent:', portfolioReturn * 12);
+      console.log('  Portfolio monthly return:', (portfolioReturn * 100).toFixed(2) + '%');
+      console.log('  Annualized equivalent:', ((portfolioReturn * 12) * 100).toFixed(2) + '%');
     }
     
     // Aplikuj výnos a přidej měsíční příspěvek
-    const oldValue = currentValue;
     currentValue = currentValue * (1 + portfolioReturn) + monthlyContribution;
-    
-    if (month <= 3) {
-      console.log(`  Value before: ${oldValue}, after: ${currentValue}`);
-    }
     
     // Ulož hodnotu na konci roku
     if (month % 12 === 0) {
       values.push(currentValue);
-      console.log(`End of year ${month/12}: ${currentValue}`);
     }
   }
   
@@ -286,22 +235,28 @@ export async function runMonteCarloSimulation(params: SimulationParameters): Pro
   const { simulations, years } = params;
   const allSimulations: number[][] = [];
   
-  console.log('=== DEBUG: Monte Carlo Simulation Start ===');
-  console.log('Spouštím Monte Carlo simulaci s novými historickými daty...', params);
+  console.log('=== Monte Carlo Simulation Start ===');
+  console.log('Parameters:', params);
   
-  // Nejprve spočítej teoretické portfolio metriky
+  // Spočítej teoretické portfolio metriky
   const portfolioMetrics = calculatePortfolioMetrics(params.allocation);
-  console.log('Portfolio Metrics:', portfolioMetrics);
+  console.log('Theoretical Portfolio Metrics:', portfolioMetrics);
+  console.log('Expected annual return:', (portfolioMetrics.expectedReturn * 100).toFixed(2) + '%');
   
-  // Spusť první simulaci s detailním debugem
-  console.log('=== Running first simulation with detailed debug ===');
-  const firstPath = simulateSinglePath(params);
-  allSimulations.push(firstPath);
-  
-  // Spusť zbytek simulací bez debugu
-  for (let i = 1; i < simulations; i++) {
+  // Spusť simulace
+  for (let i = 0; i < simulations; i++) {
     const path = simulateSinglePath(params);
     allSimulations.push(path);
+    
+    // Debug první simulace
+    if (i === 0) {
+      console.log('=== First Simulation Results ===');
+      console.log('Final value:', path[path.length - 1]);
+      const totalReturn = (path[path.length - 1] / path[0]) - 1;
+      const annualizedReturn = Math.pow(1 + totalReturn, 1/years) - 1;
+      console.log('Total return:', (totalReturn * 100).toFixed(2) + '%');
+      console.log('Annualized return:', (annualizedReturn * 100).toFixed(2) + '%');
+    }
   }
   
   console.log('Simulace dokončena, zpracovávám výsledky...');
@@ -330,10 +285,17 @@ export async function runMonteCarloSimulation(params: SimulationParameters): Pro
     });
   }
   
-  console.log('=== DEBUG: Final Results ===');
-  console.log('Year 1 median:', results[1]?.percentile50);
-  console.log('Final year median:', results[results.length - 1]?.percentile50);
-  console.log('Výsledky zpracovány s historickými daty:', results);
+  // Debug finálních výsledků
+  const finalResult = results[results.length - 1];
+  const initialValue = results[0].mean;
+  const totalReturnMedian = (finalResult.percentile50 / initialValue) - 1;
+  const annualizedReturnMedian = Math.pow(1 + totalReturnMedian, 1/years) - 1;
+  
+  console.log('=== Final Results Analysis ===');
+  console.log('Median final value:', finalResult.percentile50);
+  console.log('Median total return:', (totalReturnMedian * 100).toFixed(2) + '%');
+  console.log('Median annualized return:', (annualizedReturnMedian * 100).toFixed(2) + '%');
+  console.log('Should be close to theoretical:', (portfolioMetrics.expectedReturn * 100).toFixed(2) + '%');
   
   return results;
 }
