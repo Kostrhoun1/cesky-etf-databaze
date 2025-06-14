@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Slider } from "@/components/ui/slider";
 import { runMonteCarloSimulation } from "@/utils/monteCarloUtils";
 import { AssetAllocation, SimulationResult } from "@/types/monteCarlo";
 import { ASSETS, ASSET_KEYS } from "@/utils/monteCarloUtils";
+import MonteCarloChart from "./MonteCarloChart";
 
 // Helper to construct empty allocation
 function getDefaultAllocation(): AssetAllocation {
@@ -146,7 +146,9 @@ const MonteCarloSimulator: React.FC = () => {
             <CardTitle>Výsledky simulace</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            {/* NOVÉ: GRAF */}
+            <MonteCarloChart results={results} />
+            <div className="space-y-4 mt-10">
               {results.filter((r) => r.year === investmentPeriod).map((result) => (
                 <div key={result.year} className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   <div className="p-4 bg-red-50 rounded-lg">
