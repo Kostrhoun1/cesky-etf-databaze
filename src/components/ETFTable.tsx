@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ETF } from '@/types/etf';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -28,6 +27,33 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
+
+  // Debug: Log TER values when component receives new ETFs
+  useEffect(() => {
+    if (etfs.length > 0) {
+      console.log('ETFTable received ETFs. Sample TER values:', 
+        etfs.slice(0, 5).map(etf => ({
+          name: etf.name,
+          ter: etf.ter,
+          ter_numeric: etf.ter_numeric,
+          typeof_ter_numeric: typeof etf.ter_numeric
+        }))
+      );
+      
+      // Check if any ETF has non-zero TER
+      const nonZeroTER = etfs.filter(etf => etf.ter_numeric && etf.ter_numeric > 0);
+      console.log(`Found ${nonZeroTER.length} ETFs with non-zero TER out of ${etfs.length} total`);
+      
+      if (nonZeroTER.length > 0) {
+        console.log('Examples of non-zero TER:', 
+          nonZeroTER.slice(0, 3).map(etf => ({
+            name: etf.name,
+            ter_numeric: etf.ter_numeric
+          }))
+        );
+      }
+    }
+  }, [etfs]);
 
   // Get unique categories
   const categories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
@@ -223,7 +249,12 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
                     </div>
                   </TableCell>
                   <TableCell>{etf.fund_provider}</TableCell>
-                  <TableCell className="text-right">{formatPercentage(etf.ter_numeric)}</TableCell>
+                  <TableCell className="text-right">
+                    {/* Debug: Show both raw value and formatted value */}
+                    <span title={`Raw: ${etf.ter_numeric} | Type: ${typeof etf.ter_numeric}`}>
+                      {formatPercentage(etf.ter_numeric)}
+                    </span>
+                  </TableCell>
                   <TableCell className="text-right">
                     {formatCurrency(etf.fund_size_numeric, etf.fund_size_currency)}
                   </TableCell>

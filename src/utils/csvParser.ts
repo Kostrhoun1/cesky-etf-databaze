@@ -8,6 +8,10 @@ export const parseCSV = (csvContent: string): ETF[] => {
   console.log('CSV Headers:', headers);
   console.log('Total lines:', lines.length);
   
+  // Debug: Check which headers contain TER
+  const terHeaders = headers.filter(h => h.toLowerCase().includes('ter'));
+  console.log('TER related headers:', terHeaders);
+  
   const etfs: ETF[] = [];
   
   for (let i = 1; i < lines.length; i++) {
@@ -23,6 +27,11 @@ export const parseCSV = (csvContent: string): ETF[] => {
     headers.forEach((header, index) => {
       const value = values[index]?.trim();
       
+      // Debug TER values specifically
+      if (header.toLowerCase().includes('ter')) {
+        console.log(`Processing TER field "${header}":`, value);
+      }
+      
       // Convert numeric fields
       if (header.includes('_numeric') || 
           header.includes('return_') || 
@@ -36,16 +45,41 @@ export const parseCSV = (csvContent: string): ETF[] => {
           header === 'correlation' ||
           header === 'tracking_error' ||
           header === 'information_ratio') {
-        etf[header] = value && value !== '' ? parseFloat(value) : 0;
+        const numValue = value && value !== '' ? parseFloat(value.replace(',', '.')) : 0;
+        etf[header] = numValue;
+        
+        // Debug TER numeric values
+        if (header === 'ter_numeric') {
+          console.log(`Converted ter_numeric "${value}" to:`, numValue);
+        }
       } else {
         etf[header] = value || '';
       }
     });
     
+    // Debug first few ETFs TER values
+    if (i <= 3) {
+      console.log(`ETF ${i} TER values:`, {
+        ter: etf.ter,
+        ter_numeric: etf.ter_numeric,
+        name: etf.name
+      });
+    }
+    
     etfs.push(etf as ETF);
   }
   
   console.log('Parsed ETFs:', etfs.length);
+  
+  // Debug: Check TER values in first few parsed ETFs
+  console.log('Sample TER values from parsed ETFs:', 
+    etfs.slice(0, 5).map(etf => ({
+      name: etf.name,
+      ter: etf.ter,
+      ter_numeric: etf.ter_numeric
+    }))
+  );
+  
   return etfs;
 };
 
