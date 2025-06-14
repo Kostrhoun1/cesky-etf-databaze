@@ -18,7 +18,8 @@ const ETFComparison: React.FC = () => {
     );
 
     const loadETFs = async () => {
-      const data = await fetchETFs();
+      console.log('Loading all ETFs for comparison page...');
+      const data = await fetchETFs(); // Load all ETFs for comparison page
       setEtfs(data || []);
     };
     loadETFs();

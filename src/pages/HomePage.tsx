@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -14,19 +13,31 @@ import { Search, TrendingUp, Shield, Calculator, BookOpen, BarChart } from 'luci
 
 const HomePage: React.FC = () => {
   const [etfs, setEtfs] = useState<ETF[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
-  const { fetchETFs, isLoading } = useETFData();
+  const { fetchETFs, getETFCount, isLoading } = useETFData();
 
   useEffect(() => {
-    const loadETFs = async () => {
-      const data = await fetchETFs();
-      setEtfs(data || []);
+    const loadData = async () => {
+      try {
+        // Load top 50 ETFs for homepage and get total count
+        const [etfData, count] = await Promise.all([
+          fetchETFs(50),
+          getETFCount()
+        ]);
+        
+        setEtfs(etfData || []);
+        setTotalCount(count);
+      } catch (error) {
+        console.error('Error loading homepage data:', error);
+      }
     };
-    loadETFs();
-  }, [fetchETFs]);
+    
+    loadData();
+  }, [fetchETFs, getETFCount]);
 
-  // Get unique categories
+  // Get unique categories from loaded ETFs
   const categories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
 
   // Filter ETFs for homepage display
@@ -169,7 +180,7 @@ const HomePage: React.FC = () => {
               Nejpopulárnější ETF fondy
             </h2>
             <p className="text-lg text-gray-600">
-              Vyberte si z naší databáze {etfs.length} ETF fondů
+              Vyberte si z naší databáze {totalCount.toLocaleString()} ETF fondů
             </p>
           </div>
 
@@ -265,10 +276,10 @@ const HomePage: React.FC = () => {
             )}
           </div>
 
-          {etfs.length > 10 && (
+          {totalCount > 10 && (
             <div className="text-center mt-8">
               <Button asChild>
-                <Link to="/srovnani-etf">Zobrazit všech {etfs.length} ETF fondů</Link>
+                <Link to="/srovnani-etf">Zobrazit všech {totalCount.toLocaleString()} ETF fondů</Link>
               </Button>
             </div>
           )}
