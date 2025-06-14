@@ -26,6 +26,7 @@ export type Database = {
           country_5_weight: number | null
           created_at: string
           current_price: number | null
+          degiro_free: boolean | null
           description_cs: string | null
           description_en: string | null
           distribution_frequency: string | null
@@ -155,6 +156,7 @@ export type Database = {
           country_5_weight?: number | null
           created_at?: string
           current_price?: number | null
+          degiro_free?: boolean | null
           description_cs?: string | null
           description_en?: string | null
           distribution_frequency?: string | null
@@ -284,6 +286,7 @@ export type Database = {
           country_5_weight?: number | null
           created_at?: string
           current_price?: number | null
+          degiro_free?: boolean | null
           description_cs?: string | null
           description_en?: string | null
           distribution_frequency?: string | null

@@ -25,6 +25,13 @@ const ETFTableRow: React.FC<ETFTableRowProps> = ({ etf }) => {
           {etf.primary_ticker && (
             <div className="text-xs text-blue-600">{etf.primary_ticker}</div>
           )}
+          {etf.degiro_free && (
+            <div className="mt-1">
+              <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                DEGIRO Free
+              </Badge>
+            </div>
+          )}
         </div>
       </TableCell>
       <TableCell>{etf.fund_provider}</TableCell>

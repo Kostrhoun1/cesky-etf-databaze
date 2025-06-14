@@ -46,6 +46,7 @@ export interface ETF {
   scraping_date: string;
   scraping_status: string;
   retry_count: number;
+  degiro_free: boolean;
   // Holdings (top 10)
   holding_1_name: string;
   holding_1_weight: number;

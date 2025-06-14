@@ -61,6 +61,7 @@ export const useETFData = () => {
         scraping_date: etf.scraping_date,
         scraping_status: etf.scraping_status,
         retry_count: etf.retry_count || 0,
+        degiro_free: etf.degiro_free || false,
         // Holdings
         holding_1_name: etf.holding_1_name,
         holding_1_weight: etf.holding_1_weight || 0,
