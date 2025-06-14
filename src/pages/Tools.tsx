@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Calculator, TrendingUp, BarChart } from 'lucide-react';
 import InvestmentCalculator from '@/components/tools/InvestmentCalculator';
 import FeeCalculator from '@/components/tools/FeeCalculator';
+import MonteCarloSimulator from '@/components/tools/MonteCarloSimulator';
 
 const Tools: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'calculator' | 'feeCalculator'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'calculator' | 'feeCalculator' | 'monteCarlo'>('overview');
 
   useEffect(() => {
     document.title = 'Investiční nástroje a kalkulačky - ETF průvodce.cz';
@@ -36,13 +38,13 @@ const Tools: React.FC = () => {
       tabName: 'feeCalculator'
     },
     {
-      title: 'Portfolio backtesting',
-      description: 'Otestujte výkonnost vašeho portfolia v historických datech',
+      title: 'Monte Carlo simulátor',
+      description: 'Simulace možných výsledků vašeho portfolia na základě historických dat',
       icon: <BarChart className="h-8 w-8 text-blue-600" />,
-      features: ['Historická data', 'Risk metrics', 'Rebalancing strategie', 'Benchmarking'],
-      status: 'V přípravě',
-      available: false,
-      tabName: null
+      features: ['Portfolio alokace', 'Rizikové scénáře', 'Historická data', 'Korelace aktiv'],
+      status: 'Dostupné',
+      available: true,
+      tabName: 'monteCarlo'
     }
   ];
 
@@ -79,6 +81,25 @@ const Tools: React.FC = () => {
             </Button>
           </div>
           <FeeCalculator />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (activeTab === 'monteCarlo') {
+    return (
+      <Layout>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="mb-8">
+            <Button 
+              variant="outline" 
+              onClick={() => setActiveTab('overview')}
+              className="mb-4"
+            >
+              ← Zpět na přehled nástrojů
+            </Button>
+          </div>
+          <MonteCarloSimulator />
         </div>
       </Layout>
     );
