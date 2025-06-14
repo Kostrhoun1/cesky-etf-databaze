@@ -1,12 +1,11 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { SimulationResult } from '@/types/monteCarlo';
 
 /**
- * Vypočítá IRR (interní míru výnosnosti) z mediánové trajektorie simulace.
- * cashFlows: záporná hodnota na začátku (počáteční investice), pak záporné měsíční vklady a na konci kladný výběr (konečný stav). Funkce využívá numerickou metodu (iterace).
+ * Vypočítá IRR (interní míru výnosnosti) z cashflows.
+ * cashFlows: záporná hodnota na začátku, záporné měsíční vklady, na konci kladný výběr.
  */
 function calculateIRR(cashFlows: number[], guess = 0.05): number {
   let rate = guess;
@@ -29,9 +28,11 @@ function calculateIRR(cashFlows: number[], guess = 0.05): number {
 interface MonteCarloTableProps {
   data: SimulationResult[];
   investmentPeriod: number;
+  initialInvestment: number;
+  monthlyContribution: number;
 }
 
-const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPeriod }) => {
+const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPeriod, initialInvestment, monthlyContribution }) => {
   const formatNumber = (num: number) => {
     return new Intl.NumberFormat('cs-CZ', {
       style: 'currency',
@@ -61,49 +62,23 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
   const finalResult = data[data.length - 1];
   const initialValue = data[0].mean;
 
-  // Mediánová trajektorie pro IRR
-  // Vytvoříme cashflows:
-  // - počáteční investice (záporně), pak (investmentPeriod*12) x měsíční příspěvek (záporně), na konci návratnost (kladně).
-  // Bohužel SimulationResult dává hodnoty jen po letech, nikoli po měsících; musíme předpokládat např. uniformní rozdělení vkladů.
-  // Lepší je tedy získat odhad na základě ročních kroků.
+  // Přesné cashflow pro IRR:
+  // - první: záporná počáteční investice
+  // - následuje investmentPeriod*12 záporných měsíčních vkladů
+  // - poslední cashflow je mediánová konečná hodnota (kladně)
+  const monthCount = investmentPeriod * 12;
+  const cashFlows = [
+    -initialInvestment,
+    ...Array(monthCount - 1).fill(-monthlyContribution),
+    -monthlyContribution + finalResult.percentile50 // poslední měsíc: vklad a zhodnocená návratnost
+  ];
 
-  // Odhadneme měsíční příspěvek na základě rozdílu mezi výsledkem v 0. a 1. roce atd.,
-  // ale lepší je nechat uživatele zadat měsíční příspěvek do této komponenty – protože ale zde nemáme info o měsíčním vkladu,
-  // vezmeme konzervativní aproximaci podle diference:
-  // Nicméně, pro přesný výpočet cashflows potřebujeme znát:
-  // - počáteční investici (je v data[0].mean), 
-  // - celkový investovaný objem (počet let * 12 * měsíční vklad + počátek)
-  // Z API je ale přímo dostupné pouze mean (počáteční stav), nejsou zde však měsíční vklady.
-
-  // -> VÝSLEDEK: Chceme umožnit předat investované částky této komponentě pro správné výpočty.
-  // Pokud to zatím není možné, vypíšeme aspoň detailní přehled v boxu pod výsledky.
-
-  // Proto prozatím zobrazíme správný "Skutečný výnos" a "Investováno", kde:
-  // investovano = initialValue + (roky * 12 * vklad)
-  // vklad odhadneme z rozdílu mean mezi nultým a prvním rokem / 12
-
-  const years = investmentPeriod;
-  const yearsLen = data.length;
-
-  // Odhad měsíčního vkladu
-  const meanYear0 = data[0].mean;
-  const meanYear1 = data[1]?.mean ?? meanYear0;
-  const monthlyContribution = Math.round((meanYear1 - meanYear0) / 12);
-
-  // celkem investováno
-  const totalInvested = meanYear0 + (monthlyContribution * 12 * years);
-  const medianNetGain = finalResult.percentile50 - totalInvested;
-
-  // IRR – spočítáme jako interní míru výnosnosti z mediánových ročních hodnot 
-  // (meziroční cashflows, tj. 1x na začátku záporná částka, 20x záporný vklad za rok, na konci kladný konečný stav)
-  // pro zjednodušení
-  const cashFlows = [-meanYear0];
-  for (let i = 1; i <= years; i++) {
-    cashFlows.push(-monthlyContribution * 12);
-  }
-  cashFlows[cashFlows.length - 1] += finalResult.percentile50; // přičteme konečný stav do posledního rámečku
-
+  // Výpočet IRR podle těchto cashflow
   const irr = calculateIRR(cashFlows);
+
+  // Přehled investovaného a zisku
+  const totalInvested = initialInvestment + monthCount * monthlyContribution;
+  const medianNetGain = finalResult.percentile50 - totalInvested;
 
   return (
     <Card>
@@ -208,4 +183,3 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
 };
 
 export default MonteCarloTable;
-

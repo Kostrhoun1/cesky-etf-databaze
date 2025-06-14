@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -321,7 +320,12 @@ const MonteCarloSimulator: React.FC = () => {
       {results.length > 0 && (
         <>
           <MonteCarloChart data={results} />
-          <MonteCarloTable data={results} investmentPeriod={investmentPeriod} />
+          <MonteCarloTable 
+            data={results} 
+            investmentPeriod={investmentPeriod} 
+            initialInvestment={initialInvestment}
+            monthlyContribution={monthlyContribution}
+          />
         </>
       )}
     </div>
