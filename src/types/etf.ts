@@ -47,6 +47,14 @@ export interface ETF {
   scraping_date: string;
   scraping_status: string;
   retry_count: number;
+  // New price tracking fields
+  current_price: number;
+  ytd_return_percent: number;
+  return_1y_percent: number;
+  return_3y_percent: number;
+  return_5y_percent: number;
+  return_10y_percent: number;
+  last_price_update: string | null;
   // Holdings (top 10)
   holding_1_name: string;
   holding_1_weight: number;
