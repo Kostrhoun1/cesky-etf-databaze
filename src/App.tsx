@@ -1,9 +1,14 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import HomePage from "./pages/HomePage";
+import ETFComparison from "./pages/ETFComparison";
+import WhatAreETFs from "./pages/WhatAreETFs";
+import Tools from "./pages/Tools";
+import ETFDetail from "./pages/ETFDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -15,8 +20,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/srovnani-etf" element={<ETFComparison />} />
+          <Route path="/co-jsou-etf" element={<WhatAreETFs />} />
+          <Route path="/nastroje" element={<Tools />} />
+          <Route path="/etf/:isin" element={<ETFDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

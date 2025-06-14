@@ -1,0 +1,157 @@
+
+import React, { useEffect } from 'react';
+import Layout from '@/components/Layout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Calculator, TrendingUp, BarChart } from 'lucide-react';
+
+const Tools: React.FC = () => {
+  useEffect(() => {
+    document.title = 'Investiční nástroje a kalkulačky - ETF průvodce.cz';
+    document.querySelector('meta[name="description"]')?.setAttribute('content', 
+      'Investiční kalkulačky, backtesting portfolia, analýza poplatků. Bezplatné nástroje pro ETF investory.'
+    );
+  }, []);
+
+  const tools = [
+    {
+      title: 'Investiční kalkulačka',
+      description: 'Spočítejte si růst vašich investic s pravidelným investováním (DCA)',
+      icon: <Calculator className="h-8 w-8 text-blue-600" />,
+      features: ['Compound interest výpočty', 'DCA simulace', 'Inflace zohlednění', 'Grafické znázornění'],
+      status: 'Připravujeme'
+    },
+    {
+      title: 'Kalkulačka poplatků',
+      description: 'Analyzujte dopad různých poplatků na váš dlouhodobý výnos',
+      icon: <TrendingUp className="h-8 w-8 text-blue-600" />,
+      features: ['TER porovnání', 'Brokerské poplatky', 'Dlouhodobý dopad', 'Srovnání fondů'],
+      status: 'Připravujeme'
+    },
+    {
+      title: 'Portfolio backtesting',
+      description: 'Otestujte výkonnost vašeho portfolia v historických datech',
+      icon: <BarChart className="h-8 w-8 text-blue-600" />,
+      features: ['Historická data', 'Risk metrics', 'Rebalancing strategie', 'Benchmarking'],
+      status: 'V přípravě'
+    }
+  ];
+
+  return (
+    <Layout>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center mb-12">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            Investiční nástroje a kalkulačky
+          </h1>
+          <p className="text-lg text-gray-600">
+            Bezplatné nástroje pro analýzu a plánování vašich ETF investic
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {tools.map((tool, index) => (
+            <Card key={index} className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-2">
+                  {tool.icon}
+                  <div className="flex items-center gap-2">
+                    <CardTitle className="text-lg">{tool.title}</CardTitle>
+                    <span className="inline-block px-2 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded">
+                      {tool.status}
+                    </span>
+                  </div>
+                </div>
+                <CardDescription>{tool.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 mb-6">
+                  {tool.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="text-sm text-gray-600 flex items-center gap-2">
+                      <span className="text-green-500">✓</span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <Button className="w-full" disabled>
+                  Spustit nástroj
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Coming Soon Info */}
+        <Card className="bg-blue-50 border-blue-200">
+          <CardContent className="p-8 text-center">
+            <h3 className="text-xl font-semibold mb-4">
+              Nástroje jsou v přípravě
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Pracujeme na vytvoření pokročilých nástrojů pro analýzu a plánování vašich investic. 
+              Mezitím můžete prozkoumat naši databázi ETF fondů a vzdělávací obsah.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild>
+                <a href="/srovnani-etf">Prozkoumat ETF fondy</a>
+              </Button>
+              <Button asChild variant="outline">
+                <a href="/co-jsou-etf">Vzdělávací články</a>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Manual Calculator Section */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+            Prozatímní ruční výpočty
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Compound Interest vzorec</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <code className="text-sm">
+                    A = P × (1 + r/n)^(nt)
+                  </code>
+                </div>
+                <ul className="text-sm space-y-1 text-gray-600">
+                  <li><strong>A</strong> = konečná částka</li>
+                  <li><strong>P</strong> = počáteční investice</li>
+                  <li><strong>r</strong> = roční úroková sazba</li>
+                  <li><strong>n</strong> = počet složení za rok</li>
+                  <li><strong>t</strong> = počet let</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>DCA (Dollar Cost Averaging)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <code className="text-sm">
+                    FV = PMT × [((1 + r)^n - 1) / r]
+                  </code>
+                </div>
+                <ul className="text-sm space-y-1 text-gray-600">
+                  <li><strong>FV</strong> = budoucí hodnota</li>
+                  <li><strong>PMT</strong> = pravidelná platba</li>
+                  <li><strong>r</strong> = úroková sazba za období</li>
+                  <li><strong>n</strong> = počet období</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default Tools;
