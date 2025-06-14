@@ -13,7 +13,6 @@ interface FeeScenario {
   name: string;
   totalExpenseRatio: number;
   entryFee: number;
-  recurringFee: number;
   color: string;
 }
 
@@ -33,16 +32,16 @@ const FeeCalculator: React.FC = () => {
   const [averageReturn, setAverageReturn] = useState<number>(7);
   const [investmentPeriod, setInvestmentPeriod] = useState<number>(20);
   const [scenarios, setScenarios] = useState<FeeScenario[]>([
-    { name: 'Levný ETF', totalExpenseRatio: 0.15, entryFee: 0, recurringFee: 0, color: '#22c55e' },
-    { name: 'Aktivní fond s poplatky', totalExpenseRatio: 1.2, entryFee: 2.0, recurringFee: 10, color: '#ef4444' },
-    { name: 'Bankovní fond', totalExpenseRatio: 2.0, entryFee: 3.0, recurringFee: 25, color: '#f59e0b' }
+    { name: 'Levný ETF', totalExpenseRatio: 0.15, entryFee: 0, color: '#22c55e' },
+    { name: 'Aktivní fond s poplatky', totalExpenseRatio: 1.2, entryFee: 2.0, color: '#ef4444' },
+    { name: 'Bankovní fond', totalExpenseRatio: 2.0, entryFee: 3.0, color: '#f59e0b' }
   ]);
   const [results, setResults] = useState<FeeCalculationResult[]>([]);
   const [showResults, setShowResults] = useState<boolean>(false);
 
   const updateScenario = (index: number, field: keyof FeeScenario, value: string | number) => {
     const newScenarios = [...scenarios];
-    if (field === 'totalExpenseRatio' || field === 'entryFee' || field === 'recurringFee') {
+    if (field === 'totalExpenseRatio' || field === 'entryFee') {
       newScenarios[index][field] = Number(value);
     } else {
       newScenarios[index][field] = value as string;
@@ -97,11 +96,6 @@ const FeeCalculator: React.FC = () => {
             const monthlyTERFee = currentValue * monthlyTER;
             currentValue -= monthlyTERFee;
             yearlyFees += monthlyTERFee;
-            
-            // Odečti měsíční pravidelný poplatek
-            const monthlyRecurringFee = scenario.recurringFee / 12;
-            currentValue -= monthlyRecurringFee;
-            yearlyFees += monthlyRecurringFee;
           }
         } else {
           // Roční investování
@@ -122,10 +116,6 @@ const FeeCalculator: React.FC = () => {
           const yearlyTERFee = currentValue * yearlyTER;
           currentValue -= yearlyTERFee;
           yearlyFees += yearlyTERFee;
-          
-          // Odečti roční pravidelný poplatek
-          currentValue -= scenario.recurringFee;
-          yearlyFees += scenario.recurringFee;
         }
 
         totalFeesPaid += yearlyFees;
@@ -260,7 +250,7 @@ const FeeCalculator: React.FC = () => {
             <h3 className="text-lg font-semibold">Scénáře poplatků</h3>
             <div className="grid gap-4">
               {scenarios.map((scenario, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-lg">
+                <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-lg">
                   <div className="space-y-2">
                     <Label>Název scénáře</Label>
                     <Input
@@ -270,7 +260,7 @@ const FeeCalculator: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>TER - roční správa (%)</Label>
+                    <Label>TER - celkové % roční náklady</Label>
                     <Input
                       type="number"
                       step="0.01"
@@ -289,15 +279,6 @@ const FeeCalculator: React.FC = () => {
                       placeholder="0"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label>Pravidelný poplatek (Kč/rok)</Label>
-                    <Input
-                      type="number"
-                      value={scenario.recurringFee || ''}
-                      onChange={(e) => updateScenario(index, 'recurringFee', e.target.value)}
-                      placeholder="0"
-                    />
-                  </div>
                 </div>
               ))}
             </div>
@@ -307,7 +288,6 @@ const FeeCalculator: React.FC = () => {
               <ul className="text-sm text-blue-800 space-y-1">
                 <li><strong>TER (Total Expense Ratio):</strong> Roční náklady na správu fondu v % z investované částky</li>
                 <li><strong>Vstupní poplatek:</strong> Jednorázový poplatek při nákupu v % z investované částky</li>
-                <li><strong>Pravidelný poplatek:</strong> Pevný roční poplatek v Kč (např. správa účtu, depozitář)</li>
               </ul>
             </div>
           </div>

@@ -7,7 +7,6 @@ interface FeeScenario {
   name: string;
   totalExpenseRatio: number;
   entryFee: number;
-  recurringFee: number;
   color: string;
 }
 

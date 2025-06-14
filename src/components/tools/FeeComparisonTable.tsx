@@ -7,7 +7,6 @@ interface FeeScenario {
   name: string;
   totalExpenseRatio: number;
   entryFee: number;
-  recurringFee: number;
   color: string;
 }
 
@@ -51,7 +50,6 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
                 <TableHead>Scénář</TableHead>
                 <TableHead className="text-right">TER (%)</TableHead>
                 <TableHead className="text-right">Vstupní poplatek (%)</TableHead>
-                <TableHead className="text-right">Pravidelný poplatek (Kč/rok)</TableHead>
                 <TableHead className="text-right">Konečná hodnota (Kč)</TableHead>
                 <TableHead className="text-right">Celkové poplatky (Kč)</TableHead>
                 <TableHead className="text-right">Ztráta oproti nejlepšímu (Kč)</TableHead>
@@ -78,9 +76,6 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
                     <TableCell className="text-right">
                       {result.scenario.entryFee}%
                     </TableCell>
-                    <TableCell className="text-right">
-                      {formatNumber(result.scenario.recurringFee)}
-                    </TableCell>
                     <TableCell className="text-right font-medium">
                       {formatNumber(result.netValue)}
                     </TableCell>
@@ -102,8 +97,8 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
           <ul className="text-sm text-blue-800 space-y-1">
             <li>• <strong>Vstupní poplatky</strong> se uplatňují pouze jednou, ale snižují počáteční investici</li>
             <li>• <strong>TER</strong> působí každý rok a má compound efekt</li>
-            <li>• <strong>Pravidelné poplatky</strong> mohou být zničující zejména při menších částkách</li>
             <li>• ETF fondy typicky nemají vstupní poplatky a mají nízký TER (0,1-0,5%)</li>
+            <li>• Aktivní fondy mívají vyšší TER (1-3%) a někdy i vstupní poplatky</li>
           </ul>
         </div>
       </CardContent>
