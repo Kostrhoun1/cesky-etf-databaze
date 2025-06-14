@@ -31,29 +31,40 @@ const InvestmentCalculator: React.FC = () => {
 
   const calculateInvestment = () => {
     const data: CalculationData[] = [];
-    const monthlyReturn = averageReturn / 100 / 12;
-    const yearlyRecurring = recurringFrequency === 'monthly' ? recurringInvestment * 12 : recurringInvestment;
+    const annualReturn = averageReturn / 100;
+    const monthlyReturn = annualReturn / 12;
     
-    let totalInvested = initialInvestment;
+    console.log('Starting calculation with:', {
+      initialInvestment,
+      recurringInvestment,
+      recurringFrequency,
+      averageReturn,
+      investmentPeriod,
+      taxRate
+    });
+
     let currentValue = initialInvestment;
+    let totalInvested = initialInvestment;
 
     for (let year = 1; year <= investmentPeriod; year++) {
-      // Přidání pravidelné investice na začátku roku
-      totalInvested += yearlyRecurring;
-      currentValue += yearlyRecurring;
-      
-      // Výpočet růstu během roku (compound interest)
       if (recurringFrequency === 'monthly') {
-        // Měsíční investování s compound effectem
-        for (let month = 0; month < 12; month++) {
+        // Měsíční investování
+        for (let month = 1; month <= 12; month++) {
+          // Přidej měsíční investici
+          currentValue += recurringInvestment;
+          totalInvested += recurringInvestment;
+          
+          // Aplikuj měsíční výnos
           currentValue = currentValue * (1 + monthlyReturn);
-          if (month < 11) { // Přidáme měsíční investici kromě posledního měsíce
-            currentValue += recurringInvestment;
-          }
         }
       } else {
         // Roční investování
-        currentValue = currentValue * (1 + averageReturn / 100);
+        // Přidej roční investici na začátku roku
+        currentValue += recurringInvestment;
+        totalInvested += recurringInvestment;
+        
+        // Aplikuj roční výnos
+        currentValue = currentValue * (1 + annualReturn);
       }
 
       const grossGain = currentValue - totalInvested;
@@ -61,9 +72,18 @@ const InvestmentCalculator: React.FC = () => {
       const netValue = currentValue - tax;
       const netGain = netValue - totalInvested;
 
+      console.log(`Year ${year}:`, {
+        totalInvested,
+        currentValue,
+        grossGain,
+        tax,
+        netValue,
+        netGain
+      });
+
       data.push({
         year,
-        totalInvested,
+        totalInvested: Math.round(totalInvested),
         grossValue: Math.round(currentValue),
         netValue: Math.round(netValue),
         grossGain: Math.round(grossGain),
@@ -72,6 +92,7 @@ const InvestmentCalculator: React.FC = () => {
       });
     }
 
+    console.log('Final results:', data);
     setResults(data);
     setShowResults(true);
   };
