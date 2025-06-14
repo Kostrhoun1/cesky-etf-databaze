@@ -8,7 +8,7 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ size = 56, className = "" }) => (
   <img
-    src="/lovable-uploads/b7264137-189f-4012-86fa-ee6c4ecf61b1.png"
+    src="/lovable-uploads/52c1346d-90ce-4682-b831-38bc81cb8ba7.png"
     alt="ETF průvodce.cz logo"
     width={size}
     className={`inline-block align-middle ${className}`}
