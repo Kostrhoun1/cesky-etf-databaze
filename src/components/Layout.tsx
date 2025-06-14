@@ -17,6 +17,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Srovnání ETF', href: '/srovnani-etf', current: location.pathname === '/srovnani-etf' },
     { name: 'Co jsou ETF', href: '/co-jsou-etf', current: location.pathname === '/co-jsou-etf' },
     { name: 'Nástroje', href: '/nastroje', current: location.pathname === '/nastroje' },
+    // Nová položka v menu
+    { name: 'Blog', href: '/blog', current: location.pathname === '/blog' },
   ];
 
   return (
@@ -77,6 +79,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li><Link to="/srovnani-etf" className="hover:text-white transition-colors">Srovnání ETF</Link></li>
                 <li><Link to="/co-jsou-etf" className="hover:text-white transition-colors">Co jsou ETF</Link></li>
                 <li><Link to="/nastroje" className="hover:text-white transition-colors">Nástroje</Link></li>
+                <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
               </ul>
             </div>
             <div>
