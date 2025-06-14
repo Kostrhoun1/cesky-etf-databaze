@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -182,8 +183,8 @@ const InvestmentCalculator: React.FC = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="0">0% (žádná daň)</SelectItem>
-                  <SelectItem value="15">15% (standardní)</SelectItem>
-                  <SelectItem value="23">23% (superhrubá mzda)</SelectItem>
+                  <SelectItem value="15">15% (základní sazba)</SelectItem>
+                  <SelectItem value="23">23% (solidární zvýšení daně)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
