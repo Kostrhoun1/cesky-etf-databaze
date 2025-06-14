@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
@@ -27,6 +26,24 @@ interface YahooFinanceResponse {
 }
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Přidáme funkci pro mapování názvu burzy na suffix Yahoo Finance
+function getYahooSuffix(exchangeName: string | null): string {
+  if (!exchangeName) return '';
+  const normalized = exchangeName.trim().toLowerCase();
+  if (normalized.includes('xetra')) return '.DE';
+  if (normalized.includes('frankfurt')) return '.F';
+  if (normalized.includes('swiss') || normalized.includes('zurich')) return '.SW';
+  if (normalized.includes('milan')) return '.MI';
+  if (normalized.includes('prague')) return '.PRG';
+  if (normalized.includes('london')) return '.L';
+  if (normalized.includes('amsterdam')) return '.AS';
+  if (normalized.includes('nyse')) return '';
+  if (normalized.includes('nasdaq')) return '';
+  if (normalized.includes('paris')) return '.PA';
+  // případně další logika nebo default
+  return '';
+}
 
 async function fetchYahooFinanceData(ticker: string): Promise<any> {
   try {
@@ -157,7 +174,7 @@ serve(async (req) => {
     console.log('Fetching ETFs with tickers from database...');
     const { data: etfs, error: fetchError } = await supabase
       .from('etf_funds')
-      .select('id, isin, name, primary_ticker, exchange_1_ticker, exchange_2_ticker, exchange_3_ticker, exchange_4_ticker, exchange_5_ticker')
+      .select('id, isin, name, primary_ticker, exchange_1_ticker, exchange_2_ticker, exchange_3_ticker, exchange_4_ticker, exchange_5_ticker, primary_exchange, exchange_1_name, exchange_2_name, exchange_3_name, exchange_4_name, exchange_5_name')
       .not('primary_ticker', 'is', null)
       .limit(50); // Process in batches to avoid timeouts
 
@@ -185,25 +202,41 @@ serve(async (req) => {
     // Process each ETF
     for (const etf of etfs) {
       try {
-        // Try primary ticker first, then fallback to exchange tickers
-        const tickers = [
-          etf.primary_ticker,
-          etf.exchange_1_ticker,
-          etf.exchange_2_ticker,
-          etf.exchange_3_ticker,
-          etf.exchange_4_ticker,
-          etf.exchange_5_ticker
-        ].filter(ticker => ticker && ticker.trim() !== '');
+        // Získáme pole tickerů a jejich párované burzy
+        const tickerPairs = [
+          { ticker: etf.primary_ticker,    exchange: etf.primary_exchange },
+          { ticker: etf.exchange_1_ticker, exchange: etf.exchange_1_name },
+          { ticker: etf.exchange_2_ticker, exchange: etf.exchange_2_name },
+          { ticker: etf.exchange_3_ticker, exchange: etf.exchange_3_name },
+          { ticker: etf.exchange_4_ticker, exchange: etf.exchange_4_name },
+          { ticker: etf.exchange_5_ticker, exchange: etf.exchange_5_name },
+        ].filter(pair => pair.ticker && pair.ticker.trim() !== '');
 
         let priceData = null;
+        let found = false;
         
-        for (const ticker of tickers) {
+        // Nejprve zkoušíme tickery s odpovídajícím suffixem
+        for (const { ticker, exchange } of tickerPairs) {
+          // Suffix podle exchange
+          const suffix = getYahooSuffix(exchange);
+          // 1) Zkusíme ticker + suffix (pokud nějaký suffix je)
+          if (suffix) {
+            const tickerWithSuffix = `${ticker}${suffix}`;
+            priceData = await fetchYahooFinanceData(tickerWithSuffix);
+            if (priceData && priceData.currentPrice) {
+              console.log(`Successfully fetched data for ${etf.name} using ticker ${tickerWithSuffix}`);
+              found = true;
+              break;
+            }
+            await delay(100);
+          }
+          // 2) Zkusíme čistý ticker jako fallback
           priceData = await fetchYahooFinanceData(ticker);
           if (priceData && priceData.currentPrice) {
             console.log(`Successfully fetched data for ${etf.name} using ticker ${ticker}`);
+            found = true;
             break;
           }
-          // Add small delay between requests to avoid rate limiting
           await delay(100);
         }
 
