@@ -1,26 +1,26 @@
 
 import { AssetAllocation, AssetData, SimulationParameters, SimulationResult, PortfolioMetrics } from '@/types/monteCarlo';
 
-// Historická data aktiv (založeno na dlouhodobých průměrech)
+// Historická data aktiv (založeno na realistických dlouhodobých průměrech)
 const ASSET_DATA: Record<string, AssetData> = {
   usStocks: {
     name: 'Americké akcie',
-    annualReturn: 0.10, // 10% roční průměr
+    annualReturn: 0.07, // 7% roční průměr (realističtější)
     volatility: 0.16 // 16% volatilita
   },
   worldStocks: {
     name: 'Celosvětové akcie',
-    annualReturn: 0.08, // 8% roční průměr
+    annualReturn: 0.065, // 6.5% roční průměr (realističtější)
     volatility: 0.18 // 18% volatilita
   },
   worldBonds: {
     name: 'Celosvětové dluhopisy',
-    annualReturn: 0.04, // 4% roční průměr
+    annualReturn: 0.025, // 2.5% roční průměr (realističtější)
     volatility: 0.06 // 6% volatilita
   },
   usBonds: {
     name: 'US dluhopisy',
-    annualReturn: 0.035, // 3.5% roční průměr
+    annualReturn: 0.02, // 2% roční průměr (realističtější)
     volatility: 0.05 // 5% volatilita
   }
 };
