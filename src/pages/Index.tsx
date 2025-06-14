@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { ETF } from '@/types/etf';
+import { ETFListItem } from '@/types/etf';
 import { parseCSV } from '@/utils/csvParser';
 import { useETFData } from '@/hooks/useETFData';
 import Header from '@/components/Header';
@@ -8,7 +7,7 @@ import CSVUploader from '@/components/CSVUploader';
 import ETFTable from '@/components/ETFTable';
 
 const Index = () => {
-  const [etfs, setEtfs] = useState<ETF[]>([]);
+  const [etfs, setEtfs] = useState<ETFListItem[]>([]);
   const { upsertETFs, fetchETFs, isLoading } = useETFData();
 
   // Load ETFs from database on component mount
