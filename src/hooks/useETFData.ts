@@ -1,8 +1,7 @@
-
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { ETF } from '@/types/etf';
+import { ETF, ETFListItem } from '@/types/etf';
 
 export const useETFData = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -172,11 +171,11 @@ export const useETFData = () => {
     }
   };
 
-  const fetchETFs = async (limit?: number) => {
+  const fetchETFs = async (limit?: number): Promise<ETFListItem[]> => {
     setIsLoading(true);
     try {
       console.log(`Starting to fetch ETFs from database${limit ? ` (limit: ${limit})` : ''}...`);
-      console.log('Supabase client URL:', supabase.supabaseUrl);
+      console.log('Supabase client configured');
       
       // Test the connection first
       const { data: testData, error: testError } = await supabase
@@ -205,7 +204,8 @@ export const useETFData = () => {
           return_5y,
           return_ytd,
           fund_size_numeric,
-          degiro_free
+          degiro_free,
+          primary_ticker
         `)
         .order('fund_size_numeric', { ascending: false });
 

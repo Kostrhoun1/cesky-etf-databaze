@@ -122,3 +122,19 @@ export interface ETF {
   exchange_5_reuters: string;
   exchange_5_market_maker: string;
 }
+
+// Simplified ETF type for list displays
+export interface ETFListItem {
+  isin: string;
+  name: string;
+  fund_provider: string;
+  category: string;
+  ter_numeric: number;
+  return_1y: number;
+  return_3y: number;
+  return_5y: number;
+  return_ytd: number;
+  fund_size_numeric: number;
+  degiro_free: boolean;
+  primary_ticker?: string;
+}

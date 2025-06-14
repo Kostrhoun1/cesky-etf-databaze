@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -7,12 +8,12 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useETFData } from '@/hooks/useETFData';
-import { ETF } from '@/types/etf';
+import { ETFListItem } from '@/types/etf';
 import { formatPercentage } from '@/utils/csvParser';
 import { Search, TrendingUp, Shield, Calculator, BookOpen, BarChart } from 'lucide-react';
 
 const HomePage: React.FC = () => {
-  const [etfs, setEtfs] = useState<ETF[]>([]);
+  const [etfs, setEtfs] = useState<ETFListItem[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');

@@ -5,10 +5,10 @@ import ETFTable from '@/components/ETFTable';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useState, useEffect } from 'react';
 import { useETFData } from '@/hooks/useETFData';
-import { ETF } from '@/types/etf';
+import { ETFListItem } from '@/types/etf';
 
 const ETFComparison: React.FC = () => {
-  const [etfs, setEtfs] = useState<ETF[]>([]);
+  const [etfs, setEtfs] = useState<ETFListItem[]>([]);
   const { fetchETFs, isLoading } = useETFData();
 
   useEffect(() => {

@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { ETF } from '@/types/etf';
+import { ETFListItem } from '@/types/etf';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -10,7 +9,7 @@ import ETFTableRow from './ETFTableRow';
 import ETFTablePagination from './ETFTablePagination';
 
 interface ETFTableProps {
-  etfs: ETF[];
+  etfs: ETFListItem[];
   onRefresh?: () => void;
 }
 
@@ -28,7 +27,6 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
       console.log('ETFTable received ETFs. Sample TER values:', 
         etfs.slice(0, 5).map(etf => ({
           name: etf.name,
-          ter: etf.ter,
           ter_numeric: etf.ter_numeric,
           typeof_ter_numeric: typeof etf.ter_numeric
         }))
@@ -65,19 +63,14 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
       
       // Search in ticker fields
       const tickerFieldsMatch = 
-        (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower)) ||
-        (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase().includes(searchLower)) ||
-        (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase().includes(searchLower)) ||
-        (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().includes(searchLower)) ||
-        (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes(searchLower)) ||
-        (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes(searchLower));
+        (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower));
       
       return basicFieldsMatch || tickerFieldsMatch;
     })
     .filter(etf => categoryFilter === 'all' || etf.category === categoryFilter)
     .sort((a, b) => {
-      let aValue: any = a[sortBy as keyof ETF];
-      let bValue: any = b[sortBy as keyof ETF];
+      let aValue: any = a[sortBy as keyof ETFListItem];
+      let bValue: any = b[sortBy as keyof ETFListItem];
       
       if (typeof aValue === 'string') {
         aValue = aValue.toLowerCase();

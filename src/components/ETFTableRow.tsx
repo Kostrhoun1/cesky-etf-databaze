@@ -2,11 +2,11 @@
 import React from 'react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { ETF } from '@/types/etf';
+import { ETFListItem } from '@/types/etf';
 import { formatPercentage } from '@/utils/csvParser';
 
 interface ETFTableRowProps {
-  etf: ETF;
+  etf: ETFListItem;
 }
 
 const ETFTableRow: React.FC<ETFTableRowProps> = ({ etf }) => {
