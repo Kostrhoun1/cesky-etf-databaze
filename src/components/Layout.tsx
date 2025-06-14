@@ -20,26 +20,26 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 font-sans">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white/80 backdrop-blur-lg sticky top-0 z-40 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-2">
-              <Link to="/" className="flex items-center gap-2 group">
-                <Logo size={42} className="drop-shadow-md group-hover:scale-105 transition-transform" />
-                <span className="text-2xl font-bold text-blue-600 font-playfair tracking-tighter">ETF průvodce.cz</span>
+              <Link to="/" className="flex items-center gap-3 group">
+                <Logo size={42} className="group-hover:scale-105 transition-transform" />
+                <span className="text-xl font-bold text-gray-800 tracking-tight">ETF průvodce.cz</span>
               </Link>
             </div>
-            <nav className="hidden md:flex space-x-8">
+            <nav className="hidden md:flex space-x-1">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors ${
                     item.current
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                      ? 'text-violet-600 bg-violet-100'
+                      : 'text-gray-600 hover:text-violet-600 hover:bg-violet-50'
                   }`}
                 >
                   {item.name}
@@ -61,29 +61,29 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </main>
       {/* Footer */}
       <footer className="bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="md:col-span-2 flex flex-col gap-2">
-              <div className="flex items-center gap-3 mb-2">
-                <Logo size={44} className="drop-shadow" />
-                <span className="text-lg font-semibold">ETF průvodce.cz</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div className="md:col-span-2 flex flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <Logo size={48} />
+                <span className="text-xl font-semibold text-slate-100">ETF průvodce.cz</span>
               </div>
-              <p className="text-gray-300 mb-4">
-                Komplexní průvodce světem ETF fondů pro české investory. 
+              <p className="text-slate-400 leading-relaxed">
+                Váš moderní a komplexní průvodce světem ETF fondů pro české investory. 
                 Srovnání, analýzy a vzdělávací obsah pro vaše investiční rozhodnutí.
               </p>
             </div>
             <div>
-              <h4 className="text-md font-semibold mb-4">Sekce</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li><Link to="/srovnani-etf" className="hover:text-white">Srovnání ETF</Link></li>
-                <li><Link to="/co-jsou-etf" className="hover:text-white">Co jsou ETF</Link></li>
-                <li><Link to="/nastroje" className="hover:text-white">Nástroje</Link></li>
+              <h4 className="text-md font-semibold text-slate-200 mb-4 uppercase tracking-wider">Sekce</h4>
+              <ul className="space-y-3 text-slate-400">
+                <li><Link to="/srovnani-etf" className="hover:text-white transition-colors">Srovnání ETF</Link></li>
+                <li><Link to="/co-jsou-etf" className="hover:text-white transition-colors">Co jsou ETF</Link></li>
+                <li><Link to="/nastroje" className="hover:text-white transition-colors">Nástroje</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-md font-semibold mb-4">Brokeři</h4>
-              <ul className="space-y-2 text-gray-300">
+              <h4 className="text-md font-semibold text-slate-200 mb-4 uppercase tracking-wider">Brokeři</h4>
+              <ul className="space-y-3 text-slate-400">
                 <li>DEGIRO</li>
                 <li>Interactive Brokers</li>
                 <li>XTB</li>
@@ -92,7 +92,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </ul>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-300">
+          <div className="mt-16 pt-8 border-t border-gray-800 text-center text-slate-500">
             <p>&copy; 2025 ETF průvodce.cz. Všechna práva vyhrazena.</p>
           </div>
         </div>

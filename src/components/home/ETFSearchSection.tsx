@@ -39,7 +39,7 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
       const matchesCategory = categoryFilter === 'all' || etf.category === categoryFilter;
       return matchesSearch && matchesCategory;
     })
-    .slice(0, 15);
+    .slice(0, 10);
 
   const getReturnColor = (value: number) => {
     if (value > 0) return 'text-green-600';
@@ -48,30 +48,30 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
   };
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Nejpopulárnější ETF fondy
+        <div className="text-center mb-16">
+          <h2 className="text-3xl font-bold text-gray-900 tracking-tight sm:text-4xl">
+            Prozkoumejte populární ETF
           </h2>
-          <p className="text-lg text-gray-600">
-            Vyberte si z naší databáze {totalCount.toLocaleString()} ETF fondů
+          <p className="mt-4 text-lg text-gray-600">
+            Vyberte si z naší databáze {totalCount > 0 ? `přes ${totalCount.toLocaleString()}` : ''} ETF fondů
           </p>
         </div>
 
         {/* Search and Filter */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
+        <div className="flex flex-col md:flex-row gap-4 mb-8 max-w-3xl mx-auto">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <Input
               placeholder="Hledat ETF podle názvu, ISIN nebo poskytovatele..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              className="pl-12 h-12 text-base"
             />
           </div>
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-            <SelectTrigger className="w-full md:w-[200px]">
+            <SelectTrigger className="w-full md:w-[240px] h-12 text-base">
               <SelectValue placeholder="Kategorie" />
             </SelectTrigger>
             <SelectContent>
@@ -86,7 +86,7 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
         </div>
 
         {/* ETF List */}
-        <div className="grid gap-4">
+        <div className="space-y-4">
           {isLoading ? (
             <div className="text-center py-8">
               <p>Načítání ETF fondů...</p>
@@ -100,50 +100,51 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
             </div>
           ) : filteredETFs.length > 0 ? (
             filteredETFs.map((etf) => (
-              <Card key={etf.isin} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-start gap-3">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg mb-1">
-                            <Link to={`/etf/${etf.isin}`} className="hover:text-blue-600">
-                              {etf.name}
-                            </Link>
-                          </h3>
-                          <p className="text-sm text-gray-600 mb-2">
-                            {etf.isin} • {etf.fund_provider}
-                          </p>
-                          {etf.degiro_free && (
+              <Card key={etf.isin} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <div className="md:col-span-2">
+                      <h3 className="font-semibold text-base sm:text-lg mb-1">
+                        <Link to={`/etf/${etf.isin}`} className="hover:text-violet-600">
+                          {etf.name}
+                        </Link>
+                      </h3>
+                      <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-sm text-gray-500">
+                        <span>{etf.isin}</span>
+                        <span className="hidden sm:inline">•</span>
+                        <span>{etf.fund_provider}</span>
+                        {etf.degiro_free && (
+                          <>
+                            <span className="hidden sm:inline">•</span>
                             <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
                               DEGIRO Free
                             </Badge>
-                          )}
-                        </div>
+                          </>
+                        )}
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-6 text-sm">
-                      <div className="text-center">
-                        <p className="text-gray-500">TER</p>
+                    <div className="grid grid-cols-4 gap-2 text-sm text-center">
+                      <div>
+                        <p className="text-gray-500 text-xs uppercase">TER</p>
                         <p className="font-semibold">{formatPercentage(etf.ter_numeric)}</p>
                       </div>
-                      <div className="text-center">
-                        <p className="text-gray-500">YTD</p>
+                      <div>
+                        <p className="text-gray-500 text-xs uppercase">YTD</p>
                         <p className={`font-semibold ${getReturnColor(etf.return_ytd)}`}>
-                          {etf.return_ytd ? formatPercentage(etf.return_ytd) : '-'}
+                          {etf.return_ytd ? formatPercentage(etf.return_ytd) : 'N/A'}
                         </p>
                       </div>
-                      <div className="text-center">
-                        <p className="text-gray-500">1 rok</p>
+                      <div>
+                        <p className="text-gray-500 text-xs uppercase">1R</p>
                         <p className={`font-semibold ${getReturnColor(etf.return_1y)}`}>
-                          {etf.return_1y ? formatPercentage(etf.return_1y) : '-'}
+                          {etf.return_1y ? formatPercentage(etf.return_1y) : 'N/A'}
                         </p>
                       </div>
-                      <div className="text-center">
-                        <p className="text-gray-500">3 roky</p>
+                      <div>
+                        <p className="text-gray-500 text-xs uppercase">3R</p>
                         <p className={`font-semibold ${getReturnColor(etf.return_3y)}`}>
-                          {etf.return_3y ? formatPercentage(etf.return_3y) : '-'}
+                          {etf.return_3y ? formatPercentage(etf.return_3y) : 'N/A'}
                         </p>
                       </div>
                     </div>
@@ -168,9 +169,9 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
           )}
         </div>
 
-        {totalCount > 15 && filteredETFs.length > 0 && (
-          <div className="text-center mt-8">
-            <Button asChild>
+        {totalCount > 10 && filteredETFs.length > 0 && (
+          <div className="text-center mt-12">
+            <Button asChild size="lg">
               <Link to="/srovnani-etf">Zobrazit všech {totalCount.toLocaleString()} ETF fondů</Link>
             </Button>
           </div>
