@@ -1,28 +1,18 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import MonteCarloChart from './MonteCarloChart';
-import MonteCarloTable from './MonteCarloTable';
 import { runMonteCarloSimulation } from '@/utils/monteCarloUtils';
 import { AssetAllocation, SimulationResult } from '@/types/monteCarlo';
 
 const MonteCarloSimulator: React.FC = () => {
   const [allocation, setAllocation] = useState<AssetAllocation>({
-    usLargeStocks: 30,
-    usSmallStocks: 10,
-    internationalStocks: 20,
-    emergingMarkets: 10,
-    canadianStocks: 5,
-    reits: 5,
-    highYieldBonds: 5,
-    usBonds: 10,
-    internationalBonds: 0,
-    gold: 5,
-    cash: 0
+    stocks: 60,
+    bonds: 30,
+    cash: 10
   });
   
   const [initialInvestment, setInitialInvestment] = useState(100000);
@@ -48,35 +38,6 @@ const MonteCarloSimulator: React.FC = () => {
     }
   };
 
-  const setPresetPortfolio = (preset: string) => {
-    switch (preset) {
-      case 'conservative':
-        setAllocation({
-          usLargeStocks: 20, usSmallStocks: 5, internationalStocks: 15,
-          emergingMarkets: 0, canadianStocks: 5, reits: 5,
-          highYieldBonds: 15, usBonds: 25, internationalBonds: 5,
-          gold: 5, cash: 0
-        });
-        break;
-      case 'balanced':
-        setAllocation({
-          usLargeStocks: 30, usSmallStocks: 10, internationalStocks: 20,
-          emergingMarkets: 10, canadianStocks: 5, reits: 5,
-          highYieldBonds: 5, usBonds: 10, internationalBonds: 0,
-          gold: 5, cash: 0
-        });
-        break;
-      case 'aggressive':
-        setAllocation({
-          usLargeStocks: 40, usSmallStocks: 20, internationalStocks: 15,
-          emergingMarkets: 15, canadianStocks: 5, reits: 5,
-          highYieldBonds: 0, usBonds: 0, internationalBonds: 0,
-          gold: 0, cash: 0
-        });
-        break;
-    }
-  };
-
   const runSimulation = async () => {
     setIsLoading(true);
     try {
@@ -89,7 +50,7 @@ const MonteCarloSimulator: React.FC = () => {
       });
       setResults(simulationResults);
     } catch (error) {
-      console.error('Simulation error:', error);
+      console.error('Chyba při simulaci:', error);
     } finally {
       setIsLoading(false);
     }
@@ -97,167 +58,59 @@ const MonteCarloSimulator: React.FC = () => {
 
   const totalAllocation = Object.values(allocation).reduce((sum, val) => sum + val, 0);
 
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('cs-CZ', {
+      style: 'currency',
+      currency: 'CZK',
+      maximumFractionDigits: 0
+    }).format(num);
+  };
+
   return (
     <div className="space-y-8">
       <Card>
         <CardHeader>
-          <CardTitle>Monte Carlo simulátor portfolia (historická data 1985-2024)</CardTitle>
+          <CardTitle>Monte Carlo simulátor portfolia</CardTitle>
           <p className="text-sm text-gray-600">
-            Simulace založená na 30letých historických datech s realistickými korelacemi mezi třídami aktiv
+            Jednoduchá simulace růstu portfolia s historickými daty
           </p>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Přednastavená portfolia */}
+          {/* Portfolio alokace */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Rychlé přednastavení</h3>
-            <div className="flex gap-4">
-              <Button variant="outline" onClick={() => setPresetPortfolio('conservative')}>
-                Konzervativní (40% akcie)
-              </Button>
-              <Button variant="outline" onClick={() => setPresetPortfolio('balanced')}>
-                Vyvážené (70% akcie)
-              </Button>
-              <Button variant="outline" onClick={() => setPresetPortfolio('aggressive')}>
-                Agresivní (100% akcie)
-              </Button>
+            <h3 className="text-lg font-semibold mb-4">Složení portfolia</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <Label>Akcie ({allocation.stocks}%)</Label>
+                <Slider
+                  value={[allocation.stocks]}
+                  onValueChange={([value]) => handleAllocationChange('stocks', value)}
+                  max={100}
+                  step={1}
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label>Dluhopisy ({allocation.bonds}%)</Label>
+                <Slider
+                  value={[allocation.bonds]}
+                  onValueChange={([value]) => handleAllocationChange('bonds', value)}
+                  max={100}
+                  step={1}
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label>Hotovost ({allocation.cash}%)</Label>
+                <Slider
+                  value={[allocation.cash]}
+                  onValueChange={([value]) => handleAllocationChange('cash', value)}
+                  max={100}
+                  step={1}
+                  className="mt-2"
+                />
+              </div>
             </div>
-          </div>
-
-          {/* Portfolio složení */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Detailní složení portfolia</h3>
-            <Tabs defaultValue="stocks" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="stocks">Akcie</TabsTrigger>
-                <TabsTrigger value="bonds">Dluhopisy</TabsTrigger>
-                <TabsTrigger value="alternatives">Alternativy</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="stocks" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label>US velké akcie ({allocation.usLargeStocks}%)</Label>
-                    <Slider
-                      value={[allocation.usLargeStocks]}
-                      onValueChange={([value]) => handleAllocationChange('usLargeStocks', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label>US malé akcie ({allocation.usSmallStocks}%)</Label>
-                    <Slider
-                      value={[allocation.usSmallStocks]}
-                      onValueChange={([value]) => handleAllocationChange('usSmallStocks', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label>Mezinárodní akcie ({allocation.internationalStocks}%)</Label>
-                    <Slider
-                      value={[allocation.internationalStocks]}
-                      onValueChange={([value]) => handleAllocationChange('internationalStocks', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label>Rozvíjející se trhy ({allocation.emergingMarkets}%)</Label>
-                    <Slider
-                      value={[allocation.emergingMarkets]}
-                      onValueChange={([value]) => handleAllocationChange('emergingMarkets', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label>Kanadské akcie ({allocation.canadianStocks}%)</Label>
-                    <Slider
-                      value={[allocation.canadianStocks]}
-                      onValueChange={([value]) => handleAllocationChange('canadianStocks', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="bonds" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label>US vysokokvalitní dluhopisy ({allocation.usBonds}%)</Label>
-                    <Slider
-                      value={[allocation.usBonds]}
-                      onValueChange={([value]) => handleAllocationChange('usBonds', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label>US vysoce výnosné dluhopisy ({allocation.highYieldBonds}%)</Label>
-                    <Slider
-                      value={[allocation.highYieldBonds]}
-                      onValueChange={([value]) => handleAllocationChange('highYieldBonds', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label>Mezinárodní dluhopisy ({allocation.internationalBonds}%)</Label>
-                    <Slider
-                      value={[allocation.internationalBonds]}
-                      onValueChange={([value]) => handleAllocationChange('internationalBonds', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="alternatives" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label>REITs - nemovitosti ({allocation.reits}%)</Label>
-                    <Slider
-                      value={[allocation.reits]}
-                      onValueChange={([value]) => handleAllocationChange('reits', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label>Zlato ({allocation.gold}%)</Label>
-                    <Slider
-                      value={[allocation.gold]}
-                      onValueChange={([value]) => handleAllocationChange('gold', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label>Hotovost ({allocation.cash}%)</Label>
-                    <Slider
-                      value={[allocation.cash]}
-                      onValueChange={([value]) => handleAllocationChange('cash', value)}
-                      max={100}
-                      step={1}
-                      className="mt-2"
-                    />
-                  </div>
-                </div>
-              </TabsContent>
-            </Tabs>
             
             <div className="mt-4 flex items-center justify-between">
               <p className={`text-sm ${totalAllocation === 100 ? 'text-green-600' : 'text-red-600'}`}>
@@ -317,25 +170,52 @@ const MonteCarloSimulator: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Debug výpis výsledků pro troubleshooting */}
-      <div className="hidden">
-        {JSON.stringify(results)}
-      </div>
+      {/* Výsledky */}
+      {results && results.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Výsledky simulace</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {results.filter(r => r.year === investmentPeriod).map(result => (
+                <div key={result.year} className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  <div className="p-4 bg-red-50 rounded-lg">
+                    <span className="text-sm text-red-600">Pesimistický (5%)</span>
+                    <div className="text-lg font-bold">{formatNumber(result.percentile5)}</div>
+                  </div>
+                  <div className="p-4 bg-orange-50 rounded-lg">
+                    <span className="text-sm text-orange-600">Konzervativní (25%)</span>
+                    <div className="text-lg font-bold">{formatNumber(result.percentile25)}</div>
+                  </div>
+                  <div className="p-4 bg-blue-50 rounded-lg">
+                    <span className="text-sm text-blue-600">Realistický (50%)</span>
+                    <div className="text-lg font-bold">{formatNumber(result.percentile50)}</div>
+                  </div>
+                  <div className="p-4 bg-green-50 rounded-lg">
+                    <span className="text-sm text-green-600">Optimistický (75%)</span>
+                    <div className="text-lg font-bold">{formatNumber(result.percentile75)}</div>
+                  </div>
+                  <div className="p-4 bg-green-100 rounded-lg">
+                    <span className="text-sm text-green-700">Velmi optimistický (95%)</span>
+                    <div className="text-lg font-bold">{formatNumber(result.percentile95)}</div>
+                  </div>
+                </div>
+              ))}
+              
+              <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+                <span className="text-sm text-gray-600">Celkem investováno</span>
+                <div className="text-lg font-bold">
+                  {formatNumber(initialInvestment + (monthlyContribution * 12 * investmentPeriod))}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
-      {results && Array.isArray(results) && results.length > 0 ? (
-        <>
-          <MonteCarloChart data={results} />
-          <MonteCarloTable 
-            data={results} 
-            investmentPeriod={investmentPeriod} 
-            initialInvestment={initialInvestment}
-            monthlyContribution={monthlyContribution}
-          />
-        </>
-      ) : isLoading ? (
+      {isLoading && (
         <div className="text-center text-lg text-blue-600">Probíhá simulace...</div>
-      ) : (
-        <div className="text-center text-gray-500">Zatím nejsou dostupné žádné výsledky. Spusťte simulaci.</div>
       )}
     </div>
   );

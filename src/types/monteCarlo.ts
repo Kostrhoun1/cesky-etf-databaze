@@ -1,22 +1,8 @@
 
 export interface AssetAllocation {
-  usLargeStocks: number;
-  usSmallStocks: number;
-  internationalStocks: number;
-  emergingMarkets: number;
-  canadianStocks: number;
-  reits: number;
-  highYieldBonds: number;
-  usBonds: number;
-  internationalBonds: number;
-  gold: number;
+  stocks: number;
+  bonds: number;
   cash: number;
-}
-
-export interface AssetData {
-  name: string;
-  annualReturn: number;
-  volatility: number;
 }
 
 export interface SimulationParameters {
@@ -35,10 +21,4 @@ export interface SimulationResult {
   percentile75: number;
   percentile95: number;
   mean: number;
-}
-
-export interface PortfolioMetrics {
-  expectedReturn: number;
-  volatility: number;
-  sharpeRatio: number;
 }
