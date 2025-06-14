@@ -60,11 +60,26 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
 
   // Filter and sort ETFs
   const filteredETFs = etfs
-    .filter(etf => 
-      etf.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      etf.isin.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      etf.fund_provider.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    .filter(etf => {
+      const searchLower = searchTerm.toLowerCase();
+      
+      // Search in basic fields
+      const basicFieldsMatch = 
+        etf.name.toLowerCase().includes(searchLower) ||
+        etf.isin.toLowerCase().includes(searchLower) ||
+        etf.fund_provider.toLowerCase().includes(searchLower);
+      
+      // Search in ticker fields
+      const tickerFieldsMatch = 
+        (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower)) ||
+        (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase().includes(searchLower)) ||
+        (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase().includes(searchLower)) ||
+        (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().includes(searchLower)) ||
+        (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes(searchLower)) ||
+        (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes(searchLower));
+      
+      return basicFieldsMatch || tickerFieldsMatch;
+    })
     .filter(etf => categoryFilter === 'all' || etf.category === categoryFilter)
     .sort((a, b) => {
       let aValue: any = a[sortBy as keyof ETF];
@@ -127,7 +142,7 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Hledat podle názvu, ISIN nebo poskytovatele..."
+              placeholder="Hledat podle názvu, ISIN, poskytovatele nebo tickeru..."
               value={searchTerm}
               onChange={(e) => handleSearch(e.target.value)}
               className="pl-10"
