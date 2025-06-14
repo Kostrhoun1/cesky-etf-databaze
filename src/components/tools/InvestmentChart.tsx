@@ -1,8 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 interface CalculationData {
   year: number;
@@ -18,21 +17,6 @@ interface InvestmentChartProps {
   data: CalculationData[];
 }
 
-const chartConfig = {
-  totalInvested: {
-    label: 'Celkem investováno',
-    color: '#3b82f6'
-  },
-  grossValue: {
-    label: 'Hrubá hodnota',
-    color: '#10b981'
-  },
-  netValue: {
-    label: 'Čistá hodnota',
-    color: '#8b5cf6'
-  }
-};
-
 const InvestmentChart: React.FC<InvestmentChartProps> = ({ data }) => {
   const formatNumber = (value: number) => {
     return new Intl.NumberFormat('cs-CZ', {
@@ -41,9 +25,20 @@ const InvestmentChart: React.FC<InvestmentChartProps> = ({ data }) => {
     }).format(value);
   };
 
-  const formatTooltipValue = (value: number, name: string) => {
-    const config = chartConfig[name as keyof typeof chartConfig];
-    return [`${formatNumber(value)} Kč`, config?.label || name];
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white border border-gray-300 p-3 rounded shadow-lg">
+          <p className="font-medium">{`Rok: ${label}`}</p>
+          {payload.map((entry: any, index: number) => (
+            <p key={index} style={{ color: entry.color }}>
+              {`${entry.name}: ${formatNumber(entry.value)} Kč`}
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
@@ -52,52 +47,47 @@ const InvestmentChart: React.FC<InvestmentChartProps> = ({ data }) => {
         <CardTitle>Vývoj investice v čase</CardTitle>
       </CardHeader>
       <CardContent>
-        <ChartContainer
-          config={chartConfig}
-          className="h-[400px] w-full"
-        >
-          <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis 
-              dataKey="year" 
-              className="text-muted-foreground"
-              label={{ value: 'Rok', position: 'insideBottom', offset: -10 }}
-            />
-            <YAxis 
-              className="text-muted-foreground"
-              tickFormatter={formatNumber}
-              label={{ value: 'Hodnota (Kč)', angle: -90, position: 'insideLeft' }}
-            />
-            <ChartTooltip 
-              content={<ChartTooltipContent formatter={formatTooltipValue} />}
-            />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="totalInvested"
-              stroke="var(--color-totalInvested)"
-              strokeWidth={2}
-              name="Celkem investováno"
-              dot={{ fill: 'var(--color-totalInvested)', strokeWidth: 2, r: 4 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="grossValue"
-              stroke="var(--color-grossValue)"
-              strokeWidth={2}
-              name="Hrubá hodnota"
-              dot={{ fill: 'var(--color-grossValue)', strokeWidth: 2, r: 4 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="netValue"
-              stroke="var(--color-netValue)"
-              strokeWidth={2}
-              name="Čistá hodnota"
-              dot={{ fill: 'var(--color-netValue)', strokeWidth: 2, r: 4 }}
-            />
-          </LineChart>
-        </ChartContainer>
+        <div className="h-[400px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+              <XAxis 
+                dataKey="year" 
+                className="text-muted-foreground"
+              />
+              <YAxis 
+                className="text-muted-foreground"
+                tickFormatter={formatNumber}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="totalInvested"
+                stroke="#3b82f6"
+                strokeWidth={2}
+                name="Celkem investováno"
+                dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="grossValue"
+                stroke="#10b981"
+                strokeWidth={2}
+                name="Hrubá hodnota"
+                dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="netValue"
+                stroke="#8b5cf6"
+                strokeWidth={2}
+                name="Čistá hodnota"
+                dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </CardContent>
     </Card>
   );
