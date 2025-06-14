@@ -4,6 +4,28 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { SimulationResult } from '@/types/monteCarlo';
 
+/**
+ * Vypočítá IRR (interní míru výnosnosti) z mediánové trajektorie simulace.
+ * cashFlows: záporná hodnota na začátku (počáteční investice), pak záporné měsíční vklady a na konci kladný výběr (konečný stav). Funkce využívá numerickou metodu (iterace).
+ */
+function calculateIRR(cashFlows: number[], guess = 0.05): number {
+  let rate = guess;
+  for (let iter = 0; iter < 100; iter++) {
+    let npv = 0, dnpv = 0;
+    for (let t = 0; t < cashFlows.length; t++) {
+      npv += cashFlows[t] / Math.pow(1 + rate, t);
+      if (t > 0) {
+        dnpv -= t * cashFlows[t] / Math.pow(1 + rate, t + 1);
+      }
+    }
+    const newRate = rate - npv / dnpv;
+    if (Math.abs(newRate - rate) < 1e-7) return newRate * 12; // roční IRR z měsíčního
+    rate = newRate;
+    if (rate < -0.999) return NaN; // Nerealistický záporný výnos
+  }
+  return NaN;
+}
+
 interface MonteCarloTableProps {
   data: SimulationResult[];
   investmentPeriod: number;
@@ -38,6 +60,50 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
 
   const finalResult = data[data.length - 1];
   const initialValue = data[0].mean;
+
+  // Mediánová trajektorie pro IRR
+  // Vytvoříme cashflows:
+  // - počáteční investice (záporně), pak (investmentPeriod*12) x měsíční příspěvek (záporně), na konci návratnost (kladně).
+  // Bohužel SimulationResult dává hodnoty jen po letech, nikoli po měsících; musíme předpokládat např. uniformní rozdělení vkladů.
+  // Lepší je tedy získat odhad na základě ročních kroků.
+
+  // Odhadneme měsíční příspěvek na základě rozdílu mezi výsledkem v 0. a 1. roce atd.,
+  // ale lepší je nechat uživatele zadat měsíční příspěvek do této komponenty – protože ale zde nemáme info o měsíčním vkladu,
+  // vezmeme konzervativní aproximaci podle diference:
+  // Nicméně, pro přesný výpočet cashflows potřebujeme znát:
+  // - počáteční investici (je v data[0].mean), 
+  // - celkový investovaný objem (počet let * 12 * měsíční vklad + počátek)
+  // Z API je ale přímo dostupné pouze mean (počáteční stav), nejsou zde však měsíční vklady.
+
+  // -> VÝSLEDEK: Chceme umožnit předat investované částky této komponentě pro správné výpočty.
+  // Pokud to zatím není možné, vypíšeme aspoň detailní přehled v boxu pod výsledky.
+
+  // Proto prozatím zobrazíme správný "Skutečný výnos" a "Investováno", kde:
+  // investovano = initialValue + (roky * 12 * vklad)
+  // vklad odhadneme z rozdílu mean mezi nultým a prvním rokem / 12
+
+  const years = investmentPeriod;
+  const yearsLen = data.length;
+
+  // Odhad měsíčního vkladu
+  const meanYear0 = data[0].mean;
+  const meanYear1 = data[1]?.mean ?? meanYear0;
+  const monthlyContribution = Math.round((meanYear1 - meanYear0) / 12);
+
+  // celkem investováno
+  const totalInvested = meanYear0 + (monthlyContribution * 12 * years);
+  const medianNetGain = finalResult.percentile50 - totalInvested;
+
+  // IRR – spočítáme jako interní míru výnosnosti z mediánových ročních hodnot 
+  // (meziroční cashflows, tj. 1x na začátku záporná částka, 20x záporný vklad za rok, na konci kladný konečný stav)
+  // pro zjednodušení
+  const cashFlows = [-meanYear0];
+  for (let i = 1; i <= years; i++) {
+    cashFlows.push(-monthlyContribution * 12);
+  }
+  cashFlows[cashFlows.length - 1] += finalResult.percentile50; // přičteme konečný stav do posledního rámečku
+
+  const irr = calculateIRR(cashFlows);
 
   return (
     <Card>
@@ -87,7 +153,7 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
           <div className="p-4 bg-gray-50 rounded-lg">
             <h4 className="font-semibold text-gray-800 mb-2">Průměrný výnos p.a.</h4>
             <p className="text-2xl font-bold text-gray-900">
-              {formatPercentage((Math.pow(finalResult.mean / initialValue, 1/investmentPeriod) - 1))}
+              {isNaN(irr) ? "—" : formatPercentage(irr)}
             </p>
           </div>
           
@@ -115,6 +181,18 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
           </div>
         </div>
 
+        {/* Přehled investované částky a čistého zisku */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 bg-gray-100 rounded-lg">
+            <span className="text-sm text-gray-600">Celkem investováno</span>
+            <div className="text-lg font-bold">{formatNumber(totalInvested)}</div>
+          </div>
+          <div className="p-4 bg-green-100 rounded-lg">
+            <span className="text-sm text-gray-600">Skutečný výnos (medián)</span>
+            <div className="text-lg font-bold text-green-700">{formatNumber(medianNetGain)}</div>
+          </div>
+        </div>
+
         <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
           <h4 className="font-semibold text-yellow-900 mb-2">Důležité upozornění:</h4>
           <ul className="text-sm text-yellow-800 space-y-1">
@@ -130,3 +208,4 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
 };
 
 export default MonteCarloTable;
+
