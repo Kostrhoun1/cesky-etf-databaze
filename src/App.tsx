@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -11,6 +10,12 @@ import DEGIROReview from "./pages/DEGIROReview";
 import Tools from "./pages/Tools";
 import ETFDetail from "./pages/ETFDetail";
 import NotFound from "./pages/NotFound";
+import BlogPage from "./pages/BlogPage";
+import NejlepsiETF2025 from "./pages/blog/NejlepsiETF2025";
+import NejlepsiETFNaAmerickeAkcie from "./pages/blog/NejlepsiETFNaAmerickeAkcie";
+import NejlepsiETFNaNASDAQ from "./pages/blog/NejlepsiETFNaNASDAQ";
+import NejlepsiDividendoveETF from "./pages/blog/NejlepsiDividendoveETF";
+import NejlepsiETFNaEvropskeAkcie from "./pages/blog/NejlepsiETFNaEvropskeAkcie";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +32,12 @@ const App = () => (
         <Route path="/degiro-recenze" element={<DEGIROReview />} />
         <Route path="/nastroje" element={<Tools />} />
         <Route path="/etf/:isin" element={<ETFDetail />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/nejlepsi-etf-2025" element={<NejlepsiETF2025 />} />
+        <Route path="/blog/nejlepsi-etf-na-americke-akcie" element={<NejlepsiETFNaAmerickeAkcie />} />
+        <Route path="/blog/nejlepsi-etf-na-nasdaq" element={<NejlepsiETFNaNASDAQ />} />
+        <Route path="/blog/nejlepsi-dividendove-etf" element={<NejlepsiDividendoveETF />} />
+        <Route path="/blog/nejlepsi-etf-na-evropske-akcie" element={<NejlepsiETFNaEvropskeAkcie />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
