@@ -1,4 +1,3 @@
-
 import { AssetAllocation, AssetData, SimulationParameters, SimulationResult, PortfolioMetrics } from '@/types/monteCarlo';
 
 // Historická data aktiv za posledních 30 let (1985-2024)
@@ -164,86 +163,156 @@ export function calculatePortfolioMetrics(allocation: AssetAllocation): Portfoli
   return { expectedReturn, volatility, sharpeRatio };
 }
 
-// Zlepšené generování normálního rozdělení s omezeními
-function generateConstrainedNormal(mean: number, stdDev: number): number {
-  // Box-Muller transform s omezeními
-  let u = 0, v = 0;
-  while(u === 0) u = Math.random(); // Převení log(0)
-  while(v === 0) v = Math.random();
-  
-  const normal = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-  
-  // Omezte extrémní hodnoty na +/- 3 standardní odchylky
-  const constrainedNormal = Math.max(-3, Math.min(3, normal));
-  
-  return mean + constrainedNormal * stdDev;
+/**
+ * Pomocná funkce: vytvoří pole všech klíčů aktiv ve správném pořadí (důležité pro korelace!)
+ */
+function getAssetOrder(): (keyof AssetAllocation)[] {
+  return [
+    'usLargeStocks',
+    'usSmallStocks',
+    'internationalStocks',
+    'emergingMarkets',
+    'canadianStocks',
+    'reits',
+    'highYieldBonds',
+    'usBonds',
+    'internationalBonds',
+    'gold',
+    'cash'
+  ];
 }
 
-// Generování měsíčních výnosů s realistickými omezeními
-function generateMonthlyReturns(allocation: AssetAllocation): Record<string, number> {
-  const assets = Object.keys(allocation) as (keyof AssetAllocation)[];
-  const monthlyReturns: Record<string, number> = {};
-  
-  assets.forEach(asset => {
-    if (allocation[asset] === 0) {
-      monthlyReturns[asset] = 0;
-      return;
+/**
+ * Převede korelační matici na kovarianční matici (užívá roční volatility).
+ */
+function correlationToCovariance(corr: number[][], stdDevs: number[]): number[][] {
+  const size = corr.length;
+  const cov: number[][] = Array.from({ length: size }, () => Array(size).fill(0));
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      cov[i][j] = corr[i][j] * stdDevs[i] * stdDevs[j];
     }
-    
-    const assetData = ASSET_DATA[asset];
-    
-    // Převod na měsíční parametry s konzervativnějším přístupem
-    const monthlyExpectedReturn = assetData.annualReturn / 12;
-    const monthlyVolatility = assetData.volatility / Math.sqrt(12);
-    
-    // Generuj omezený normální výnos
-    const monthlyReturn = generateConstrainedNormal(monthlyExpectedReturn, monthlyVolatility);
-    
-    // Další omezení - žádný měsíční výnos by neměl být extrémní
-    const maxMonthlyReturn = 0.25; // Max 25% za měsíc
-    const minMonthlyReturn = -0.25; // Max -25% za měsíc
-    
-    monthlyReturns[asset] = Math.max(minMonthlyReturn, Math.min(maxMonthlyReturn, monthlyReturn));
-  });
-  
-  return monthlyReturns;
+  }
+  return cov;
 }
 
-// Simulace jednoho scénáře
+/**
+ * Choleského rozklad symmetric pozitivně definitní matice (k vygenerování korelovaných náhodných veličin).
+ * Lze projít i bez knihovny, protože n=11 je malé.
+ */
+function choleskyDecomposition(matrix: number[][]): number[][] {
+  const n = matrix.length;
+  const L: number[][] = Array.from({ length: n }, () => Array(n).fill(0));
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j <= i; j++) {
+      let sum = 0;
+      for (let k = 0; k < j; k++) {
+        sum += L[i][k] * L[j][k];
+      }
+      if (i === j) {
+        L[i][j] = Math.sqrt(Math.max(matrix[i][i] - sum, 0));
+      } else {
+        if (L[j][j] === 0) {
+          L[i][j] = 0;
+        } else {
+          L[i][j] = (matrix[i][j] - sum) / L[j][j];
+        }
+      }
+    }
+  }
+  return L;
+}
+
+/**
+ * Vygeneruje vektor standardních normálních náhodných veličin.
+ */
+function generateStandardNormalVector(dim: number): number[] {
+  const out = [];
+  for (let i = 0; i < dim; i++) {
+    let u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    const normal = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    out.push(normal);
+  }
+  return out;
+}
+
+/**
+ * Vygeneruje měsíční výnosy všech aktiv [korelovaně], použije explicitně zadané roční hodnoty!
+ */
+function generateCorrelatedMonthlyReturns(): Record<string, number> {
+  const assetOrder = getAssetOrder();
+  const n = assetOrder.length;
+
+  // Konverze - z ročních na měsíční parametry:
+  const means = assetOrder.map(a => ASSET_DATA[a].annualReturn / 12);
+  const stdDevs = assetOrder.map(a => ASSET_DATA[a].volatility / Math.sqrt(12)); // měsíční SD
+
+  // Korelační matice do pole:
+  const corrMat = assetOrder.map(a1 => assetOrder.map(a2 => CORRELATION_MATRIX[a1][a2]));
+  const covMat = correlationToCovariance(corrMat, stdDevs);
+  const chol = choleskyDecomposition(covMat);
+
+  // Random vektor
+  const z = generateStandardNormalVector(n);
+
+  // Korelované výnosy: mean + L*z
+  const returns: number[] = Array(n).fill(0);
+  for (let i = 0; i < n; i++) {
+    let sum = 0;
+    for (let k = 0; k <= i; k++) {
+      sum += chol[i][k] * z[k];
+    }
+    // Omezit na ±3 SD, ať nejsou extrémy (viz předchozí)
+    const capped = Math.max(means[i] - 3*stdDevs[i], Math.min(means[i] + 3*stdDevs[i], means[i] + sum));
+    // Další globální hardcap na ±25% za měsíc pro případ původní výzvy
+    returns[i] = Math.max(-0.25, Math.min(0.25, capped));
+  }
+
+  // Namapovat zpět do Record
+  const result: Record<string, number> = {};
+  assetOrder.forEach((a, i) => { result[a] = returns[i]; });
+  return result;
+}
+
+/**
+ * Generuje jeden měsíční vektor výnosů, přiřadí 0 tam, kde je v alokaci 0 %.
+ */
+function generatePortfolioMonthlyReturns(allocation: AssetAllocation): Record<string, number> {
+  const returns = generateCorrelatedMonthlyReturns();
+  const adjusted: Record<string, number> = {};
+  Object.keys(allocation).forEach(a => {
+    adjusted[a] = allocation[a as keyof AssetAllocation] === 0 ? 0 : returns[a];
+  });
+  return adjusted;
+}
+
+// Upravujeme simulací jednoho scénáře tak, aby užíval korelované výnosy!
 function simulateSinglePath(params: SimulationParameters): number[] {
   const { allocation, initialInvestment, monthlyContribution, years } = params;
   const monthsTotal = years * 12;
   const values: number[] = [initialInvestment];
-  
   let currentValue = initialInvestment;
-  
+
   for (let month = 1; month <= monthsTotal; month++) {
-    // Generuj měsíční výnosy
-    const monthlyReturns = generateMonthlyReturns(allocation);
-    
-    // Spočítej vážený výnos portfolia pro tento měsíc
+    const monthlyReturns = generatePortfolioMonthlyReturns(allocation);
     let portfolioReturn = 0;
     Object.keys(allocation).forEach(asset => {
       const weight = allocation[asset as keyof AssetAllocation] / 100;
       portfolioReturn += weight * monthlyReturns[asset];
     });
-    
     // Debug pro první simulaci a první 3 měsíce
     if (month <= 3) {
       console.log(`Month ${month}:`);
       console.log('  Portfolio monthly return:', (portfolioReturn * 100).toFixed(2) + '%');
       console.log('  Annualized equivalent:', ((Math.pow(1 + portfolioReturn, 12) - 1) * 100).toFixed(2) + '%');
     }
-    
-    // Aplikuj výnos a přidej měsíční příspěvek
     currentValue = currentValue * (1 + portfolioReturn) + monthlyContribution;
-    
-    // Ulož hodnotu na konci roku
     if (month % 12 === 0) {
       values.push(currentValue);
     }
   }
-  
   return values;
 }
 
