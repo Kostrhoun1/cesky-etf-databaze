@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -63,14 +64,14 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
   const initialValue = data[0].mean;
 
   // Přesné cashflow pro IRR:
-  // - první: záporná počáteční investice
-  // - následuje investmentPeriod*12 záporných měsíčních vkladů
-  // - poslední cashflow je mediánová konečná hodnota (kladně)
+  // 1. První: záporná počáteční investice
+  // 2. Následuje investmentPeriod*12 záporných měsíčních vkladů
+  // 3. Poslední cashflow je mediánová konečná hodnota (kladně)
   const monthCount = investmentPeriod * 12;
   const cashFlows = [
     -initialInvestment,
-    ...Array(monthCount - 1).fill(-monthlyContribution),
-    -monthlyContribution + finalResult.percentile50 // poslední měsíc: vklad a zhodnocená návratnost
+    ...Array(monthCount).fill(-monthlyContribution),
+    finalResult.percentile50
   ];
 
   // Výpočet IRR podle těchto cashflow
@@ -128,7 +129,7 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
           <div className="p-4 bg-gray-50 rounded-lg">
             <h4 className="font-semibold text-gray-800 mb-2">Průměrný výnos p.a.</h4>
             <p className="text-2xl font-bold text-gray-900">
-              {isNaN(irr) ? "—" : formatPercentage(irr)}
+              {isNaN(irr) || irr < -1 || irr > 2 ? "—" : formatPercentage(irr)}
             </p>
           </div>
           
