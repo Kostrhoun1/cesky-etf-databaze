@@ -25,10 +25,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <header className="bg-white/80 backdrop-blur-lg sticky top-0 z-40 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            <div className="flex items-center gap-2">
-              <Link to="/" className="flex items-center gap-3 group">
-                <Logo size={42} className="group-hover:scale-105 transition-transform" />
-                <span className="text-xl font-bold text-gray-800 tracking-tight">ETF průvodce.cz</span>
+            <div className="flex items-center">
+              <Link to="/" className="flex items-center group">
+                <Logo size={180} className="group-hover:opacity-90 transition-opacity" />
               </Link>
             </div>
             <nav className="hidden md:flex space-x-1">
@@ -64,11 +63,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="md:col-span-2 flex flex-col gap-4">
-              <div className="flex items-center gap-3">
-                <Logo size={48} />
-                <span className="text-xl font-semibold text-slate-100">ETF průvodce.cz</span>
+              <div className="flex items-center">
+                <Logo size={200} />
               </div>
-              <p className="text-slate-400 leading-relaxed">
+              <p className="text-slate-400 leading-relaxed max-w-sm">
                 Váš moderní a komplexní průvodce světem ETF fondů pro české investory. 
                 Srovnání, analýzy a vzdělávací obsah pro vaše investiční rozhodnutí.
               </p>
