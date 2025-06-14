@@ -19,7 +19,6 @@ export const useETFData = () => {
         name: etf.name,
         url: etf.url,
         description_en: etf.description_en,
-        description_cs: etf.description_cs,
         ter: etf.ter,
         ter_numeric: etf.ter_numeric || 0,
         fund_size: etf.fund_size,
