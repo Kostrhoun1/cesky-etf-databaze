@@ -3,9 +3,9 @@ import React from "react";
 import BlogArticleLayout from "./_BlogArticleLayout";
 import FilteredETFList from "../../components/blog/FilteredETFList";
 
-// ETF zaměřené na dividendy: filtruji kategorií nebo názvem
+// Dividendové ETF - upravíme kategorii
 const filter = {
-  category: "Dividend Equity",
+  category: "Dividend Equity", // zkusíme také "High Dividend Yield" nebo "Dividend"
   top: 10,
   sortBy: "return_5y" as const,
   sortOrder: "desc" as const,

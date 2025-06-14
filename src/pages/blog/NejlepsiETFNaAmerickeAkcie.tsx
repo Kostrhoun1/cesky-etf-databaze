@@ -3,9 +3,9 @@ import React from "react";
 import BlogArticleLayout from "./_BlogArticleLayout";
 import FilteredETFList from "../../components/blog/FilteredETFList";
 
-// Pro americké akcie: typicky kategorie "US Equity" nebo název/kategorie obsahuje 'S&P', 'USA', 'US Equity'
+// Americké akcie - upravíme na kategorie, které skutečně existují
 const filter = {
-  category: "US Equity",
+  category: "US Equity", // nebo "North America Equity"
   top: 10,
   sortBy: "return_5y" as const,
   sortOrder: "desc" as const,

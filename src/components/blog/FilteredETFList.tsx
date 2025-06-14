@@ -25,9 +25,30 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
     queryKey: ["etfs", filter],
     queryFn: async () => {
       let etfs = await fetchETFs();
+      
+      console.log(`Total ETFs loaded: ${etfs.length}`);
+      console.log(`Filter category: ${filter.category}`);
+      
+      // Zobrazit všechny dostupné kategorie pro debugging
+      const allCategories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
+      console.log('All available categories:', allCategories.sort());
+      
       if (filter.category) {
-        etfs = etfs.filter((etf) => etf.category?.toLowerCase() === filter.category?.toLowerCase());
+        // Zkusíme exact match
+        let filteredByCategory = etfs.filter((etf) => etf.category?.toLowerCase() === filter.category?.toLowerCase());
+        
+        // Pokud nenajdeme exact match, zkusíme partial match
+        if (filteredByCategory.length === 0) {
+          filteredByCategory = etfs.filter((etf) => 
+            etf.category?.toLowerCase().includes(filter.category?.toLowerCase() || "") ||
+            etf.name?.toLowerCase().includes(filter.category?.toLowerCase() || "")
+          );
+        }
+        
+        console.log(`ETFs after category filter (${filter.category}): ${filteredByCategory.length}`);
+        etfs = filteredByCategory;
       }
+      
       if (filter.sortBy) {
         etfs = etfs.sort((a, b) => {
           const aVal = a[filter.sortBy as keyof ETFListItem];
@@ -42,9 +63,12 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
             : (Number(bVal) || 0) - (Number(aVal) || 0);
         });
       }
+      
       if (filter.top) {
         etfs = etfs.slice(0, filter.top);
       }
+      
+      console.log(`Final ETFs count: ${etfs.length}`);
       return etfs;
     },
   });
@@ -66,14 +90,22 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
   if (data.length === 0)
     return (
       <Card className="mt-6">
-        <CardContent>Žádné ETF fondy nesplňují podmínky filtru tohoto článku.</CardContent>
+        <CardContent>
+          <p>Žádné ETF fondy nesplňují podmínky filtru tohoto článku.</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Filtr kategorie: {filter.category || "Žádný"}
+          </p>
+        </CardContent>
       </Card>
     );
 
   return (
     <Card className="mt-8">
       <CardHeader>
-        <CardTitle>Výběr ETF k této kategorii</CardTitle>
+        <CardTitle>Výběr ETF k této kategorii</CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Nalezeno {data.length} fondů v kategorii "{filter.category}"
+        </p>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
