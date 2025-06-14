@@ -3,7 +3,13 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Calculator, BookOpen } from 'lucide-react';
 
-const BenefitsSection: React.FC = () => {
+interface BenefitsSectionProps {
+  totalCount: number;
+}
+
+const BenefitsSection: React.FC<BenefitsSectionProps> = ({ totalCount }) => {
+  const displayCount = totalCount > 0 ? Math.floor(totalCount / 100) * 100 : 3500;
+  
   const benefits = [
     {
       icon: BarChart,
@@ -23,14 +29,14 @@ const BenefitsSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-gray-900 tracking-tight sm:text-4xl">
             Vše pro vaše investice
           </h2>
           <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-            Poskytujeme komplexní informace, nástroje a analýzy pro informovaná investiční rozhodnutí.
+            Srovnáváme přes {displayCount.toLocaleString()}+ ETF a poskytujeme komplexní informace, nástroje a analýzy pro vaše investiční rozhodnutí.
           </p>
         </div>
 

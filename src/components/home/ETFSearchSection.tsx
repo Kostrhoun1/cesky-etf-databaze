@@ -48,14 +48,16 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
   };
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-gray-900 tracking-tight sm:text-4xl">
             Prozkoumejte populární ETF
           </h2>
-          <p className="mt-4 text-lg text-gray-600">
-            Vyberte si z naší databáze {totalCount > 0 ? `přes ${totalCount.toLocaleString()}` : ''} ETF fondů
+          <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+            {totalCount > 0
+              ? `Srovnáváme pro vás přes ${totalCount.toLocaleString()} ETF fondů. Začněte prozkoumávat ty nejlepší pro české investory.`
+              : 'Začněte prozkoumávat naši databázi ETF fondů.'}
           </p>
         </div>
 

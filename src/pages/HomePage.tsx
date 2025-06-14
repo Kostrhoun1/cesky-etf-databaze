@@ -57,8 +57,8 @@ const HomePage: React.FC = () => {
 
   return (
     <Layout>
-      <HeroSection />
-      <BenefitsSection />
+      <HeroSection totalCount={totalCount} />
+      <BenefitsSection totalCount={totalCount} />
       <ETFSearchSection 
         etfs={etfs}
         totalCount={totalCount}
@@ -66,7 +66,7 @@ const HomePage: React.FC = () => {
         loadingError={loadingError}
       />
       <BrokerComparisonSection />
-      <CTASection />
+      <CTASection totalCount={totalCount} />
     </Layout>
   );
 };
