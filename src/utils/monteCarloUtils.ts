@@ -103,8 +103,8 @@ export function calculatePortfolioMetrics(allocation: AssetAllocation): Portfoli
   return { expectedReturn, volatility, sharpeRatio };
 }
 
-// Generování korelovaných výnosů
-function generateCorrelatedReturns(allocation: AssetAllocation): Record<string, number> {
+// Generování korelovaných MĚSÍČNÍCH výnosů
+function generateCorrelatedMonthlyReturns(allocation: AssetAllocation): Record<string, number> {
   const assets = Object.keys(allocation) as (keyof AssetAllocation)[];
   
   // Vytvoř korelační matici
@@ -126,9 +126,12 @@ function generateCorrelatedReturns(allocation: AssetAllocation): Record<string, 
       correlatedReturn += L[i][j] * independentReturns[j];
     }
     
-    // Převeď na skutečný výnos
+    // Převeď na skutečný MĚSÍČNÍ výnos
     const assetData = ASSET_DATA[asset];
-    correlatedReturns[asset] = assetData.annualReturn + correlatedReturn * assetData.volatility;
+    const monthlyExpectedReturn = assetData.annualReturn / 12;
+    const monthlyVolatility = assetData.volatility / Math.sqrt(12); // Škálování volatility na měsíc
+    
+    correlatedReturns[asset] = monthlyExpectedReturn + correlatedReturn * monthlyVolatility;
   });
   
   return correlatedReturns;
@@ -147,15 +150,14 @@ function simulateSinglePath(params: SimulationParameters): number[] {
   
   // Debug první pár měsíců
   for (let month = 1; month <= monthsTotal; month++) {
-    // Generuj měsíční výnosy (roční výnosy / 12)
-    const monthlyReturns = generateCorrelatedReturns(allocation);
+    // Generuj měsíční výnosy (už jsou měsíční!)
+    const monthlyReturns = generateCorrelatedMonthlyReturns(allocation);
     
     // Spočítej vážený výnos portfolia pro tento měsíc
     let portfolioReturn = 0;
     Object.keys(allocation).forEach(asset => {
       const weight = allocation[asset as keyof AssetAllocation] / 100;
-      const monthlyReturn = monthlyReturns[asset] / 12;
-      portfolioReturn += weight * monthlyReturn;
+      portfolioReturn += weight * monthlyReturns[asset];
     });
     
     if (month <= 3) { // Debug pouze první 3 měsíce
