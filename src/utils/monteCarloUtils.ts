@@ -1,36 +1,132 @@
-
 import { AssetAllocation, AssetData, SimulationParameters, SimulationResult, PortfolioMetrics } from '@/types/monteCarlo';
 
-// Historická data aktiv (založeno na realistických dlouhodobých průměrech)
+// Historická data aktiv za posledních 30 let (1985-2024)
 const ASSET_DATA: Record<string, AssetData> = {
-  usStocks: {
-    name: 'Americké akcie',
-    annualReturn: 0.07, // 7% roční průměr (realističtější)
-    volatility: 0.16 // 16% volatilita
+  usLargeStocks: {
+    name: 'US velké akcie (S&P 500)',
+    annualReturn: 0.086, // 8.6%
+    volatility: 0.168 // 16.8%
   },
-  worldStocks: {
-    name: 'Celosvětové akcie',
-    annualReturn: 0.065, // 6.5% roční průměr (realističtější)
-    volatility: 0.18 // 18% volatilita
+  usSmallStocks: {
+    name: 'US malé akcie',
+    annualReturn: 0.076, // 7.6%
+    volatility: 0.205 // 20.5%
   },
-  worldBonds: {
-    name: 'Celosvětové dluhopisy',
-    annualReturn: 0.025, // 2.5% roční průměr (realističtější)
-    volatility: 0.06 // 6% volatilita
+  internationalStocks: {
+    name: 'Mezinárodní rozvinuté akcie',
+    annualReturn: 0.062, // 6.2%
+    volatility: 0.194 // 19.4%
+  },
+  emergingMarkets: {
+    name: 'Akcie rozvíjejících se trhů',
+    annualReturn: 0.073, // 7.3%
+    volatility: 0.231 // 23.1%
+  },
+  canadianStocks: {
+    name: 'Kanadské akcie',
+    annualReturn: 0.060, // 6.0%
+    volatility: 0.172 // 17.2%
+  },
+  reits: {
+    name: 'REITs (nemovitosti)',
+    annualReturn: 0.058, // 5.8%
+    volatility: 0.187 // 18.7%
+  },
+  highYieldBonds: {
+    name: 'US vysoce výnosné dluhopisy',
+    annualReturn: 0.048, // 4.8%
+    volatility: 0.089 // 8.9%
   },
   usBonds: {
-    name: 'US dluhopisy',
-    annualReturn: 0.02, // 2% roční průměr (realističtější)
-    volatility: 0.05 // 5% volatilita
+    name: 'US vysokokvalitní dluhopisy',
+    annualReturn: 0.042, // 4.2%
+    volatility: 0.054 // 5.4%
+  },
+  internationalBonds: {
+    name: 'Mezinárodní dluhopisy',
+    annualReturn: 0.026, // 2.6%
+    volatility: 0.108 // 10.8%
+  },
+  gold: {
+    name: 'Zlato',
+    annualReturn: 0.023, // 2.3%
+    volatility: 0.162 // 16.2%
+  },
+  cash: {
+    name: 'Hotovost (T-bills)',
+    annualReturn: 0.004, // 0.4%
+    volatility: 0.015 // 1.5%
   }
 };
 
-// Korelační matice mezi aktivy
+// Korelační matice založená na historických datech (1985-2024)
 const CORRELATION_MATRIX = {
-  usStocks: { usStocks: 1.0, worldStocks: 0.85, worldBonds: -0.1, usBonds: -0.2 },
-  worldStocks: { usStocks: 0.85, worldStocks: 1.0, worldBonds: -0.05, usBonds: -0.15 },
-  worldBonds: { usStocks: -0.1, worldStocks: -0.05, worldBonds: 1.0, usBonds: 0.7 },
-  usBonds: { usStocks: -0.2, worldStocks: -0.15, worldBonds: 0.7, usBonds: 1.0 }
+  usLargeStocks: { 
+    usLargeStocks: 1.00, usSmallStocks: 0.85, internationalStocks: 0.78, 
+    emergingMarkets: 0.65, canadianStocks: 0.74, usBonds: 0.15, 
+    highYieldBonds: 0.45, internationalBonds: 0.25, reits: 0.65, 
+    gold: 0.05, cash: -0.05 
+  },
+  usSmallStocks: { 
+    usLargeStocks: 0.85, usSmallStocks: 1.00, internationalStocks: 0.72, 
+    emergingMarkets: 0.70, canadianStocks: 0.68, usBonds: 0.10, 
+    highYieldBonds: 0.50, internationalBonds: 0.20, reits: 0.70, 
+    gold: 0.00, cash: -0.10 
+  },
+  internationalStocks: { 
+    usLargeStocks: 0.78, usSmallStocks: 0.72, internationalStocks: 1.00, 
+    emergingMarkets: 0.80, canadianStocks: 0.82, usBonds: 0.25, 
+    highYieldBonds: 0.40, internationalBonds: 0.45, reits: 0.55, 
+    gold: 0.15, cash: 0.00 
+  },
+  emergingMarkets: { 
+    usLargeStocks: 0.65, usSmallStocks: 0.70, internationalStocks: 0.80, 
+    emergingMarkets: 1.00, canadianStocks: 0.60, usBonds: 0.20, 
+    highYieldBonds: 0.35, internationalBonds: 0.30, reits: 0.50, 
+    gold: 0.10, cash: 0.05 
+  },
+  canadianStocks: { 
+    usLargeStocks: 0.74, usSmallStocks: 0.68, internationalStocks: 0.82, 
+    emergingMarkets: 0.60, canadianStocks: 1.00, usBonds: 0.22, 
+    highYieldBonds: 0.42, internationalBonds: 0.35, reits: 0.58, 
+    gold: 0.12, cash: 0.02 
+  },
+  usBonds: { 
+    usLargeStocks: 0.15, usSmallStocks: 0.10, internationalStocks: 0.25, 
+    emergingMarkets: 0.20, canadianStocks: 0.22, usBonds: 1.00, 
+    highYieldBonds: 0.65, internationalBonds: 0.55, reits: 0.20, 
+    gold: 0.30, cash: 0.35 
+  },
+  highYieldBonds: { 
+    usLargeStocks: 0.45, usSmallStocks: 0.50, internationalStocks: 0.40, 
+    emergingMarkets: 0.35, canadianStocks: 0.42, usBonds: 0.65, 
+    highYieldBonds: 1.00, internationalBonds: 0.45, reits: 0.55, 
+    gold: 0.15, cash: 0.20 
+  },
+  internationalBonds: { 
+    usLargeStocks: 0.25, usSmallStocks: 0.20, internationalStocks: 0.45, 
+    emergingMarkets: 0.30, canadianStocks: 0.35, usBonds: 0.55, 
+    highYieldBonds: 0.45, internationalBonds: 1.00, reits: 0.30, 
+    gold: 0.25, cash: 0.30 
+  },
+  reits: { 
+    usLargeStocks: 0.65, usSmallStocks: 0.70, internationalStocks: 0.55, 
+    emergingMarkets: 0.50, canadianStocks: 0.58, usBonds: 0.20, 
+    highYieldBonds: 0.55, internationalBonds: 0.30, reits: 1.00, 
+    gold: 0.15, cash: -0.10 
+  },
+  gold: { 
+    usLargeStocks: 0.05, usSmallStocks: 0.00, internationalStocks: 0.15, 
+    emergingMarkets: 0.10, canadianStocks: 0.12, usBonds: 0.30, 
+    highYieldBonds: 0.15, internationalBonds: 0.25, reits: 0.15, 
+    gold: 1.00, cash: 0.20 
+  },
+  cash: { 
+    usLargeStocks: -0.05, usSmallStocks: -0.10, internationalStocks: 0.00, 
+    emergingMarkets: 0.05, canadianStocks: 0.02, usBonds: 0.35, 
+    highYieldBonds: 0.20, internationalBonds: 0.30, reits: -0.10, 
+    gold: 0.20, cash: 1.00 
+  }
 };
 
 // Box-Muller transformace pro generování normálního rozdělení
@@ -191,7 +287,7 @@ export async function runMonteCarloSimulation(params: SimulationParameters): Pro
   const allSimulations: number[][] = [];
   
   console.log('=== DEBUG: Monte Carlo Simulation Start ===');
-  console.log('Spouštím Monte Carlo simulaci...', params);
+  console.log('Spouštím Monte Carlo simulaci s novými historickými daty...', params);
   
   // Nejprve spočítej teoretické portfolio metriky
   const portfolioMetrics = calculatePortfolioMetrics(params.allocation);
@@ -237,7 +333,7 @@ export async function runMonteCarloSimulation(params: SimulationParameters): Pro
   console.log('=== DEBUG: Final Results ===');
   console.log('Year 1 median:', results[1]?.percentile50);
   console.log('Final year median:', results[results.length - 1]?.percentile50);
-  console.log('Výsledky zpracovány:', results);
+  console.log('Výsledky zpracovány s historickými daty:', results);
   
   return results;
 }

@@ -1,9 +1,16 @@
 
 export interface AssetAllocation {
-  usStocks: number;
-  worldStocks: number;
-  worldBonds: number;
+  usLargeStocks: number;
+  usSmallStocks: number;
+  internationalStocks: number;
+  emergingMarkets: number;
+  canadianStocks: number;
+  reits: number;
+  highYieldBonds: number;
   usBonds: number;
+  internationalBonds: number;
+  gold: number;
+  cash: number;
 }
 
 export interface AssetData {
