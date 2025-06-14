@@ -1,7 +1,28 @@
 
+export type AssetClass =
+  | "us_large"
+  | "us_small"
+  | "emerging"
+  | "intl_dev"
+  | "canada"
+  | "reits"
+  | "us_high_yield"
+  | "us_quality_bond"
+  | "intl_bond"
+  | "gold"
+  | "cash";
+
 export interface AssetAllocation {
-  stocks: number;
-  bonds: number;
+  us_large: number;
+  us_small: number;
+  emerging: number;
+  intl_dev: number;
+  canada: number;
+  reits: number;
+  us_high_yield: number;
+  us_quality_bond: number;
+  intl_bond: number;
+  gold: number;
   cash: number;
 }
 
