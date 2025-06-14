@@ -41,16 +41,16 @@ const WhatAreETFs: React.FC = () => {
                       <Scale className="w-8 h-8" />
                   </div>
               </div>
-              <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Co je to ETF? Stručná definice</h2>
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Co je to ETF? Jednoduché vysvětlení</h2>
               <div className="prose prose-lg max-w-none text-gray-700">
                 <p>
-                  ETF je zkratka pro <strong>Exchange Traded Fund</strong>, což v češtině znamená <strong>burzovně obchodovaný fond</strong>. Představte si ho jako investiční koš, který obsahuje desítky, stovky nebo i tisíce různých aktiv – nejčastěji akcií nebo dluhopisů.
+                  Představte si ETF jako <strong>velký koš plný různých akcií firem</strong> (nebo dalších investic). Když si koupíte ETF, automaticky tím vlastníte malý kousek <u>mnoha</u> společností najednou – místo toho, abyste vybírali a kupovali každou akcii zvlášť.
                 </p>
                 <p>
-                  Na rozdíl od tradičních podílových fondů se ETF obchodují na burze stejně snadno jako jednotlivé akcie. Můžete je kdykoliv během obchodních hodin nakoupit nebo prodat za aktuální tržní cenu.
+                  ETF funguje na burze úplně stejně jako běžná akcie. Stačí pár kliknutí u brokera a celý koš společností máte během pár vteřin ve svém portfoliu.
                 </p>
                 <blockquote className="border-l-4 border-violet-400 bg-violet-50 p-4 rounded-r-lg text-violet-800">
-                  Klíčovou vlastností většiny ETF je, že <strong>pasivně kopírují</strong> výkonnost určitého tržního indexu, jako je například S&P 500 (500 největších amerických firem) nebo MSCI World (velké firmy z celého světa).
+                  Z jedním ETF můžete najednou investovat například do všech velkých firem v Evropě, v USA nebo na celém světě – jednoduše, levně a bez složitého vybírání konkrétních akcií.
                 </blockquote>
               </div>
             </div>
@@ -65,15 +65,21 @@ const WhatAreETFs: React.FC = () => {
                 </div>
                 <div className="md:col-span-2 prose prose-lg max-w-none text-gray-700">
                   <p>
-                    Mechanismus fungování ETF je postaven na dvou klíčových procesech: <strong>tvorba (creation)</strong> a <strong>odkup (redemption)</strong>. Tyto operace probíhají na tzv. primárním trhu a starají se o ně velcí institucionální investoři, známí jako <strong>autorizovaní participanti (AP)</strong>.
+                    ETF jednoduše koupíte přes svého brokera, stejně jako třeba akcii Applu. Za jednu cenu tak získáte “vstupenku” do celého trhu (např. do stovky či tisícovky firem najednou).
                   </p>
-                  <ol>
-                    <li><strong>Tvorba:</strong> AP nakoupí podkladová aktiva (např. akcie) a smění je s emitentem za nové ETF podíly.</li>
-                    <li><strong>Prodej:</strong> AP tyto nové podíly prodává na burze běžným investorům, jako jste vy.</li>
-                    <li><strong>Odkup:</strong> Proces funguje i opačně. AP skoupí ETF podíly z burzy a smění je zpět za podkladová aktiva.</li>
-                  </ol>
                   <p>
-                    Tento mechanismus udržuje cenu ETF velmi blízko jeho reálné vnitřní hodnotě (tzv. NAV - Net Asset Value).
+                    <strong>Když cena firem v koši roste, roste i hodnota ETF.</strong> Pokud firmy zlevní, i vaše ETF může krátkodobě ztratit na hodnotě.
+                  </p>
+                  <ul className="list-disc pl-5 my-4">
+                    <li>
+                        <strong>Správu koše</strong> řeší automaticky fond – vy jen držíte ETF a nemusíte sledovat jednotlivé akcie.
+                    </li>
+                    <li>
+                        <strong>Obchoduje se na burze</strong> – ETF můžete nakupovat a prodávat téměř kdykoliv během dne, stejně jako akcii.
+                    </li>
+                  </ul>
+                  <p>
+                    Výhodou ETF je právě jednoduchost: stačí si vybrat správný “koš” a během chvilky investujete do stovek společností najednou.
                   </p>
                 </div>
             </div>
