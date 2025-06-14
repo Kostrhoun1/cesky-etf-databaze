@@ -1,11 +1,14 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calculator, TrendingUp, BarChart } from 'lucide-react';
+import InvestmentCalculator from '@/components/tools/InvestmentCalculator';
 
 const Tools: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'overview' | 'calculator'>('overview');
+
   useEffect(() => {
     document.title = 'Investiční nástroje a kalkulačky - ETF průvodce.cz';
     document.querySelector('meta[name="description"]')?.setAttribute('content', 
@@ -18,24 +21,46 @@ const Tools: React.FC = () => {
       title: 'Investiční kalkulačka',
       description: 'Spočítejte si růst vašich investic s pravidelným investováním (DCA)',
       icon: <Calculator className="h-8 w-8 text-blue-600" />,
-      features: ['Compound interest výpočty', 'DCA simulace', 'Inflace zohlednění', 'Grafické znázornění'],
-      status: 'Připravujeme'
+      features: ['Compound interest výpočty', 'DCA simulace', 'Daňové zohlednění', 'Grafické znázornění'],
+      status: 'Dostupné',
+      available: true
     },
     {
       title: 'Kalkulačka poplatků',
       description: 'Analyzujte dopad různých poplatků na váš dlouhodobý výnos',
       icon: <TrendingUp className="h-8 w-8 text-blue-600" />,
       features: ['TER porovnání', 'Brokerské poplatky', 'Dlouhodobý dopad', 'Srovnání fondů'],
-      status: 'Připravujeme'
+      status: 'Připravujeme',
+      available: false
     },
     {
       title: 'Portfolio backtesting',
       description: 'Otestujte výkonnost vašeho portfolia v historických datech',
       icon: <BarChart className="h-8 w-8 text-blue-600" />,
       features: ['Historická data', 'Risk metrics', 'Rebalancing strategie', 'Benchmarking'],
-      status: 'V přípravě'
+      status: 'V přípravě',
+      available: false
     }
   ];
+
+  if (activeTab === 'calculator') {
+    return (
+      <Layout>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="mb-8">
+            <Button 
+              variant="outline" 
+              onClick={() => setActiveTab('overview')}
+              className="mb-4"
+            >
+              ← Zpět na přehled nástrojů
+            </Button>
+          </div>
+          <InvestmentCalculator />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -57,7 +82,11 @@ const Tools: React.FC = () => {
                   {tool.icon}
                   <div className="flex items-center gap-2">
                     <CardTitle className="text-lg">{tool.title}</CardTitle>
-                    <span className="inline-block px-2 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded">
+                    <span className={`inline-block px-2 py-1 text-xs font-semibold rounded ${
+                      tool.available 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-orange-100 text-orange-800'
+                    }`}>
                       {tool.status}
                     </span>
                   </div>
@@ -73,8 +102,12 @@ const Tools: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" disabled>
-                  Spustit nástroj
+                <Button 
+                  className="w-full" 
+                  disabled={!tool.available}
+                  onClick={() => tool.available && tool.title === 'Investiční kalkulačka' && setActiveTab('calculator')}
+                >
+                  {tool.available ? 'Spustit nástroj' : 'Připravujeme'}
                 </Button>
               </CardContent>
             </Card>
@@ -85,11 +118,11 @@ const Tools: React.FC = () => {
         <Card className="bg-blue-50 border-blue-200">
           <CardContent className="p-8 text-center">
             <h3 className="text-xl font-semibold mb-4">
-              Nástroje jsou v přípravě
+              Další nástroje jsou v přípravě
             </h3>
             <p className="text-gray-600 mb-6">
               Pracujeme na vytvoření pokročilých nástrojů pro analýzu a plánování vašich investic. 
-              Mezitím můžete prozkoumat naši databázi ETF fondů a vzdělávací obsah.
+              Mezitím můžete použít naši investiční kalkulačku nebo prozkoumat databázi ETF fondů.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild>
