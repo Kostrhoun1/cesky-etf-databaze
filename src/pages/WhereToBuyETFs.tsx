@@ -1,61 +1,12 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
+import DetailedBrokerComparison from '../components/home/DetailedBrokerComparison';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ExternalLink, Star, TrendingUp, Shield, DollarSign, FileText } from 'lucide-react';
+import { DollarSign, Shield, TrendingUp } from 'lucide-react';
 
 const WhereToBuyETFs = () => {
-  const brokers = [
-    {
-      name: 'DEGIRO',
-      description: 'Jeden z nejpopulárnějších brokerů v Evropě s nízkými poplatky',
-      pros: ['Velmi nízké poplatky', 'Široká nabídka ETF', 'Regulace v EU'],
-      cons: ['Omezené vzdělávací materiály', 'Základní platforma'],
-      fees: 'ETF od 0€, akcie od 2€',
-      rating: 4.5,
-      recommended: true,
-      hasDetailedReview: true
-    },
-    {
-      name: 'Interactive Brokers',
-      description: 'Profesionální platforma s přístupem na globální trhy',
-      pros: ['Nejširší výběr trhů', 'Pokročilé nástroje', 'Nízké poplatky při vyšších objemech'],
-      cons: ['Složitější pro začátečníky', 'Vyšší minimální vklad'],
-      fees: 'ETF od 1.25€, měsíční poplatek 10€',
-      rating: 4.3,
-      recommended: false
-    },
-    {
-      name: 'XTB',
-      description: 'Český broker s lokální podporou a vzdělávacími materiály',
-      pros: ['Česká podpora', 'Vzdělávací materiály', 'Uživatelsky přívětivé rozhraní'],
-      cons: ['Vyšší poplatky než konkurence', 'Omezený výběr ETF'],
-      fees: 'ETF od 0€ do 100k€/měsíc, pak 0.2%',
-      rating: 4.0,
-      recommended: false
-    },
-    {
-      name: 'Trading 212',
-      description: 'Mobilní platforma s nulovými poplatky za ETF',
-      pros: ['Nulové poplatky za ETF', 'Moderní mobilní aplikace', 'Fractional shares'],
-      cons: ['Omezené pokročilé funkce', 'Mladší platforma'],
-      fees: 'ETF 0€, akcie 0€',
-      rating: 4.1,
-      recommended: true
-    },
-    {
-      name: 'Portu',
-      description: 'Český robo-advisor s automatizovaným investováním',
-      pros: ['Automatizované investování', 'Česká regulace', 'Jednoduché použití'],
-      cons: ['Omezený výběr ETF', 'Vyšší poplatky', 'Méně kontroly'],
-      fees: 'Roční poplatek 0.75% + poplatky ETF',
-      rating: 3.8,
-      recommended: false
-    }
-  ];
-
   const considerations = [
     {
       icon: <DollarSign className="h-6 w-6 text-green-600" />,
@@ -109,79 +60,14 @@ const WhereToBuyETFs = () => {
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Srovnání brokerů */}
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Srovnání brokerů
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {brokers.map((broker, index) => (
-              <Card key={index} className="relative">
-                {broker.recommended && (
-                  <Badge className="absolute -top-2 left-4 bg-green-600">
-                    Doporučeno
-                  </Badge>
-                )}
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-xl">{broker.name}</CardTitle>
-                      <CardDescription className="mt-2">
-                        {broker.description}
-                      </CardDescription>
-                    </div>
-                    <div className="flex items-center text-yellow-500">
-                      <Star className="h-4 w-4 fill-current" />
-                      <span className="ml-1 text-sm font-medium">
-                        {broker.rating}
-                      </span>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-green-700 mb-2">Výhody:</h4>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      {broker.pros.map((pro, proIndex) => (
-                        <li key={proIndex}>• {pro}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-red-700 mb-2">Nevýhody:</h4>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      {broker.cons.map((con, conIndex) => (
-                        <li key={conIndex}>• {con}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="border-t pt-4">
-                    <h4 className="font-semibold mb-2">Poplatky:</h4>
-                    <p className="text-sm text-gray-600">{broker.fees}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button className="flex-1" variant="outline">
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Navštívit web
-                    </Button>
-                    {broker.hasDetailedReview && (
-                      <Button asChild variant="secondary" size="sm">
-                        <Link to="/degiro-recenze">
-                          <FileText className="h-4 w-4 mr-1" />
-                          Recenze
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
+      {/* Detailní srovnání brokerů */}
+      <DetailedBrokerComparison />
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Tipy pro začátečníky */}
-        <div className="mt-16 bg-blue-50 rounded-lg p-8">
+        <div className="bg-blue-50 rounded-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Tipy pro začátečníky
           </h2>
