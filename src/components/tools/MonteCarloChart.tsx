@@ -41,7 +41,8 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
     }).format(num);
 
   return (
-    <div className="w-full h-80">
+    // Zvětšená výška + padding pro komfortní rozestup
+    <div className="w-full h-[440px] pb-8 flex items-start">
       <ChartContainer config={chartConfig}>
         <AreaChart data={results} margin={{ top: 16, right: 24, left: 4, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -125,3 +126,4 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
 };
 
 export default MonteCarloChart;
+
