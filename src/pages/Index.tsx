@@ -1,27 +1,47 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ETF } from '@/types/etf';
 import { parseCSV } from '@/utils/csvParser';
+import { useETFData } from '@/hooks/useETFData';
 import Header from '@/components/Header';
 import CSVUploader from '@/components/CSVUploader';
 import ETFTable from '@/components/ETFTable';
 
 const Index = () => {
   const [etfs, setEtfs] = useState<ETF[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { upsertETFs, fetchETFs, isLoading } = useETFData();
+
+  // Load ETFs from database on component mount
+  useEffect(() => {
+    const loadETFs = async () => {
+      const dbETFs = await fetchETFs();
+      setEtfs(dbETFs);
+    };
+    
+    loadETFs();
+  }, []);
 
   const handleFileUpload = async (csvContent: string) => {
-    setIsLoading(true);
     try {
       console.log('Processing CSV content...');
       const parsedETFs = parseCSV(csvContent);
-      setEtfs(parsedETFs);
       console.log('Successfully parsed', parsedETFs.length, 'ETFs');
+      
+      // Upsert to database
+      await upsertETFs(parsedETFs);
+      
+      // Refresh the data from database
+      const updatedETFs = await fetchETFs();
+      setEtfs(updatedETFs);
+      
     } catch (error) {
-      console.error('Error parsing CSV:', error);
-    } finally {
-      setIsLoading(false);
+      console.error('Error processing CSV:', error);
     }
+  };
+
+  const handleLoadFromDatabase = async () => {
+    const dbETFs = await fetchETFs();
+    setEtfs(dbETFs);
   };
 
   return (
@@ -42,7 +62,7 @@ const Index = () => {
                 </li>
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-semibold">2</span>
-                  <span>Nahrajte soubor pomocí tlačítka výše</span>
+                  <span>Nahrajte soubor pomocí tlačítka výše - data se automaticky uloží do databáze</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-semibold">3</span>
@@ -56,6 +76,20 @@ const Index = () => {
                   isin;name;url;description_en;description_cs;ter;ter_numeric;fund_size;fund_size_numeric;...
                 </p>
               </div>
+              
+              <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                <h3 className="font-medium mb-2 text-blue-800">💡 Tip:</h3>
+                <p className="text-sm text-blue-700">
+                  Pokud již máte data v databázi, zkuste obnovit stránku nebo{' '}
+                  <button 
+                    onClick={handleLoadFromDatabase}
+                    className="underline hover:no-underline font-medium"
+                    disabled={isLoading}
+                  >
+                    načíst data z databáze
+                  </button>
+                </p>
+              </div>
             </div>
           </div>
         ) : (
@@ -64,15 +98,24 @@ const Index = () => {
               <div>
                 <h2 className="text-2xl font-bold">ETF Databáze</h2>
                 <p className="text-gray-600">
-                  Načteno {etfs.length} ETF fondů z CSV souboru
+                  Načteno {etfs.length} ETF fondů z databáze
                 </p>
               </div>
-              <button
-                onClick={() => setEtfs([])}
-                className="text-sm text-blue-600 hover:text-blue-800 underline"
-              >
-                Nahrát nový soubor
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleLoadFromDatabase}
+                  disabled={isLoading}
+                  className="text-sm text-green-600 hover:text-green-800 underline disabled:opacity-50"
+                >
+                  Obnovit z databáze
+                </button>
+                <button
+                  onClick={() => setEtfs([])}
+                  className="text-sm text-blue-600 hover:text-blue-800 underline"
+                >
+                  Nahrát nový soubor
+                </button>
+              </div>
             </div>
             
             <ETFTable etfs={etfs} />
@@ -84,7 +127,9 @@ const Index = () => {
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <div className="flex items-center gap-3">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                <span>Zpracovávám CSV soubor...</span>
+                <span>
+                  {etfs.length === 0 ? 'Načítám data z databáze...' : 'Zpracovávám CSV soubor...'}
+                </span>
               </div>
             </div>
           </div>
