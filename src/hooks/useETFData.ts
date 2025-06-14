@@ -175,11 +175,38 @@ export const useETFData = () => {
   const fetchETFs = async (limit?: number) => {
     setIsLoading(true);
     try {
-      console.log(`Fetching ETFs from database${limit ? ` (limit: ${limit})` : ''}...`);
+      console.log(`Starting to fetch ETFs from database${limit ? ` (limit: ${limit})` : ''}...`);
+      console.log('Supabase client URL:', supabase.supabaseUrl);
       
+      // Test the connection first
+      const { data: testData, error: testError } = await supabase
+        .from('etf_funds')
+        .select('count')
+        .limit(1);
+      
+      if (testError) {
+        console.error('Connection test failed:', testError);
+        throw new Error(`Database connection failed: ${testError.message}`);
+      }
+      
+      console.log('Database connection test successful');
+
+      // Now fetch the actual data
       let query = supabase
         .from('etf_funds')
-        .select('*')
+        .select(`
+          isin,
+          name,
+          fund_provider,
+          category,
+          ter_numeric,
+          return_1y,
+          return_3y,
+          return_5y,
+          return_ytd,
+          fund_size_numeric,
+          degiro_free
+        `)
         .order('fund_size_numeric', { ascending: false });
 
       if (limit) {
@@ -190,7 +217,7 @@ export const useETFData = () => {
 
       if (error) {
         console.error('Error fetching ETFs:', error);
-        throw error;
+        throw new Error(`Failed to fetch ETFs: ${error.message}`);
       }
 
       console.log(`Successfully loaded ${data?.length || 0} ETFs from database`);
@@ -199,7 +226,7 @@ export const useETFData = () => {
       console.error('Error in fetchETFs:', error);
       toast({
         title: "Chyba při načítání",
-        description: "Nepodařilo se načíst data z databáze.",
+        description: error instanceof Error ? error.message : "Nepodařilo se načíst data z databáze.",
         variant: "destructive",
       });
       return [];
@@ -210,6 +237,8 @@ export const useETFData = () => {
 
   const getETFCount = async () => {
     try {
+      console.log('Fetching ETF count...');
+      
       const { count, error } = await supabase
         .from('etf_funds')
         .select('*', { count: 'exact', head: true });
@@ -219,6 +248,7 @@ export const useETFData = () => {
         return 0;
       }
 
+      console.log('ETF count:', count);
       return count || 0;
     } catch (error) {
       console.error('Error in getETFCount:', error);
