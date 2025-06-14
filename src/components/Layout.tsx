@@ -3,6 +3,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Logo from './Logo';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -24,12 +25,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link to="/" className="text-2xl font-bold text-blue-600">
-                ETF průvodce.cz
+            <div className="flex items-center gap-2">
+              <Link to="/" className="flex items-center gap-2 group">
+                <Logo size={42} className="drop-shadow-md group-hover:scale-105 transition-transform" />
+                <span className="text-2xl font-bold text-blue-600 font-playfair tracking-tighter">ETF průvodce.cz</span>
               </Link>
             </div>
-            
             <nav className="hidden md:flex space-x-8">
               {navigation.map((item) => (
                 <Link
@@ -45,7 +46,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </Link>
               ))}
             </nav>
-
             {/* Mobile menu button */}
             <div className="md:hidden">
               <Button variant="ghost" size="sm">
@@ -55,24 +55,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
       </header>
-
       {/* Main content */}
       <main>
         {children}
       </main>
-
       {/* Footer */}
       <footer className="bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="md:col-span-2">
-              <h3 className="text-lg font-semibold mb-4">ETF průvodce.cz</h3>
+            <div className="md:col-span-2 flex flex-col gap-2">
+              <div className="flex items-center gap-3 mb-2">
+                <Logo size={44} className="drop-shadow" />
+                <span className="text-lg font-semibold">ETF průvodce.cz</span>
+              </div>
               <p className="text-gray-300 mb-4">
                 Komplexní průvodce světem ETF fondů pro české investory. 
                 Srovnání, analýzy a vzdělávací obsah pro vaše investiční rozhodnutí.
               </p>
             </div>
-            
             <div>
               <h4 className="text-md font-semibold mb-4">Sekce</h4>
               <ul className="space-y-2 text-gray-300">
@@ -81,7 +81,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li><Link to="/nastroje" className="hover:text-white">Nástroje</Link></li>
               </ul>
             </div>
-            
             <div>
               <h4 className="text-md font-semibold mb-4">Brokeři</h4>
               <ul className="space-y-2 text-gray-300">
@@ -93,7 +92,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </ul>
             </div>
           </div>
-          
           <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-300">
             <p>&copy; 2025 ETF průvodce.cz. Všechna práva vyhrazena.</p>
           </div>
