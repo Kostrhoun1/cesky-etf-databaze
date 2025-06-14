@@ -245,7 +245,17 @@ function generateCorrelatedMonthlyReturns(): Record<string, number> {
   const assetOrder = getAssetOrder();
   const n = assetOrder.length;
 
-  // Správný převod annualReturn na měsíční drift ― viz lognormální model:
+  // Přidáno kontrolní výpis ročních driftů/volatility:
+  if (Math.random() < 0.01) { // jen občas
+    assetOrder.forEach(a => {
+      const annualRet = ASSET_DATA[a].annualReturn;
+      const annualVol = ASSET_DATA[a].volatility;
+      const drift = Math.log(1 + annualRet) / 12 - 0.5 * (annualVol * annualVol) / 12;
+      const sd = annualVol / Math.sqrt(12);
+      console.log(`Asset: ${a} | annualRet: ${(annualRet*100).toFixed(2)}% | drift: ${(drift*100).toFixed(3)}%/m | sd: ${(sd*100).toFixed(2)}%/m`);
+    });
+  }
+
   const drifts = assetOrder.map(a => {
     const annualRet = ASSET_DATA[a].annualReturn;
     const annualVol = ASSET_DATA[a].volatility;
@@ -253,31 +263,23 @@ function generateCorrelatedMonthlyReturns(): Record<string, number> {
   });
   const stdDevs = assetOrder.map(a => ASSET_DATA[a].volatility / Math.sqrt(12));
 
-  // Korelační matice do pole:
   const corrMat = assetOrder.map(a1 => assetOrder.map(a2 => CORRELATION_MATRIX[a1][a2]));
   const covMat = correlationToCovariance(corrMat, stdDevs);
   const chol = choleskyDecomposition(covMat);
-
-  // Random vektor
   const z = generateStandardNormalVector(n);
 
-  // Korelované _log_ výnosy:
   const returns: number[] = Array(n).fill(0);
   for (let i = 0; i < n; i++) {
     let sum = 0;
     for (let k = 0; k <= i; k++) {
       sum += chol[i][k] * z[k];
     }
-    // Výnos = exp(drift + šum) - 1
     let r = Math.exp(drifts[i] + sum) - 1;
-    // Omezit na ±3 SD kolem očekávaného výnosu (typicky rozumné)
     const maxReturn = Math.exp(drifts[i] + 3 * stdDevs[i]) - 1;
     const minReturn = Math.exp(drifts[i] - 3 * stdDevs[i]) - 1;
-    // Dále globální hardcap na ±25 %
     returns[i] = Math.max(-0.25, Math.min(0.25, Math.max(minReturn, Math.min(r, maxReturn))));
   }
 
-  // Namapovat zpět do Record
   const result: Record<string, number> = {};
   assetOrder.forEach((a, i) => { result[a] = returns[i]; });
   return result;
@@ -309,13 +311,16 @@ function simulateSinglePath(params: SimulationParameters): number[] {
       const weight = allocation[asset as keyof AssetAllocation] / 100;
       portfolioReturn += weight * monthlyReturns[asset];
     });
-    // Debug pro první simulaci a první 3 měsíce
+
+    // Přidáno: debug kontrola jednotlivého měsíce
     if (month <= 3) {
-      console.log(`Month ${month}:`);
-      console.log('  Portfolio monthly return:', (portfolioReturn * 100).toFixed(2) + '%');
-      console.log('  Annualized equivalent:', ((Math.pow(1 + portfolioReturn, 12) - 1) * 100).toFixed(2) + '%');
+      console.log(`[Debug] Month ${month} start: value=${currentValue}, monthlyReturn=${(portfolioReturn*100).toFixed(2)}%`);
     }
-    currentValue = currentValue * (1 + portfolioReturn) + monthlyContribution;
+
+    // Kapitalizace: vklad na KONCI měsíce (realističtější, než na začátku)
+    currentValue = currentValue * (1 + portfolioReturn);
+    currentValue += monthlyContribution;
+
     if (month % 12 === 0) {
       values.push(currentValue);
     }
