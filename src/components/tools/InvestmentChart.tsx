@@ -71,18 +71,10 @@ const InvestmentChart: React.FC<InvestmentChartProps> = ({ data }) => {
               />
               <Line
                 type="monotone"
-                dataKey="grossValue"
-                stroke="#10b981"
-                strokeWidth={2}
-                name="Hrubá hodnota"
-                dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
-              />
-              <Line
-                type="monotone"
                 dataKey="netValue"
                 stroke="#8b5cf6"
                 strokeWidth={2}
-                name="Čistá hodnota"
+                name="Celková hodnota portfolia"
                 dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 4 }}
               />
             </LineChart>

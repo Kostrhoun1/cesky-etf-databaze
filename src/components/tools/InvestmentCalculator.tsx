@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -196,7 +195,7 @@ const InvestmentCalculator: React.FC = () => {
 
           {showResults && results.length > 0 && (
             <div className="pt-6 border-t">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-blue-900">Celkem investováno</h4>
                   <p className="text-2xl font-bold text-blue-600">
@@ -204,21 +203,15 @@ const InvestmentCalculator: React.FC = () => {
                   </p>
                 </div>
                 <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-green-900">Hrubá hodnota</h4>
+                  <h4 className="font-semibold text-green-900">Čistý výnos (po dani)</h4>
                   <p className="text-2xl font-bold text-green-600">
-                    {formatNumber(results[results.length - 1].grossValue)} Kč
+                    {formatNumber(results[results.length - 1].netGain)} Kč
                   </p>
                 </div>
                 <div className="bg-purple-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-purple-900">Čistá hodnota</h4>
+                  <h4 className="font-semibold text-purple-900">Celková hodnota portfolia</h4>
                   <p className="text-2xl font-bold text-purple-600">
                     {formatNumber(results[results.length - 1].netValue)} Kč
-                  </p>
-                </div>
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-orange-900">Čistý zisk</h4>
-                  <p className="text-2xl font-bold text-orange-600">
-                    {formatNumber(results[results.length - 1].netGain)} Kč
                   </p>
                 </div>
               </div>

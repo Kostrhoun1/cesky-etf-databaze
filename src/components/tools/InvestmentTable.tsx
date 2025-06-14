@@ -33,33 +33,23 @@ const InvestmentTable: React.FC<InvestmentTableProps> = ({ data }) => {
             <TableHeader>
               <TableRow>
                 <TableHead>Rok</TableHead>
-                <TableHead className="text-right">Investováno (Kč)</TableHead>
-                <TableHead className="text-right">Hrubá hodnota (Kč)</TableHead>
-                <TableHead className="text-right">Daň (Kč)</TableHead>
-                <TableHead className="text-right">Čistá hodnota (Kč)</TableHead>
-                <TableHead className="text-right">Hrubý zisk (Kč)</TableHead>
-                <TableHead className="text-right">Čistý zisk (Kč)</TableHead>
+                <TableHead className="text-right">Celkem investováno (Kč)</TableHead>
+                <TableHead className="text-right">Čistý výnos (Kč)</TableHead>
+                <TableHead className="text-right">Celková hodnota portfolia (Kč)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.map((row) => (
                 <TableRow key={row.year}>
                   <TableCell className="font-medium">{row.year}</TableCell>
-                  <TableCell className="text-right">{formatNumber(row.totalInvested)}</TableCell>
-                  <TableCell className="text-right text-green-600 font-medium">
-                    {formatNumber(row.grossValue)}
+                  <TableCell className="text-right text-blue-600 font-medium">
+                    {formatNumber(row.totalInvested)}
                   </TableCell>
-                  <TableCell className="text-right text-red-600">
-                    {formatNumber(row.tax)}
+                  <TableCell className="text-right text-green-600 font-medium">
+                    {formatNumber(row.netGain)}
                   </TableCell>
                   <TableCell className="text-right text-purple-600 font-medium">
                     {formatNumber(row.netValue)}
-                  </TableCell>
-                  <TableCell className="text-right text-green-600">
-                    {formatNumber(row.grossGain)}
-                  </TableCell>
-                  <TableCell className="text-right text-orange-600 font-medium">
-                    {formatNumber(row.netGain)}
                   </TableCell>
                 </TableRow>
               ))}
