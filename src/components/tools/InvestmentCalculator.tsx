@@ -184,7 +184,7 @@ const InvestmentCalculator: React.FC = () => {
                 <SelectContent>
                   <SelectItem value="0">0% (žádná daň)</SelectItem>
                   <SelectItem value="15">15% (základní sazba)</SelectItem>
-                  <SelectItem value="23">23% (solidární zvýšení daně)</SelectItem>
+                  <SelectItem value="23">23% (vyšší sazba)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
