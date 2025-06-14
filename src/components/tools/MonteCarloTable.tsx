@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -57,6 +58,7 @@ interface MonteCarloTableProps {
 
 const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPeriod, initialInvestment, monthlyContribution }) => {
   const formatNumber = (num: number) => {
+    if (!isFinite(num)) return '—';
     return new Intl.NumberFormat('cs-CZ', {
       style: 'currency',
       currency: 'CZK',
@@ -65,6 +67,7 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
   };
 
   const formatPercentage = (num: number) => {
+    if (!isFinite(num)) return '—';
     return new Intl.NumberFormat('cs-CZ', {
       style: 'percent',
       minimumFractionDigits: 1,
@@ -156,7 +159,7 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
           <div className="p-4 bg-gray-50 rounded-lg">
             <h4 className="font-semibold text-gray-800 mb-2">Průměrný výnos p.a.</h4>
             <p className="text-2xl font-bold text-gray-900">
-              {isNaN(irr) ? "—" : formatPercentage(irr)}
+              {formatPercentage(irr)}
             </p>
           </div>
           
