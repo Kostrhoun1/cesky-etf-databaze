@@ -164,29 +164,46 @@ export function calculatePortfolioMetrics(allocation: AssetAllocation): Portfoli
   return { expectedReturn, volatility, sharpeRatio };
 }
 
-// Generování normálního rozdělení (Box-Muller)
-function generateNormalRandom(): number {
+// Zlepšené generování normálního rozdělení s omezeními
+function generateConstrainedNormal(mean: number, stdDev: number): number {
+  // Box-Muller transform s omezeními
   let u = 0, v = 0;
-  while(u === 0) u = Math.random();
+  while(u === 0) u = Math.random(); // Převení log(0)
   while(v === 0) v = Math.random();
-  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  
+  const normal = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  
+  // Omezte extrémní hodnoty na +/- 3 standardní odchylky
+  const constrainedNormal = Math.max(-3, Math.min(3, normal));
+  
+  return mean + constrainedNormal * stdDev;
 }
 
-// Zjednodušené generování měsíčních výnosů (bez korelací pro začátek)
+// Generování měsíčních výnosů s realistickými omezeními
 function generateMonthlyReturns(allocation: AssetAllocation): Record<string, number> {
   const assets = Object.keys(allocation) as (keyof AssetAllocation)[];
   const monthlyReturns: Record<string, number> = {};
   
   assets.forEach(asset => {
+    if (allocation[asset] === 0) {
+      monthlyReturns[asset] = 0;
+      return;
+    }
+    
     const assetData = ASSET_DATA[asset];
     
-    // Převod na měsíční parametry
+    // Převod na měsíční parametry s konzervativnějším přístupem
     const monthlyExpectedReturn = assetData.annualReturn / 12;
     const monthlyVolatility = assetData.volatility / Math.sqrt(12);
     
-    // Generuj normálně distribuovaný náhodný výnos
-    const randomComponent = generateNormalRandom() * monthlyVolatility;
-    monthlyReturns[asset] = monthlyExpectedReturn + randomComponent;
+    // Generuj omezený normální výnos
+    const monthlyReturn = generateConstrainedNormal(monthlyExpectedReturn, monthlyVolatility);
+    
+    // Další omezení - žádný měsíční výnos by neměl být extrémní
+    const maxMonthlyReturn = 0.25; // Max 25% za měsíc
+    const minMonthlyReturn = -0.25; // Max -25% za měsíc
+    
+    monthlyReturns[asset] = Math.max(minMonthlyReturn, Math.min(maxMonthlyReturn, monthlyReturn));
   });
   
   return monthlyReturns;
@@ -215,7 +232,7 @@ function simulateSinglePath(params: SimulationParameters): number[] {
     if (month <= 3) {
       console.log(`Month ${month}:`);
       console.log('  Portfolio monthly return:', (portfolioReturn * 100).toFixed(2) + '%');
-      console.log('  Annualized equivalent:', ((portfolioReturn * 12) * 100).toFixed(2) + '%');
+      console.log('  Annualized equivalent:', ((Math.pow(1 + portfolioReturn, 12) - 1) * 100).toFixed(2) + '%');
     }
     
     // Aplikuj výnos a přidej měsíční příspěvek
@@ -256,6 +273,12 @@ export async function runMonteCarloSimulation(params: SimulationParameters): Pro
       const annualizedReturn = Math.pow(1 + totalReturn, 1/years) - 1;
       console.log('Total return:', (totalReturn * 100).toFixed(2) + '%');
       console.log('Annualized return:', (annualizedReturn * 100).toFixed(2) + '%');
+      
+      // Kontrola vstupních příspěvků
+      const totalContributions = path[0] + (params.monthlyContribution * 12 * years);
+      const netGain = path[path.length - 1] - totalContributions;
+      console.log('Total contributions:', totalContributions);
+      console.log('Net investment gain:', netGain);
     }
   }
   
@@ -285,15 +308,18 @@ export async function runMonteCarloSimulation(params: SimulationParameters): Pro
     });
   }
   
-  // Debug finálních výsledků
+  // Debug finálních výsledků s realistickým výpočtem
   const finalResult = results[results.length - 1];
   const initialValue = results[0].mean;
-  const totalReturnMedian = (finalResult.percentile50 / initialValue) - 1;
+  const totalContributions = initialValue + (params.monthlyContribution * 12 * years);
+  const netGainMedian = finalResult.percentile50 - totalContributions;
+  const totalReturnMedian = netGainMedian / totalContributions;
   const annualizedReturnMedian = Math.pow(1 + totalReturnMedian, 1/years) - 1;
   
   console.log('=== Final Results Analysis ===');
   console.log('Median final value:', finalResult.percentile50);
-  console.log('Median total return:', (totalReturnMedian * 100).toFixed(2) + '%');
+  console.log('Total contributions:', totalContributions);
+  console.log('Net investment gain:', netGainMedian);
   console.log('Median annualized return:', (annualizedReturnMedian * 100).toFixed(2) + '%');
   console.log('Should be close to theoretical:', (portfolioMetrics.expectedReturn * 100).toFixed(2) + '%');
   
