@@ -1,13 +1,13 @@
-
 import React, { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calculator, TrendingUp, BarChart } from 'lucide-react';
 import InvestmentCalculator from '@/components/tools/InvestmentCalculator';
+import FeeCalculator from '@/components/tools/FeeCalculator';
 
 const Tools: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'calculator'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'calculator' | 'feeCalculator'>('overview');
 
   useEffect(() => {
     document.title = 'Investiční nástroje a kalkulačky - ETF průvodce.cz';
@@ -23,15 +23,17 @@ const Tools: React.FC = () => {
       icon: <Calculator className="h-8 w-8 text-blue-600" />,
       features: ['Compound interest výpočty', 'DCA simulace', 'Daňové zohlednění', 'Grafické znázornění'],
       status: 'Dostupné',
-      available: true
+      available: true,
+      tabName: 'calculator'
     },
     {
       title: 'Kalkulačka poplatků',
       description: 'Analyzujte dopad různých poplatků na váš dlouhodobý výnos',
       icon: <TrendingUp className="h-8 w-8 text-blue-600" />,
       features: ['TER porovnání', 'Brokerské poplatky', 'Dlouhodobý dopad', 'Srovnání fondů'],
-      status: 'Připravujeme',
-      available: false
+      status: 'Dostupné',
+      available: true,
+      tabName: 'feeCalculator'
     },
     {
       title: 'Portfolio backtesting',
@@ -39,7 +41,8 @@ const Tools: React.FC = () => {
       icon: <BarChart className="h-8 w-8 text-blue-600" />,
       features: ['Historická data', 'Risk metrics', 'Rebalancing strategie', 'Benchmarking'],
       status: 'V přípravě',
-      available: false
+      available: false,
+      tabName: null
     }
   ];
 
@@ -57,6 +60,25 @@ const Tools: React.FC = () => {
             </Button>
           </div>
           <InvestmentCalculator />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (activeTab === 'feeCalculator') {
+    return (
+      <Layout>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="mb-8">
+            <Button 
+              variant="outline" 
+              onClick={() => setActiveTab('overview')}
+              className="mb-4"
+            >
+              ← Zpět na přehled nástrojů
+            </Button>
+          </div>
+          <FeeCalculator />
         </div>
       </Layout>
     );
@@ -105,7 +127,7 @@ const Tools: React.FC = () => {
                 <Button 
                   className="w-full" 
                   disabled={!tool.available}
-                  onClick={() => tool.available && tool.title === 'Investiční kalkulačka' && setActiveTab('calculator')}
+                  onClick={() => tool.available && tool.tabName && setActiveTab(tool.tabName as any)}
                 >
                   {tool.available ? 'Spustit nástroj' : 'Připravujeme'}
                 </Button>
