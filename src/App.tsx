@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import ETFComparison from "./pages/ETFComparison";
 import WhatAreETFs from "./pages/WhatAreETFs";
 import WhereToBuyETFs from "./pages/WhereToBuyETFs";
+import DEGIROReview from "./pages/DEGIROReview";
 import Tools from "./pages/Tools";
 import ETFDetail from "./pages/ETFDetail";
 import NotFound from "./pages/NotFound";
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/srovnani-etf" element={<ETFComparison />} />
           <Route path="/co-jsou-etf" element={<WhatAreETFs />} />
           <Route path="/kde-koupit-etf" element={<WhereToBuyETFs />} />
+          <Route path="/degiro-recenze" element={<DEGIROReview />} />
           <Route path="/nastroje" element={<Tools />} />
           <Route path="/etf/:isin" element={<ETFDetail />} />
           <Route path="*" element={<NotFound />} />

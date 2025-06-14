@@ -1,10 +1,10 @@
-
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Star, TrendingUp, Shield, DollarSign } from 'lucide-react';
+import { ExternalLink, Star, TrendingUp, Shield, DollarSign, FileText } from 'lucide-react';
 
 const WhereToBuyETFs = () => {
   const brokers = [
@@ -15,7 +15,8 @@ const WhereToBuyETFs = () => {
       cons: ['Omezené vzdělávací materiály', 'Základní platforma'],
       fees: 'ETF od 0€, akcie od 2€',
       rating: 4.5,
-      recommended: true
+      recommended: true,
+      hasDetailedReview: true
     },
     {
       name: 'Interactive Brokers',
@@ -159,10 +160,20 @@ const WhereToBuyETFs = () => {
                     <h4 className="font-semibold mb-2">Poplatky:</h4>
                     <p className="text-sm text-gray-600">{broker.fees}</p>
                   </div>
-                  <Button className="w-full" variant="outline">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Navštívit web
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button className="flex-1" variant="outline">
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Navštívit web
+                    </Button>
+                    {broker.hasDetailedReview && (
+                      <Button asChild variant="secondary" size="sm">
+                        <Link to="/degiro-recenze">
+                          <FileText className="h-4 w-4 mr-1" />
+                          Recenze
+                        </Link>
+                      </Button>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             ))}
