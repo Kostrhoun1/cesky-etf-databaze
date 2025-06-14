@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -175,17 +174,49 @@ export const useETFData = () => {
   const fetchETFs = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
+      console.log('Fetching all ETFs from database...');
+      
+      // First, get the total count
+      const { count, error: countError } = await supabase
         .from('etf_funds')
-        .select('*')
-        .order('name');
+        .select('*', { count: 'exact', head: true });
 
-      if (error) {
-        console.error('Error fetching ETFs:', error);
-        throw error;
+      if (countError) {
+        console.error('Error counting ETFs:', countError);
+        throw countError;
       }
 
-      return data || [];
+      console.log(`Total ETFs in database: ${count}`);
+
+      // Fetch all data in batches to avoid hitting limits
+      const batchSize = 1000;
+      const totalBatches = Math.ceil((count || 0) / batchSize);
+      let allETFs: any[] = [];
+
+      for (let batch = 0; batch < totalBatches; batch++) {
+        const start = batch * batchSize;
+        const end = start + batchSize - 1;
+        
+        console.log(`Fetching batch ${batch + 1}/${totalBatches} (records ${start}-${end})`);
+        
+        const { data, error } = await supabase
+          .from('etf_funds')
+          .select('*')
+          .order('name')
+          .range(start, end);
+
+        if (error) {
+          console.error(`Error fetching batch ${batch + 1}:`, error);
+          throw error;
+        }
+
+        if (data) {
+          allETFs = [...allETFs, ...data];
+        }
+      }
+
+      console.log(`Successfully loaded ${allETFs.length} ETFs from database`);
+      return allETFs;
     } catch (error) {
       console.error('Error in fetchETFs:', error);
       toast({

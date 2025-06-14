@@ -8,6 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Search, TrendingUp, TrendingDown } from 'lucide-react';
 import { formatCurrency, formatPercentage } from '@/utils/csvParser';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface ETFTableProps {
   etfs: ETF[];
@@ -18,6 +26,8 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
 
   // Get unique categories
   const categories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
@@ -46,6 +56,12 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
       }
     });
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredETFs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedETFs = filteredETFs.slice(startIndex, endIndex);
+
   const handleSort = (field: string) => {
     if (sortBy === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -53,6 +69,17 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
       setSortBy(field);
       setSortOrder('asc');
     }
+    setCurrentPage(1); // Reset to first page when sorting
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1); // Reset to first page when searching
+  };
+
+  const handleCategoryFilter = (value: string) => {
+    setCategoryFilter(value);
+    setCurrentPage(1); // Reset to first page when filtering
   };
 
   return (
@@ -61,6 +88,9 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
         <CardTitle className="flex items-center gap-2">
           ETF Fondy
           <Badge variant="secondary">{filteredETFs.length} fondů</Badge>
+          {etfs.length > filteredETFs.length && (
+            <Badge variant="outline">z {etfs.length} celkem</Badge>
+          )}
         </CardTitle>
         <CardDescription>
           Přehled ETF fondů s detailními informacemi o výkonnosti a složení
@@ -73,12 +103,12 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
             <Input
               placeholder="Hledat podle názvu, ISIN nebo poskytovatele..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
               className="pl-10"
             />
           </div>
           
-          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <Select value={categoryFilter} onValueChange={handleCategoryFilter}>
             <SelectTrigger className="w-full sm:w-[200px]">
               <SelectValue placeholder="Kategorie" />
             </SelectTrigger>
@@ -106,6 +136,13 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
             </SelectContent>
           </Select>
         </div>
+
+        {/* Pagination info */}
+        {filteredETFs.length > itemsPerPage && (
+          <div className="text-sm text-muted-foreground">
+            Zobrazeno {startIndex + 1}-{Math.min(endIndex, filteredETFs.length)} z {filteredETFs.length} fondů
+          </div>
+        )}
       </CardHeader>
       
       <CardContent>
@@ -177,7 +214,7 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredETFs.map((etf) => (
+              {paginatedETFs.map((etf) => (
                 <TableRow key={etf.isin} className="hover:bg-muted/50">
                   <TableCell>
                     <div>
@@ -207,6 +244,55 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs }) => {
             </TableBody>
           </Table>
         </div>
+        
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-6">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                  />
+                </PaginationItem>
+                
+                {/* Page numbers */}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNumber;
+                  if (totalPages <= 5) {
+                    pageNumber = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNumber = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNumber = totalPages - 4 + i;
+                  } else {
+                    pageNumber = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <PaginationItem key={pageNumber}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(pageNumber)}
+                        isActive={currentPage === pageNumber}
+                        className="cursor-pointer"
+                      >
+                        {pageNumber}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
+                
+                <PaginationItem>
+                  <PaginationNext 
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
         
         {filteredETFs.length === 0 && (
           <div className="text-center py-8 text-muted-foreground">
