@@ -1,4 +1,3 @@
-
 import { AssetAllocation, SimulationParameters, SimulationResult, AssetClass } from "@/types/monteCarlo";
 
 // Asset return, volatility
@@ -6,7 +5,7 @@ export const ASSETS: Record<AssetClass, { label: string; annualReturn: number; v
   us_large:         { label: "US velké akcie",             annualReturn: 0.086, volatility: 0.168 },
   us_small:         { label: "US malé akcie",              annualReturn: 0.076, volatility: 0.205 },
   emerging:         { label: "Akcie rozvíjejících se trhů",annualReturn: 0.073, volatility: 0.231 },
-  intl_dev:         { label: "Mezinárodní rozvinuté akcie",annualReturn: 0.062, volatility: 0.194 },
+  intl_dev:         { label: "Rozvinuté zahraniční akcie", annualReturn: 0.062, volatility: 0.194 },
   canada:           { label: "Kanadské akcie",             annualReturn: 0.060, volatility: 0.172 },
   reits:            { label: "REITs (nemovitosti)",        annualReturn: 0.058, volatility: 0.187 },
   us_high_yield:    { label: "US vysoce výnosné dluhopisy",annualReturn: 0.048, volatility: 0.089 },
