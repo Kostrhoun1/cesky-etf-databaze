@@ -12,7 +12,8 @@ import FeeComparisonTable from './FeeComparisonTable';
 interface FeeScenario {
   name: string;
   totalExpenseRatio: number;
-  brokerFee: number;
+  entryFee: number;
+  recurringFee: number;
   color: string;
 }
 
@@ -32,16 +33,16 @@ const FeeCalculator: React.FC = () => {
   const [averageReturn, setAverageReturn] = useState<number>(7);
   const [investmentPeriod, setInvestmentPeriod] = useState<number>(20);
   const [scenarios, setScenarios] = useState<FeeScenario[]>([
-    { name: 'Levný ETF', totalExpenseRatio: 0.15, brokerFee: 0, color: '#22c55e' },
-    { name: 'Průměrný ETF', totalExpenseRatio: 0.5, brokerFee: 0, color: '#3b82f6' },
-    { name: 'Drahý fond', totalExpenseRatio: 1.5, brokerFee: 0, color: '#ef4444' }
+    { name: 'Levný ETF', totalExpenseRatio: 0.15, entryFee: 0, recurringFee: 0, color: '#22c55e' },
+    { name: 'Aktivní fond s poplatky', totalExpenseRatio: 1.2, entryFee: 2.0, recurringFee: 10, color: '#ef4444' },
+    { name: 'Bankovní fond', totalExpenseRatio: 2.0, entryFee: 3.0, recurringFee: 25, color: '#f59e0b' }
   ]);
   const [results, setResults] = useState<FeeCalculationResult[]>([]);
   const [showResults, setShowResults] = useState<boolean>(false);
 
   const updateScenario = (index: number, field: keyof FeeScenario, value: string | number) => {
     const newScenarios = [...scenarios];
-    if (field === 'totalExpenseRatio' || field === 'brokerFee') {
+    if (field === 'totalExpenseRatio' || field === 'entryFee' || field === 'recurringFee') {
       newScenarios[index][field] = Number(value);
     } else {
       newScenarios[index][field] = value as string;
@@ -68,6 +69,11 @@ const FeeCalculator: React.FC = () => {
       let totalInvested = initialInvestment;
       let totalFeesPaid = 0;
 
+      // Aplikuj vstupní poplatek na počáteční investici
+      const initialEntryFee = (initialInvestment * scenario.entryFee) / 100;
+      currentValue -= initialEntryFee;
+      totalFeesPaid += initialEntryFee;
+
       for (let year = 1; year <= investmentPeriod; year++) {
         let yearlyFees = 0;
 
@@ -78,14 +84,24 @@ const FeeCalculator: React.FC = () => {
             currentValue += recurringInvestment;
             totalInvested += recurringInvestment;
             
+            // Aplikuj vstupní poplatek na měsíční investici
+            const monthlyEntryFee = (recurringInvestment * scenario.entryFee) / 100;
+            currentValue -= monthlyEntryFee;
+            yearlyFees += monthlyEntryFee;
+            
             // Aplikuj měsíční výnos
             currentValue = currentValue * (1 + monthlyReturn);
             
-            // Odečti měsíční poplatky (TER)
+            // Odečti měsíční TER
             const monthlyTER = (scenario.totalExpenseRatio / 100) / 12;
-            const monthlyFee = currentValue * monthlyTER;
-            currentValue -= monthlyFee;
-            yearlyFees += monthlyFee;
+            const monthlyTERFee = currentValue * monthlyTER;
+            currentValue -= monthlyTERFee;
+            yearlyFees += monthlyTERFee;
+            
+            // Odečti měsíční pravidelný poplatek
+            const monthlyRecurringFee = scenario.recurringFee / 12;
+            currentValue -= monthlyRecurringFee;
+            yearlyFees += monthlyRecurringFee;
           }
         } else {
           // Roční investování
@@ -93,21 +109,23 @@ const FeeCalculator: React.FC = () => {
           currentValue += recurringInvestment;
           totalInvested += recurringInvestment;
           
+          // Aplikuj vstupní poplatek na roční investici
+          const yearlyEntryFee = (recurringInvestment * scenario.entryFee) / 100;
+          currentValue -= yearlyEntryFee;
+          yearlyFees += yearlyEntryFee;
+          
           // Aplikuj roční výnos
           currentValue = currentValue * (1 + annualReturn);
           
-          // Odečti roční poplatky (TER)
+          // Odečti roční TER
           const yearlyTER = scenario.totalExpenseRatio / 100;
-          const yearlyFee = currentValue * yearlyTER;
-          currentValue -= yearlyFee;
-          yearlyFees += yearlyFee;
-        }
-
-        // Přidej brokerské poplatky (pokud jsou nastavené)
-        if (scenario.brokerFee > 0) {
-          const brokerFees = recurringFrequency === 'monthly' ? scenario.brokerFee * 12 : scenario.brokerFee;
-          currentValue -= brokerFees;
-          yearlyFees += brokerFees;
+          const yearlyTERFee = currentValue * yearlyTER;
+          currentValue -= yearlyTERFee;
+          yearlyFees += yearlyTERFee;
+          
+          // Odečti roční pravidelný poplatek
+          currentValue -= scenario.recurringFee;
+          yearlyFees += scenario.recurringFee;
         }
 
         totalFeesPaid += yearlyFees;
@@ -242,7 +260,7 @@ const FeeCalculator: React.FC = () => {
             <h3 className="text-lg font-semibold">Scénáře poplatků</h3>
             <div className="grid gap-4">
               {scenarios.map((scenario, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-lg">
+                <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-lg">
                   <div className="space-y-2">
                     <Label>Název scénáře</Label>
                     <Input
@@ -252,7 +270,7 @@ const FeeCalculator: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>TER - celkový náklad (%)</Label>
+                    <Label>TER - roční správa (%)</Label>
                     <Input
                       type="number"
                       step="0.01"
@@ -262,16 +280,35 @@ const FeeCalculator: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Brokerský poplatek (Kč/{recurringFrequency === 'monthly' ? 'měsíc' : 'rok'})</Label>
+                    <Label>Vstupní poplatek (%)</Label>
                     <Input
                       type="number"
-                      value={scenario.brokerFee || ''}
-                      onChange={(e) => updateScenario(index, 'brokerFee', e.target.value)}
+                      step="0.01"
+                      value={scenario.entryFee || ''}
+                      onChange={(e) => updateScenario(index, 'entryFee', e.target.value)}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Pravidelný poplatek (Kč/rok)</Label>
+                    <Input
+                      type="number"
+                      value={scenario.recurringFee || ''}
+                      onChange={(e) => updateScenario(index, 'recurringFee', e.target.value)}
                       placeholder="0"
                     />
                   </div>
                 </div>
               ))}
+            </div>
+            
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h4 className="font-semibold text-blue-900 mb-2">Vysvětlení poplatků:</h4>
+              <ul className="text-sm text-blue-800 space-y-1">
+                <li><strong>TER (Total Expense Ratio):</strong> Roční náklady na správu fondu v % z investované částky</li>
+                <li><strong>Vstupní poplatek:</strong> Jednorázový poplatek při nákupu v % z investované částky</li>
+                <li><strong>Pravidelný poplatek:</strong> Pevný roční poplatek v Kč (např. správa účtu, depozitář)</li>
+              </ul>
             </div>
           </div>
 

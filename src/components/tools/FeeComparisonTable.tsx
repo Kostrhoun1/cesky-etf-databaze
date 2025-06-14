@@ -6,7 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 interface FeeScenario {
   name: string;
   totalExpenseRatio: number;
-  brokerFee: number;
+  entryFee: number;
+  recurringFee: number;
   color: string;
 }
 
@@ -49,16 +50,16 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
               <TableRow>
                 <TableHead>Scénář</TableHead>
                 <TableHead className="text-right">TER (%)</TableHead>
+                <TableHead className="text-right">Vstupní poplatek (%)</TableHead>
+                <TableHead className="text-right">Pravidelný poplatek (Kč/rok)</TableHead>
                 <TableHead className="text-right">Konečná hodnota (Kč)</TableHead>
                 <TableHead className="text-right">Celkové poplatky (Kč)</TableHead>
                 <TableHead className="text-right">Ztráta oproti nejlepšímu (Kč)</TableHead>
-                <TableHead className="text-right">Ztráta oproti nejlepšímu (%)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {finalResults.map((result) => {
                 const lossVsBest = bestScenario.netValue - result.netValue;
-                const lossPercentage = (lossVsBest / bestScenario.netValue) * 100;
                 
                 return (
                   <TableRow key={result.scenario.name}>
@@ -74,6 +75,12 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
                     <TableCell className="text-right">
                       {result.scenario.totalExpenseRatio}%
                     </TableCell>
+                    <TableCell className="text-right">
+                      {result.scenario.entryFee}%
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {formatNumber(result.scenario.recurringFee)}
+                    </TableCell>
                     <TableCell className="text-right font-medium">
                       {formatNumber(result.netValue)}
                     </TableCell>
@@ -82,9 +89,6 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
                     </TableCell>
                     <TableCell className="text-right text-red-600">
                       {lossVsBest > 0 ? formatNumber(lossVsBest) : '-'}
-                    </TableCell>
-                    <TableCell className="text-right text-red-600">
-                      {lossVsBest > 0 ? `${lossPercentage.toFixed(1)}%` : '-'}
                     </TableCell>
                   </TableRow>
                 );
@@ -96,9 +100,10 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
         <div className="mt-4 p-4 bg-blue-50 rounded-lg">
           <h4 className="font-semibold text-blue-900 mb-2">Klíčové pozorování:</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Rozdíl pouhých několika desetin procenta v TER může znamenat tisíce korun během let</li>
-            <li>• Compound effect zpomaluje váš růst každý rok</li>
-            <li>• Při výběru investic vždy zohledněte poplatky vedle výkonnosti</li>
+            <li>• <strong>Vstupní poplatky</strong> se uplatňují pouze jednou, ale snižují počáteční investici</li>
+            <li>• <strong>TER</strong> působí každý rok a má compound efekt</li>
+            <li>• <strong>Pravidelné poplatky</strong> mohou být zničující zejména při menších částkách</li>
+            <li>• ETF fondy typicky nemají vstupní poplatky a mají nízký TER (0,1-0,5%)</li>
           </ul>
         </div>
       </CardContent>

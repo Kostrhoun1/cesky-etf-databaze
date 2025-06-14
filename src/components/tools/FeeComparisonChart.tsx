@@ -6,7 +6,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Lege
 interface FeeScenario {
   name: string;
   totalExpenseRatio: number;
-  brokerFee: number;
+  entryFee: number;
+  recurringFee: number;
   color: string;
 }
 
