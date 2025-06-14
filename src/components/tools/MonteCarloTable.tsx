@@ -1,29 +1,51 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { SimulationResult } from '@/types/monteCarlo';
 
 /**
- * Vypočítá IRR (interní míru výnosnosti) z cashflows.
- * cashFlows: záporná hodnota na začátku, záporné měsíční vklady, na konci kladný výběr.
+ * Vypočítá IRR (interní míru výnosnosti) pomocí Bisekční metody.
+ * Je robustnější než Newton-Raphson metoda.
  */
-function calculateIRR(cashFlows: number[], guess = 0.05): number {
-  let rate = guess;
-  for (let iter = 0; iter < 100; iter++) {
-    let npv = 0, dnpv = 0;
-    for (let t = 0; t < cashFlows.length; t++) {
-      npv += cashFlows[t] / Math.pow(1 + rate, t);
-      if (t > 0) {
-        dnpv -= t * cashFlows[t] / Math.pow(1 + rate, t + 1);
-      }
-    }
-    const newRate = rate - npv / dnpv;
-    if (Math.abs(newRate - rate) < 1e-7) return newRate * 12; // roční IRR z měsíčního
-    rate = newRate;
-    if (rate < -0.999) return NaN; // Nerealistický záporný výnos
+function calculateIRR(cashFlows: number[], maxIterations = 100, tolerance = 1e-7): number {
+  let low = -0.9999; // Měsíční úrok blízko -100%
+  let high = 2; // Měsíční úrok 200% (ročně 2400%, velmi vysoká horní mez)
+  let mid = 0;
+
+  const npv = (rate: number) => cashFlows.reduce((acc, val, t) => acc + val / Math.pow(1 + rate, t), 0);
+
+  const npvLow = npv(low);
+  const npvHigh = npv(high);
+
+  // Pro typickou investici (záporný CF na začátku, kladný na konci) je NPV klesající funkce.
+  // Pokud jsou znaménka na hranicích intervalu stejná, kořen zde pravděpodobně není.
+  if (npvLow * npvHigh >= 0) {
+    return NaN;
   }
-  return NaN;
+
+  for (let i = 0; i < maxIterations; i++) {
+    mid = (low + high) / 2;
+    
+    if (high - low < tolerance) break;
+
+    const npvMid = npv(mid);
+    
+    // Pokud má npvMid a npvLow stejné znaménko, posouváme dolní hranici. Jinak horní.
+    if (npv(low) * npvMid > 0) {
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+  
+  const annualIRR = mid * 12;
+
+  // Pokud je výsledek extrémní, pravděpodobně chyba v datech nebo nekonvergovalo
+  if (Math.abs(annualIRR) > 5) { // > 500% je nepravděpodobné
+    return NaN;
+  }
+
+  return annualIRR;
 }
 
 interface MonteCarloTableProps {
@@ -64,15 +86,20 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
   const initialValue = data[0].mean;
 
   // Přesné cashflow pro IRR:
-  // 1. První: záporná počáteční investice
-  // 2. Následuje investmentPeriod*12 záporných měsíčních vkladů
-  // 3. Poslední cashflow je mediánová konečná hodnota (kladně)
+  // t=0: Počáteční investice (záporně)
+  // t=1..N: Měsíční vklady (záporně)
+  // t=N: K poslednímu vkladu se přičte konečná hodnota portfolia (kladně)
   const monthCount = investmentPeriod * 12;
-  const cashFlows = [
-    -initialInvestment,
-    ...Array(monthCount).fill(-monthlyContribution),
-    finalResult.percentile50
-  ];
+  
+  const cashFlows = new Array(monthCount + 1);
+  cashFlows[0] = -initialInvestment;
+  for (let i = 1; i <= monthCount; i++) {
+    cashFlows[i] = -monthlyContribution;
+  }
+  // Přičteme finální hodnotu k poslednímu cashflow
+  if (monthCount < cashFlows.length) {
+    cashFlows[monthCount] += finalResult.percentile50;
+  }
 
   // Výpočet IRR podle těchto cashflow
   const irr = calculateIRR(cashFlows);
@@ -129,7 +156,7 @@ const MonteCarloTable: React.FC<MonteCarloTableProps> = ({ data, investmentPerio
           <div className="p-4 bg-gray-50 rounded-lg">
             <h4 className="font-semibold text-gray-800 mb-2">Průměrný výnos p.a.</h4>
             <p className="text-2xl font-bold text-gray-900">
-              {isNaN(irr) || irr < -1 || irr > 2 ? "—" : formatPercentage(irr)}
+              {isNaN(irr) ? "—" : formatPercentage(irr)}
             </p>
           </div>
           
