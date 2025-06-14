@@ -42,17 +42,17 @@ const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ data }) => {
       <CardContent>
         <div className="h-[500px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+            <LineChart data={data} margin={{ top: 20, right: 30, left: 80, bottom: 60 }}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
               <XAxis 
                 dataKey="year" 
                 className="text-muted-foreground"
-                label={{ value: 'Roky', position: 'insideBottom', offset: -10 }}
+                label={{ value: 'Roky', position: 'insideBottom', offset: -5 }}
               />
               <YAxis 
                 className="text-muted-foreground"
                 tickFormatter={formatNumber}
-                label={{ value: 'Hodnota portfolia (Kč)', angle: -90, position: 'insideLeft' }}
+                label={{ value: 'Hodnota portfolia (Kč)', angle: -90, position: 'insideLeft', textAnchor: 'middle' }}
               />
               <Tooltip content={<CustomTooltip />} />
               <Legend />
