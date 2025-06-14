@@ -3,9 +3,9 @@ import React from "react";
 import BlogArticleLayout from "./_BlogArticleLayout";
 import FilteredETFList from "../../components/blog/FilteredETFList";
 
-// Americké akcie - upravíme na kategorie, které skutečně existují
+// Americké akcie - použijeme obecnější filtr, který najde více fondů
 const filter = {
-  category: "US Equity", // nebo "North America Equity"
+  category: "Equity", // širší kategorie, která pokryje různé typy akciových fondů
   top: 10,
   sortBy: "return_5y" as const,
   sortOrder: "desc" as const,

@@ -27,26 +27,20 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
       let etfs = await fetchETFs();
       
       console.log(`Total ETFs loaded: ${etfs.length}`);
-      console.log(`Filter category: ${filter.category}`);
-      
-      // Zobrazit všechny dostupné kategorie pro debugging
-      const allCategories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
-      console.log('All available categories:', allCategories.sort());
       
       if (filter.category) {
-        // Zkusíme exact match
-        let filteredByCategory = etfs.filter((etf) => etf.category?.toLowerCase() === filter.category?.toLowerCase());
+        console.log(`Filter category: ${filter.category}`);
         
-        // Pokud nenajdeme exact match, zkusíme partial match
-        if (filteredByCategory.length === 0) {
-          filteredByCategory = etfs.filter((etf) => 
-            etf.category?.toLowerCase().includes(filter.category?.toLowerCase() || "") ||
-            etf.name?.toLowerCase().includes(filter.category?.toLowerCase() || "")
-          );
-        }
+        // Zobrazit všechny dostupné kategorie pro debugging
+        const allCategories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
+        console.log('All available categories:', allCategories.sort());
         
-        console.log(`ETFs after category filter (${filter.category}): ${filteredByCategory.length}`);
-        etfs = filteredByCategory;
+        // Filtrujeme podle kategorie s partial match
+        etfs = etfs.filter((etf) => 
+          etf.category?.toLowerCase().includes(filter.category?.toLowerCase() || "")
+        );
+        
+        console.log(`ETFs after category filter (${filter.category}): ${etfs.length}`);
       }
       
       if (filter.sortBy) {
@@ -104,7 +98,10 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
       <CardHeader>
         <CardTitle>Výběr ETF k této kategorii</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Nalezeno {data.length} fondů v kategorii "{filter.category}"
+          {filter.category 
+            ? `Nalezeno ${data.length} fondů v kategorii "${filter.category}"`
+            : `Nalezeno ${data.length} nejlepších fondů`
+          }
         </p>
       </CardHeader>
       <CardContent>

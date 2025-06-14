@@ -3,9 +3,9 @@ import React from "react";
 import BlogArticleLayout from "./_BlogArticleLayout";
 import FilteredETFList from "../../components/blog/FilteredETFList";
 
-// ETF zaměřené na NASDAQ - upravíme filtr na širší technologické kategorie
+// ETF zaměřené na NASDAQ - použijeme širší filtr
 const filter = {
-  category: "Technology Equity", // nebo zkusíme "Technology" nebo "Tech"
+  category: "Equity", // široká kategorie pro akciové fondy
   top: 10,
   sortBy: "return_5y" as const,
   sortOrder: "desc" as const,

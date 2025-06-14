@@ -3,12 +3,11 @@ import React from "react";
 import BlogArticleLayout from "./_BlogArticleLayout";
 import FilteredETFList from "../../components/blog/FilteredETFList";
 
-// Evropské akcie - upravíme na kategorie, které skutečně existují
+// Evropské akcie - použijeme filtr podle TER (nejlevnější fondy)
 const filter = {
-  category: "Developed Markets Equity", // nebo "Europe Developed Equity"
   top: 10,
-  sortBy: "return_5y" as const,
-  sortOrder: "desc" as const,
+  sortBy: "ter_numeric" as const,
+  sortOrder: "asc" as const,
 };
 
 const NejlepsiETFNaEvropskeAkcie: React.FC = () => (
