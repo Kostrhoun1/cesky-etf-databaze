@@ -245,9 +245,13 @@ function generateCorrelatedMonthlyReturns(): Record<string, number> {
   const assetOrder = getAssetOrder();
   const n = assetOrder.length;
 
-  // Konverze - z ročních na měsíční parametry:
-  const means = assetOrder.map(a => ASSET_DATA[a].annualReturn / 12);
-  const stdDevs = assetOrder.map(a => ASSET_DATA[a].volatility / Math.sqrt(12)); // měsíční SD
+  // Správný převod annualReturn na měsíční drift ― viz lognormální model:
+  const drifts = assetOrder.map(a => {
+    const annualRet = ASSET_DATA[a].annualReturn;
+    const annualVol = ASSET_DATA[a].volatility;
+    return Math.log(1 + annualRet) / 12 - 0.5 * (annualVol * annualVol) / 12;
+  });
+  const stdDevs = assetOrder.map(a => ASSET_DATA[a].volatility / Math.sqrt(12));
 
   // Korelační matice do pole:
   const corrMat = assetOrder.map(a1 => assetOrder.map(a2 => CORRELATION_MATRIX[a1][a2]));
@@ -257,17 +261,20 @@ function generateCorrelatedMonthlyReturns(): Record<string, number> {
   // Random vektor
   const z = generateStandardNormalVector(n);
 
-  // Korelované výnosy: mean + L*z
+  // Korelované _log_ výnosy:
   const returns: number[] = Array(n).fill(0);
   for (let i = 0; i < n; i++) {
     let sum = 0;
     for (let k = 0; k <= i; k++) {
       sum += chol[i][k] * z[k];
     }
-    // Omezit na ±3 SD, ať nejsou extrémy (viz předchozí)
-    const capped = Math.max(means[i] - 3*stdDevs[i], Math.min(means[i] + 3*stdDevs[i], means[i] + sum));
-    // Další globální hardcap na ±25% za měsíc pro případ původní výzvy
-    returns[i] = Math.max(-0.25, Math.min(0.25, capped));
+    // Výnos = exp(drift + šum) - 1
+    let r = Math.exp(drifts[i] + sum) - 1;
+    // Omezit na ±3 SD kolem očekávaného výnosu (typicky rozumné)
+    const maxReturn = Math.exp(drifts[i] + 3 * stdDevs[i]) - 1;
+    const minReturn = Math.exp(drifts[i] - 3 * stdDevs[i]) - 1;
+    // Dále globální hardcap na ±25 %
+    returns[i] = Math.max(-0.25, Math.min(0.25, Math.max(minReturn, Math.min(r, maxReturn))));
   }
 
   // Namapovat zpět do Record
