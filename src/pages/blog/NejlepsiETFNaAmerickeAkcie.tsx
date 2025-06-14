@@ -7,8 +7,8 @@ import FilteredETFList from "../../components/blog/FilteredETFList";
 const filter = {
   category: "US Equity",
   top: 10,
-  sortBy: "return_5y",
-  sortOrder: "desc",
+  sortBy: "return_5y" as const,
+  sortOrder: "desc" as const,
 };
 
 const NejlepsiETFNaAmerickeAkcie: React.FC = () => (

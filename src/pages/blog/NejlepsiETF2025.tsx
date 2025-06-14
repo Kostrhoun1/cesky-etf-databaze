@@ -8,8 +8,8 @@ const filter = {
   top: 10, // počet fondů
   // žádný speciální filtr, zobrazíme největší ETFka dle velikosti fondu
   category: undefined,
-  sortBy: "fund_size_numeric", // největší fondy
-  sortOrder: "desc",
+  sortBy: "fund_size_numeric" as const, // největší fondy
+  sortOrder: "desc" as const,
 };
 
 const NejlepsiETF2025: React.FC = () => (
