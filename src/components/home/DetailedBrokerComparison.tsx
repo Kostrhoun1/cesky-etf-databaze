@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import BrokerOverview from '../broker/BrokerOverview';
 import BrokerComparison from '../broker/BrokerComparison';
@@ -7,8 +7,6 @@ import BrokerDetails from '../broker/BrokerDetails';
 import BrokerRecommendations from '../broker/BrokerRecommendations';
 
 const DetailedBrokerComparison: React.FC = () => {
-  const [selectedBroker, setSelectedBroker] = useState<string | null>(null);
-
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,10 +28,7 @@ const DetailedBrokerComparison: React.FC = () => {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-8">
-            <BrokerOverview 
-              selectedBroker={selectedBroker} 
-              setSelectedBroker={setSelectedBroker} 
-            />
+            <BrokerOverview />
           </TabsContent>
 
           <TabsContent value="comparison">

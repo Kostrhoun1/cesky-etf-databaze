@@ -1,27 +1,106 @@
 
 import React from 'react';
-import BrokerCard from './BrokerCard';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Check, X, Star } from 'lucide-react';
 import { brokers } from '../../data/brokerData';
 
-interface BrokerOverviewProps {
-  selectedBroker: string | null;
-  setSelectedBroker: (id: string | null) => void;
-}
-
-const BrokerOverview: React.FC<BrokerOverviewProps> = ({ selectedBroker, setSelectedBroker }) => {
-  const handleBrokerToggle = (brokerId: string) => {
-    setSelectedBroker(selectedBroker === brokerId ? null : brokerId);
-  };
-
+const BrokerOverview: React.FC = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {brokers.map((broker) => (
-        <BrokerCard
-          key={broker.id}
-          broker={broker}
-          isExpanded={selectedBroker === broker.id}
-          onToggle={() => handleBrokerToggle(broker.id)}
-        />
+        <Card key={broker.id} className="hover:shadow-lg transition-shadow">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-4">
+              <span className="text-4xl">{broker.logo}</span>
+              <div className="flex-1">
+                <CardTitle className="text-xl flex items-center gap-2">
+                  {broker.name}
+                  {broker.czSupport && <Badge variant="outline" className="text-xs">CZ</Badge>}
+                </CardTitle>
+                <div className="flex items-center gap-1 mt-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className={`w-4 h-4 ${i < Math.round(broker.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+                  ))}
+                  <span className="text-sm text-gray-600 ml-2">({broker.rating})</span>
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <p className="text-gray-600 text-sm leading-relaxed">{broker.description}</p>
+            
+            {/* Key metrics */}
+            <div className="grid grid-cols-3 gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="text-center">
+                <div className="text-sm font-bold text-green-600">{broker.etfFee.split(' ')[0]}</div>
+                <div className="text-xs text-gray-500">ETF poplatek</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm font-bold text-blue-600">{broker.etfCount}</div>
+                <div className="text-xs text-gray-500">ETF nabídka</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm font-bold text-purple-600">{broker.minDeposit}</div>
+                <div className="text-xs text-gray-500">Min. vklad</div>
+              </div>
+            </div>
+
+            {/* Pros and Cons Summary */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h4 className="font-semibold text-green-700 mb-3 flex items-center gap-1">
+                  <Check className="w-4 h-4" />
+                  Výhody
+                </h4>
+                <ul className="space-y-2">
+                  {broker.pros.slice(0, 3).map((pro, index) => (
+                    <li key={index} className="text-sm text-gray-700 flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 shrink-0"></div>
+                      <span className="leading-relaxed">{pro}</span>
+                    </li>
+                  ))}
+                  {broker.pros.length > 3 && (
+                    <li className="text-xs text-gray-500 italic">
+                      +{broker.pros.length - 3} dalších výhod
+                    </li>
+                  )}
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-red-700 mb-3 flex items-center gap-1">
+                  <X className="w-4 h-4" />
+                  Nevýhody
+                </h4>
+                <ul className="space-y-2">
+                  {broker.cons.slice(0, 3).map((con, index) => (
+                    <li key={index} className="text-sm text-gray-700 flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 shrink-0"></div>
+                      <span className="leading-relaxed">{con}</span>
+                    </li>
+                  ))}
+                  {broker.cons.length > 3 && (
+                    <li className="text-xs text-gray-500 italic">
+                      +{broker.cons.length - 3} dalších nevýhod
+                    </li>
+                  )}
+                </ul>
+              </div>
+            </div>
+
+            {/* Special features as tags */}
+            <div>
+              <h5 className="font-medium text-gray-700 mb-2">Speciální funkce:</h5>
+              <div className="flex flex-wrap gap-1">
+                {broker.specialFeatures.map((feature, index) => (
+                  <Badge key={index} variant="secondary" className="text-xs">
+                    {feature}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       ))}
     </div>
   );
