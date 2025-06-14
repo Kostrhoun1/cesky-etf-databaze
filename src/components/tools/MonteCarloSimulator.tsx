@@ -317,7 +317,12 @@ const MonteCarloSimulator: React.FC = () => {
         </CardContent>
       </Card>
 
-      {results.length > 0 && (
+      {/* Debug výpis výsledků pro troubleshooting */}
+      <div className="hidden">
+        {JSON.stringify(results)}
+      </div>
+
+      {results && Array.isArray(results) && results.length > 0 ? (
         <>
           <MonteCarloChart data={results} />
           <MonteCarloTable 
@@ -327,6 +332,10 @@ const MonteCarloSimulator: React.FC = () => {
             monthlyContribution={monthlyContribution}
           />
         </>
+      ) : isLoading ? (
+        <div className="text-center text-lg text-blue-600">Probíhá simulace...</div>
+      ) : (
+        <div className="text-center text-gray-500">Zatím nejsou dostupné žádné výsledky. Spusťte simulaci.</div>
       )}
     </div>
   );
