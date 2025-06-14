@@ -25,6 +25,7 @@ export type Database = {
           country_5_name: string | null
           country_5_weight: number | null
           created_at: string
+          current_price: number | null
           description_cs: string | null
           description_en: string | null
           distribution_frequency: string | null
@@ -91,6 +92,7 @@ export type Database = {
           information_ratio: number | null
           investment_focus: string | null
           isin: string
+          last_price_update: string | null
           legal_structure: string | null
           max_drawdown_1y: number | null
           max_drawdown_3y: number | null
@@ -101,9 +103,13 @@ export type Database = {
           primary_ticker: string | null
           replication: string | null
           retry_count: number | null
+          return_10y_percent: number | null
           return_1y: number | null
+          return_1y_percent: number | null
           return_3y: number | null
+          return_3y_percent: number | null
           return_5y: number | null
+          return_5y_percent: number | null
           return_per_risk_1y: number | null
           return_per_risk_3y: number | null
           return_per_risk_5y: number | null
@@ -131,6 +137,7 @@ export type Database = {
           volatility_1y: number | null
           volatility_3y: number | null
           volatility_5y: number | null
+          ytd_return_percent: number | null
         }
         Insert: {
           beta?: number | null
@@ -147,6 +154,7 @@ export type Database = {
           country_5_name?: string | null
           country_5_weight?: number | null
           created_at?: string
+          current_price?: number | null
           description_cs?: string | null
           description_en?: string | null
           distribution_frequency?: string | null
@@ -213,6 +221,7 @@ export type Database = {
           information_ratio?: number | null
           investment_focus?: string | null
           isin: string
+          last_price_update?: string | null
           legal_structure?: string | null
           max_drawdown_1y?: number | null
           max_drawdown_3y?: number | null
@@ -223,9 +232,13 @@ export type Database = {
           primary_ticker?: string | null
           replication?: string | null
           retry_count?: number | null
+          return_10y_percent?: number | null
           return_1y?: number | null
+          return_1y_percent?: number | null
           return_3y?: number | null
+          return_3y_percent?: number | null
           return_5y?: number | null
+          return_5y_percent?: number | null
           return_per_risk_1y?: number | null
           return_per_risk_3y?: number | null
           return_per_risk_5y?: number | null
@@ -253,6 +266,7 @@ export type Database = {
           volatility_1y?: number | null
           volatility_3y?: number | null
           volatility_5y?: number | null
+          ytd_return_percent?: number | null
         }
         Update: {
           beta?: number | null
@@ -269,6 +283,7 @@ export type Database = {
           country_5_name?: string | null
           country_5_weight?: number | null
           created_at?: string
+          current_price?: number | null
           description_cs?: string | null
           description_en?: string | null
           distribution_frequency?: string | null
@@ -335,6 +350,7 @@ export type Database = {
           information_ratio?: number | null
           investment_focus?: string | null
           isin?: string
+          last_price_update?: string | null
           legal_structure?: string | null
           max_drawdown_1y?: number | null
           max_drawdown_3y?: number | null
@@ -345,9 +361,13 @@ export type Database = {
           primary_ticker?: string | null
           replication?: string | null
           retry_count?: number | null
+          return_10y_percent?: number | null
           return_1y?: number | null
+          return_1y_percent?: number | null
           return_3y?: number | null
+          return_3y_percent?: number | null
           return_5y?: number | null
+          return_5y_percent?: number | null
           return_per_risk_1y?: number | null
           return_per_risk_3y?: number | null
           return_per_risk_5y?: number | null
@@ -375,6 +395,7 @@ export type Database = {
           volatility_1y?: number | null
           volatility_3y?: number | null
           volatility_5y?: number | null
+          ytd_return_percent?: number | null
         }
         Relationships: []
       }
