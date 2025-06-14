@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { CheckCircle, XCircle, BarChart, Users, Scale, Shield, ShoppingCart, HelpCircle } from 'lucide-react';
+import ChartFeeImpact from "@/components/ChartFeeImpact";
 
 const WhatAreETFs: React.FC = () => {
   useEffect(() => {
@@ -125,6 +125,8 @@ const WhatAreETFs: React.FC = () => {
                   </CardContent>
                 </Card>
               </div>
+              {/* GRAF: Srovnání dopadu poplatků */}
+              <ChartFeeImpact />
             </div>
 
             {/* Section 4: Typy ETF */}
