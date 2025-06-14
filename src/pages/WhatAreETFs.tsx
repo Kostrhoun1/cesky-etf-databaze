@@ -180,7 +180,62 @@ const WhatAreETFs: React.FC = () => {
                 ))}
               </ol>
             </div>
-          
+
+            {/* Section 5b: Kde koupit ETF */}
+            <div className="animate-fade-in">
+              <div className="flex justify-center mb-6">
+                <div className="bg-orange-100 text-orange-600 p-4 rounded-xl">
+                  <ShoppingCart className="w-8 h-8" />
+                </div>
+              </div>
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Kde koupit ETF?</h2>
+              <div className="prose prose-lg max-w-none mx-auto text-gray-700 mb-8">
+                <p>
+                  <strong>ETF fondy může dnes nakupovat téměř každý — stačí si založit účet u ověřeného brokera, který ETF nabízí.</strong> V Česku a v Evropě široce používají tyto platformy:
+                </p>
+                <ul className="list-disc pl-6">
+                  <li>
+                    <strong>XTB</strong>&nbsp;– česká pobočka, snadné ověření totožnosti, nákup ETF bez poplatků (na hlavní evropské burzy), jednoduché rozhraní.
+                  </li>
+                  <li>
+                    <strong>Trading 212</strong>&nbsp;– intuitivní aplikace, široká nabídka evropských ETF, možnost nakoupit i frakční podíly.
+                  </li>
+                  <li>
+                    <strong>DEGIRO</strong>&nbsp;– dlouhodobě populární volba v Evropě, velmi nízké poplatky, široká nabídka ETF (i některé bez poplatků).
+                  </li>
+                  <li>
+                    <strong>Portu</strong>&nbsp;– vhodné pro úplné začátečníky, nabízí automatizované portfolia složená z ETF.
+                  </li>
+                  <li>
+                    <strong>Interactive Brokers</strong>&nbsp;– vhodné pro pokročilejší investory a spravování větších portfolií.
+                  </li>
+                </ul>
+                <p className="mt-4">
+                  <span className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded mr-2 font-semibold">TIP</span>
+                  Porovnejte si nabídku brokerů podle poplatků a nabízených ETF v našem&nbsp;
+                  <Link to="/srovnani-etf" className="text-violet-600 hover:underline">srovnávači ETF i brokerů</Link>.
+                </p>
+                <p className="mt-4">
+                  <strong>Je nákup ETF bezpečný?</strong><br/>
+                  <span>
+                    Pokud používáte ověřeného a regulovaného brokera, vaše investice v ETF jsou vedeny na samostatném majetkovém účtu a zákon je chrání proti krachu brokera. Doporučujeme vybírat z výše uvedených možností.
+                  </span>
+                </p>
+                <p>
+                  <strong>Jaký broker je nejlepší?</strong><br/>
+                  Záleží na vašich preferencích (poplatky, nabídka ETF, čeština, uživatelské rozhraní). Většině začátečníků bude vyhovovat XTB, DEGIRO nebo Trading 212.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button asChild size="lg" className="bg-orange-50 text-orange-700 hover:bg-orange-100 font-bold border border-orange-200 transition">
+                  <Link to="/srovnani-etf">Porovnat ETF a brokery</Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="border-orange-300 text-orange-700 hover:bg-orange-50 font-bold transition">
+                  <Link to="/nastroje">Návod pro začátečníky</Link>
+                </Button>
+              </div>
+            </div>
+
             {/* Section 6: FAQ */}
             <div className="animate-fade-in">
               <div className="flex justify-center mb-6">
