@@ -62,14 +62,6 @@ export const useETFData = () => {
         scraping_date: etf.scraping_date,
         scraping_status: etf.scraping_status,
         retry_count: etf.retry_count || 0,
-        // New price fields
-        current_price: etf.current_price || 0,
-        ytd_return_percent: etf.ytd_return_percent || 0,
-        return_1y_percent: etf.return_1y_percent || 0,
-        return_3y_percent: etf.return_3y_percent || 0,
-        return_5y_percent: etf.return_5y_percent || 0,
-        return_10y_percent: etf.return_10y_percent || 0,
-        last_price_update: etf.last_price_update,
         // Holdings
         holding_1_name: etf.holding_1_name,
         holding_1_weight: etf.holding_1_weight || 0,
@@ -239,49 +231,9 @@ export const useETFData = () => {
     }
   };
 
-  const fetchPricesManually = async () => {
-    setIsLoading(true);
-    try {
-      console.log('Manually triggering price fetch...');
-      
-      const response = await fetch(`https://nbhwnatadyubiuadfakx.supabase.co/functions/v1/fetch-etf-prices`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log('Price fetch result:', result);
-      
-      toast({
-        title: "Aktualizace cen dokončena",
-        description: `Zpracováno ${result.processed} fondů, úspěšně aktualizováno ${result.successful} cen.`,
-      });
-
-      return result;
-    } catch (error) {
-      console.error('Error fetching prices manually:', error);
-      toast({
-        title: "Chyba při aktualizaci cen",
-        description: "Nepodařilo se aktualizovat ceny fondů.",
-        variant: "destructive",
-      });
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return {
     upsertETFs,
     fetchETFs,
-    fetchPricesManually,
     isLoading
   };
 };

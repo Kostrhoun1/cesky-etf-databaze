@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ETF } from '@/types/etf';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,10 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Search, TrendingUp, TrendingDown, RefreshCw } from 'lucide-react';
-import { formatCurrency, formatPercentage } from '@/utils/csvParser';
-import { useETFData } from '@/hooks/useETFData';
+import { Search, TrendingUp, TrendingDown } from 'lucide-react';
+import { formatPercentage } from '@/utils/csvParser';
 import {
   Pagination,
   PaginationContent,
@@ -30,7 +29,6 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
-  const { fetchPricesManually, isLoading } = useETFData();
 
   // Debug: Log TER values when component receives new ETFs
   useEffect(() => {
@@ -127,23 +125,6 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
     setCurrentPage(1); // Reset to first page when filtering
   };
 
-  const handlePriceUpdate = async () => {
-    try {
-      await fetchPricesManually();
-      if (onRefresh) {
-        onRefresh();
-      }
-    } catch (error) {
-      console.error('Error updating prices:', error);
-    }
-  };
-
-  const formatLastUpdate = (dateString: string | null) => {
-    if (!dateString) return 'Nikdy';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('cs-CZ') + ' ' + date.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -160,15 +141,6 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
               Přehled ETF fondů s detailními informacemi o výkonnosti a složení
             </CardDescription>
           </div>
-          <Button 
-            onClick={handlePriceUpdate} 
-            disabled={isLoading}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-            {isLoading ? 'Aktualizuji...' : 'Aktualizovat ceny'}
-          </Button>
         </div>
         
         {/* Filters */}
@@ -205,11 +177,10 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
               <SelectItem value="name">Název</SelectItem>
               <SelectItem value="ter_numeric">TER</SelectItem>
               <SelectItem value="fund_size_numeric">Velikost fondu</SelectItem>
-              <SelectItem value="current_price">Aktuální cena</SelectItem>
-              <SelectItem value="ytd_return_percent">YTD výnos</SelectItem>
-              <SelectItem value="return_1y_percent">Výnos 1Y</SelectItem>
-              <SelectItem value="return_3y_percent">Výnos 3Y</SelectItem>
-              <SelectItem value="return_5y_percent">Výnos 5Y</SelectItem>
+              <SelectItem value="return_ytd">YTD výnos</SelectItem>
+              <SelectItem value="return_1y">Výnos 1Y</SelectItem>
+              <SelectItem value="return_3y">Výnos 3Y</SelectItem>
+              <SelectItem value="return_5y">Výnos 5Y</SelectItem>
               <SelectItem value="volatility_1y">Volatilita 1Y</SelectItem>
             </SelectContent>
           </Select>
@@ -245,15 +216,6 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
                 </TableHead>
                 <TableHead 
                   className="cursor-pointer hover:bg-muted/50 text-right"
-                  onClick={() => handleSort('current_price')}
-                >
-                  Aktuální cena
-                  {sortBy === 'current_price' && (
-                    sortOrder === 'asc' ? <TrendingUp className="inline ml-1 h-4 w-4" /> : <TrendingDown className="inline ml-1 h-4 w-4" />
-                  )}
-                </TableHead>
-                <TableHead 
-                  className="cursor-pointer hover:bg-muted/50 text-right"
                   onClick={() => handleSort('ter_numeric')}
                 >
                   TER
@@ -263,42 +225,41 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
                 </TableHead>
                 <TableHead 
                   className="cursor-pointer hover:bg-muted/50 text-right"
-                  onClick={() => handleSort('ytd_return_percent')}
+                  onClick={() => handleSort('return_ytd')}
                 >
                   YTD výnos
-                  {sortBy === 'ytd_return_percent' && (
+                  {sortBy === 'return_ytd' && (
                     sortOrder === 'asc' ? <TrendingUp className="inline ml-1 h-4 w-4" /> : <TrendingDown className="inline ml-1 h-4 w-4" />
                   )}
                 </TableHead>
                 <TableHead 
                   className="cursor-pointer hover:bg-muted/50 text-right"
-                  onClick={() => handleSort('return_1y_percent')}
+                  onClick={() => handleSort('return_1y')}
                 >
                   Výnos 1Y
-                  {sortBy === 'return_1y_percent' && (
+                  {sortBy === 'return_1y' && (
                     sortOrder === 'asc' ? <TrendingUp className="inline ml-1 h-4 w-4" /> : <TrendingDown className="inline ml-1 h-4 w-4" />
                   )}
                 </TableHead>
                 <TableHead 
                   className="cursor-pointer hover:bg-muted/50 text-right"
-                  onClick={() => handleSort('return_3y_percent')}
+                  onClick={() => handleSort('return_3y')}
                 >
                   Výnos 3Y
-                  {sortBy === 'return_3y_percent' && (
+                  {sortBy === 'return_3y' && (
                     sortOrder === 'asc' ? <TrendingUp className="inline ml-1 h-4 w-4" /> : <TrendingDown className="inline ml-1 h-4 w-4" />
                   )}
                 </TableHead>
                 <TableHead 
                   className="cursor-pointer hover:bg-muted/50 text-right"
-                  onClick={() => handleSort('return_5y_percent')}
+                  onClick={() => handleSort('return_5y')}
                 >
                   Výnos 5Y
-                  {sortBy === 'return_5y_percent' && (
+                  {sortBy === 'return_5y' && (
                     sortOrder === 'asc' ? <TrendingUp className="inline ml-1 h-4 w-4" /> : <TrendingDown className="inline ml-1 h-4 w-4" />
                   )}
                 </TableHead>
                 <TableHead>Kategorie</TableHead>
-                <TableHead className="text-right">Poslední aktualizace</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -315,39 +276,24 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
                   </TableCell>
                   <TableCell>{etf.fund_provider}</TableCell>
                   <TableCell className="text-right">
-                    {etf.current_price && etf.current_price > 0 ? (
-                      <span className="font-medium">
-                        {etf.current_price.toLocaleString('cs-CZ', { 
-                          minimumFractionDigits: 2, 
-                          maximumFractionDigits: 2 
-                        })} {etf.fund_currency || 'USD'}
-                      </span>
-                    ) : (
-                      <span className="text-muted-foreground">-</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
                     {formatPercentage(etf.ter_numeric)}
                   </TableCell>
-                  <TableCell className={`text-right ${etf.ytd_return_percent > 0 ? 'text-green-600' : etf.ytd_return_percent < 0 ? 'text-red-600' : ''}`}>
-                    {etf.ytd_return_percent ? formatPercentage(etf.ytd_return_percent) : '-'}
+                  <TableCell className={`text-right ${etf.return_ytd > 0 ? 'text-green-600' : etf.return_ytd < 0 ? 'text-red-600' : ''}`}>
+                    {etf.return_ytd ? formatPercentage(etf.return_ytd) : '-'}
                   </TableCell>
-                  <TableCell className={`text-right ${etf.return_1y_percent > 0 ? 'text-green-600' : etf.return_1y_percent < 0 ? 'text-red-600' : ''}`}>
-                    {etf.return_1y_percent ? formatPercentage(etf.return_1y_percent) : '-'}
+                  <TableCell className={`text-right ${etf.return_1y > 0 ? 'text-green-600' : etf.return_1y < 0 ? 'text-red-600' : ''}`}>
+                    {etf.return_1y ? formatPercentage(etf.return_1y) : '-'}
                   </TableCell>
-                  <TableCell className={`text-right ${etf.return_3y_percent > 0 ? 'text-green-600' : etf.return_3y_percent < 0 ? 'text-red-600' : ''}`}>
-                    {etf.return_3y_percent ? formatPercentage(etf.return_3y_percent) : '-'}
+                  <TableCell className={`text-right ${etf.return_3y > 0 ? 'text-green-600' : etf.return_3y < 0 ? 'text-red-600' : ''}`}>
+                    {etf.return_3y ? formatPercentage(etf.return_3y) : '-'}
                   </TableCell>
-                  <TableCell className={`text-right ${etf.return_5y_percent > 0 ? 'text-green-600' : etf.return_5y_percent < 0 ? 'text-red-600' : ''}`}>
-                    {etf.return_5y_percent ? formatPercentage(etf.return_5y_percent) : '-'}
+                  <TableCell className={`text-right ${etf.return_5y > 0 ? 'text-green-600' : etf.return_5y < 0 ? 'text-red-600' : ''}`}>
+                    {etf.return_5y ? formatPercentage(etf.return_5y) : '-'}
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="text-xs">
                       {etf.category}
                     </Badge>
-                  </TableCell>
-                  <TableCell className="text-right text-xs text-muted-foreground">
-                    {formatLastUpdate(etf.last_price_update)}
                   </TableCell>
                 </TableRow>
               ))}

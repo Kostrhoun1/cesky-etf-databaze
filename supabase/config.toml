@@ -1,5 +1,2 @@
 
 project_id = "nbhwnatadyubiuadfakx"
-
-[functions.fetch-etf-prices]
-verify_jwt = false
