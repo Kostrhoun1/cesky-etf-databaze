@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -72,6 +71,42 @@ const ETFSearchSection: React.FC = () => {
   const activeCategory = selectedCategory ?? (categories.includes('Akciové') ? 'Akciové' : categories[0] ?? '');
 
   const filteredETFs = useMemo(() => {
+    console.log('=== ETFSearchSection Filtering Debug ===');
+    console.log('Search term:', searchTerm);
+    console.log('Total ETFs in search section:', etfs.length);
+    console.log('Active category:', activeCategory);
+
+    // Pokud hledáme SXR8, najdeme všechny ETF s tímto tickerem
+    if (searchTerm.toLowerCase() === 'sxr8') {
+      console.log('Searching for SXR8 in ETFSearchSection...');
+      const sxr8ETFs = etfs.filter(etf => {
+        const hasSXR8 = 
+          (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes('sxr8')) ||
+          (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase().includes('sxr8')) ||
+          (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase().includes('sxr8')) ||
+          (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().includes('sxr8')) ||
+          (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes('sxr8')) ||
+          (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes('sxr8'));
+        
+        if (hasSXR8) {
+          console.log('Found ETF with SXR8 in search section:', {
+            name: etf.name,
+            isin: etf.isin,
+            category: etf.category,
+            primary_ticker: etf.primary_ticker,
+            exchange_1_ticker: etf.exchange_1_ticker,
+            exchange_2_ticker: etf.exchange_2_ticker,
+            exchange_3_ticker: etf.exchange_3_ticker,
+            exchange_4_ticker: etf.exchange_4_ticker,
+            exchange_5_ticker: etf.exchange_5_ticker,
+          });
+        }
+        
+        return hasSXR8;
+      });
+      console.log('ETFs with SXR8 ticker in search section:', sxr8ETFs.length);
+    }
+
     return etfs
       .filter(etf => {
         const searchLower = searchTerm.toLowerCase();
