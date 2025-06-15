@@ -1,21 +1,22 @@
+
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { sanitizeText } from "@/utils/sanitize";
 import NewsletterSubscribersList, { Subscriber } from "@/components/newsletter/NewsletterSubscribersList";
 import NewsletterForm from "@/components/newsletter/NewsletterForm";
 import NewsletterList, { Newsletter } from "@/components/newsletter/NewsletterList";
 
-const NewsletterAdminPage: React.FC = () => {
+const NewsletterAdminPageContent: React.FC = () => {
+  const { user } = useAuth();
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
   const [sending, setSending] = useState(false);
-
-  // Nově
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [showSubscribers, setShowSubscribers] = useState(false);
-
-  // Pro odesílání
   const [sendingId, setSendingId] = useState<string | null>(null);
 
   const reloadNewsletters = () => {
@@ -27,20 +28,6 @@ const NewsletterAdminPage: React.FC = () => {
         if (!error && data) setNewsletters(data as Newsletter[]);
       });
   };
-
-  useEffect(() => {
-    reloadNewsletters();
-    // Získáme aktuální odběratele
-    supabase
-      .from("newsletter_subscribers")
-      .select("*")
-      .is("unsubscribed_at", null)
-      .order("subscribed_at", { ascending: true })
-      .limit(500)
-      .then(({ data, error }) => {
-        if (!error && data) setSubscribers(data as Subscriber[]);
-      });
-  }, []);
 
   const reloadSubscribers = () => {
     supabase
@@ -54,7 +41,34 @@ const NewsletterAdminPage: React.FC = () => {
       });
   };
 
-  // Odeslat newsletter přes edge funkci
+  useEffect(() => {
+    reloadNewsletters();
+    reloadSubscribers();
+  }, []);
+
+  // Validate and sanitize input
+  const validateInput = (subject: string, body: string): boolean => {
+    if (!subject.trim() || subject.trim().length < 3) {
+      toast({
+        title: "Neplatný předmět",
+        description: "Předmět musí obsahovat alespoň 3 znaky.",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (!body.trim() || body.trim().length < 10) {
+      toast({
+        title: "Neplatný obsah",
+        description: "Obsah musí obsahovat alespoň 10 znaků.",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSendNewsletter = async (newsletterId: string) => {
     if (!window.confirm("Opravdu chcete odeslat tento newsletter všem odběratelům? Akce je nevratná."))
       return;
@@ -62,7 +76,6 @@ const NewsletterAdminPage: React.FC = () => {
     setSendingId(newsletterId);
 
     try {
-      // Použijeme Supabase client pro volání edge funkce s automatickou autorizací
       const { data: result, error } = await supabase.functions.invoke('send-newsletter', {
         body: { newsletter_id: newsletterId }
       });
@@ -103,25 +116,49 @@ const NewsletterAdminPage: React.FC = () => {
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!subject || !body) {
-      toast({ title: "Vyplňte předmět a obsah" });
+    
+    const sanitizedSubject = sanitizeText(subject);
+    const sanitizedBody = body; // Don't sanitize here, will be sanitized in component and edge function
+
+    if (!validateInput(sanitizedSubject, sanitizedBody)) {
       return;
     }
+
     setSending(true);
-    const { error } = await supabase
-      .from("newsletters")
-      .insert({ subject, body });
+    
+    try {
+      const { error } = await supabase
+        .from("newsletters")
+        .insert({ 
+          subject: sanitizedSubject, 
+          body: sanitizedBody,
+          sent_by: user?.id 
+        });
 
-    setSending(false);
-
-    if (error) {
-      toast({ title: "Chyba", description: error.message });
-    } else {
-      setSubject("");
-      setBody("");
-      toast({ title: "Newsletter uložen", description: "Zpráva byla uložena, připravte rozeslání." });
-      reloadNewsletters();
+      if (error) {
+        toast({ 
+          title: "Chyba", 
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        setSubject("");
+        setBody("");
+        toast({ 
+          title: "Newsletter uložen", 
+          description: "Zpráva byla uložena, připravte rozeslání." 
+        });
+        reloadNewsletters();
+      }
+    } catch (error: any) {
+      toast({
+        title: "Chyba",
+        description: "Nepodařilo se uložit newsletter.",
+        variant: "destructive",
+      });
     }
+    
+    setSending(false);
   };
 
   return (
@@ -149,6 +186,14 @@ const NewsletterAdminPage: React.FC = () => {
         sendingId={sendingId}
       />
     </div>
+  );
+};
+
+const NewsletterAdminPage: React.FC = () => {
+  return (
+    <ProtectedRoute requireAdmin={true}>
+      <NewsletterAdminPageContent />
+    </ProtectedRoute>
   );
 };
 

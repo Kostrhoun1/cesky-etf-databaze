@@ -9,6 +9,7 @@ import {
   TableCell
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { sanitizeHTML, sanitizeText } from "@/utils/sanitize";
 
 export type Newsletter = {
   id: string;
@@ -45,7 +46,7 @@ const NewsletterList: React.FC<NewsletterListProps> = ({
       <TableBody>
         {newsletters.map((nl) => (
           <TableRow key={nl.id}>
-            <TableCell>{nl.subject}</TableCell>
+            <TableCell>{sanitizeText(nl.subject)}</TableCell>
             <TableCell>{new Date(nl.created_at).toLocaleString()}</TableCell>
             <TableCell>
               {nl.sent_at ? (
@@ -71,7 +72,7 @@ const NewsletterList: React.FC<NewsletterListProps> = ({
             <TableCell>
               <div
                 className="max-h-32 overflow-auto border rounded p-2 text-xs bg-gray-50 prose prose-xs max-w-none"
-                dangerouslySetInnerHTML={{ __html: nl.body }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHTML(nl.body) }}
               />
             </TableCell>
           </TableRow>
