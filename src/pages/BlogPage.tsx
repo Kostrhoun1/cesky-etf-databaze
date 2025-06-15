@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 
-// Obrázky k článkům – správné cesty (odstraněno /public)
+const PLACEHOLDER_IMAGE = "/placeholder.svg"; // existuje v public složce
+
 const ARTICLE_IMAGES: Record<string, string> = {
   "nejlepsi-etf-2025": "/lovable-uploads/photo-1488590528505-98d2b5aba04b.jpg",
   "nejlepsi-etf-na-americke-akcie": "/lovable-uploads/photo-1581091226825-a6a2a5aee158.jpg",
@@ -77,12 +78,18 @@ const BlogPage: React.FC = () => (
             className="group bg-white/90 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-200 animate-fade-in"
           >
             <Link to={`/blog/${article.slug}`} className="block h-full focus:outline-none group">
-              <div className="relative aspect-[16/9] w-full overflow-hidden">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
                 <img
-                  src={ARTICLE_IMAGES[article.slug]}
+                  src={ARTICLE_IMAGES[article.slug] || PLACEHOLDER_IMAGE}
                   alt={article.title}
                   className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                   loading="lazy"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (target.src !== window.location.origin + PLACEHOLDER_IMAGE) {
+                      target.src = PLACEHOLDER_IMAGE;
+                    }
+                  }}
                 />
                 <span className="absolute left-3 top-3 bg-violet-600 text-white text-xs px-3 py-1 rounded-full">
                   TIP #{idx + 1}
