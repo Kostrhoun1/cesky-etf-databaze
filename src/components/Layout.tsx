@@ -37,8 +37,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </Link>
             </div>
             
-            {/* Desktop navigation */}
-            <nav className="hidden md:flex space-x-1">
+            {/* Desktop navigation - centered */}
+            <nav className="hidden md:flex space-x-1 absolute left-1/2 transform -translate-x-1/2">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
