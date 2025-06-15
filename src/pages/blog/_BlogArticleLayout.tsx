@@ -77,36 +77,17 @@ const BlogArticleLayout: React.FC<Props> = ({ title, perex, seoDescription, read
           {/* Article Content Card */}
           <Card className="border-0 shadow-2xl bg-white/80 backdrop-blur-sm mb-12">
             <CardContent className="p-0">
-              <div className="prose prose-lg prose-slate max-w-none p-8 lg:p-12">
-                <style jsx>{`
-                  .prose h2 {
-                    @apply text-2xl font-bold text-gray-900 mt-12 mb-6 pb-3 border-b border-gray-200;
-                  }
-                  .prose h3 {
-                    @apply text-xl font-semibold text-gray-800 mt-8 mb-4;
-                  }
-                  .prose p {
-                    @apply text-gray-700 leading-relaxed mb-6;
-                  }
-                  .prose ul {
-                    @apply space-y-2 mb-6;
-                  }
-                  .prose li {
-                    @apply text-gray-700;
-                  }
-                  .prose strong {
-                    @apply text-gray-900 font-semibold;
-                  }
-                  .prose a {
-                    @apply text-violet-600 hover:text-violet-700 font-medium no-underline hover:underline transition-colors;
-                  }
-                  .prose blockquote {
-                    @apply border-l-4 border-violet-200 bg-violet-50 p-4 my-6 italic text-gray-800;
-                  }
-                  .prose code {
-                    @apply bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm;
-                  }
-                `}</style>
+              <div className="prose prose-lg prose-slate max-w-none p-8 lg:p-12 
+                [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-gray-900 [&_h2]:mt-12 [&_h2]:mb-6 [&_h2]:pb-3 [&_h2]:border-b [&_h2]:border-gray-200
+                [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-gray-800 [&_h3]:mt-8 [&_h3]:mb-4
+                [&_p]:text-gray-700 [&_p]:leading-relaxed [&_p]:mb-6
+                [&_ul]:space-y-2 [&_ul]:mb-6
+                [&_li]:text-gray-700
+                [&_strong]:text-gray-900 [&_strong]:font-semibold
+                [&_a]:text-violet-600 [&_a]:hover:text-violet-700 [&_a]:font-medium [&_a]:no-underline [&_a]:hover:underline [&_a]:transition-colors
+                [&_blockquote]:border-l-4 [&_blockquote]:border-violet-200 [&_blockquote]:bg-violet-50 [&_blockquote]:p-4 [&_blockquote]:my-6 [&_blockquote]:italic [&_blockquote]:text-gray-800
+                [&_code]:bg-gray-100 [&_code]:text-gray-800 [&_code]:px-2 [&_code]:py-1 [&_code]:rounded [&_code]:text-sm"
+              >
                 {children}
               </div>
             </CardContent>
