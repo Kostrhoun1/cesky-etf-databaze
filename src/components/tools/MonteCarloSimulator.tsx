@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,16 +36,27 @@ const MonteCarloSimulator: React.FC = () => {
   const [results, setResults] = useState<SimulationResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log("MonteCarloSimulator rendered with state:", {
+    allocation,
+    initialInvestment,
+    monthlyContribution,
+    investmentPeriod,
+    resultsLength: results.length,
+    isLoading
+  });
+
   // Součet alokací napříč aktivy
   const totalAllocation = Object.values(allocation).reduce((sum, v) => sum + v, 0);
 
   // Handler pro změnu jednoho assetu
   const handleAllocationChange = (asset: keyof AssetAllocation, value: number) => {
+    console.log(`Allocation change: ${asset} = ${value}`);
     setAllocation((prev) => ({ ...prev, [asset]: value }));
   };
 
   // Jednoduchá normalizace (totožné jako dříve)
   const normalizeAllocation = () => {
+    console.log("Normalizing allocation");
     const total = Object.values(allocation).reduce((sum, val) => sum + val, 0);
     if (total !== 100) {
       const factor = 100 / total;
@@ -57,8 +69,25 @@ const MonteCarloSimulator: React.FC = () => {
   };
 
   const runSimulation = async () => {
+    console.log("runSimulation started");
+    console.log("Simulation parameters:", {
+      allocation,
+      initialInvestment,
+      monthlyContribution,
+      years: investmentPeriod,
+      totalAllocation
+    });
+
+    if (totalAllocation !== 100) {
+      console.error("Cannot run simulation: total allocation is not 100%");
+      return;
+    }
+
     setIsLoading(true);
+    setResults([]); // Clear previous results
+    
     try {
+      console.log("Calling runMonteCarloSimulation...");
       const simulationResults = await runMonteCarloSimulation({
         allocation,
         initialInvestment,
@@ -66,10 +95,12 @@ const MonteCarloSimulator: React.FC = () => {
         years: investmentPeriod,
         simulations: 1000,
       });
+      console.log("Simulation completed with results:", simulationResults);
       setResults(simulationResults);
     } catch (error) {
       console.error("Chyba při simulaci:", error);
     } finally {
+      console.log("Setting isLoading to false");
       setIsLoading(false);
     }
   };
@@ -146,7 +177,7 @@ const MonteCarloSimulator: React.FC = () => {
             <CardTitle>Výsledky simulace</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* NOVÉ: GRAF */}
+            {/* GRAF */}
             <MonteCarloChart results={results} />
             <div className="space-y-4 mt-10">
               {results.filter((r) => r.year === investmentPeriod).map((result) => (
@@ -187,5 +218,3 @@ const MonteCarloSimulator: React.FC = () => {
 };
 
 export default MonteCarloSimulator;
-
-// ... Soubor je nyní delší než 200 řádků. Pro lepší čitelnost doporučuji zvážit refaktoraci do menších komponent (např. dynamické pole sliderů rozdělit a přesunout do samostatného komponentu).

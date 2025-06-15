@@ -1,3 +1,4 @@
+
 import { AssetAllocation, SimulationParameters, SimulationResult, AssetClass } from "@/types/monteCarlo";
 
 // Asset return, volatility
@@ -92,12 +93,20 @@ function generateMonthlyReturns(): number[] {
 }
 
 export async function runMonteCarloSimulation(params: SimulationParameters): Promise<SimulationResult[]> {
+  console.log("runMonteCarloSimulation started with params:", params);
+  
   const { allocation, initialInvestment, monthlyContribution, years, simulations } = params;
   const nAssets = ASSET_KEYS.length;
   const monthsTotal = years * 12;
   const allSimulations: number[][] = [];
 
+  console.log(`Running ${simulations} simulations for ${years} years (${monthsTotal} months)`);
+
   for (let sim = 0; sim < simulations; sim++) {
+    if (sim % 100 === 0) {
+      console.log(`Running simulation ${sim}/${simulations}`);
+    }
+    
     let value = initialInvestment;
     const values: number[] = [initialInvestment];
     for (let month = 1; month <= monthsTotal; month++) {
@@ -117,6 +126,8 @@ export async function runMonteCarloSimulation(params: SimulationParameters): Pro
     allSimulations.push(values);
   }
 
+  console.log("Simulations completed, calculating percentiles...");
+
   // Výpočet percentilů pro každý rok
   const results: SimulationResult[] = [];
   for (let year = 0; year <= years; year++) {
@@ -133,5 +144,7 @@ export async function runMonteCarloSimulation(params: SimulationParameters): Pro
       mean
     });
   }
+  
+  console.log("Final results:", results);
   return results;
 }
