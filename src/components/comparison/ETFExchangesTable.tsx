@@ -1,17 +1,15 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ETFListItem } from '@/types/etf';
+import { ETF } from '@/types/etf';
 
 interface ETFExchangesTableProps {
-  selectedETFs: ETFListItem[];
+  selectedETFs: ETF[];
 }
 
 const ETFExchangesTable: React.FC<ETFExchangesTableProps> = ({
   selectedETFs,
 }) => {
-  const extendedETFs = selectedETFs as any[];
-
   return (
     <Card>
       <CardHeader>
@@ -34,12 +32,12 @@ const ETFExchangesTable: React.FC<ETFExchangesTableProps> = ({
               {[1, 2, 3, 4, 5].map((i) => (
                 <tr key={i} className="border-b">
                   <td className="p-3 font-medium">Burza #{i}</td>
-                  {extendedETFs.map((etf) => {
-                    const exchangeName = etf[`exchange_${i}_name`];
-                    const exchangeCurrency = etf[`exchange_${i}_currency`];
-                    const exchangeTicker = etf[`exchange_${i}_ticker`];
-                    const exchangeBloomberg = etf[`exchange_${i}_bloomberg`];
-                    const exchangeReuters = etf[`exchange_${i}_reuters`];
+                  {selectedETFs.map((etf) => {
+                    const exchangeName = etf[`exchange_${i}_name` as keyof ETF] as string;
+                    const exchangeCurrency = etf[`exchange_${i}_currency` as keyof ETF] as string;
+                    const exchangeTicker = etf[`exchange_${i}_ticker` as keyof ETF] as string;
+                    const exchangeBloomberg = etf[`exchange_${i}_bloomberg` as keyof ETF] as string;
+                    const exchangeReuters = etf[`exchange_${i}_reuters` as keyof ETF] as string;
                     
                     return (
                       <td key={etf.isin} className="p-3">

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ETFListItem } from '@/types/etf';
+import { ETF } from '@/types/etf';
 import { 
   formatDate, 
   formatNumber, 
@@ -10,14 +10,12 @@ import {
 } from '@/utils/etfFormatters';
 
 interface ETFFundDetailsTableProps {
-  selectedETFs: ETFListItem[];
+  selectedETFs: ETF[];
 }
 
 const ETFFundDetailsTable: React.FC<ETFFundDetailsTableProps> = ({
   selectedETFs,
 }) => {
-  const extendedETFs = selectedETFs as any[];
-
   return (
     <Card>
       <CardHeader>
@@ -39,7 +37,7 @@ const ETFFundDetailsTable: React.FC<ETFFundDetailsTableProps> = ({
             <tbody>
               <tr className="border-b">
                 <td className="p-3 font-medium">Datum vzniku</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">
                     {etf.inception_date ? formatDate(etf.inception_date) : '-'}
                   </td>
@@ -47,13 +45,13 @@ const ETFFundDetailsTable: React.FC<ETFFundDetailsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Domicil fondu</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">{etf.fund_domicile || '-'}</td>
                 ))}
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Frekvence dividend</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">
                     {getDistributionFrequencyLabel(etf.distribution_frequency)}
                   </td>
@@ -61,7 +59,7 @@ const ETFFundDetailsTable: React.FC<ETFFundDetailsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Typ replikace</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">
                     {getReplicationLabel(etf.replication)}
                   </td>
@@ -69,25 +67,25 @@ const ETFFundDetailsTable: React.FC<ETFFundDetailsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Právní struktura</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">{etf.legal_structure || '-'}</td>
                 ))}
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Investiční zaměření</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">{etf.investment_focus || '-'}</td>
                 ))}
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Udržitelnost</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">{etf.sustainability || '-'}</td>
                 ))}
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Celkem pozic</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">
                     {etf.total_holdings ? formatNumber(etf.total_holdings) : '-'}
                   </td>
@@ -95,13 +93,13 @@ const ETFFundDetailsTable: React.FC<ETFFundDetailsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Primární burza</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">{etf.primary_exchange || '-'}</td>
                 ))}
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Celkem burz</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">
                     {etf.total_exchanges ? formatNumber(etf.total_exchanges) : '-'}
                   </td>

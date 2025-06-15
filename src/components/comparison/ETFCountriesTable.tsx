@@ -1,18 +1,16 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ETFListItem } from '@/types/etf';
+import { ETF } from '@/types/etf';
 import { formatPercentage } from '@/utils/csvParser';
 
 interface ETFCountriesTableProps {
-  selectedETFs: ETFListItem[];
+  selectedETFs: ETF[];
 }
 
 const ETFCountriesTable: React.FC<ETFCountriesTableProps> = ({
   selectedETFs,
 }) => {
-  const extendedETFs = selectedETFs as any[];
-
   return (
     <Card>
       <CardHeader>
@@ -35,9 +33,9 @@ const ETFCountriesTable: React.FC<ETFCountriesTableProps> = ({
               {[1, 2, 3, 4, 5].map((i) => (
                 <tr key={i} className="border-b">
                   <td className="p-3 font-medium">#{i}</td>
-                  {extendedETFs.map((etf) => {
-                    const countryName = etf[`country_${i}_name`];
-                    const countryWeight = etf[`country_${i}_weight`];
+                  {selectedETFs.map((etf) => {
+                    const countryName = etf[`country_${i}_name` as keyof ETF] as string;
+                    const countryWeight = etf[`country_${i}_weight` as keyof ETF] as number;
                     return (
                       <td key={etf.isin} className="p-3">
                         {countryName ? (

@@ -1,13 +1,34 @@
 
 import { useState, useCallback } from 'react';
-import { ETFListItem } from '@/types/etf';
+import { ETFListItem, ETF } from '@/types/etf';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useETFComparison = () => {
-  const [selectedETFs, setSelectedETFs] = useState<ETFListItem[]>([]);
+  const [selectedETFs, setSelectedETFs] = useState<ETF[]>([]);
   const { toast } = useToast();
 
-  const addETFToComparison = useCallback((etf: ETFListItem) => {
+  const fetchFullETFData = async (isin: string): Promise<ETF | null> => {
+    try {
+      const { data, error } = await supabase
+        .from('etf_funds')
+        .select('*')
+        .eq('isin', isin)
+        .single();
+
+      if (error) {
+        console.error('Error fetching full ETF data:', error);
+        return null;
+      }
+
+      return data as ETF;
+    } catch (error) {
+      console.error('Error fetching full ETF data:', error);
+      return null;
+    }
+  };
+
+  const addETFToComparison = useCallback(async (etf: ETFListItem) => {
     if (selectedETFs.length >= 3) {
       toast({
         title: "Maximum dosažen",
@@ -26,7 +47,18 @@ export const useETFComparison = () => {
       return false;
     }
 
-    setSelectedETFs(prev => [...prev, etf]);
+    // Fetch full ETF data with all fields needed for comparison
+    const fullETFData = await fetchFullETFData(etf.isin);
+    if (!fullETFData) {
+      toast({
+        title: "Chyba",
+        description: "Nepodařilo se načíst kompletní data fondu.",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    setSelectedETFs(prev => [...prev, fullETFData]);
     toast({
       title: "Fond přidán",
       description: `${etf.name} byl přidán do porovnání.`,

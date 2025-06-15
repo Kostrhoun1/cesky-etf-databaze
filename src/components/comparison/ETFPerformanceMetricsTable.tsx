@@ -1,19 +1,17 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ETFListItem } from '@/types/etf';
+import { ETF } from '@/types/etf';
 import { formatPercentage } from '@/utils/csvParser';
 import { getReturnColor } from '@/utils/etfFormatters';
 
 interface ETFPerformanceMetricsTableProps {
-  selectedETFs: ETFListItem[];
+  selectedETFs: ETF[];
 }
 
 const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
   selectedETFs,
 }) => {
-  const extendedETFs = selectedETFs as any[];
-
   return (
     <Card>
       <CardHeader>
@@ -35,7 +33,7 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
             <tbody>
               <tr className="border-b">
                 <td className="p-3 font-medium">Volatilita 1 rok</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3 font-mono">
                     {etf.volatility_1y ? formatPercentage(etf.volatility_1y) : '-'}
                   </td>
@@ -43,7 +41,7 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Volatilita 3 roky</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3 font-mono">
                     {etf.volatility_3y ? formatPercentage(etf.volatility_3y) : '-'}
                   </td>
@@ -51,7 +49,7 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Volatilita 5 let</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3 font-mono">
                     {etf.volatility_5y ? formatPercentage(etf.volatility_5y) : '-'}
                   </td>
@@ -59,7 +57,7 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Max. pokles 1 rok</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className={`p-3 font-mono ${getReturnColor(etf.max_drawdown_1y)}`}>
                     {etf.max_drawdown_1y ? formatPercentage(etf.max_drawdown_1y) : '-'}
                   </td>
@@ -67,7 +65,7 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Max. pokles 3 roky</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className={`p-3 font-mono ${getReturnColor(etf.max_drawdown_3y)}`}>
                     {etf.max_drawdown_3y ? formatPercentage(etf.max_drawdown_3y) : '-'}
                   </td>
@@ -75,7 +73,7 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Max. pokles 5 let</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className={`p-3 font-mono ${getReturnColor(etf.max_drawdown_5y)}`}>
                     {etf.max_drawdown_5y ? formatPercentage(etf.max_drawdown_5y) : '-'}
                   </td>
@@ -83,7 +81,7 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Beta</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3 font-mono">
                     {etf.beta ? etf.beta.toFixed(2) : '-'}
                   </td>
@@ -91,7 +89,7 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Korelace</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3 font-mono">
                     {etf.correlation ? etf.correlation.toFixed(2) : '-'}
                   </td>
@@ -99,7 +97,7 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Tracking Error</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3 font-mono">
                     {etf.tracking_error ? formatPercentage(etf.tracking_error) : '-'}
                   </td>
@@ -107,7 +105,7 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
               </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Information Ratio</td>
-                {extendedETFs.map((etf) => (
+                {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3 font-mono">
                     {etf.information_ratio ? etf.information_ratio.toFixed(2) : '-'}
                   </td>

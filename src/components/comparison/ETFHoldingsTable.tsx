@@ -1,18 +1,16 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ETFListItem } from '@/types/etf';
+import { ETF } from '@/types/etf';
 import { formatPercentage } from '@/utils/csvParser';
 
 interface ETFHoldingsTableProps {
-  selectedETFs: ETFListItem[];
+  selectedETFs: ETF[];
 }
 
 const ETFHoldingsTable: React.FC<ETFHoldingsTableProps> = ({
   selectedETFs,
 }) => {
-  const extendedETFs = selectedETFs as any[];
-
   return (
     <Card>
       <CardHeader>
@@ -35,9 +33,9 @@ const ETFHoldingsTable: React.FC<ETFHoldingsTableProps> = ({
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
                 <tr key={i} className="border-b">
                   <td className="p-3 font-medium">#{i}</td>
-                  {extendedETFs.map((etf) => {
-                    const holdingName = etf[`holding_${i}_name`];
-                    const holdingWeight = etf[`holding_${i}_weight`];
+                  {selectedETFs.map((etf) => {
+                    const holdingName = etf[`holding_${i}_name` as keyof ETF] as string;
+                    const holdingWeight = etf[`holding_${i}_weight` as keyof ETF] as number;
                     return (
                       <td key={etf.isin} className="p-3">
                         {holdingName ? (

@@ -4,11 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { X, BarChart3 } from 'lucide-react';
-import { ETFListItem } from '@/types/etf';
+import { ETF } from '@/types/etf';
 import { formatPercentage } from '@/utils/csvParser';
 
 interface ETFComparisonPanelProps {
-  selectedETFs: ETFListItem[];
+  selectedETFs: ETF[];
   onRemoveETF: (isin: string) => void;
   onClearAll: () => void;
   onShowComparison: () => void;

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ETFListItem } from '@/types/etf';
+import { ETF } from '@/types/etf';
 import { formatPercentage, formatTER } from '@/utils/csvParser';
 import { formatCurrency, getDistributionPolicyLabel } from '@/utils/etfFormatters';
 import ETFComparisonHeader from './comparison/ETFComparisonHeader';
@@ -13,7 +13,7 @@ import ETFSectorsTable from './comparison/ETFSectorsTable';
 import ETFExchangesTable from './comparison/ETFExchangesTable';
 
 interface ETFDetailedComparisonProps {
-  selectedETFs: ETFListItem[];
+  selectedETFs: ETF[];
   onBack: () => void;
 }
 
@@ -33,7 +33,7 @@ const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
 
   const feesAndSizeData = [
     { label: 'TER (roční poplatek)', key: 'ter_numeric', format: (value: number) => formatTER(value), className: 'font-mono' },
-    { label: 'Velikost fondu', key: 'fund_size_numeric', format: (value: number, etf: ETFListItem) => formatCurrency(value, etf?.fund_currency), className: 'font-mono' },
+    { label: 'Velikost fondu', key: 'fund_size_numeric', format: (value: number, etf: ETF) => formatCurrency(value, etf?.fund_currency), className: 'font-mono' },
   ];
 
   const performanceData = [

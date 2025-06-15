@@ -1,19 +1,19 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ETFListItem } from '@/types/etf';
+import { ETF } from '@/types/etf';
 
 interface ComparisonData {
   label: string;
   key: string;
-  format?: (value: any, etf?: ETFListItem) => string;
+  format?: (value: any, etf?: ETF) => string;
   className?: string;
 }
 
 interface ETFComparisonTableProps {
   title: string;
   data: ComparisonData[];
-  selectedETFs: ETFListItem[];
+  selectedETFs: ETF[];
 }
 
 const ETFComparisonTable: React.FC<ETFComparisonTableProps> = ({
@@ -47,7 +47,7 @@ const ETFComparisonTable: React.FC<ETFComparisonTableProps> = ({
                 <tr key={index} className="border-b">
                   <td className="p-3 font-medium">{row.label}</td>
                   {selectedETFs.map((etf) => {
-                    const value = etf[row.key as keyof ETFListItem];
+                    const value = etf[row.key as keyof ETF];
                     const formattedValue = row.format ? row.format(value, etf) : (value || '-');
                     return (
                       <td key={etf.isin} className={`p-3 ${row.className || ''}`}>
