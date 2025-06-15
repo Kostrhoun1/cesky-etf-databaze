@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -6,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Plus } from 'lucide-react';
 import { ETFListItem } from '@/types/etf';
-import { formatPercentage } from '@/utils/csvParser';
+import { formatPercentage, formatTER } from '@/utils/csvParser';
 
 interface ETFTableRowProps {
   etf: ETFListItem;
@@ -77,7 +76,7 @@ const ETFTableRow: React.FC<ETFTableRowProps> = ({
         </div>
       </TableCell>
       <TableCell className="text-right">
-        {formatPercentage(etf.ter_numeric)}
+        {formatTER(etf.ter_numeric)}
       </TableCell>
       <TableCell className={`text-right ${getReturnColor(etf.return_ytd)}`}>
         {etf.return_ytd ? formatPercentage(etf.return_ytd) : '-'}

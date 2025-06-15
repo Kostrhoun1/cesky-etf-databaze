@@ -1,11 +1,11 @@
-
 import React from 'react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { TrendingUp, TrendingDown, Plus } from 'lucide-react';
+import { Plus, ChevronUp, ChevronDown } from 'lucide-react';
 import { ETFListItem } from '@/types/etf';
-import { formatPercentage } from '@/utils/csvParser';
+import { formatPercentage, formatTER } from '@/utils/csvParser';
 
 interface ETFSearchTableProps {
   etfs: ETFListItem[];
@@ -31,8 +31,8 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
   const getSortIcon = (field: string) => {
     if (sortBy === field) {
       return sortOrder === 'asc' ? 
-        <TrendingUp className="inline ml-1 h-4 w-4" /> : 
-        <TrendingDown className="inline ml-1 h-4 w-4" />;
+        <ChevronUp className="inline ml-1 h-4 w-4" /> : 
+        <ChevronDown className="inline ml-1 h-4 w-4" />;
     }
     return null;
   };
@@ -73,51 +73,51 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead>
-          <tr className="border-b">
+      <Table>
+        <TableHead>
+          <TableRow>
             {onSelectETF && (
-              <th className="text-left p-3 w-12">
+              <TableHeader className="text-left p-3 w-12">
                 Porovnat
-              </th>
+              </TableHeader>
             )}
-            <th 
+            <TableHeader 
               className="text-left p-3 cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('name')}
             >
               Název / ISIN
               {getSortIcon('name')}
-            </th>
-            <th 
+            </TableHeader>
+            <TableHeader 
               className="text-right p-3 cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('ter_numeric')}
             >
               TER
               {getSortIcon('ter_numeric')}
-            </th>
-            <th 
+            </TableHeader>
+            <TableHeader 
               className="text-right p-3 cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('return_ytd')}
             >
               YTD výnos
               {getSortIcon('return_ytd')}
-            </th>
-            <th 
+            </TableHeader>
+            <TableHeader 
               className="text-right p-3 cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('return_1y')}
             >
               Výnos 1Y
               {getSortIcon('return_1y')}
-            </th>
-            <th>Typ fondu</th>
-            <th>Sledovaný index</th>
-          </tr>
-        </thead>
-        <tbody>
+            </TableHeader>
+            <TableHeader>Typ fondu</TableHeader>
+            <TableHeader>Sledovaný index</TableHeader>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {etfs.map((etf) => (
-            <tr key={etf.isin} className="border-b hover:bg-gray-50">
+            <TableRow key={etf.isin} className="border-b hover:bg-gray-50">
               {onSelectETF && (
-                <td className="p-3">
+                <TableCell className="p-3">
                   <div className="flex items-center">
                     {isETFSelected && isETFSelected(etf.isin) ? (
                       <Checkbox checked={true} disabled />
@@ -133,9 +133,9 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
                       </Button>
                     )}
                   </div>
-                </td>
+                </TableCell>
               )}
-              <td className="p-3">
+              <TableCell className="p-3">
                 <div>
                   <div className="font-medium">{etf.name}</div>
                   <div className="text-sm text-gray-500">{etf.isin}</div>
@@ -150,28 +150,28 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
                     </div>
                   )}
                 </div>
-              </td>
-              <td className="p-3 text-right">
-                {formatPercentage(etf.ter_numeric)}
-              </td>
-              <td className={`p-3 text-right ${getReturnColor(etf.return_ytd)}`}>
+              </TableCell>
+              <TableCell className="text-right font-mono">
+                {formatTER(etf.ter_numeric)}
+              </TableCell>
+              <TableCell className={`p-3 text-right ${getReturnColor(etf.return_ytd)}`}>
                 {etf.return_ytd ? formatPercentage(etf.return_ytd) : '-'}
-              </td>
-              <td className={`p-3 text-right ${getReturnColor(etf.return_1y)}`}>
+              </TableCell>
+              <TableCell className={`p-3 text-right ${getReturnColor(etf.return_1y)}`}>
                 {etf.return_1y ? formatPercentage(etf.return_1y) : '-'}
-              </td>
-              <td className="p-3">
+              </TableCell>
+              <TableCell className="p-3">
                 <Badge variant="outline" className="text-xs">
                   {getDistributionPolicyLabel(etf.distribution_policy)}
                 </Badge>
-              </td>
-              <td className="p-3 text-sm text-gray-600">
+              </TableCell>
+              <TableCell className="p-3 text-sm text-gray-600">
                 {etf.index_name || '-'}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 };

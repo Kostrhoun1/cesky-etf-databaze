@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft } from 'lucide-react';
 import { ETFListItem } from '@/types/etf';
-import { formatPercentage } from '@/utils/csvParser';
+import { formatPercentage, formatTER } from '@/utils/csvParser';
 
 interface ETFDetailedComparisonProps {
   selectedETFs: ETFListItem[];
@@ -121,7 +121,7 @@ const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
   ];
 
   const feesAndSizeData = [
-    { label: 'TER (roční poplatek)', key: 'ter_numeric', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+    { label: 'TER (roční poplatek)', key: 'ter_numeric', format: (value: number) => formatTER(value), className: 'font-mono' },
     { label: 'Velikost fondu', key: 'fund_size_numeric', format: (value: number, etf: ETFListItem) => formatCurrency(value, etf?.fund_currency), className: 'font-mono' },
   ];
 

@@ -100,3 +100,8 @@ export const formatPercentage = (value: number): string => {
   if (value === null || value === undefined || isNaN(value)) return 'N/A';
   return `${value.toFixed(2)}%`;
 };
+
+export const formatTER = (value: number): string => {
+  if (value === null || value === undefined || isNaN(value) || value === 0) return 'N/A';
+  return `${value.toFixed(2)}%`;
+};
