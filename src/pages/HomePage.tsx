@@ -10,48 +10,29 @@ import BrokerComparisonSection from '@/components/home/BrokerComparisonSection';
 import CTASection from '@/components/home/CTASection';
 
 const HomePage: React.FC = () => {
-  const [etfs, setEtfs] = useState<ETFListItem[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [loadingError, setLoadingError] = useState<string | null>(null);
-  const { fetchETFs, getETFCount, isLoading } = useETFData();
+  const { getETFCount } = useETFData();
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        setLoadingError(null);
-        
-        // Load top 100 ETFs for homepage to have more data to work with
-        const etfData = await fetchETFs(100);
-        
-        if (etfData && etfData.length > 0) {
-          setEtfs(etfData);
-        } else {
-          setLoadingError('Žádná ETF data nebyla načtena');
-        }
-
-        // Get total count separately
+        // Get total count for display in hero and other sections
         const count = await getETFCount();
         setTotalCount(count);
         
       } catch (error) {
         console.error('HomePage: Error loading data:', error);
-        setLoadingError(error instanceof Error ? error.message : 'Neznámá chyba');
       }
     };
     
     loadData();
-  }, [fetchETFs, getETFCount]);
+  }, [getETFCount]);
 
   return (
     <Layout>
       <HeroSection totalCount={totalCount} />
       <BenefitsSection totalCount={totalCount} />
-      <ETFSearchSection 
-        etfs={etfs}
-        totalCount={totalCount}
-        isLoading={isLoading}
-        loadingError={loadingError}
-      />
+      <ETFSearchSection />
       <BrokerComparisonSection />
       <CTASection totalCount={totalCount} />
     </Layout>
