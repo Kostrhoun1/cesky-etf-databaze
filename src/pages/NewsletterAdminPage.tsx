@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
@@ -63,16 +62,19 @@ const NewsletterAdminPage: React.FC = () => {
     setSendingId(newsletterId);
 
     try {
-      const res = await fetch(
-        "https://nbhwnatadyubiuadfakx.supabase.co/functions/v1/send-newsletter",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ newsletter_id: newsletterId }),
-        }
-      );
-      const result = await res.json();
-      if (!res.ok || result.status === "failed" || result.error) {
+      // Použijeme Supabase client pro volání edge funkce s automatickou autorizací
+      const { data: result, error } = await supabase.functions.invoke('send-newsletter', {
+        body: { newsletter_id: newsletterId }
+      });
+
+      if (error) {
+        console.error("Edge function error:", error);
+        toast({
+          title: "Chyba při odesílání",
+          description: error.message || "Neznámá chyba při volání funkce.",
+          variant: "destructive",
+        });
+      } else if (result?.status === "failed" || result?.error) {
         toast({
           title: "Chyba při odesílání",
           description:
@@ -89,6 +91,7 @@ const NewsletterAdminPage: React.FC = () => {
         reloadNewsletters();
       }
     } catch (e: any) {
+      console.error("Network error:", e);
       toast({
         title: "Chyba spojení",
         description: e.message,
