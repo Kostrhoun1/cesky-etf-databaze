@@ -1,3 +1,4 @@
+
 import { useState, useMemo, useEffect } from 'react';
 import { ETFListItem } from '@/types/etf';
 
@@ -44,6 +45,23 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     console.log('Search term:', searchTerm);
     console.log('Total ETFs:', etfs.length);
     console.log('Active category:', activeCategory);
+
+    // Pokud hledáme konkrétní ISIN, přidáme debug informace
+    if (searchTerm.toLowerCase() === 'bg9000011163') {
+      console.log('=== SEARCHING FOR SPECIFIC ISIN: BG9000011163 ===');
+      const foundETF = etfs.find(etf => etf.isin.toLowerCase() === 'bg9000011163');
+      if (foundETF) {
+        console.log('Found ETF with ISIN BG9000011163:', {
+          name: foundETF.name,
+          isin: foundETF.isin,
+          category: foundETF.category,
+          fund_provider: foundETF.fund_provider
+        });
+      } else {
+        console.log('ETF with ISIN BG9000011163 NOT FOUND in database');
+        console.log('All available ISINs (first 10):', etfs.slice(0, 10).map(etf => etf.isin));
+      }
+    }
 
     // Pokud hledáme SXR8, najdeme všechny ETF s tímto tickerem
     if (searchTerm.toLowerCase() === 'sxr8') {
