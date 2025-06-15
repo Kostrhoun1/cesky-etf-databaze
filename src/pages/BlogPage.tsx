@@ -84,7 +84,7 @@ const BlogPage: React.FC = () => (
             key={article.slug}
             className="group bg-white/90 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-200 animate-fade-in"
           >
-            <Link to={`/blog/${article.slug}`} className="block h-full focus:outline-none group">
+            <Link to={`/tipy/${article.slug}`} className="block h-full focus:outline-none group">
               <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
                 <img
                   src={ARTICLE_IMAGES[article.slug] || PLACEHOLDER_IMAGE}
@@ -123,3 +123,4 @@ const BlogPage: React.FC = () => (
 );
 
 export default BlogPage;
+
