@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Search, TrendingUp, TrendingDown } from 'lucide-react';
 import { ETFListItem } from '@/types/etf';
@@ -166,16 +165,6 @@ const ETFSearchSection: React.FC = () => {
                   </div>
                 </div>
 
-                {categories.length > 0 && (
-                  <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full mb-6">
-                    <TabsList>
-                      {categories.map(category => (
-                        <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
-                      ))}
-                    </TabsList>
-                  </Tabs>
-                )}
-
                 <div className="flex flex-col sm:flex-row gap-4 mb-6">
                   <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -186,22 +175,17 @@ const ETFSearchSection: React.FC = () => {
                       className="pl-10"
                     />
                   </div>
-                  
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full sm:w-[200px]">
-                      <SelectValue placeholder="Řadit podle" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="name">Název</SelectItem>
-                      <SelectItem value="ter_numeric">TER</SelectItem>
-                      <SelectItem value="fund_size_numeric">Velikost fondu</SelectItem>
-                      <SelectItem value="return_ytd">YTD výnos</SelectItem>
-                      <SelectItem value="return_1y">Výnos 1Y</SelectItem>
-                      <SelectItem value="return_3y">Výnos 3Y</SelectItem>
-                      <SelectItem value="return_5y">Výnos 5Y</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
+
+                {categories.length > 0 && (
+                  <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full mb-6">
+                    <TabsList className={`grid w-full ${categories.length <= 3 ? 'grid-cols-3' : categories.length <= 4 ? 'grid-cols-4' : categories.length <= 5 ? 'grid-cols-5' : 'grid-cols-6'}`}>
+                      {categories.map(category => (
+                        <TabsTrigger key={category} value={category} className="text-xs lg:text-sm px-2 py-2">{category}</TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </Tabs>
+                )}
 
                 {isLoading ? (
                   <div className="text-center py-8">
