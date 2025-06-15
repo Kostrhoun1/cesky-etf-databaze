@@ -10,11 +10,14 @@ import { ETFListItem } from '@/types/etf';
 import ETFComparisonPanel from '@/components/ETFComparisonPanel';
 import ETFDetailedComparison from '@/components/ETFDetailedComparison';
 import ETFAdvancedFilters from '@/components/ETFAdvancedFilters';
+import ETFSearchFilters from '@/components/home/ETFSearchFilters';
 import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
 
 const ETFComparison: React.FC = () => {
   const [etfs, setEtfs] = useState<ETFListItem[]>([]);
   const [showDetailedComparison, setShowDetailedComparison] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
   const { fetchETFs, isLoading } = useETFData();
   
   const {
@@ -38,6 +41,45 @@ const ETFComparison: React.FC = () => {
     maxTer: 1,
   });
 
+  // Získání kategorií z dat
+  const categories = useMemo(() => {
+    const uniqueCategories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))].sort();
+    return uniqueCategories;
+  }, [etfs]);
+
+  // Nastavení výchozí kategorie
+  const activeCategory = selectedCategory || (categories.includes('Akciové') ? 'Akciové' : categories[0] || '');
+
+  // Filtrování ETF podle aktivní kategorie a dalších filtrů
+  const filteredETFs = useMemo(() => {
+    return etfs.filter(etf => {
+      // Filtr podle kategorie
+      const categoryMatch = etf.category === activeCategory;
+      
+      // Filtr podle vyhledávacího termínu
+      const searchLower = searchTerm.toLowerCase();
+      const searchMatch = !searchTerm || 
+        etf.name.toLowerCase().includes(searchLower) ||
+        etf.isin.toLowerCase().includes(searchLower) ||
+        etf.fund_provider.toLowerCase().includes(searchLower) ||
+        (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower)) ||
+        (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase().includes(searchLower)) ||
+        (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase().includes(searchLower)) ||
+        (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().includes(searchLower)) ||
+        (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes(searchLower)) ||
+        (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes(searchLower));
+      
+      // Pokročilé filtry
+      const { distributionPolicy, indexName, fundCurrency, maxTer } = advancedFilters;
+      const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
+      const indexMatch = indexName === 'all' || etf.index_name === indexName;
+      const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
+      const terMatch = (etf.ter_numeric || 0) <= maxTer;
+      
+      return categoryMatch && searchMatch && distPolicyMatch && indexMatch && currencyMatch && terMatch;
+    });
+  }, [etfs, activeCategory, searchTerm, advancedFilters]);
+
   useEffect(() => {
     if (maxTerFromData > 1) {
       setAdvancedFilters(prev => ({ ...prev, maxTer: maxTerFromData }));
@@ -57,18 +99,6 @@ const ETFComparison: React.FC = () => {
     loadETFs();
   }, [fetchETFs]);
 
-  // Filtrování ETF podle pokročilých filtrů
-  const filteredETFs = useMemo(() => {
-    return etfs.filter(etf => {
-      const { distributionPolicy, indexName, fundCurrency, maxTer } = advancedFilters;
-      const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
-      const indexMatch = indexName === 'all' || etf.index_name === indexName;
-      const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
-      const terMatch = (etf.ter_numeric || 0) <= maxTer;
-      return distPolicyMatch && indexMatch && currencyMatch && terMatch;
-    });
-  }, [etfs, advancedFilters]);
-
   const handleAdvancedFilterChange = (key: keyof AdvancedFiltersState, value: any) => {
     setAdvancedFilters(prevFilters => ({...prevFilters, [key]: value}));
   };
@@ -79,6 +109,14 @@ const ETFComparison: React.FC = () => {
 
   const handleBackToList = () => {
     setShowDetailedComparison(false);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
   };
 
   if (showDetailedComparison) {
@@ -114,6 +152,17 @@ const ETFComparison: React.FC = () => {
           </div>
           
           <div className="lg:col-span-3">
+            {/* Kategorie a vyhledávání */}
+            <div className="mb-6">
+              <ETFSearchFilters
+                searchTerm={searchTerm}
+                onSearchChange={handleSearchChange}
+                categories={categories}
+                activeCategory={activeCategory}
+                onCategoryChange={handleCategoryChange}
+              />
+            </div>
+
             {isLoading ? (
               <div className="text-center py-12">
                 <p className="text-lg">Načítání ETF fondů...</p>
