@@ -3,7 +3,8 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ETFListItem } from '@/types/etf';
-import { formatPercentage, formatNumber } from '@/utils/csvParser';
+import { formatPercentage } from '@/utils/csvParser';
+import { formatNumber } from '@/utils/etfFormatters';
 import { Loader2 } from 'lucide-react';
 
 interface ETFTableRowProps {
