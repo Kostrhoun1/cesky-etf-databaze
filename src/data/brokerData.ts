@@ -4,7 +4,7 @@ export const brokers: Broker[] = [
   {
     id: 'degiro',
     name: 'DEGIRO',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/DEGIRO_Logo.svg/200px-DEGIRO_Logo.svg.png',
+    logo: 'https://media.degiro.nl/uploads/logos/degiro-horizontal-logo.svg',
     description: 'Populární broker s nízkými poplatky a širokou nabídkou ETF',
     rating: 4.5,
     regulation: 'BaFin (DE), DNB/AFM (NL)',
@@ -37,7 +37,7 @@ export const brokers: Broker[] = [
   {
     id: 'xtb',
     name: 'XTB',
-    logo: 'https://www.xtb.com/hubfs/XTB_logo_2022.svg',
+    logo: 'https://www.xtb.com/cs/hubfs/xtb_logo_2022_horizontal_black.svg',
     description: 'Polský broker s výbornou českou podporou a vzdělávacími materiály',
     rating: 4.7,
     regulation: 'CySEC (EU), ČNB (CZ)',
@@ -70,7 +70,7 @@ export const brokers: Broker[] = [
   {
     id: 'fio',
     name: 'Fio e-Broker',
-    logo: 'https://www.fio.cz/images/logo-fio.svg',
+    logo: 'https://www.fio.cz/images/fb/fb-fio-logo.png',
     description: 'Český broker s lokální podporou a standardním zdaněním českých dividend',
     rating: 4.0,
     regulation: 'ČNB (CZ)',
@@ -103,7 +103,7 @@ export const brokers: Broker[] = [
   {
     id: 'trading212',
     name: 'Trading 212',
-    logo: 'https://helpcentre.trading212.com/hc/article_attachments/360011245778/logo.png',
+    logo: 'https://www.trading212.com/assets/images/logo.svg',
     description: 'Bezpoplatkový broker s intuitivní aplikací a frakčním investováním',
     rating: 4.2,
     regulation: 'FCA (UK), CySEC (EU), BaFin (DE)',
