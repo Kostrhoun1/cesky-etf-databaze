@@ -32,8 +32,8 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
 }) => {
   const getSortIcon = (field: string) => {
     if (sortBy === field) {
-      return sortOrder === 'asc' ? 
-        <ChevronUp className="inline ml-1 h-4 w-4" /> : 
+      return sortOrder === 'asc' ?
+        <ChevronUp className="inline ml-1 h-4 w-4" /> :
         <ChevronDown className="inline ml-1 h-4 w-4" />;
     }
     return null;
@@ -78,33 +78,29 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
       <Table>
         <TableHeader>
           <TableRow>
-            {onSelectETF && (
-              <TableHead className="w-12 text-center">
-                Porovnat
-              </TableHead>
-            )}
-            <TableHead 
+            {/* Odstranili jsme TableHead s Porovnat */}
+            <TableHead
               className="cursor-pointer hover:bg-gray-50 text-left"
               onClick={() => onSort('name')}
             >
               Název / ISIN
               {getSortIcon('name')}
             </TableHead>
-            <TableHead 
+            <TableHead
               className="text-right cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('ter_numeric')}
             >
               TER
               {getSortIcon('ter_numeric')}
             </TableHead>
-            <TableHead 
+            <TableHead
               className="text-right cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('return_ytd')}
             >
               YTD výnos
               {getSortIcon('return_ytd')}
             </TableHead>
-            <TableHead 
+            <TableHead
               className="text-right cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('return_1y')}
             >
@@ -118,46 +114,44 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
         <TableBody>
           {etfs.map((etf) => (
             <TableRow key={etf.isin} className="border-b hover:bg-gray-50">
-              {onSelectETF && (
-                <TableCell className="p-3 text-center">
-                  <div className="flex items-center justify-center">
-                    {isETFSelected && isETFSelected(etf.isin) ? (
-                      <Checkbox checked={true} disabled />
-                    ) : (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleSelectETF(etf)}
-                        disabled={!canAddMore}
-                        className="h-8 w-8 p-0"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                </TableCell>
-              )}
+              {/* Název / ISIN + Checkbox */}
               <TableCell className="p-3">
-                <div>
-                  <div className="font-medium">
-                    <Link 
-                      to={`/etf/${etf.isin}`}
-                      className="text-blue-600 hover:text-blue-800 hover:underline"
-                    >
-                      {etf.name}
-                    </Link>
-                  </div>
-                  <div className="text-sm text-gray-500">{etf.isin}</div>
-                  {etf.primary_ticker && (
-                    <div className="text-xs text-blue-600">{etf.primary_ticker}</div>
-                  )}
-                  {etf.degiro_free && (
-                    <div className="mt-1">
-                      <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
-                        DEGIRO Free
-                      </Badge>
+                <div className="flex items-start gap-3">
+                  {onSelectETF && (
+                    <div className="flex pt-1">
+                      {isETFSelected && isETFSelected(etf.isin) ? (
+                        <Checkbox checked={true} disabled />
+                      ) : (
+                        <Checkbox
+                          checked={false}
+                          disabled={!canAddMore}
+                          onCheckedChange={() => handleSelectETF(etf)}
+                          aria-label="Porovnat fond"
+                        />
+                      )}
                     </div>
                   )}
+                  <div>
+                    <div className="font-medium">
+                      <Link
+                        to={`/etf/${etf.isin}`}
+                        className="text-blue-600 hover:text-blue-800 hover:underline"
+                      >
+                        {etf.name}
+                      </Link>
+                    </div>
+                    <div className="text-sm text-gray-500">{etf.isin}</div>
+                    {etf.primary_ticker && (
+                      <div className="text-xs text-blue-600">{etf.primary_ticker}</div>
+                    )}
+                    {etf.degiro_free && (
+                      <div className="mt-1">
+                        <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                          DEGIRO Free
+                        </Badge>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </TableCell>
               <TableCell className="text-right font-mono p-3">
