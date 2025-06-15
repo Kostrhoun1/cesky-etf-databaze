@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -74,45 +75,45 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
   return (
     <div className="overflow-x-auto">
       <Table>
-        <TableHead>
+        <TableHeader>
           <TableRow>
             {onSelectETF && (
-              <TableHeader className="text-left p-3 w-12">
+              <TableHead className="w-12">
                 Porovnat
-              </TableHeader>
+              </TableHead>
             )}
-            <TableHeader 
-              className="text-left p-3 cursor-pointer hover:bg-gray-50"
+            <TableHead 
+              className="cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('name')}
             >
               Název / ISIN
               {getSortIcon('name')}
-            </TableHeader>
-            <TableHeader 
-              className="text-right p-3 cursor-pointer hover:bg-gray-50"
+            </TableHead>
+            <TableHead 
+              className="text-right cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('ter_numeric')}
             >
               TER
               {getSortIcon('ter_numeric')}
-            </TableHeader>
-            <TableHeader 
-              className="text-right p-3 cursor-pointer hover:bg-gray-50"
+            </TableHead>
+            <TableHead 
+              className="text-right cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('return_ytd')}
             >
               YTD výnos
               {getSortIcon('return_ytd')}
-            </TableHeader>
-            <TableHeader 
-              className="text-right p-3 cursor-pointer hover:bg-gray-50"
+            </TableHead>
+            <TableHead 
+              className="text-right cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('return_1y')}
             >
               Výnos 1Y
               {getSortIcon('return_1y')}
-            </TableHeader>
-            <TableHeader>Typ fondu</TableHeader>
-            <TableHeader>Sledovaný index</TableHeader>
+            </TableHead>
+            <TableHead>Typ fondu</TableHead>
+            <TableHead>Sledovaný index</TableHead>
           </TableRow>
-        </TableHead>
+        </TableHeader>
         <TableBody>
           {etfs.map((etf) => (
             <TableRow key={etf.isin} className="border-b hover:bg-gray-50">
@@ -151,7 +152,7 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
                   )}
                 </div>
               </TableCell>
-              <TableCell className="text-right font-mono">
+              <TableCell className="text-right font-mono p-3">
                 {formatTER(etf.ter_numeric)}
               </TableCell>
               <TableCell className={`p-3 text-right ${getReturnColor(etf.return_ytd)}`}>
