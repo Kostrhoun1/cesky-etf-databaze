@@ -105,6 +105,14 @@ const ETFComparison: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+          <div className="lg:col-span-1">
+            <ETFAdvancedFilters
+              etfs={etfs}
+              filters={advancedFilters}
+              onFilterChange={handleAdvancedFilterChange}
+            />
+          </div>
+          
           <div className="lg:col-span-3">
             {isLoading ? (
               <div className="text-center py-12">
@@ -118,14 +126,6 @@ const ETFComparison: React.FC = () => {
                 canAddMore={canAddMore}
               />
             )}
-          </div>
-          
-          <div className="lg:col-span-1">
-            <ETFAdvancedFilters
-              etfs={etfs}
-              filters={advancedFilters}
-              onFilterChange={handleAdvancedFilterChange}
-            />
           </div>
         </div>
 
