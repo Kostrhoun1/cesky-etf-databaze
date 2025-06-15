@@ -9,6 +9,21 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      app_admins: {
+        Row: {
+          id: string
+          user_email: string
+        }
+        Insert: {
+          id?: string
+          user_email: string
+        }
+        Update: {
+          id?: string
+          user_email?: string
+        }
+        Relationships: []
+      }
       etf_funds: {
         Row: {
           beta: number | null
@@ -399,6 +414,57 @@ export type Database = {
           volatility_3y?: number | null
           volatility_5y?: number | null
           ytd_return_percent?: number | null
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          email: string
+          id: string
+          subscribed_at: string
+          unsubscribed_at: string | null
+        }
+        Insert: {
+          email: string
+          id?: string
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Relationships: []
+      }
+      newsletters: {
+        Row: {
+          body: string
+          created_at: string
+          csv_etf_data: string | null
+          id: string
+          sent_at: string | null
+          sent_by: string | null
+          subject: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          csv_etf_data?: string | null
+          id?: string
+          sent_at?: string | null
+          sent_by?: string | null
+          subject: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          csv_etf_data?: string | null
+          id?: string
+          sent_at?: string | null
+          sent_by?: string | null
+          subject?: string
         }
         Relationships: []
       }
