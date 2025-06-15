@@ -1,13 +1,17 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ETFListItem } from '@/types/etf';
 import { useETFData } from '@/hooks/useETFData';
+import { useETFComparison } from '@/hooks/useETFComparison';
 import ETFAdvancedFilters from '@/components/ETFAdvancedFilters';
 import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
 import ETFSearchHeader from './ETFSearchHeader';
 import ETFSearchFilters from './ETFSearchFilters';
 import ETFSearchTable from './ETFSearchTable';
+import ETFComparisonPanel from '@/components/ETFComparisonPanel';
+import ETFDetailedComparison from '@/components/ETFDetailedComparison';
 
 const ETFSearchSection: React.FC = () => {
   const { fetchETFs, isLoading } = useETFData();
@@ -16,6 +20,16 @@ const ETFSearchSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>();
   const [sortBy, setSortBy] = useState<string>('fund_size_numeric');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [showDetailedComparison, setShowDetailedComparison] = useState(false);
+
+  const {
+    selectedETFs,
+    addETFToComparison,
+    removeETFFromComparison,
+    clearComparison,
+    isETFSelected,
+    canAddMore,
+  } = useETFComparison();
 
   const maxTerFromData = useMemo(() => {
     if (etfs.length === 0) return 1;
@@ -117,6 +131,23 @@ const ETFSearchSection: React.FC = () => {
     setAdvancedFilters(prevFilters => ({...prevFilters, [key]: value}));
   };
 
+  const handleShowDetailedComparison = () => {
+    setShowDetailedComparison(true);
+  };
+
+  const handleBackToList = () => {
+    setShowDetailedComparison(false);
+  };
+
+  if (showDetailedComparison) {
+    return (
+      <ETFDetailedComparison
+        selectedETFs={selectedETFs}
+        onBack={handleBackToList}
+      />
+    );
+  }
+
   return (
     <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -155,6 +186,9 @@ const ETFSearchSection: React.FC = () => {
                   sortOrder={sortOrder}
                   onSort={handleSort}
                   isLoading={isLoading}
+                  onSelectETF={addETFToComparison}
+                  isETFSelected={isETFSelected}
+                  canAddMore={canAddMore}
                 />
               </CardContent>
             </Card>
@@ -168,6 +202,13 @@ const ETFSearchSection: React.FC = () => {
             />
           </div>
         </div>
+
+        <ETFComparisonPanel
+          selectedETFs={selectedETFs}
+          onRemoveETF={removeETFFromComparison}
+          onClearAll={clearComparison}
+          onShowComparison={handleShowDetailedComparison}
+        />
       </div>
     </section>
   );

@@ -1,7 +1,9 @@
 
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { TrendingUp, TrendingDown, Plus } from 'lucide-react';
 import { ETFListItem } from '@/types/etf';
 import { formatPercentage } from '@/utils/csvParser';
 
@@ -11,6 +13,9 @@ interface ETFSearchTableProps {
   sortOrder: 'asc' | 'desc';
   onSort: (field: string) => void;
   isLoading: boolean;
+  onSelectETF?: (etf: ETFListItem) => void;
+  isETFSelected?: (isin: string) => boolean;
+  canAddMore?: boolean;
 }
 
 const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
@@ -18,7 +23,10 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
   sortBy,
   sortOrder,
   onSort,
-  isLoading
+  isLoading,
+  onSelectETF,
+  isETFSelected,
+  canAddMore = true,
 }) => {
   const getSortIcon = (field: string) => {
     if (sortBy === field) {
@@ -39,6 +47,12 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
     if (policy === 'Accumulating') return 'Akumulační';
     if (policy === 'Distributing') return 'Distribuční';
     return policy || '-';
+  };
+
+  const handleSelectETF = (etf: ETFListItem) => {
+    if (onSelectETF) {
+      onSelectETF(etf);
+    }
   };
 
   if (isLoading) {
@@ -62,6 +76,11 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
       <table className="w-full">
         <thead>
           <tr className="border-b">
+            {onSelectETF && (
+              <th className="text-left p-3 w-12">
+                Porovnat
+              </th>
+            )}
             <th 
               className="text-left p-3 cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('name')}
@@ -97,6 +116,25 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
         <tbody>
           {etfs.map((etf) => (
             <tr key={etf.isin} className="border-b hover:bg-gray-50">
+              {onSelectETF && (
+                <td className="p-3">
+                  <div className="flex items-center">
+                    {isETFSelected && isETFSelected(etf.isin) ? (
+                      <Checkbox checked={true} disabled />
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleSelectETF(etf)}
+                        disabled={!canAddMore}
+                        className="h-8 w-8 p-0"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </td>
+              )}
               <td className="p-3">
                 <div>
                   <div className="font-medium">{etf.name}</div>

@@ -5,11 +5,24 @@ import ETFTable from '@/components/ETFTable';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useState, useEffect } from 'react';
 import { useETFData } from '@/hooks/useETFData';
+import { useETFComparison } from '@/hooks/useETFComparison';
 import { ETFListItem } from '@/types/etf';
+import ETFComparisonPanel from '@/components/ETFComparisonPanel';
+import ETFDetailedComparison from '@/components/ETFDetailedComparison';
 
 const ETFComparison: React.FC = () => {
   const [etfs, setEtfs] = useState<ETFListItem[]>([]);
+  const [showDetailedComparison, setShowDetailedComparison] = useState(false);
   const { fetchETFs, isLoading } = useETFData();
+  
+  const {
+    selectedETFs,
+    addETFToComparison,
+    removeETFFromComparison,
+    clearComparison,
+    isETFSelected,
+    canAddMore,
+  } = useETFComparison();
 
   useEffect(() => {
     document.title = 'Srovnání ETF fondů - ETF průvodce.cz';
@@ -23,6 +36,25 @@ const ETFComparison: React.FC = () => {
     };
     loadETFs();
   }, [fetchETFs]);
+
+  const handleShowDetailedComparison = () => {
+    setShowDetailedComparison(true);
+  };
+
+  const handleBackToList = () => {
+    setShowDetailedComparison(false);
+  };
+
+  if (showDetailedComparison) {
+    return (
+      <Layout>
+        <ETFDetailedComparison
+          selectedETFs={selectedETFs}
+          onBack={handleBackToList}
+        />
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -41,8 +73,20 @@ const ETFComparison: React.FC = () => {
             <p className="text-lg">Načítání ETF fondů...</p>
           </div>
         ) : (
-          <ETFTable etfs={etfs} />
+          <ETFTable 
+            etfs={etfs}
+            onSelectETF={addETFToComparison}
+            isETFSelected={isETFSelected}
+            canAddMore={canAddMore}
+          />
         )}
+
+        <ETFComparisonPanel
+          selectedETFs={selectedETFs}
+          onRemoveETF={removeETFFromComparison}
+          onClearAll={clearComparison}
+          onShowComparison={handleShowDetailedComparison}
+        />
       </div>
     </Layout>
   );
