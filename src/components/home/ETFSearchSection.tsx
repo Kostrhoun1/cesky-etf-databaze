@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -26,25 +26,6 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
-  // Debug: Log when ETFs prop changes
-  useEffect(() => {
-    console.log('ETFSearchSection: ETFs prop updated:', {
-      etfsLength: etfs.length,
-      isLoading,
-      loadingError,
-      searchTerm,
-      categoryFilter
-    });
-    
-    if (etfs.length > 0) {
-      console.log('ETFSearchSection: First 3 ETFs:', etfs.slice(0, 3));
-      
-      // Log available categories
-      const categories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
-      console.log('ETFSearchSection: Available categories:', categories);
-    }
-  }, [etfs, isLoading, loadingError, searchTerm, categoryFilter]);
-
   // Get unique categories from loaded ETFs
   const categories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
 
@@ -66,17 +47,6 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
       return matchesSearch && matchesCategory;
     })
     .slice(0, 10);
-
-  // Debug: Log filtering results
-  useEffect(() => {
-    console.log('ETFSearchSection: Filtering results:', {
-      originalETFs: etfs.length,
-      filteredETFs: filteredETFs.length,
-      searchTerm,
-      categoryFilter,
-      categories: categories.length
-    });
-  }, [etfs.length, filteredETFs.length, searchTerm, categoryFilter, categories.length]);
 
   const getReturnColor = (value: number) => {
     if (value > 0) return 'text-green-600';
@@ -123,14 +93,6 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
             </SelectContent>
           </Select>
         </div>
-
-        {/* Debug info - zobrazí se pouze v development módu */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="mb-4 p-4 bg-gray-100 rounded text-sm">
-            Debug: ETFs loaded: {etfs.length}, Filtered: {filteredETFs.length}, 
-            Categories: {categories.length}, Loading: {isLoading.toString()}
-          </div>
-        )}
 
         {/* ETF List */}
         <div className="space-y-4">

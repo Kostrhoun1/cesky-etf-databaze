@@ -18,24 +18,19 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        console.log('HomePage: Starting to load ETF data...');
         setLoadingError(null);
         
         // Load top 100 ETFs for homepage to have more data to work with
         const etfData = await fetchETFs(100);
-        console.log('HomePage: Received ETF data:', etfData?.length || 0, 'items');
         
         if (etfData && etfData.length > 0) {
           setEtfs(etfData);
-          console.log('HomePage: ETF data set successfully');
         } else {
-          console.warn('HomePage: No ETF data received');
           setLoadingError('Žádná ETF data nebyla načtena');
         }
 
         // Get total count separately
         const count = await getETFCount();
-        console.log('HomePage: Total ETF count:', count);
         setTotalCount(count);
         
       } catch (error) {
@@ -46,14 +41,6 @@ const HomePage: React.FC = () => {
     
     loadData();
   }, [fetchETFs, getETFCount]);
-
-  // Debug log when etfs change
-  useEffect(() => {
-    console.log('HomePage: ETFs state updated, length:', etfs.length);
-    if (etfs.length > 0) {
-      console.log('HomePage: First ETF:', etfs[0]);
-    }
-  }, [etfs]);
 
   return (
     <Layout>
