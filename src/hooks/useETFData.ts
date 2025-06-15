@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -186,41 +185,92 @@ export const useETFData = () => {
     try {
       console.log('Starting to fetch ETFs from database...');
 
-      // Build query
-      let query = supabase
-        .from('etf_funds')
-        .select(`
-          isin,
-          name,
-          fund_provider,
-          category,
-          ter_numeric,
-          return_1y,
-          return_3y,
-          return_5y,
-          return_ytd,
-          fund_size_numeric,
-          degiro_free,
-          primary_ticker,
-          distribution_policy,
-          index_name,
-          fund_currency
-        `)
-        .order('fund_size_numeric', { ascending: false });
+      // If no limit specified, fetch all records in batches to avoid Supabase limits
+      if (!limit) {
+        console.log('Fetching all ETFs without limit...');
+        let allData: any[] = [];
+        let hasMore = true;
+        let offset = 0;
+        const batchSize = 1000;
 
-      if (limit) {
-        query = query.limit(limit);
+        while (hasMore) {
+          const { data, error } = await supabase
+            .from('etf_funds')
+            .select(`
+              isin,
+              name,
+              fund_provider,
+              category,
+              ter_numeric,
+              return_1y,
+              return_3y,
+              return_5y,
+              return_ytd,
+              fund_size_numeric,
+              degiro_free,
+              primary_ticker,
+              distribution_policy,
+              index_name,
+              fund_currency
+            `)
+            .order('fund_size_numeric', { ascending: false })
+            .range(offset, offset + batchSize - 1);
+
+          if (error) {
+            console.error('Error fetching ETFs batch:', error);
+            throw new Error(`Failed to fetch ETFs: ${error.message}`);
+          }
+
+          if (data && data.length > 0) {
+            allData = [...allData, ...data];
+            offset += batchSize;
+            console.log(`Loaded batch: ${data.length} ETFs, total so far: ${allData.length}`);
+            
+            // If we got less than batchSize, we've reached the end
+            if (data.length < batchSize) {
+              hasMore = false;
+            }
+          } else {
+            hasMore = false;
+          }
+        }
+
+        console.log('Successfully loaded', allData.length, 'ETFs from database (all records)');
+        return allData || [];
+      } else {
+        // Original logic for when limit is specified
+        let query = supabase
+          .from('etf_funds')
+          .select(`
+            isin,
+            name,
+            fund_provider,
+            category,
+            ter_numeric,
+            return_1y,
+            return_3y,
+            return_5y,
+            return_ytd,
+            fund_size_numeric,
+            degiro_free,
+            primary_ticker,
+            distribution_policy,
+            index_name,
+            fund_currency
+          `)
+          .order('fund_size_numeric', { ascending: false })
+          .limit(limit);
+
+        const { data, error } = await query;
+
+        if (error) {
+          console.error('Error fetching ETFs:', error);
+          throw new Error(`Failed to fetch ETFs: ${error.message}`);
+        }
+
+        console.log('Successfully loaded', data?.length || 0, 'ETFs from database');
+        return data || [];
       }
-
-      const { data, error } = await query;
-
-      if (error) {
-        console.error('Error fetching ETFs:', error);
-        throw new Error(`Failed to fetch ETFs: ${error.message}`);
-      }
-
-      console.log('Successfully loaded', data?.length || 0, 'ETFs from database');
-      return data || [];
     } catch (error) {
       console.error('Error in fetchETFs:', error);
       toast({
