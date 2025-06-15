@@ -42,7 +42,8 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
       const searchLower = searchTerm.toLowerCase();
       const matchesSearch = etf.name.toLowerCase().includes(searchLower) ||
                            etf.isin.toLowerCase().includes(searchLower) ||
-                           etf.fund_provider.toLowerCase().includes(searchLower);
+                           etf.fund_provider.toLowerCase().includes(searchLower) ||
+                           (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower));
       const matchesCategory = categoryFilter === 'all' || etf.category === categoryFilter;
       return matchesSearch && matchesCategory;
     })
@@ -73,7 +74,7 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
           <div className="relative flex-1">
             <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <Input
-              placeholder="Hledat ETF podle názvu, ISIN nebo poskytovatele..."
+              placeholder="Hledat ETF podle názvu, ISIN, poskytovatele nebo tickeru..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-12 h-12 text-base"
