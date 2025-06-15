@@ -76,15 +76,28 @@ const NewsletterAdminPage: React.FC = () => {
           disabled={sending}
         />
         <Textarea
-          placeholder="Obsah newsletteru..."
+          placeholder="Obsah newsletteru (HTML)..."
           value={body}
           onChange={e => setBody(e.target.value)}
           rows={8}
           disabled={sending}
         />
+        <div className="text-xs text-gray-600">
+          Obsah newsletteru můžete zadat jako čistý HTML kód. Doporučujeme HTML připravit v externím editoru (např. <a href="https://html.online/" target="_blank" rel="noopener noreferrer" className="underline text-violet-600">html.online</a>) a vložit zde. Nezapomeňte si před odesláním zkontrolovat vzhled v ukázce níže. 
+          <br />Za správnost a bezpečnost vloženého HTML zodpovídáte Vy.
+        </div>
         <Button type="submit" disabled={sending}>
           {sending ? "Odesílám..." : "Uložit newsletter"}
         </Button>
+        {body && (
+          <div>
+            <div className="font-semibold mb-1 mt-2 text-sm text-violet-700">Ukázka vzhledu (náhled):</div>
+            <div
+              className="border rounded bg-gray-50 p-4 text-sm prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: body }}
+            />
+          </div>
+        )}
       </form>
 
       <div className="bg-white rounded shadow p-6">
@@ -95,6 +108,7 @@ const NewsletterAdminPage: React.FC = () => {
               <TableHead>Předmět</TableHead>
               <TableHead>Vytvořeno</TableHead>
               <TableHead>Odesláno</TableHead>
+              <TableHead>Ukázka obsahu</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -104,6 +118,12 @@ const NewsletterAdminPage: React.FC = () => {
                 <TableCell>{new Date(nl.created_at).toLocaleString()}</TableCell>
                 <TableCell>
                   {nl.sent_at ? new Date(nl.sent_at).toLocaleString() : <span className="text-gray-500">Neodesláno</span>}
+                </TableCell>
+                <TableCell>
+                  <div
+                    className="max-h-32 overflow-auto border rounded p-2 text-xs bg-gray-50 prose prose-xs max-w-none"
+                    dangerouslySetInnerHTML={{ __html: nl.body }}
+                  />
                 </TableCell>
               </TableRow>
             ))}
