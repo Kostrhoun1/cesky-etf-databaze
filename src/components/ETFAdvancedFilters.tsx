@@ -12,18 +12,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Filter } from 'lucide-react';
-
-interface AdvancedFilters {
-  distributionPolicy: string;
-  indexName: string;
-  fundCurrency: string;
-  maxTer: number;
-}
+import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
 
 interface ETFAdvancedFiltersProps {
   etfs: ETFListItem[];
-  filters: AdvancedFilters;
-  onFilterChange: (filters: AdvancedFilters) => void;
+  filters: AdvancedFiltersState;
+  onFilterChange: (key: keyof AdvancedFiltersState, value: any) => void;
 }
 
 const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, onFilterChange }) => {
@@ -31,10 +25,6 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
   const uniqueCurrencies = [...new Set(etfs.map(etf => etf.fund_currency).filter(Boolean))].sort();
   
   const maxTerFromData = React.useMemo(() => Math.max(...etfs.map(etf => etf.ter_numeric || 0), 1), [etfs]);
-
-  const handleFilterChange = (key: keyof AdvancedFilters, value: any) => {
-    onFilterChange({ ...filters, [key]: value });
-  };
 
   return (
     <Accordion type="single" collapsible defaultValue="advanced-filters" className="w-full bg-white rounded-lg border shadow-sm p-4">
@@ -51,7 +41,7 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
               <Label className="font-semibold">Typ fondu</Label>
               <RadioGroup
                 value={filters.distributionPolicy}
-                onValueChange={(value) => handleFilterChange('distributionPolicy', value)}
+                onValueChange={(value) => onFilterChange('distributionPolicy', value)}
                 className="mt-2 space-y-1"
               >
                 <div className="flex items-center space-x-2">
@@ -73,7 +63,7 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
               <Label htmlFor="index-filter-adv" className="font-semibold">Sledovaný index</Label>
               <Select
                 value={filters.indexName}
-                onValueChange={(value) => handleFilterChange('indexName', value)}
+                onValueChange={(value) => onFilterChange('indexName', value)}
               >
                 <SelectTrigger id="index-filter-adv" className="mt-2">
                   <SelectValue placeholder="Všechny indexy" />
@@ -91,7 +81,7 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
               <Label htmlFor="currency-filter-adv" className="font-semibold">Měna fondu</Label>
               <Select
                 value={filters.fundCurrency}
-                onValueChange={(value) => handleFilterChange('fundCurrency', value)}
+                onValueChange={(value) => onFilterChange('fundCurrency', value)}
               >
                 <SelectTrigger id="currency-filter-adv" className="mt-2">
                   <SelectValue placeholder="Všechny měny" />
@@ -112,7 +102,7 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
                 max={maxTerFromData}
                 step={0.01}
                 value={[filters.maxTer]}
-                onValueChange={(value) => handleFilterChange('maxTer', value[0])}
+                onValueChange={(value) => onFilterChange('maxTer', value[0])}
                 className="mt-3"
               />
             </div>
