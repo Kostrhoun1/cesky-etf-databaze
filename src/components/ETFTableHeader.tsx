@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 
 interface ETFTableHeaderProps {
   sortBy: string;
@@ -8,18 +8,10 @@ interface ETFTableHeaderProps {
   onSort: (field: string) => void;
 }
 
-const ETFTableHeader: React.FC<ETFTableHeaderProps> = ({
-  sortBy,
-  sortOrder,
-  onSort,
-}) => {
-  const getSortIcon = (field: string) => {
-    if (sortBy === field) {
-      return sortOrder === 'asc' ? 
-        <TrendingUp className="inline ml-1 h-4 w-4" /> : 
-        <TrendingDown className="inline ml-1 h-4 w-4" />;
-    }
-    return null;
+const ETFTableHeader: React.FC<ETFTableHeaderProps> = ({ sortBy, sortOrder, onSort }) => {
+  const SortIcon = ({ field }: { field: string }) => {
+    if (sortBy !== field) return null;
+    return sortOrder === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />;
   };
 
   return (
@@ -29,60 +21,49 @@ const ETFTableHeader: React.FC<ETFTableHeaderProps> = ({
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
           onClick={() => onSort('name')}
         >
-          Název / ISIN / Poskytovatel
-          {getSortIcon('name')}
+          <div className="flex items-center">
+            Název
+            <SortIcon field="name" />
+          </div>
         </th>
         <th 
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-          onClick={() => onSort('category')}
+          onClick={() => onSort('fund_provider')}
         >
-          Kategorie
-          {getSortIcon('category')}
+          <div className="flex items-center">
+            Poskytovatel
+            <SortIcon field="fund_provider" />
+          </div>
         </th>
         <th 
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
           onClick={() => onSort('ter_numeric')}
         >
-          TER
-          {getSortIcon('ter_numeric')}
+          <div className="flex items-center">
+            TER (%)
+            <SortIcon field="ter_numeric" />
+          </div>
         </th>
         <th 
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
           onClick={() => onSort('fund_size_numeric')}
         >
-          Velikost fondu
-          {getSortIcon('fund_size_numeric')}
-        </th>
-        <th 
-          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-          onClick={() => onSort('return_ytd')}
-        >
-          YTD výnos
-          {getSortIcon('return_ytd')}
+          <div className="flex items-center">
+            Velikost fondu (mil.)
+            <SortIcon field="fund_size_numeric" />
+          </div>
         </th>
         <th 
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
           onClick={() => onSort('return_1y')}
         >
-          Výnos 1Y
-          {getSortIcon('return_1y')}
-        </th>
-        <th 
-          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-          onClick={() => onSort('return_3y')}
-        >
-          Výnos 3Y
-          {getSortIcon('return_3y')}
-        </th>
-        <th 
-          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-          onClick={() => onSort('return_5y')}
-        >
-          Výnos 5Y
-          {getSortIcon('return_5y')}
+          <div className="flex items-center">
+            Výnos 1Y (%)
+            <SortIcon field="return_1y" />
+          </div>
         </th>
         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Typ fondu
+          Akce
         </th>
       </tr>
     </thead>
