@@ -140,4 +140,10 @@ export interface ETFListItem {
   distribution_policy: string;
   index_name: string;
   fund_currency: string;
+  // Přidání všech ticker polí pro rozšířené vyhledávání
+  exchange_1_ticker?: string;
+  exchange_2_ticker?: string;
+  exchange_3_ticker?: string;
+  exchange_4_ticker?: string;
+  exchange_5_ticker?: string;
 }

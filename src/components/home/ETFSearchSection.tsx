@@ -81,8 +81,14 @@ const ETFSearchSection: React.FC = () => {
           etf.isin.toLowerCase().includes(searchLower) ||
           etf.fund_provider.toLowerCase().includes(searchLower);
         
+        // Rozšířené vyhledávání ve všech ticker polích
         const tickerFieldsMatch = 
-          (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower));
+          (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes(searchLower));
         
         return basicFieldsMatch || tickerFieldsMatch;
       })
