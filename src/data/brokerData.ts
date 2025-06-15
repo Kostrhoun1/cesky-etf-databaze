@@ -4,7 +4,7 @@ export const brokers: Broker[] = [
   {
     id: 'degiro',
     name: 'DEGIRO',
-    logo: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=100&h=100&fit=crop&crop=center',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/DEGIRO_Logo.svg/200px-DEGIRO_Logo.svg.png',
     description: 'Populární broker s nízkými poplatky a širokou nabídkou ETF',
     rating: 4.5,
     regulation: 'BaFin (DE), DNB/AFM (NL)',
@@ -37,7 +37,7 @@ export const brokers: Broker[] = [
   {
     id: 'xtb',
     name: 'XTB',
-    logo: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=100&h=100&fit=crop&crop=center',
+    logo: 'https://www.xtb.com/hubfs/XTB_logo_2022.svg',
     description: 'Polský broker s výbornou českou podporou a vzdělávacími materiály',
     rating: 4.7,
     regulation: 'CySEC (EU), ČNB (CZ)',
@@ -70,7 +70,7 @@ export const brokers: Broker[] = [
   {
     id: 'fio',
     name: 'Fio e-Broker',
-    logo: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=100&h=100&fit=crop&crop=center',
+    logo: 'https://www.fio.cz/images/logo-fio.svg',
     description: 'Český broker s lokální podporou a standardním zdaněním českých dividend',
     rating: 4.0,
     regulation: 'ČNB (CZ)',
@@ -103,7 +103,7 @@ export const brokers: Broker[] = [
   {
     id: 'trading212',
     name: 'Trading 212',
-    logo: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=100&h=100&fit=crop&crop=center',
+    logo: 'https://helpcentre.trading212.com/hc/article_attachments/360011245778/logo.png',
     description: 'Bezpoplatkový broker s intuitivní aplikací a frakčním investováním',
     rating: 4.2,
     regulation: 'FCA (UK), CySEC (EU), BaFin (DE)',
@@ -136,7 +136,7 @@ export const brokers: Broker[] = [
   {
     id: 'ibkr',
     name: 'Interactive Brokers',
-    logo: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=100&h=100&fit=crop&crop=center',
+    logo: 'https://www.interactivebrokers.com/images/web/logos/ib-logo-text-black.svg',
     description: 'Globální broker s nejširší nabídkou a pokročilými nástroji',
     rating: 4.8,
     regulation: 'CBI (IE), SEC (US), FCA (UK), ČNB (CZ)',
