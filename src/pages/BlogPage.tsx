@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 
-// Obrázky k článkům – jméno placeholderu viz nápověda
+// Obrázky k článkům – správné cesty (odstraněno /public)
 const ARTICLE_IMAGES: Record<string, string> = {
-  "nejlepsi-etf-2025": "/public/lovable-uploads/photo-1488590528505-98d2b5aba04b.jpg",
-  "nejlepsi-etf-na-americke-akcie": "/public/lovable-uploads/photo-1581091226825-a6a2a5aee158.jpg",
-  "nejlepsi-etf-na-nasdaq": "/public/lovable-uploads/photo-1498050108023-c5249f4df085.jpg",
-  "nejlepsi-dividendove-etf": "/public/lovable-uploads/photo-1486312338219-ce68d2c6f44d.jpg",
-  "nejlepsi-etf-na-evropske-akcie": "/public/lovable-uploads/photo-1501854140801-50d01698950b.jpg",
+  "nejlepsi-etf-2025": "/lovable-uploads/photo-1488590528505-98d2b5aba04b.jpg",
+  "nejlepsi-etf-na-americke-akcie": "/lovable-uploads/photo-1581091226825-a6a2a5aee158.jpg",
+  "nejlepsi-etf-na-nasdaq": "/lovable-uploads/photo-1498050108023-c5249f4df085.jpg",
+  "nejlepsi-dividendove-etf": "/lovable-uploads/photo-1486312338219-ce68d2c6f44d.jpg",
+  "nejlepsi-etf-na-evropske-akcie": "/lovable-uploads/photo-1501854140801-50d01698950b.jpg",
 };
 
 const ARTICLES = [
@@ -51,7 +51,7 @@ const BlogPage: React.FC = () => (
     {/* Hero sekce */}
     <section className="relative flex flex-col items-center justify-center px-4 py-12 md:py-20 mb-6">
       <img
-        src="/public/lovable-uploads/photo-1649972904349-6e44c42644a7.jpg"
+        src="/lovable-uploads/photo-1649972904349-6e44c42644a7.jpg"
         alt="Investování – tipy"
         className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none rounded-xl"
         loading="lazy"
