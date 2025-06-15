@@ -46,13 +46,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (session?.user) {
           setTimeout(async () => {
             try {
-              const { data: profile } = await supabase
-                .from('profiles')
-                .select('role')
-                .eq('id', session.user.id)
+              const { data: adminCheck } = await supabase
+                .from('app_admins')
+                .select('user_email')
+                .eq('user_email', session.user.email)
                 .maybeSingle();
               
-              setIsAdmin(profile?.role === 'admin');
+              setIsAdmin(!!adminCheck);
             } catch (error) {
               console.error('Error checking admin status:', error);
               setIsAdmin(false);
