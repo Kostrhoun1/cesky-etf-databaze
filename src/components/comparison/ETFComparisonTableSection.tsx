@@ -5,8 +5,6 @@ import ETFTable from '@/components/ETFTable';
 
 interface ETFComparisonTableSectionProps {
   etfs: ETFListItem[];
-  searchTerm: string;
-  onSearchChange: (value: string) => void;
   isLoading: boolean;
   onSelectETF: (etf: ETFListItem) => Promise<boolean>;
   isETFSelected: (isin: string) => boolean;
