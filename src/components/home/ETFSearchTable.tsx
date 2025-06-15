@@ -78,12 +78,12 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
         <TableHeader>
           <TableRow>
             {onSelectETF && (
-              <TableHead className="w-12">
+              <TableHead className="w-12 text-center">
                 Porovnat
               </TableHead>
             )}
             <TableHead 
-              className="cursor-pointer hover:bg-gray-50"
+              className="cursor-pointer hover:bg-gray-50 text-left"
               onClick={() => onSort('name')}
             >
               Název / ISIN
@@ -110,16 +110,16 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
               Výnos 1Y
               {getSortIcon('return_1y')}
             </TableHead>
-            <TableHead>Typ fondu</TableHead>
-            <TableHead>Sledovaný index</TableHead>
+            <TableHead className="text-left">Typ fondu</TableHead>
+            <TableHead className="text-left">Sledovaný index</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {etfs.map((etf) => (
             <TableRow key={etf.isin} className="border-b hover:bg-gray-50">
               {onSelectETF && (
-                <TableCell className="p-3">
-                  <div className="flex items-center">
+                <TableCell className="p-3 text-center">
+                  <div className="flex items-center justify-center">
                     {isETFSelected && isETFSelected(etf.isin) ? (
                       <Checkbox checked={true} disabled />
                     ) : (
