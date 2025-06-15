@@ -1,142 +1,89 @@
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { ETFListItem } from '@/types/etf';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import ETFTableFilters from './ETFTableFilters';
 import ETFTableHeader from './ETFTableHeader';
 import ETFTableRow from './ETFTableRow';
+import ETFTableFilters from './ETFTableFilters';
 import ETFTablePagination from './ETFTablePagination';
-import ETFAdvancedFilters from './ETFAdvancedFilters';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useETFTableLogic } from '@/hooks/useETFTableLogic';
 
 interface ETFTableProps {
   etfs: ETFListItem[];
-  onRefresh?: () => void;
-  onSelectETF?: (etf: ETFListItem) => boolean;
+  onSelectETF?: (etf: ETFListItem) => Promise<boolean>;
   isETFSelected?: (isin: string) => boolean;
   canAddMore?: boolean;
 }
 
-const ETFTable: React.FC<ETFTableProps> = ({ 
-  etfs, 
-  onRefresh, 
+const ETFTable: React.FC<ETFTableProps> = ({
+  etfs,
   onSelectETF,
   isETFSelected,
-  canAddMore = true
+  canAddMore = true,
 }) => {
+  const [loadingETF, setLoadingETF] = useState<string | null>(null);
+
   const {
-    searchTerm,
-    sortBy,
-    sortOrder,
     currentPage,
-    advancedFilters,
-    paginatedETFs,
+    setCurrentPage,
+    itemsPerPage,
+    filters,
+    handleFilterChange,
+    handleSearch,
+    sortConfig,
+    handleSort,
+    searchTerm,
     filteredETFs,
     totalPages,
-    itemsPerPage,
-    categories,
-    activeCategory,
-    startIndex,
-    endIndex,
-    handleSort,
-    handleSearch,
-    handleCategoryChange,
-    setCurrentPage,
-    handleAdvancedFilterChange
+    paginatedETFs,
   } = useETFTableLogic(etfs);
 
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-      <div className="lg:col-span-3">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  ETF Fondy
-                  <Badge variant="secondary">{filteredETFs.length} fondů</Badge>
-                  {etfs.length > filteredETFs.length && (
-                    <Badge variant="outline">z {etfs.length} celkem</Badge>
-                  )}
-                </CardTitle>
-                <CardDescription>
-                  Přehled ETF fondů s detailními informacemi o výkonnosti a složení
-                </CardDescription>
-              </div>
-            </div>
+  const handleSelectETF = async (etf: ETFListItem) => {
+    if (!onSelectETF) return;
+    
+    setLoadingETF(etf.isin);
+    try {
+      await onSelectETF(etf);
+    } finally {
+      setLoadingETF(null);
+    }
+  };
 
-            <ETFTableFilters
-              searchTerm={searchTerm}
-              onSearchChange={handleSearch}
-            />
-            
-            {categories.length > 0 && (
-              <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full mt-4">
-                <TabsList className={`grid w-full ${categories.length <= 3 ? 'grid-cols-3' : categories.length <= 4 ? 'grid-cols-4' : categories.length <= 5 ? 'grid-cols-5' : 'grid-cols-6'}`}>
-                  {categories.map(category => (
-                    <TabsTrigger key={category} value={category} className="text-xs lg:text-sm px-2 py-2">
-                      {category}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-            )}
-          </CardHeader>
-          
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <ETFTableHeader
-                  sortBy={sortBy}
-                  sortOrder={sortOrder}
-                  onSort={handleSort}
-                  showComparisonColumn={!!onSelectETF}
+  return (
+    <div className="space-y-6">
+      <ETFTableFilters
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onSearch={handleSearch}
+        searchTerm={searchTerm}
+      />
+
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <ETFTableHeader sortConfig={sortConfig} onSort={handleSort} />
+            <tbody className="bg-white divide-y divide-gray-200">
+              {paginatedETFs.map((etf) => (
+                <ETFTableRow
+                  key={etf.isin}
+                  etf={etf}
+                  onSelect={onSelectETF ? () => handleSelectETF(etf) : undefined}
+                  isSelected={isETFSelected ? isETFSelected(etf.isin) : false}
+                  canAddMore={canAddMore}
+                  isLoading={loadingETF === etf.isin}
                 />
-                <TableBody>
-                  {paginatedETFs.map((etf) => (
-                    <ETFTableRow 
-                      key={etf.isin} 
-                      etf={etf}
-                      onSelectETF={onSelectETF}
-                      isETFSelected={isETFSelected}
-                      canAddMore={canAddMore}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            
-            {/* Pagination info moved below table */}
-            {filteredETFs.length > itemsPerPage && (
-              <div className="text-sm text-muted-foreground mt-4">
-                Zobrazeno {startIndex + 1}-{Math.min(endIndex, filteredETFs.length)} z {filteredETFs.length} fondů
-              </div>
-            )}
-            
-            <ETFTablePagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-            
-            {filteredETFs.length === 0 && (
-              <div className="text-center py-8 text-muted-foreground">
-                Žádné ETF fondy nenalezeny podle zadaných kritérií.
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div className="lg:col-span-1">
-        <ETFAdvancedFilters
-          etfs={etfs}
-          filters={advancedFilters}
-          onFilterChange={handleAdvancedFilterChange}
-        />
-      </div>
+
+      <ETFTablePagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+        totalItems={filteredETFs.length}
+        itemsPerPage={itemsPerPage}
+      />
     </div>
   );
 };
