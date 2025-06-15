@@ -21,6 +21,14 @@ const ETFComparisonTable: React.FC<ETFComparisonTableProps> = ({
   data,
   selectedETFs,
 }) => {
+  // Pokud jde o poplatky a velikost fondu, upravíme popisek sloupce Velikost fondu
+  const getRowLabel = (row: ComparisonData) => {
+    if (row.key === 'fund_size_numeric') {
+      return 'Velikost fondu (mil.)';
+    }
+    return row.label;
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -45,7 +53,7 @@ const ETFComparisonTable: React.FC<ETFComparisonTableProps> = ({
             <tbody>
               {data.map((row, index) => (
                 <tr key={index} className="border-b">
-                  <td className="p-3 font-medium">{row.label}</td>
+                  <td className="p-3 font-medium">{getRowLabel(row)}</td>
                   {selectedETFs.map((etf) => {
                     const value = etf[row.key as keyof ETF];
                     const formattedValue = row.format ? row.format(value, etf) : (value || '-');
@@ -66,3 +74,4 @@ const ETFComparisonTable: React.FC<ETFComparisonTableProps> = ({
 };
 
 export default ETFComparisonTable;
+
