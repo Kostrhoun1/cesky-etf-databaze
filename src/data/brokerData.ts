@@ -103,7 +103,7 @@ export const brokers: Broker[] = [
   {
     id: 'trading212',
     name: 'Trading 212',
-    logo: 'https://www.trading212.com/assets/images/logo.svg',
+    logo: '/lovable-uploads/25c6d816-7993-40c3-abe2-e21c45cc239d.png',
     description: 'Bezpoplatkový broker s intuitivní aplikací a frakčním investováním',
     rating: 4.2,
     regulation: 'FCA (UK), CySEC (EU), BaFin (DE)',
