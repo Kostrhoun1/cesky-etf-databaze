@@ -58,6 +58,11 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
                 </CardDescription>
               </div>
             </div>
+
+            <ETFTableFilters
+              searchTerm={searchTerm}
+              onSearchChange={handleSearch}
+            />
             
             {categories.length > 0 && (
               <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full mt-4">
@@ -69,18 +74,6 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
                   ))}
                 </TabsList>
               </Tabs>
-            )}
-
-            <ETFTableFilters
-              searchTerm={searchTerm}
-              onSearchChange={handleSearch}
-            />
-
-            {/* Pagination info */}
-            {filteredETFs.length > itemsPerPage && (
-              <div className="text-sm text-muted-foreground mt-4">
-                Zobrazeno {startIndex + 1}-{Math.min(endIndex, filteredETFs.length)} z {filteredETFs.length} fondů
-              </div>
             )}
           </CardHeader>
           
@@ -99,6 +92,13 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
                 </TableBody>
               </Table>
             </div>
+            
+            {/* Pagination info moved below table */}
+            {filteredETFs.length > itemsPerPage && (
+              <div className="text-sm text-muted-foreground mt-4">
+                Zobrazeno {startIndex + 1}-{Math.min(endIndex, filteredETFs.length)} z {filteredETFs.length} fondů
+              </div>
+            )}
             
             <ETFTablePagination
               currentPage={currentPage}
