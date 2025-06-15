@@ -140,33 +140,37 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
   };
 
   return (
-    <>
-      <ETFComparisonFilters
-        etfs={etfs}
-        searchTerm={searchTerm}
-        onSearchChange={handleSearchChange}
-        categories={categories}
-        activeCategory={activeCategory}
-        onCategoryChange={handleCategoryChange}
-        advancedFilters={advancedFilters}
-        onAdvancedFilterChange={handleAdvancedFilterChange}
-      />
+    <div className="flex gap-8">
+      <div className="w-80 flex-shrink-0">
+        <ETFComparisonFilters
+          etfs={etfs}
+          searchTerm={searchTerm}
+          onSearchChange={handleSearchChange}
+          categories={categories}
+          activeCategory={activeCategory}
+          onCategoryChange={handleCategoryChange}
+          advancedFilters={advancedFilters}
+          onAdvancedFilterChange={handleAdvancedFilterChange}
+        />
+      </div>
+      
+      <div className="flex-1 min-w-0">
+        <ETFComparisonTableSection
+          filteredETFs={filteredETFs}
+          isLoading={isLoading}
+          onSelectETF={addETFToComparison}
+          isETFSelected={isETFSelected}
+          canAddMore={canAddMore}
+        />
 
-      <ETFComparisonTableSection
-        filteredETFs={filteredETFs}
-        isLoading={isLoading}
-        onSelectETF={addETFToComparison}
-        isETFSelected={isETFSelected}
-        canAddMore={canAddMore}
-      />
-
-      <ETFComparisonPanel
-        selectedETFs={selectedETFs}
-        onRemoveETF={removeETFFromComparison}
-        onClearAll={clearComparison}
-        onShowComparison={onShowDetailedComparison}
-      />
-    </>
+        <ETFComparisonPanel
+          selectedETFs={selectedETFs}
+          onRemoveETF={removeETFFromComparison}
+          onClearAll={clearComparison}
+          onShowComparison={onShowDetailedComparison}
+        />
+      </div>
+    </div>
   );
 };
 

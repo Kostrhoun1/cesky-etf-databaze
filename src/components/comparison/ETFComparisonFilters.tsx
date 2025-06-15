@@ -27,24 +27,20 @@ const ETFComparisonFilters: React.FC<ETFComparisonFiltersProps> = ({
   onAdvancedFilterChange,
 }) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
-      <div className="lg:col-span-1">
-        <ETFAdvancedFilters
-          etfs={etfs}
-          filters={advancedFilters}
-          onFilterChange={onAdvancedFilterChange}
-        />
-      </div>
+    <div className="space-y-6">
+      <ETFSearchFilters
+        searchTerm={searchTerm}
+        onSearchChange={onSearchChange}
+        categories={categories}
+        activeCategory={activeCategory}
+        onCategoryChange={onCategoryChange}
+      />
       
-      <div className="lg:col-span-3">
-        <ETFSearchFilters
-          searchTerm={searchTerm}
-          onSearchChange={onSearchChange}
-          categories={categories}
-          activeCategory={activeCategory}
-          onCategoryChange={onCategoryChange}
-        />
-      </div>
+      <ETFAdvancedFilters
+        etfs={etfs}
+        filters={advancedFilters}
+        onFilterChange={onAdvancedFilterChange}
+      />
     </div>
   );
 };
