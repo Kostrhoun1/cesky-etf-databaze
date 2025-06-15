@@ -66,8 +66,8 @@ const FeaturesSection: React.FC = () => {
                 </span>
               </div>
               <CardHeader className="p-0 mb-2">
-                <CardTitle asChild>
-                  <h3 className="text-xl font-semibold">{title}</h3>
+                <CardTitle>
+                  {title}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0 mb-6">
