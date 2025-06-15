@@ -37,15 +37,13 @@ const ETFComparisonFilters: React.FC<ETFComparisonFiltersProps> = ({
       </div>
       
       <div className="lg:col-span-3">
-        <div className="mb-6">
-          <ETFSearchFilters
-            searchTerm={searchTerm}
-            onSearchChange={onSearchChange}
-            categories={categories}
-            activeCategory={activeCategory}
-            onCategoryChange={onCategoryChange}
-          />
-        </div>
+        <ETFSearchFilters
+          searchTerm={searchTerm}
+          onSearchChange={onSearchChange}
+          categories={categories}
+          activeCategory={activeCategory}
+          onCategoryChange={onCategoryChange}
+        />
       </div>
     </div>
   );
