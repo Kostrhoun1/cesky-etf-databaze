@@ -58,7 +58,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
       const fundSizeSample = etfs.slice(0, 10).map(etf => ({
         name: etf.name,
         fund_size_numeric: etf.fund_size_numeric,
-        sizeInMillions: etf.fund_size_numeric ? etf.fund_size_numeric / 1000000 : 0
+        sizeInMillions: etf.fund_size_numeric // Už je v milionech
       }));
       console.log('Fund size sample (first 10 ETFs):', fundSizeSample);
     }
@@ -142,29 +142,28 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
         // Replication method filter
         const replicationMatch = replicationMethod === 'all' || etf.replication === replicationMethod;
         
-        // Fund size filter - opravená logika
+        // Fund size filter - hodnoty jsou v databázi už v milionech
         let fundSizeMatch = true;
         if (fundSizeRange !== 'all' && etf.fund_size_numeric) {
-          // Hodnoty v databázi jsou už v základních jednotkách (EUR, USD atd.)
-          // Budeme pracovat přímo s hodnotami, ne je převádět
-          const fundSize = etf.fund_size_numeric;
+          // Hodnoty v databázi jsou už v milionech
+          const fundSizeInMillions = etf.fund_size_numeric;
           
           switch (fundSizeRange) {
             case 'small':
               // Malé: méně než 100 milionů
-              fundSizeMatch = fundSize < 100000000;
+              fundSizeMatch = fundSizeInMillions < 100;
               break;
             case 'medium':
-              // Střední: 100 mil. - 1 mld.
-              fundSizeMatch = fundSize >= 100000000 && fundSize < 1000000000;
+              // Střední: 100 mil. - 1 000 mil. (1 mld.)
+              fundSizeMatch = fundSizeInMillions >= 100 && fundSizeInMillions < 1000;
               break;
             case 'large':
-              // Velké: 1 - 10 mld.
-              fundSizeMatch = fundSize >= 1000000000 && fundSize < 10000000000;
+              // Velké: 1 000 - 10 000 mil. (1 - 10 mld.)
+              fundSizeMatch = fundSizeInMillions >= 1000 && fundSizeInMillions < 10000;
               break;
             case 'xlarge':
-              // Velmi velké: více než 10 mld.
-              fundSizeMatch = fundSize >= 10000000000;
+              // Velmi velké: více než 10 000 mil. (10 mld.)
+              fundSizeMatch = fundSizeInMillions >= 10000;
               break;
             default:
               fundSizeMatch = true;
@@ -172,7 +171,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
           
           // Debug pro konkrétní ETF
           if (advancedFilters.fundSizeRange !== 'all') {
-            console.log(`ETF ${etf.name}: size=${fundSize}, range=${fundSizeRange}, match=${fundSizeMatch}`);
+            console.log(`ETF ${etf.name}: size=${fundSizeInMillions} mil., range=${fundSizeRange}, match=${fundSizeMatch}`);
           }
         }
         

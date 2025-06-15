@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import ETFTable from '@/components/ETFTable';
@@ -81,28 +80,28 @@ const ETFComparison: React.FC = () => {
       // Replication method filter
       const replicationMatch = replicationMethod === 'all' || etf.replication === replicationMethod;
       
-      // Fund size filter - opravená logika
+      // Fund size filter - hodnoty jsou v databázi už v milionech
       let fundSizeMatch = true;
       if (fundSizeRange !== 'all' && etf.fund_size_numeric) {
-        // Hodnoty v databázi jsou už v základních jednotkách (EUR, USD atd.)
-        const fundSize = etf.fund_size_numeric;
+        // Hodnoty v databázi jsou už v milionech
+        const fundSizeInMillions = etf.fund_size_numeric;
         
         switch (fundSizeRange) {
           case 'small':
             // Malé: méně než 100 milionů
-            fundSizeMatch = fundSize < 100000000;
+            fundSizeMatch = fundSizeInMillions < 100;
             break;
           case 'medium':
-            // Střední: 100 mil. - 1 mld.
-            fundSizeMatch = fundSize >= 100000000 && fundSize < 1000000000;
+            // Střední: 100 mil. - 1 000 mil. (1 mld.)
+            fundSizeMatch = fundSizeInMillions >= 100 && fundSizeInMillions < 1000;
             break;
           case 'large':
-            // Velké: 1 - 10 mld.
-            fundSizeMatch = fundSize >= 1000000000 && fundSize < 10000000000;
+            // Velké: 1 000 - 10 000 mil. (1 - 10 mld.)
+            fundSizeMatch = fundSizeInMillions >= 1000 && fundSizeInMillions < 10000;
             break;
           case 'xlarge':
-            // Velmi velké: více než 10 mld.
-            fundSizeMatch = fundSize >= 10000000000;
+            // Velmi velké: více než 10 000 mil. (10 mld.)
+            fundSizeMatch = fundSizeInMillions >= 10000;
             break;
           default:
             fundSizeMatch = true;
