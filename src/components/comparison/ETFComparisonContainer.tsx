@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { ETFListItem } from '@/types/etf';
 import { useETFData } from '@/hooks/useETFData';
 import { useETFComparison } from '@/hooks/useETFComparison';
 import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
 import ETFComparisonFilters from './ETFComparisonFilters';
+import ETFCategoryTabs from './ETFCategoryTabs';
 import ETFComparisonTableSection from './ETFComparisonTableSection';
 import ETFComparisonPanel from '@/components/ETFComparisonPanel';
 
@@ -146,15 +146,18 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
           etfs={etfs}
           searchTerm={searchTerm}
           onSearchChange={handleSearchChange}
-          categories={categories}
-          activeCategory={activeCategory}
-          onCategoryChange={handleCategoryChange}
           advancedFilters={advancedFilters}
           onAdvancedFilterChange={handleAdvancedFilterChange}
         />
       </div>
       
       <div className="flex-1 min-w-0">
+        <ETFCategoryTabs
+          categories={categories}
+          activeCategory={activeCategory}
+          onCategoryChange={handleCategoryChange}
+        />
+        
         <ETFComparisonTableSection
           filteredETFs={filteredETFs}
           isLoading={isLoading}
