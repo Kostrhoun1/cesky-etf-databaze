@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ETFListItem } from '@/types/etf';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody } from '@/components/ui/table';
@@ -9,6 +9,7 @@ import ETFTableHeader from './ETFTableHeader';
 import ETFTableRow from './ETFTableRow';
 import ETFTablePagination from './ETFTablePagination';
 import ETFAdvancedFilters from './ETFAdvancedFilters';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface ETFTableProps {
   etfs: ETFListItem[];
@@ -17,7 +18,7 @@ interface ETFTableProps {
 
 const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>();
   const [sortBy, setSortBy] = useState<string>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,6 +31,12 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
     fundCurrency: 'all',
     maxTer: initialMaxTer,
   });
+
+  const categories = useMemo(() => 
+    [...new Set(etfs.map(etf => etf.category).filter(Boolean))].sort(),
+  [etfs]);
+
+  const activeCategory = selectedCategory ?? (categories.includes('Akciové') ? 'Akciové' : categories[0] ?? '');
 
   useEffect(() => {
     if (etfs.length > 0) {
@@ -67,9 +74,6 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
     }
   }, [etfs]);
 
-  // Get unique categories
-  const categories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
-
   // Filter and sort ETFs
   const filteredETFs = etfs
     .filter(etf => {
@@ -87,7 +91,7 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
       
       return basicFieldsMatch || tickerFieldsMatch;
     })
-    .filter(etf => categoryFilter === 'all' || etf.category === categoryFilter)
+    .filter(etf => etf.category === activeCategory)
     .filter(etf => {
       const { distributionPolicy, indexName, fundCurrency, maxTer } = advancedFilters;
       const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
@@ -133,8 +137,8 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
     setCurrentPage(1); // Reset to first page when searching
   };
 
-  const handleCategoryFilter = (value: string) => {
-    setCategoryFilter(value);
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
     setCurrentPage(1); // Reset to first page when filtering
   };
 
@@ -158,14 +162,21 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
               </div>
             </div>
             
+            {categories.length > 0 && (
+              <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full mt-4">
+                <TabsList>
+                  {categories.map(category => (
+                    <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            )}
+
             <ETFTableFilters
               searchTerm={searchTerm}
-              categoryFilter={categoryFilter}
               sortBy={sortBy}
-              categories={categories}
               onSearchChange={handleSearch}
-              onCategoryFilterChange={handleCategoryFilter}
-              onSortByChange={setSortBy}
+              onSortByChange={(value) => { setSortBy(value); setCurrentPage(1); }}
             />
 
             {/* Pagination info */}

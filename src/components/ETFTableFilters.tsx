@@ -6,21 +6,15 @@ import { Search } from 'lucide-react';
 
 interface ETFTableFiltersProps {
   searchTerm: string;
-  categoryFilter: string;
   sortBy: string;
-  categories: string[];
   onSearchChange: (value: string) => void;
-  onCategoryFilterChange: (value: string) => void;
   onSortByChange: (value: string) => void;
 }
 
 const ETFTableFilters: React.FC<ETFTableFiltersProps> = ({
   searchTerm,
-  categoryFilter,
   sortBy,
-  categories,
   onSearchChange,
-  onCategoryFilterChange,
   onSortByChange,
 }) => {
   return (
@@ -34,20 +28,6 @@ const ETFTableFilters: React.FC<ETFTableFiltersProps> = ({
           className="pl-10"
         />
       </div>
-      
-      <Select value={categoryFilter} onValueChange={onCategoryFilterChange}>
-        <SelectTrigger className="w-full sm:w-[200px]">
-          <SelectValue placeholder="Kategorie" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Všechny kategorie</SelectItem>
-          {categories.map(category => (
-            <SelectItem key={category} value={category}>
-              {category}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
       
       <Select value={sortBy} onValueChange={onSortByChange}>
         <SelectTrigger className="w-full sm:w-[200px]">
