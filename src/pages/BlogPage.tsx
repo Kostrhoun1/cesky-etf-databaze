@@ -12,6 +12,7 @@ const ARTICLE_IMAGES: Record<string, string> = {
   "nejlepsi-etf-na-nasdaq": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop",
   "nejlepsi-dividendove-etf": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600&fit=crop",
   "nejlepsi-etf-na-evropske-akcie": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=800&h=600&fit=crop",
+  "all-weather-portfolio": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
 };
 
 const ARTICLES = [
@@ -44,6 +45,12 @@ const ARTICLES = [
     title: "Nejlepší ETF na evropské akcie",
     perex:
       "ETF fondy zaměřené na evropské společnosti. Inspirace pro diverzifikaci portfolia v rámci Evropy.",
+  },
+  {
+    slug: "all-weather-portfolio",
+    title: "All-Weather Portfolio podle Raya Dalia",
+    perex:
+      "Jak sestavit robustní portfolio, které funguje v každém ekonomickém prostředí? Průvodce legendární strategií Ray Dalia s ETF.",
   },
 ];
 
