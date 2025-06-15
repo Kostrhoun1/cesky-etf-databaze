@@ -242,35 +242,34 @@ const ETFDetail: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Performance */}
+          {/* YTD Performance */}
           <Card>
             <CardHeader>
-              <CardTitle>Výkonnost</CardTitle>
+              <CardTitle>Letošní výkonnost (YTD)</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">YTD:</span>
-                  <span className={`font-medium ${getReturnColor(etf.return_ytd)}`}>
+                  <span className="text-gray-600">YTD výnos:</span>
+                  <span className={`font-medium text-lg ${getReturnColor(etf.return_ytd)}`}>
                     {etf.return_ytd ? formatPercentage(etf.return_ytd) : '-'}
                   </span>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 1 Year Performance */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Roční výkonnost</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">1 rok:</span>
-                  <span className={`font-medium ${getReturnColor(etf.return_1y)}`}>
+                  <span className={`font-medium text-lg ${getReturnColor(etf.return_1y)}`}>
                     {etf.return_1y ? formatPercentage(etf.return_1y) : '-'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">3 roky:</span>
-                  <span className={`font-medium ${getReturnColor(etf.return_3y)}`}>
-                    {etf.return_3y ? formatPercentage(etf.return_3y) : '-'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">5 let:</span>
-                  <span className={`font-medium ${getReturnColor(etf.return_5y)}`}>
-                    {etf.return_5y ? formatPercentage(etf.return_5y) : '-'}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -283,6 +282,123 @@ const ETFDetail: React.FC = () => {
                   <span className="text-gray-600">Max. pokles 1Y:</span>
                   <span className="font-medium text-red-600">
                     {etf.max_drawdown_1y ? formatPercentage(etf.max_drawdown_1y) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Výnos/riziko 1Y:</span>
+                  <span className="font-medium">
+                    {etf.return_per_risk_1y ? formatPercentage(etf.return_per_risk_1y) : '-'}
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 3 Year Performance */}
+          <Card>
+            <CardHeader>
+              <CardTitle>3-letá výkonnost</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">3 roky:</span>
+                  <span className={`font-medium text-lg ${getReturnColor(etf.return_3y)}`}>
+                    {etf.return_3y ? formatPercentage(etf.return_3y) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Volatilita 3Y:</span>
+                  <span className="font-medium">
+                    {etf.volatility_3y ? formatPercentage(etf.volatility_3y) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Max. pokles 3Y:</span>
+                  <span className="font-medium text-red-600">
+                    {etf.max_drawdown_3y ? formatPercentage(etf.max_drawdown_3y) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Výnos/riziko 3Y:</span>
+                  <span className="font-medium">
+                    {etf.return_per_risk_3y ? formatPercentage(etf.return_per_risk_3y) : '-'}
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 5 Year Performance */}
+          <Card>
+            <CardHeader>
+              <CardTitle>5-letá výkonnost</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">5 let:</span>
+                  <span className={`font-medium text-lg ${getReturnColor(etf.return_5y)}`}>
+                    {etf.return_5y ? formatPercentage(etf.return_5y) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Volatilita 5Y:</span>
+                  <span className="font-medium">
+                    {etf.volatility_5y ? formatPercentage(etf.volatility_5y) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Max. pokles 5Y:</span>
+                  <span className="font-medium text-red-600">
+                    {etf.max_drawdown_5y ? formatPercentage(etf.max_drawdown_5y) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Výnos/riziko 5Y:</span>
+                  <span className="font-medium">
+                    {etf.return_per_risk_5y ? formatPercentage(etf.return_per_risk_5y) : '-'}
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Risk Metrics */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Rizikovost</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Beta:</span>
+                  <span className="font-medium">
+                    {etf.beta ? etf.beta.toFixed(2) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Korelace:</span>
+                  <span className="font-medium">
+                    {etf.correlation ? etf.correlation.toFixed(2) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Tracking error:</span>
+                  <span className="font-medium">
+                    {etf.tracking_error ? formatPercentage(etf.tracking_error) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Information ratio:</span>
+                  <span className="font-medium">
+                    {etf.information_ratio ? etf.information_ratio.toFixed(2) : '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Max. pokles celkem:</span>
+                  <span className="font-medium text-red-600">
+                    {etf.max_drawdown_inception ? formatPercentage(etf.max_drawdown_inception) : '-'}
                   </span>
                 </div>
               </div>
