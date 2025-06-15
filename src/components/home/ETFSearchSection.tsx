@@ -56,6 +56,48 @@ const ETFSearchSection: React.FC = () => {
         const data = await fetchETFs(); // Remove the limit parameter
         console.log('Successfully loaded', data.length, 'ETFs for search section');
         setEtfs(data);
+        
+        // Debug: Show sample of ticker data
+        console.log('=== Ticker Data Sample (first 10 ETFs) ===');
+        data.slice(0, 10).forEach((etf, index) => {
+          console.log(`ETF ${index + 1}:`, {
+            name: etf.name,
+            isin: etf.isin,
+            primary_ticker: etf.primary_ticker,
+            exchange_1_ticker: etf.exchange_1_ticker,
+            exchange_2_ticker: etf.exchange_2_ticker,
+            exchange_3_ticker: etf.exchange_3_ticker,
+            exchange_4_ticker: etf.exchange_4_ticker,
+            exchange_5_ticker: etf.exchange_5_ticker,
+          });
+        });
+        
+        // Debug: Look for any ticker containing "SXR"
+        console.log('=== ETFs with SXR in ticker ===');
+        const sxrETFs = data.filter(etf => {
+          const hasSXR = 
+            (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes('sxr')) ||
+            (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase().includes('sxr')) ||
+            (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase().includes('sxr')) ||
+            (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().includes('sxr')) ||
+            (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes('sxr')) ||
+            (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes('sxr'));
+          return hasSXR;
+        });
+        console.log('Found', sxrETFs.length, 'ETFs with SXR in ticker');
+        sxrETFs.forEach(etf => {
+          console.log('SXR ETF:', {
+            name: etf.name,
+            isin: etf.isin,
+            primary_ticker: etf.primary_ticker,
+            exchange_1_ticker: etf.exchange_1_ticker,
+            exchange_2_ticker: etf.exchange_2_ticker,
+            exchange_3_ticker: etf.exchange_3_ticker,
+            exchange_4_ticker: etf.exchange_4_ticker,
+            exchange_5_ticker: etf.exchange_5_ticker,
+          });
+        });
+        
       } catch (error) {
         console.error('Error loading ETFs for search section:', error);
       }
