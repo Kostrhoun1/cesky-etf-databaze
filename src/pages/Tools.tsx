@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -177,54 +176,6 @@ const Tools: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-
-        {/* Manual Calculator Section */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Prozatímní ruční výpočty
-          </h2>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Compound Interest vzorec</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                  <code className="text-sm">
-                    A = P × (1 + r/n)^(nt)
-                  </code>
-                </div>
-                <ul className="text-sm space-y-1 text-gray-600">
-                  <li><strong>A</strong> = konečná částka</li>
-                  <li><strong>P</strong> = počáteční investice</li>
-                  <li><strong>r</strong> = roční úroková sazba</li>
-                  <li><strong>n</strong> = počet složení za rok</li>
-                  <li><strong>t</strong> = počet let</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>DCA (Dollar Cost Averaging)</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                  <code className="text-sm">
-                    FV = PMT × [((1 + r)^n - 1) / r]
-                  </code>
-                </div>
-                <ul className="text-sm space-y-1 text-gray-600">
-                  <li><strong>FV</strong> = budoucí hodnota</li>
-                  <li><strong>PMT</strong> = pravidelná platba</li>
-                  <li><strong>r</strong> = úroková sazba za období</li>
-                  <li><strong>n</strong> = počet období</li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
       </div>
     </Layout>
   );
