@@ -61,9 +61,9 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
             
             {categories.length > 0 && (
               <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full mt-4">
-                <TabsList>
+                <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
                   {categories.map(category => (
-                    <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
+                    <TabsTrigger key={category} value={category} className="text-xs lg:text-sm">{category}</TabsTrigger>
                   ))}
                 </TabsList>
               </Tabs>
