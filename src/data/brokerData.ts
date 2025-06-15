@@ -136,7 +136,7 @@ export const brokers: Broker[] = [
   {
     id: 'ibkr',
     name: 'Interactive Brokers',
-    logo: '/lovable-uploads/6462aac9-b2f4-4030-9c58-feec749d812d.png',
+    logo: '/lovable-uploads/4465126c-b9d7-4fc5-b560-477d3425500d.png',
     description: 'Globální broker s nejširší nabídkou a pokročilými nástroji',
     rating: 4.8,
     regulation: 'CBI (IE), SEC (US), FCA (UK), ČNB (CZ)',
