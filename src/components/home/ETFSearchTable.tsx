@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -138,7 +139,14 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
               )}
               <TableCell className="p-3">
                 <div>
-                  <div className="font-medium">{etf.name}</div>
+                  <div className="font-medium">
+                    <Link 
+                      to={`/etf/${etf.isin}`}
+                      className="text-blue-600 hover:text-blue-800 hover:underline"
+                    >
+                      {etf.name}
+                    </Link>
+                  </div>
                   <div className="text-sm text-gray-500">{etf.isin}</div>
                   {etf.primary_ticker && (
                     <div className="text-xs text-blue-600">{etf.primary_ticker}</div>
