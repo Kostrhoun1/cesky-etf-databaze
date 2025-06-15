@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -68,7 +67,7 @@ const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
     return replication || '-';
   };
 
-  const ComparisonTable = ({ title, data }: { title: string; data: Array<{ label: string; key: string; format?: (value: any) => string; className?: string }> }) => (
+  const ComparisonTable = ({ title, data }: { title: string; data: Array<{ label: string; key: string; format?: (value: any, etf?: ETFListItem) => string; className?: string }> }) => (
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
@@ -95,7 +94,7 @@ const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
                   <td className="p-3 font-medium">{row.label}</td>
                   {selectedETFs.map((etf) => {
                     const value = etf[row.key as keyof ETFListItem];
-                    const formattedValue = row.format ? row.format(value) : (value || '-');
+                    const formattedValue = row.format ? row.format(value, etf) : (value || '-');
                     return (
                       <td key={etf.isin} className={`p-3 ${row.className || ''}`}>
                         {formattedValue}
@@ -115,22 +114,22 @@ const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
     { label: 'Poskytovatel', key: 'fund_provider' },
     { label: 'Kategorie', key: 'category' },
     { label: 'Sledovaný index', key: 'index_name' },
-    { label: 'Typ fondu', key: 'distribution_policy', format: getDistributionPolicyLabel },
+    { label: 'Typ fondu', key: 'distribution_policy', format: (value: string) => getDistributionPolicyLabel(value) },
     { label: 'Měna fondu', key: 'fund_currency' },
     { label: 'Ticker', key: 'primary_ticker', format: (value: string) => value ? value : '-' },
     { label: 'DEGIRO Free', key: 'degiro_free', format: (value: boolean) => value ? 'Ano' : 'Ne' },
   ];
 
   const feesAndSizeData = [
-    { label: 'TER (roční poplatek)', key: 'ter_numeric', format: formatPercentage, className: 'font-mono' },
-    { label: 'Velikost fondu', key: 'fund_size_numeric', format: (value: number, etf: ETFListItem) => formatCurrency(value, etf.fund_currency) },
+    { label: 'TER (roční poplatek)', key: 'ter_numeric', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+    { label: 'Velikost fondu', key: 'fund_size_numeric', format: (value: number, etf: ETFListItem) => formatCurrency(value, etf?.fund_currency), className: 'font-mono' },
   ];
 
   const performanceData = [
-    { label: 'YTD výnos', key: 'return_ytd', format: formatPercentage, className: 'font-mono' },
-    { label: 'Výnos 1 rok', key: 'return_1y', format: formatPercentage, className: 'font-mono' },
-    { label: 'Výnos 3 roky', key: 'return_3y', format: formatPercentage, className: 'font-mono' },
-    { label: 'Výnos 5 let', key: 'return_5y', format: formatPercentage, className: 'font-mono' },
+    { label: 'YTD výnos', key: 'return_ytd', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+    { label: 'Výnos 1 rok', key: 'return_1y', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+    { label: 'Výnos 3 roky', key: 'return_3y', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+    { label: 'Výnos 5 let', key: 'return_5y', format: (value: number) => formatPercentage(value), className: 'font-mono' },
   ];
 
   // For the full ETF data, we need to cast to access all properties
