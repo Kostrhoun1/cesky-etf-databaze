@@ -1,245 +1,312 @@
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Search, TrendingUp, TrendingDown } from 'lucide-react';
 import { ETFListItem } from '@/types/etf';
+import { useETFData } from '@/hooks/useETFData';
 import { formatPercentage } from '@/utils/csvParser';
-import { Search } from 'lucide-react';
-import ETFAdvancedFilters from '../ETFAdvancedFilters';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ETFAdvancedFilters from '@/components/ETFAdvancedFilters';
+import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
 
-interface ETFSearchSectionProps {
-  etfs: ETFListItem[];
-  totalCount: number;
-  isLoading: boolean;
-  loadingError: string | null;
-}
-
-const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
-  etfs,
-  totalCount,
-  isLoading,
-  loadingError
-}) => {
+const ETFSearchSection: React.FC = () => {
+  const { fetchETFs, isLoading } = useETFData();
+  const [etfs, setEtfs] = useState<ETFListItem[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState<string>('all');
-  
-  const initialMaxTer = etfs.length > 0 ? Math.max(...etfs.map(etf => etf.ter_numeric || 0), 1) : 1;
-  const [advancedFilters, setAdvancedFilters] = useState({
+  const [selectedCategory, setSelectedCategory] = useState<string>();
+  const [sortBy, setSortBy] = useState<string>('fund_size_numeric');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
+  const maxTerFromData = useMemo(() => {
+    if (etfs.length === 0) return 1;
+    return Math.max(...etfs.map(etf => etf.ter_numeric || 0), 1);
+  }, [etfs]);
+
+  const [advancedFilters, setAdvancedFilters] = useState<AdvancedFiltersState>({
     distributionPolicy: 'all',
     indexName: 'all',
     fundCurrency: 'all',
-    maxTer: initialMaxTer,
+    maxTer: 1,
   });
 
   useEffect(() => {
-    if (etfs.length > 0) {
-      const maxTerValue = Math.max(...etfs.map(etf => etf.ter_numeric || 0), 1);
-      if (advancedFilters.maxTer > maxTerValue) {
-        setAdvancedFilters(prev => ({ ...prev, maxTer: maxTerValue }));
-      }
+    if (maxTerFromData > 1) {
+      setAdvancedFilters(prev => ({ ...prev, maxTer: maxTerFromData }));
     }
-  }, [etfs, advancedFilters.maxTer]);
+  }, [maxTerFromData]);
 
-  // Get unique categories from loaded ETFs
-  const categories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
-
-  // Filter ETFs for homepage display
-  const filteredETFs = etfs
-    .filter(etf => {
-      // Pokud je searchTerm prázdný, prochází všechny ETF
-      if (!searchTerm.trim()) {
-        const matchesCategory = categoryFilter === 'all' || etf.category === categoryFilter;
-        return matchesCategory;
+  // Load ETFs only once when component mounts
+  useEffect(() => {
+    const loadETFs = async () => {
+      console.log('Loading ETFs for search section...');
+      try {
+        const data = await fetchETFs(200); // Limit to 200 for homepage
+        console.log('Successfully loaded', data.length, 'ETFs for search section');
+        setEtfs(data);
+      } catch (error) {
+        console.error('Error loading ETFs for search section:', error);
       }
+    };
 
-      // Jinak aplikujeme search filter
-      const searchLower = searchTerm.toLowerCase();
-      const matchesSearch = etf.name.toLowerCase().includes(searchLower) ||
-                           etf.isin.toLowerCase().includes(searchLower) ||
-                           etf.fund_provider.toLowerCase().includes(searchLower) ||
-                           (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower));
-      const matchesCategory = categoryFilter === 'all' || etf.category === categoryFilter;
-      return matchesSearch && matchesCategory;
-    })
-    .filter(etf => {
-      const { distributionPolicy, indexName, fundCurrency, maxTer } = advancedFilters;
-      const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
-      const indexMatch = indexName === 'all' || etf.index_name === indexName;
-      const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
-      const terMatch = (etf.ter_numeric || 0) <= maxTer;
-      return distPolicyMatch && indexMatch && currencyMatch && terMatch;
-    })
-    .slice(0, 10);
+    loadETFs();
+  }, [fetchETFs]); // Only depend on fetchETFs which is now memoized
+
+  const categories = useMemo(() => 
+    [...new Set(etfs.map(etf => etf.category).filter(Boolean))].sort(),
+  [etfs]);
+
+  const activeCategory = selectedCategory ?? (categories.includes('Akciové') ? 'Akciové' : categories[0] ?? '');
+
+  const filteredETFs = useMemo(() => {
+    return etfs
+      .filter(etf => {
+        const searchLower = searchTerm.toLowerCase();
+        
+        const basicFieldsMatch = 
+          etf.name.toLowerCase().includes(searchLower) ||
+          etf.isin.toLowerCase().includes(searchLower) ||
+          etf.fund_provider.toLowerCase().includes(searchLower);
+        
+        const tickerFieldsMatch = 
+          (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower));
+        
+        return basicFieldsMatch || tickerFieldsMatch;
+      })
+      .filter(etf => etf.category === activeCategory)
+      .filter(etf => {
+        const { distributionPolicy, indexName, fundCurrency, maxTer } = advancedFilters;
+        const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
+        const indexMatch = indexName === 'all' || etf.index_name === indexName;
+        const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
+        const terMatch = (etf.ter_numeric || 0) <= maxTer;
+        return distPolicyMatch && indexMatch && currencyMatch && terMatch;
+      })
+      .sort((a, b) => {
+        let aValue: any = a[sortBy as keyof ETFListItem];
+        let bValue: any = b[sortBy as keyof ETFListItem];
+        
+        if (typeof aValue === 'string') {
+          aValue = aValue.toLowerCase();
+          bValue = bValue.toLowerCase();
+        }
+        
+        if (sortOrder === 'asc') {
+          return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+        } else {
+          return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+        }
+      });
+  }, [etfs, searchTerm, activeCategory, advancedFilters, sortBy, sortOrder]);
+
+  const topETFs = filteredETFs.slice(0, 10);
+
+  const handleSort = (field: string) => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(field);
+      setSortOrder('asc');
+    }
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
+  };
+
+  const handleAdvancedFilterChange = (key: keyof AdvancedFiltersState, value: any) => {
+    setAdvancedFilters(prevFilters => ({...prevFilters, [key]: value}));
+  };
+
+  const getSortIcon = (field: string) => {
+    if (sortBy === field) {
+      return sortOrder === 'asc' ? 
+        <TrendingUp className="inline ml-1 h-4 w-4" /> : 
+        <TrendingDown className="inline ml-1 h-4 w-4" />;
+    }
+    return null;
+  };
 
   const getReturnColor = (value: number) => {
     if (value > 0) return 'text-green-600';
     if (value < 0) return 'text-red-600';
-    return 'text-gray-600';
+    return '';
   };
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 tracking-tight sm:text-4xl">
-            Prozkoumejte populární ETF
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Najděte nejlepší ETF fondy
           </h2>
-          <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-            {totalCount > 0
-              ? `Srovnáváme pro vás přes ${totalCount.toLocaleString()} ETF fondů. Začněte prozkoumávat ty nejlepší pro české investory.`
-              : 'Začněte prozkoumávat naši databázi ETF fondů.'}
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Prozkoumejte naši databázi ETF fondů s pokročilými filtry a detailními informacemi o výkonnosti
           </p>
         </div>
 
-        {/* Search and Filter */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8 max-w-3xl mx-auto">
-          <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <Input
-              placeholder="Hledat ETF podle názvu, ISIN, poskytovatele nebo tickeru..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-12 h-12 text-base"
-            />
-          </div>
-          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-            <SelectTrigger className="w-full md:w-[240px] h-12 text-base">
-              <SelectValue placeholder="Kategorie" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Všechny kategorie</SelectItem>
-              {categories.map(category => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+          <div className="lg:col-span-3">
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-xl font-semibold flex items-center gap-2">
+                      ETF Fondy
+                      <Badge variant="secondary">{filteredETFs.length} fondů</Badge>
+                      {etfs.length > filteredETFs.length && (
+                        <Badge variant="outline">z {etfs.length} celkem</Badge>
+                      )}
+                    </h3>
+                    <p className="text-muted-foreground mt-1">
+                      Přehled nejlepších ETF fondů s detailními informacemi
+                    </p>
+                  </div>
+                </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* ETF List */}
-          <div className="lg:col-span-3 space-y-4">
-            {isLoading ? (
-              <div className="text-center py-8">
-                <p>Načítání ETF fondů...</p>
-              </div>
-            ) : loadingError ? (
-              <div className="text-center py-8">
-                <p className="text-red-600 mb-4">Chyba při načítání: {loadingError}</p>
-                <Button onClick={() => window.location.reload()}>
-                  Zkusit znovu
-                </Button>
-              </div>
-            ) : filteredETFs.length > 0 ? (
-              filteredETFs.map((etf) => (
-                <Card key={etf.isin} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-                  <CardContent className="p-4 sm:p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                      <div className="md:col-span-2">
-                        <h3 className="font-semibold text-base sm:text-lg mb-1">
-                          <Link to={`/etf/${etf.isin}`} className="hover:text-violet-600">
-                            {etf.name}
-                          </Link>
-                        </h3>
-                        <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-sm text-gray-500">
-                          <span>{etf.isin}</span>
-                          <span className="hidden sm:inline">•</span>
-                          <span>{etf.fund_provider}</span>
-                          {etf.degiro_free && (
-                            <>
-                              <span className="hidden sm:inline">•</span>
-                              <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
-                                DEGIRO Free
+                {categories.length > 0 && (
+                  <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full mb-6">
+                    <TabsList>
+                      {categories.map(category => (
+                        <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </Tabs>
+                )}
+
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Hledat podle názvu, ISIN, poskytovatele nebo tickeru..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-full sm:w-[200px]">
+                      <SelectValue placeholder="Řadit podle" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="name">Název</SelectItem>
+                      <SelectItem value="ter_numeric">TER</SelectItem>
+                      <SelectItem value="fund_size_numeric">Velikost fondu</SelectItem>
+                      <SelectItem value="return_ytd">YTD výnos</SelectItem>
+                      <SelectItem value="return_1y">Výnos 1Y</SelectItem>
+                      <SelectItem value="return_3y">Výnos 3Y</SelectItem>
+                      <SelectItem value="return_5y">Výnos 5Y</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {isLoading ? (
+                  <div className="text-center py-8">
+                    <p className="text-lg">Načítání ETF fondů...</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th 
+                            className="text-left p-3 cursor-pointer hover:bg-gray-50"
+                            onClick={() => handleSort('name')}
+                          >
+                            Název / ISIN
+                            {getSortIcon('name')}
+                          </th>
+                          <th 
+                            className="text-left p-3 cursor-pointer hover:bg-gray-50"
+                            onClick={() => handleSort('fund_provider')}
+                          >
+                            Poskytovatel
+                          </th>
+                          <th 
+                            className="text-right p-3 cursor-pointer hover:bg-gray-50"
+                            onClick={() => handleSort('ter_numeric')}
+                          >
+                            TER
+                            {getSortIcon('ter_numeric')}
+                          </th>
+                          <th 
+                            className="text-right p-3 cursor-pointer hover:bg-gray-50"
+                            onClick={() => handleSort('return_ytd')}
+                          >
+                            YTD výnos
+                            {getSortIcon('return_ytd')}
+                          </th>
+                          <th 
+                            className="text-right p-3 cursor-pointer hover:bg-gray-50"
+                            onClick={() => handleSort('return_1y')}
+                          >
+                            Výnos 1Y
+                            {getSortIcon('return_1y')}
+                          </th>
+                          <th>Kategorie</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {topETFs.map((etf) => (
+                          <tr key={etf.isin} className="border-b hover:bg-gray-50">
+                            <td className="p-3">
+                              <div>
+                                <div className="font-medium">{etf.name}</div>
+                                <div className="text-sm text-gray-500">{etf.isin}</div>
+                                {etf.primary_ticker && (
+                                  <div className="text-xs text-blue-600">{etf.primary_ticker}</div>
+                                )}
+                                {etf.degiro_free && (
+                                  <div className="mt-1">
+                                    <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                                      DEGIRO Free
+                                    </Badge>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td className="p-3">{etf.fund_provider}</td>
+                            <td className="p-3 text-right">
+                              {formatPercentage(etf.ter_numeric)}
+                            </td>
+                            <td className={`p-3 text-right ${getReturnColor(etf.return_ytd)}`}>
+                              {etf.return_ytd ? formatPercentage(etf.return_ytd) : '-'}
+                            </td>
+                            <td className={`p-3 text-right ${getReturnColor(etf.return_1y)}`}>
+                              {etf.return_1y ? formatPercentage(etf.return_1y) : '-'}
+                            </td>
+                            <td className="p-3">
+                              <Badge variant="outline" className="text-xs">
+                                {etf.category}
                               </Badge>
-                            </>
-                          )}
-                        </div>
-                      </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
 
-                      <div className="grid grid-cols-4 gap-2 text-sm text-center">
-                        <div>
-                          <p className="text-gray-500 text-xs uppercase">TER</p>
-                          <p className="font-semibold">{formatPercentage(etf.ter_numeric)}</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500 text-xs uppercase">YTD</p>
-                          <p className={`font-semibold ${getReturnColor(etf.return_ytd)}`}>
-                            {etf.return_ytd ? formatPercentage(etf.return_ytd) : 'N/A'}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500 text-xs uppercase">1R</p>
-                          <p className={`font-semibold ${getReturnColor(etf.return_1y)}`}>
-                            {etf.return_1y ? formatPercentage(etf.return_1y) : 'N/A'}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500 text-xs uppercase">3R</p>
-                          <p className={`font-semibold ${getReturnColor(etf.return_3y)}`}>
-                            {etf.return_3y ? formatPercentage(etf.return_3y) : 'N/A'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : etfs.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-gray-600">Žádná ETF data nejsou k dispozici.</p>
-                <Button 
-                  onClick={() => window.location.reload()}
-                  className="mt-4"
-                >
-                  Obnovit stránku
-                </Button>
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-600">
-                  Žádné ETF fondy nenalezeny podle zadaných kritérií.
-                </p>
-                <Button 
-                  onClick={() => {
-                    setSearchTerm('');
-                    setCategoryFilter('all');
-                    setAdvancedFilters({
-                      distributionPolicy: 'all',
-                      indexName: 'all',
-                      fundCurrency: 'all',
-                      maxTer: initialMaxTer,
-                    })
-                  }}
-                  className="mt-4"
-                  variant="outline"
-                >
-                  Vymazat filtry
-                </Button>
-              </div>
-            )}
+                {!isLoading && filteredETFs.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    Žádné ETF fondy nenalezeny podle zadaných kritérií.
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
+          
           <div className="lg:col-span-1">
             <ETFAdvancedFilters
               etfs={etfs}
               filters={advancedFilters}
-              onFilterChange={setAdvancedFilters}
+              onFilterChange={handleAdvancedFilterChange}
             />
           </div>
         </div>
-
-
-        {totalCount > 10 && filteredETFs.length > 0 && (
-          <div className="text-center mt-12">
-            <Button asChild size="lg">
-              <Link to="/srovnani-etf">Zobrazit všech {totalCount.toLocaleString()} ETF fondů</Link>
-            </Button>
-          </div>
-        )}
       </div>
     </section>
   );

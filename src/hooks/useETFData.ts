@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+
+import { useState, useCallback, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { ETF, ETFListItem } from '@/types/etf';
@@ -6,6 +7,7 @@ import { ETF, ETFListItem } from '@/types/etf';
 export const useETFData = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const loadingRef = useRef(false);
 
   const upsertETFs = useCallback(async (etfs: ETF[]) => {
     setIsLoading(true);
@@ -172,9 +174,19 @@ export const useETFData = () => {
   }, [toast]);
 
   const fetchETFs = useCallback(async (limit?: number): Promise<ETFListItem[]> => {
+    // Prevent duplicate calls
+    if (loadingRef.current) {
+      console.log('fetchETFs already in progress, skipping...');
+      return [];
+    }
+
+    loadingRef.current = true;
     setIsLoading(true);
+    
     try {
-      // Now fetch the actual data
+      console.log('Starting to fetch ETFs from database...');
+
+      // Build query
       let query = supabase
         .from('etf_funds')
         .select(`
@@ -207,6 +219,7 @@ export const useETFData = () => {
         throw new Error(`Failed to fetch ETFs: ${error.message}`);
       }
 
+      console.log('Successfully loaded', data?.length || 0, 'ETFs from database');
       return data || [];
     } catch (error) {
       console.error('Error in fetchETFs:', error);
@@ -218,6 +231,7 @@ export const useETFData = () => {
       return [];
     } finally {
       setIsLoading(false);
+      loadingRef.current = false;
     }
   }, [toast]);
 
