@@ -189,7 +189,10 @@ export const useETFData = () => {
           return_ytd,
           fund_size_numeric,
           degiro_free,
-          primary_ticker
+          primary_ticker,
+          distribution_policy,
+          index_name,
+          fund_currency
         `)
         .order('fund_size_numeric', { ascending: false });
 

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ETFListItem } from '@/types/etf';
 import { formatPercentage } from '@/utils/csvParser';
 import { Search } from 'lucide-react';
+import ETFAdvancedFilters from '../ETFAdvancedFilters';
 
 interface ETFSearchSectionProps {
   etfs: ETFListItem[];
@@ -25,6 +26,23 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  
+  const initialMaxTer = etfs.length > 0 ? Math.max(...etfs.map(etf => etf.ter_numeric || 0), 1) : 1;
+  const [advancedFilters, setAdvancedFilters] = useState({
+    distributionPolicy: 'all',
+    indexName: 'all',
+    fundCurrency: 'all',
+    maxTer: initialMaxTer,
+  });
+
+  useEffect(() => {
+    if (etfs.length > 0) {
+      const maxTerValue = Math.max(...etfs.map(etf => etf.ter_numeric || 0), 1);
+      if (advancedFilters.maxTer > maxTerValue) {
+        setAdvancedFilters(prev => ({ ...prev, maxTer: maxTerValue }));
+      }
+    }
+  }, [etfs, advancedFilters.maxTer]);
 
   // Get unique categories from loaded ETFs
   const categories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
@@ -46,6 +64,14 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
                            (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower));
       const matchesCategory = categoryFilter === 'all' || etf.category === categoryFilter;
       return matchesSearch && matchesCategory;
+    })
+    .filter(etf => {
+      const { distributionPolicy, indexName, fundCurrency, maxTer } = advancedFilters;
+      const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
+      const indexMatch = indexName === 'all' || etf.index_name === indexName;
+      const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
+      const terMatch = (etf.ter_numeric || 0) <= maxTer;
+      return distPolicyMatch && indexMatch && currencyMatch && terMatch;
     })
     .slice(0, 10);
 
@@ -95,103 +121,117 @@ const ETFSearchSection: React.FC<ETFSearchSectionProps> = ({
           </Select>
         </div>
 
-        {/* ETF List */}
-        <div className="space-y-4">
-          {isLoading ? (
-            <div className="text-center py-8">
-              <p>Načítání ETF fondů...</p>
-            </div>
-          ) : loadingError ? (
-            <div className="text-center py-8">
-              <p className="text-red-600 mb-4">Chyba při načítání: {loadingError}</p>
-              <Button onClick={() => window.location.reload()}>
-                Zkusit znovu
-              </Button>
-            </div>
-          ) : filteredETFs.length > 0 ? (
-            filteredETFs.map((etf) => (
-              <Card key={etf.isin} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                    <div className="md:col-span-2">
-                      <h3 className="font-semibold text-base sm:text-lg mb-1">
-                        <Link to={`/etf/${etf.isin}`} className="hover:text-violet-600">
-                          {etf.name}
-                        </Link>
-                      </h3>
-                      <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-sm text-gray-500">
-                        <span>{etf.isin}</span>
-                        <span className="hidden sm:inline">•</span>
-                        <span>{etf.fund_provider}</span>
-                        {etf.degiro_free && (
-                          <>
-                            <span className="hidden sm:inline">•</span>
-                            <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
-                              DEGIRO Free
-                            </Badge>
-                          </>
-                        )}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* ETF List */}
+          <div className="lg:col-span-3 space-y-4">
+            {isLoading ? (
+              <div className="text-center py-8">
+                <p>Načítání ETF fondů...</p>
+              </div>
+            ) : loadingError ? (
+              <div className="text-center py-8">
+                <p className="text-red-600 mb-4">Chyba při načítání: {loadingError}</p>
+                <Button onClick={() => window.location.reload()}>
+                  Zkusit znovu
+                </Button>
+              </div>
+            ) : filteredETFs.length > 0 ? (
+              filteredETFs.map((etf) => (
+                <Card key={etf.isin} className="hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                      <div className="md:col-span-2">
+                        <h3 className="font-semibold text-base sm:text-lg mb-1">
+                          <Link to={`/etf/${etf.isin}`} className="hover:text-violet-600">
+                            {etf.name}
+                          </Link>
+                        </h3>
+                        <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-sm text-gray-500">
+                          <span>{etf.isin}</span>
+                          <span className="hidden sm:inline">•</span>
+                          <span>{etf.fund_provider}</span>
+                          {etf.degiro_free && (
+                            <>
+                              <span className="hidden sm:inline">•</span>
+                              <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                                DEGIRO Free
+                              </Badge>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="grid grid-cols-4 gap-2 text-sm text-center">
-                      <div>
-                        <p className="text-gray-500 text-xs uppercase">TER</p>
-                        <p className="font-semibold">{formatPercentage(etf.ter_numeric)}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500 text-xs uppercase">YTD</p>
-                        <p className={`font-semibold ${getReturnColor(etf.return_ytd)}`}>
-                          {etf.return_ytd ? formatPercentage(etf.return_ytd) : 'N/A'}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500 text-xs uppercase">1R</p>
-                        <p className={`font-semibold ${getReturnColor(etf.return_1y)}`}>
-                          {etf.return_1y ? formatPercentage(etf.return_1y) : 'N/A'}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500 text-xs uppercase">3R</p>
-                        <p className={`font-semibold ${getReturnColor(etf.return_3y)}`}>
-                          {etf.return_3y ? formatPercentage(etf.return_3y) : 'N/A'}
-                        </p>
+                      <div className="grid grid-cols-4 gap-2 text-sm text-center">
+                        <div>
+                          <p className="text-gray-500 text-xs uppercase">TER</p>
+                          <p className="font-semibold">{formatPercentage(etf.ter_numeric)}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs uppercase">YTD</p>
+                          <p className={`font-semibold ${getReturnColor(etf.return_ytd)}`}>
+                            {etf.return_ytd ? formatPercentage(etf.return_ytd) : 'N/A'}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs uppercase">1R</p>
+                          <p className={`font-semibold ${getReturnColor(etf.return_1y)}`}>
+                            {etf.return_1y ? formatPercentage(etf.return_1y) : 'N/A'}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs uppercase">3R</p>
+                          <p className={`font-semibold ${getReturnColor(etf.return_3y)}`}>
+                            {etf.return_3y ? formatPercentage(etf.return_3y) : 'N/A'}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          ) : etfs.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-600">Žádná ETF data nejsou k dispozici.</p>
-              <Button 
-                onClick={() => window.location.reload()}
-                className="mt-4"
-              >
-                Obnovit stránku
-              </Button>
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-gray-600">
-                Žádné ETF fondy nenalezeny podle zadaných kritérií.
-                {searchTerm && ` Hledaný výraz: "${searchTerm}"`}
-                {categoryFilter !== 'all' && ` Kategorie: "${categoryFilter}"`}
-              </p>
-              <Button 
-                onClick={() => {
-                  setSearchTerm('');
-                  setCategoryFilter('all');
-                }}
-                className="mt-4"
-                variant="outline"
-              >
-                Vymazat filtry
-              </Button>
-            </div>
-          )}
+                  </CardContent>
+                </Card>
+              ))
+            ) : etfs.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Žádná ETF data nejsou k dispozici.</p>
+                <Button 
+                  onClick={() => window.location.reload()}
+                  className="mt-4"
+                >
+                  Obnovit stránku
+                </Button>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-600">
+                  Žádné ETF fondy nenalezeny podle zadaných kritérií.
+                </p>
+                <Button 
+                  onClick={() => {
+                    setSearchTerm('');
+                    setCategoryFilter('all');
+                    setAdvancedFilters({
+                      distributionPolicy: 'all',
+                      indexName: 'all',
+                      fundCurrency: 'all',
+                      maxTer: initialMaxTer,
+                    })
+                  }}
+                  className="mt-4"
+                  variant="outline"
+                >
+                  Vymazat filtry
+                </Button>
+              </div>
+            )}
+          </div>
+          <div className="lg:col-span-1">
+            <ETFAdvancedFilters
+              etfs={etfs}
+              filters={advancedFilters}
+              onFilterChange={setAdvancedFilters}
+            />
+          </div>
         </div>
+
 
         {totalCount > 10 && filteredETFs.length > 0 && (
           <div className="text-center mt-12">
