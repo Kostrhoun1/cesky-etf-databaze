@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { ETF } from '@/types/etf';
 import { formatPercentage, formatTER } from '@/utils/csvParser';
 import { formatCurrency, getDistributionPolicyLabel } from '@/utils/etfFormatters';
-import ETFComparisonHeader from './comparison/ETFComparisonHeader';
+import ETFDetailedComparisonHeader from './comparison/ETFDetailedComparisonHeader';
 import ETFComparisonTable from './comparison/ETFComparisonTable';
 import ETFPerformanceMetricsTable from './comparison/ETFPerformanceMetricsTable';
 import ETFFundDetailsTable from './comparison/ETFFundDetailsTable';
@@ -45,7 +44,7 @@ const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <ETFComparisonHeader onBack={onBack} />
+      <ETFDetailedComparisonHeader onBack={onBack} />
 
       <div className="space-y-6">
         <ETFComparisonTable title="Základní informace" data={basicInfoData} selectedETFs={selectedETFs} />

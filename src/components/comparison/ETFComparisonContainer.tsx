@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ETFComparisonHeader from './ETFComparisonHeader';
 import ETFCategoryTabs from './ETFCategoryTabs';
@@ -19,16 +20,13 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
 
   const {
     searchTerm,
-    sortBy,
-    sortOrder,
-    advancedFilters,
     filteredETFs,
     categories: logicCategories,
     activeCategory,
-    handleSort,
     handleSearch,
     handleCategoryChange,
-    handleAdvancedFilterChange
+    handleAdvancedFilterChange,
+    advancedFilters
   } = useETFTableLogic(etfs);
 
   return (
@@ -51,9 +49,6 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
             etfs={filteredETFs}
             searchTerm={searchTerm}
             onSearchChange={handleSearch}
-            sortBy={sortBy}
-            sortOrder={sortOrder}
-            onSort={handleSort}
             isLoading={isLoading}
             onSelectETF={addETFToComparison}
             isETFSelected={isETFSelected}

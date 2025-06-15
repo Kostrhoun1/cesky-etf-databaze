@@ -9,9 +9,6 @@ interface ETFComparisonTableSectionProps {
   etfs: ETFListItem[];
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  sortBy: string;
-  sortOrder: 'asc' | 'desc';
-  onSort: (field: string) => void;
   isLoading: boolean;
   onSelectETF: (etf: ETFListItem) => Promise<boolean>;
   isETFSelected: (isin: string) => boolean;
@@ -24,9 +21,6 @@ const ETFComparisonTableSection: React.FC<ETFComparisonTableSectionProps> = ({
   etfs,
   searchTerm,
   onSearchChange,
-  sortBy,
-  sortOrder,
-  onSort,
   isLoading,
   onSelectETF,
   isETFSelected,
@@ -60,9 +54,6 @@ const ETFComparisonTableSection: React.FC<ETFComparisonTableSectionProps> = ({
         onSelectETF={onSelectETF}
         isETFSelected={isETFSelected}
         canAddMore={canAddMore}
-        sortBy={sortBy}
-        sortOrder={sortOrder}
-        onSort={onSort}
       />
     </div>
   );
