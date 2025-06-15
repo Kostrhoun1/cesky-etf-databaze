@@ -7,6 +7,8 @@ export interface AdvancedFiltersState {
   indexName: string;
   fundCurrency: string;
   maxTer: number;
+  replicationMethod: string;
+  fundSizeRange: string;
 }
 
 export const useETFTableLogic = (etfs: ETFListItem[]) => {
@@ -23,6 +25,8 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     indexName: 'all',
     fundCurrency: 'all',
     maxTer: initialMaxTer,
+    replicationMethod: 'all',
+    fundSizeRange: 'all',
   });
 
   const categories = useMemo(() => 
@@ -109,19 +113,45 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
           (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase().includes(searchLower)) ||
           (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase().includes(searchLower)) ||
           (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().includes(searchLower)) ||
-          (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes('sxr8')) ||
           (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes(searchLower));
         
         return basicFieldsMatch || tickerFieldsMatch;
       })
       .filter(etf => etf.category === activeCategory)
       .filter(etf => {
-        const { distributionPolicy, indexName, fundCurrency, maxTer } = advancedFilters;
+        const { distributionPolicy, indexName, fundCurrency, maxTer, replicationMethod, fundSizeRange } = advancedFilters;
         const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
         const indexMatch = indexName === 'all' || etf.index_name === indexName;
         const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
         const terMatch = (etf.ter_numeric || 0) <= maxTer;
-        return distPolicyMatch && indexMatch && currencyMatch && terMatch;
+        
+        // Replication method filter
+        const replicationMatch = replicationMethod === 'all' || etf.replication === replicationMethod;
+        
+        // Fund size filter
+        let fundSizeMatch = true;
+        if (fundSizeRange !== 'all' && etf.fund_size_numeric) {
+          const sizeInMillions = etf.fund_size_numeric / 1000000; // Convert to millions
+          switch (fundSizeRange) {
+            case 'small':
+              fundSizeMatch = sizeInMillions < 100;
+              break;
+            case 'medium':
+              fundSizeMatch = sizeInMillions >= 100 && sizeInMillions < 1000;
+              break;
+            case 'large':
+              fundSizeMatch = sizeInMillions >= 1000 && sizeInMillions < 10000;
+              break;
+            case 'xlarge':
+              fundSizeMatch = sizeInMillions >= 10000;
+              break;
+            default:
+              fundSizeMatch = true;
+          }
+        }
+        
+        return distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch;
       })
       .sort((a, b) => {
         let aValue: any = a[sortBy as keyof ETFListItem];

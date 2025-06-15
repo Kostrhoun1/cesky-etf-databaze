@@ -39,6 +39,8 @@ const ETFComparison: React.FC = () => {
     indexName: 'all',
     fundCurrency: 'all',
     maxTer: 1,
+    replicationMethod: 'all',
+    fundSizeRange: 'all',
   });
 
   // Získání kategorií z dat
@@ -70,13 +72,38 @@ const ETFComparison: React.FC = () => {
         (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes(searchLower));
       
       // Pokročilé filtry
-      const { distributionPolicy, indexName, fundCurrency, maxTer } = advancedFilters;
+      const { distributionPolicy, indexName, fundCurrency, maxTer, replicationMethod, fundSizeRange } = advancedFilters;
       const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
       const indexMatch = indexName === 'all' || etf.index_name === indexName;
       const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
       const terMatch = (etf.ter_numeric || 0) <= maxTer;
       
-      return categoryMatch && searchMatch && distPolicyMatch && indexMatch && currencyMatch && terMatch;
+      // Replication method filter
+      const replicationMatch = replicationMethod === 'all' || etf.replication === replicationMethod;
+      
+      // Fund size filter
+      let fundSizeMatch = true;
+      if (fundSizeRange !== 'all' && etf.fund_size_numeric) {
+        const sizeInMillions = etf.fund_size_numeric / 1000000; // Convert to millions
+        switch (fundSizeRange) {
+          case 'small':
+            fundSizeMatch = sizeInMillions < 100;
+            break;
+          case 'medium':
+            fundSizeMatch = sizeInMillions >= 100 && sizeInMillions < 1000;
+            break;
+          case 'large':
+            fundSizeMatch = sizeInMillions >= 1000 && sizeInMillions < 10000;
+            break;
+          case 'xlarge':
+            fundSizeMatch = sizeInMillions >= 10000;
+            break;
+          default:
+            fundSizeMatch = true;
+        }
+      }
+      
+      return categoryMatch && searchMatch && distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch;
     });
   }, [etfs, activeCategory, searchTerm, advancedFilters]);
 
