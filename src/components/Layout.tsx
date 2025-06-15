@@ -1,8 +1,10 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Menu } from 'lucide-react';
 import Logo from './Logo';
 
 interface LayoutProps {
@@ -11,6 +13,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Upravené pořadí a přejmenování Blog → Tipy
   const navigation = [
@@ -33,6 +36,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <Logo size={180} className="group-hover:opacity-90 transition-opacity" />
               </Link>
             </div>
+            
+            {/* Desktop navigation */}
             <nav className="hidden md:flex space-x-1">
               {navigation.map((item) => (
                 <Link
@@ -48,19 +53,47 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </Link>
               ))}
             </nav>
-            {/* Mobile menu button */}
+            
+            {/* Mobile menu */}
             <div className="md:hidden">
-              <Button variant="ghost" size="sm">
-                Menu
-              </Button>
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="sm">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Otevřít menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-80">
+                  <div className="mt-6">
+                    <nav className="flex flex-col space-y-2">
+                      {navigation.map((item) => (
+                        <Link
+                          key={item.name}
+                          to={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`px-4 py-3 rounded-md text-base font-medium transition-colors ${
+                            item.current
+                              ? 'text-violet-600 bg-violet-100'
+                              : 'text-gray-600 hover:text-violet-600 hover:bg-violet-50'
+                          }`}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </nav>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
       </header>
+      
       {/* Main content */}
       <main>
         {children}
       </main>
+      
       {/* Footer */}
       <footer className="bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -105,4 +138,3 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 };
 
 export default Layout;
-
