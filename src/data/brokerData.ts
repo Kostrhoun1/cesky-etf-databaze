@@ -4,7 +4,7 @@ export const brokers: Broker[] = [
   {
     id: 'degiro',
     name: 'DEGIRO',
-    logo: 'https://media.degiro.nl/uploads/logos/degiro-horizontal-logo.svg',
+    logo: '/lovable-uploads/f9bacf3b-7b11-4c31-917d-e16803dc0887.png',
     description: 'Populární broker s nízkými poplatky a širokou nabídkou ETF',
     rating: 4.5,
     regulation: 'BaFin (DE), DNB/AFM (NL)',
@@ -37,7 +37,7 @@ export const brokers: Broker[] = [
   {
     id: 'xtb',
     name: 'XTB',
-    logo: 'https://www.xtb.com/cs/hubfs/xtb_logo_2022_horizontal_black.svg',
+    logo: '/lovable-uploads/a7162820-5478-4cd8-9bfd-fd04b80a42ff.png',
     description: 'Polský broker s výbornou českou podporou a vzdělávacími materiály',
     rating: 4.7,
     regulation: 'CySEC (EU), ČNB (CZ)',
@@ -70,7 +70,7 @@ export const brokers: Broker[] = [
   {
     id: 'fio',
     name: 'Fio e-Broker',
-    logo: 'https://www.fio.cz/images/fb/fb-fio-logo.png',
+    logo: '/lovable-uploads/55aac89b-3834-421c-8689-34fb13fad2b1.png',
     description: 'Český broker s lokální podporou a standardním zdaněním českých dividend',
     rating: 4.0,
     regulation: 'ČNB (CZ)',
@@ -136,7 +136,7 @@ export const brokers: Broker[] = [
   {
     id: 'ibkr',
     name: 'Interactive Brokers',
-    logo: 'https://www.interactivebrokers.com/images/web/logos/ib-logo-text-black.svg',
+    logo: '/lovable-uploads/6462aac9-b2f4-4030-9c58-feec749d812d.png',
     description: 'Globální broker s nejširší nabídkou a pokročilými nástroji',
     rating: 4.8,
     regulation: 'CBI (IE), SEC (US), FCA (UK), ČNB (CZ)',
