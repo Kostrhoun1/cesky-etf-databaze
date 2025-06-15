@@ -12,14 +12,14 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
 
+  // Upravené pořadí a přejmenování Blog → Tipy
   const navigation = [
     { name: 'Domů', href: '/', current: location.pathname === '/' },
     { name: 'Srovnání ETF', href: '/srovnani-etf', current: location.pathname === '/srovnani-etf' },
     { name: 'Co jsou ETF', href: '/co-jsou-etf', current: location.pathname === '/co-jsou-etf' },
     { name: 'Kde koupit ETF', href: '/kde-koupit-etf', current: location.pathname === '/kde-koupit-etf' },
+    { name: 'Tipy', href: '/blog', current: location.pathname.startsWith('/blog') },
     { name: 'Nástroje', href: '/nastroje', current: location.pathname === '/nastroje' },
-    // Nová položka v menu
-    { name: 'Blog', href: '/blog', current: location.pathname === '/blog' },
   ];
 
   return (
@@ -80,8 +80,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li><Link to="/srovnani-etf" className="hover:text-white transition-colors">Srovnání ETF</Link></li>
                 <li><Link to="/co-jsou-etf" className="hover:text-white transition-colors">Co jsou ETF</Link></li>
                 <li><Link to="/kde-koupit-etf" className="hover:text-white transition-colors">Kde koupit ETF</Link></li>
+                <li><Link to="/blog" className="hover:text-white transition-colors">Tipy</Link></li>
                 <li><Link to="/nastroje" className="hover:text-white transition-colors">Nástroje</Link></li>
-                <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
               </ul>
             </div>
             <div>
