@@ -34,7 +34,6 @@ const ETFTableRow: React.FC<ETFTableRowProps> = ({ etf }) => {
           )}
         </div>
       </TableCell>
-      <TableCell>{etf.fund_provider}</TableCell>
       <TableCell className="text-right">
         {formatPercentage(etf.ter_numeric)}
       </TableCell>
@@ -54,6 +53,9 @@ const ETFTableRow: React.FC<ETFTableRowProps> = ({ etf }) => {
         <Badge variant="outline" className="text-xs">
           {etf.category}
         </Badge>
+      </TableCell>
+      <TableCell className="text-sm text-muted-foreground">
+        {etf.index_name || '-'}
       </TableCell>
     </TableRow>
   );

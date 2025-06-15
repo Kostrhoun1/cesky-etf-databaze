@@ -30,12 +30,6 @@ const ETFTableHeader: React.FC<ETFTableHeaderProps> = ({ sortBy, sortOrder, onSo
           {getSortIcon('name')}
         </TableHead>
         <TableHead 
-          className="cursor-pointer hover:bg-muted/50"
-          onClick={() => onSort('fund_provider')}
-        >
-          Poskytovatel
-        </TableHead>
-        <TableHead 
           className="cursor-pointer hover:bg-muted/50 text-right"
           onClick={() => onSort('ter_numeric')}
         >
@@ -71,6 +65,7 @@ const ETFTableHeader: React.FC<ETFTableHeaderProps> = ({ sortBy, sortOrder, onSo
           {getSortIcon('return_5y')}
         </TableHead>
         <TableHead>Kategorie</TableHead>
+        <TableHead>Sledovaný index</TableHead>
       </TableRow>
     </TableHeader>
   );

@@ -209,12 +209,6 @@ const ETFSearchSection: React.FC = () => {
                             {getSortIcon('name')}
                           </th>
                           <th 
-                            className="text-left p-3 cursor-pointer hover:bg-gray-50"
-                            onClick={() => handleSort('fund_provider')}
-                          >
-                            Poskytovatel
-                          </th>
-                          <th 
                             className="text-right p-3 cursor-pointer hover:bg-gray-50"
                             onClick={() => handleSort('ter_numeric')}
                           >
@@ -236,6 +230,7 @@ const ETFSearchSection: React.FC = () => {
                             {getSortIcon('return_1y')}
                           </th>
                           <th>Typ fondu</th>
+                          <th>Sledovaný index</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -257,7 +252,6 @@ const ETFSearchSection: React.FC = () => {
                                 )}
                               </div>
                             </td>
-                            <td className="p-3">{etf.fund_provider}</td>
                             <td className="p-3 text-right">
                               {formatPercentage(etf.ter_numeric)}
                             </td>
@@ -271,6 +265,9 @@ const ETFSearchSection: React.FC = () => {
                               <Badge variant="outline" className="text-xs">
                                 {getDistributionPolicyLabel(etf.distribution_policy)}
                               </Badge>
+                            </td>
+                            <td className="p-3 text-sm text-gray-600">
+                              {etf.index_name || '-'}
                             </td>
                           </tr>
                         ))}
