@@ -15,9 +15,18 @@ import { useETFTableLogic } from '@/hooks/useETFTableLogic';
 interface ETFTableProps {
   etfs: ETFListItem[];
   onRefresh?: () => void;
+  onSelectETF?: (etf: ETFListItem) => boolean;
+  isETFSelected?: (isin: string) => boolean;
+  canAddMore?: boolean;
 }
 
-const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
+const ETFTable: React.FC<ETFTableProps> = ({ 
+  etfs, 
+  onRefresh, 
+  onSelectETF,
+  isETFSelected,
+  canAddMore = true
+}) => {
   const {
     searchTerm,
     sortBy,
@@ -84,10 +93,17 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
                   sortBy={sortBy}
                   sortOrder={sortOrder}
                   onSort={handleSort}
+                  showComparisonColumn={!!onSelectETF}
                 />
                 <TableBody>
                   {paginatedETFs.map((etf) => (
-                    <ETFTableRow key={etf.isin} etf={etf} />
+                    <ETFTableRow 
+                      key={etf.isin} 
+                      etf={etf}
+                      onSelectETF={onSelectETF}
+                      isETFSelected={isETFSelected}
+                      canAddMore={canAddMore}
+                    />
                   ))}
                 </TableBody>
               </Table>
