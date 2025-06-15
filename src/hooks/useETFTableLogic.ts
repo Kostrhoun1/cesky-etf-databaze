@@ -1,4 +1,3 @@
-
 import { useState, useMemo, useEffect } from 'react';
 import { ETFListItem } from '@/types/etf';
 
@@ -49,6 +48,20 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     console.log('Search term:', searchTerm);
     console.log('Total ETFs:', etfs.length);
     console.log('Active category:', activeCategory);
+    console.log('Advanced filters:', advancedFilters);
+
+    // Debug fund size filter specifically
+    if (advancedFilters.fundSizeRange !== 'all') {
+      console.log('=== Fund Size Filter Debug ===');
+      console.log('Fund size range:', advancedFilters.fundSizeRange);
+      
+      const fundSizeSample = etfs.slice(0, 10).map(etf => ({
+        name: etf.name,
+        fund_size_numeric: etf.fund_size_numeric,
+        sizeInMillions: etf.fund_size_numeric ? etf.fund_size_numeric / 1000000 : 0
+      }));
+      console.log('Fund size sample (first 10 ETFs):', fundSizeSample);
+    }
 
     // Pokud hledáme konkrétní ISIN, přidáme debug informace
     if (searchTerm.toLowerCase() === 'bg9000011163') {
@@ -98,7 +111,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
       console.log('ETFs with SXR8 ticker:', sxr8ETFs.length);
     }
 
-    return etfs
+    const result = etfs
       .filter(etf => {
         const searchLower = searchTerm.toLowerCase();
         
@@ -129,29 +142,56 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
         // Replication method filter
         const replicationMatch = replicationMethod === 'all' || etf.replication === replicationMethod;
         
-        // Fund size filter
+        // Fund size filter - opravená logika
         let fundSizeMatch = true;
         if (fundSizeRange !== 'all' && etf.fund_size_numeric) {
-          const sizeInMillions = etf.fund_size_numeric / 1000000; // Convert to millions
+          // Hodnoty v databázi jsou už v základních jednotkách (EUR, USD atd.)
+          // Budeme pracovat přímo s hodnotami, ne je převádět
+          const fundSize = etf.fund_size_numeric;
+          
           switch (fundSizeRange) {
             case 'small':
-              fundSizeMatch = sizeInMillions < 100;
+              // Malé: méně než 100 milionů
+              fundSizeMatch = fundSize < 100000000;
               break;
             case 'medium':
-              fundSizeMatch = sizeInMillions >= 100 && sizeInMillions < 1000;
+              // Střední: 100 mil. - 1 mld.
+              fundSizeMatch = fundSize >= 100000000 && fundSize < 1000000000;
               break;
             case 'large':
-              fundSizeMatch = sizeInMillions >= 1000 && sizeInMillions < 10000;
+              // Velké: 1 - 10 mld.
+              fundSizeMatch = fundSize >= 1000000000 && fundSize < 10000000000;
               break;
             case 'xlarge':
-              fundSizeMatch = sizeInMillions >= 10000;
+              // Velmi velké: více než 10 mld.
+              fundSizeMatch = fundSize >= 10000000000;
               break;
             default:
               fundSizeMatch = true;
           }
+          
+          // Debug pro konkrétní ETF
+          if (advancedFilters.fundSizeRange !== 'all') {
+            console.log(`ETF ${etf.name}: size=${fundSize}, range=${fundSizeRange}, match=${fundSizeMatch}`);
+          }
         }
         
-        return distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch;
+        const allFiltersMatch = distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch;
+        
+        // Debug pro filtry, pokud není fund size 'all'
+        if (advancedFilters.fundSizeRange !== 'all' && !allFiltersMatch) {
+          console.log(`ETF ${etf.name} filtered out:`, {
+            distPolicyMatch,
+            indexMatch,
+            currencyMatch,
+            terMatch,
+            replicationMatch,
+            fundSizeMatch,
+            fund_size_numeric: etf.fund_size_numeric
+          });
+        }
+        
+        return allFiltersMatch;
       })
       .sort((a, b) => {
         let aValue: any = a[sortBy as keyof ETFListItem];
@@ -192,6 +232,9 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
           return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
         }
       });
+
+    console.log(`Filtered ETFs: ${result.length} out of ${etfs.length}`);
+    return result;
   }, [etfs, searchTerm, activeCategory, advancedFilters, sortBy, sortOrder]);
 
   const totalPages = Math.ceil(filteredETFs.length / itemsPerPage);
