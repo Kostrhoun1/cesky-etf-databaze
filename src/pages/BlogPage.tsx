@@ -82,9 +82,9 @@ const BlogPage: React.FC = () => (
         {ARTICLES.map((article, idx) => (
           <Card
             key={article.slug}
-            className="group bg-white/90 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-200 animate-fade-in"
+            className="group bg-white/90 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-200 animate-fade-in flex flex-col h-full"
           >
-            <Link to={`/tipy/${article.slug}`} className="block h-full focus:outline-none group">
+            <Link to={`/tipy/${article.slug}`} className="block h-full focus:outline-none group flex flex-col">
               <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
                 <img
                   src={ARTICLE_IMAGES[article.slug] || PLACEHOLDER_IMAGE}
@@ -102,12 +102,14 @@ const BlogPage: React.FC = () => (
                   TIP #{idx + 1}
                 </span>
               </div>
-              <CardContent className="flex flex-col h-full justify-between p-5">
-                <h2 className="font-bold text-lg leading-tight mb-2 text-gray-900 group-hover:text-violet-700 transition-colors">
-                  {article.title}
-                </h2>
-                <p className="text-gray-600 text-sm line-clamp-3 min-h-[60px]">{article.perex}</p>
-                <div className="flex mt-4 items-center gap-1">
+              <CardContent className="flex flex-col h-full justify-between p-5 flex-1">
+                <div className="flex-1">
+                  <h2 className="font-bold text-lg leading-tight mb-3 text-gray-900 group-hover:text-violet-700 transition-colors">
+                    {article.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">{article.perex}</p>
+                </div>
+                <div className="flex items-center gap-1 mt-auto">
                   <span className="text-violet-700 font-medium text-sm group-hover:underline underline-offset-2 transition-colors">
                     Číst více
                   </span>
@@ -123,4 +125,3 @@ const BlogPage: React.FC = () => (
 );
 
 export default BlogPage;
-
