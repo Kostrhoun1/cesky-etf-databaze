@@ -296,7 +296,7 @@ const BeginnerGuide: React.FC = () => {
                   <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-bold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105">
                     <Link to="/srovnani-etf">Najít první ETF</Link>
                   </Button>
-                  <Button asChild size="lg" variant="outline" className="border-2 border-white/30 text-white hover:bg-white/10 hover:text-white font-bold px-8 py-4 text-lg transition-all hover:scale-105">
+                  <Button asChild size="lg" variant="outline" className="border-2 border-white/30 text-white hover:bg-white/10 bg-transparent font-bold px-8 py-4 text-lg transition-all hover:scale-105">
                     <Link to="/kde-koupit-etf">Vybrat brokera</Link>
                   </Button>
                 </div>
