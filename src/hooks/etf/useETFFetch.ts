@@ -48,7 +48,8 @@ export const useETFFetch = () => {
               primary_ticker,
               distribution_policy,
               index_name,
-              fund_currency
+              fund_currency,
+              replication
             `)
             .order('fund_size_numeric', { ascending: false })
             .range(offset, offset + batchSize - 1);
@@ -93,7 +94,8 @@ export const useETFFetch = () => {
             primary_ticker,
             distribution_policy,
             index_name,
-            fund_currency
+            fund_currency,
+            replication
           `)
           .order('fund_size_numeric', { ascending: false })
           .limit(limit);
