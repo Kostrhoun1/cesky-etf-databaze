@@ -19,11 +19,9 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
   const { selectedETFs, addETFToComparison, removeETFFromComparison, clearComparison, isETFSelected, canAddMore } = useETFComparison();
 
   const {
-    searchTerm,
     filteredETFs,
     categories: logicCategories,
     activeCategory,
-    handleSearch,
     handleCategoryChange,
     handleAdvancedFilterChange,
     advancedFilters
@@ -47,8 +45,6 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
           
           <ETFComparisonTableSection
             etfs={filteredETFs}
-            searchTerm={searchTerm}
-            onSearchChange={handleSearch}
             isLoading={isLoading}
             onSelectETF={addETFToComparison}
             isETFSelected={isETFSelected}
