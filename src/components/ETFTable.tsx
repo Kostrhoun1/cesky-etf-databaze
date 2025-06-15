@@ -26,10 +26,9 @@ const ETFTable: React.FC<ETFTableProps> = ({
     currentPage,
     setCurrentPage,
     itemsPerPage,
-    filters,
-    handleFilterChange,
     handleSearch,
-    sortConfig,
+    sortBy,
+    sortOrder,
     handleSort,
     searchTerm,
     filteredETFs,
@@ -51,16 +50,18 @@ const ETFTable: React.FC<ETFTableProps> = ({
   return (
     <div className="space-y-6">
       <ETFTableFilters
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        onSearch={handleSearch}
         searchTerm={searchTerm}
+        onSearchChange={handleSearch}
       />
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <ETFTableHeader sortConfig={sortConfig} onSort={handleSort} />
+            <ETFTableHeader 
+              sortBy={sortBy} 
+              sortOrder={sortOrder} 
+              onSort={handleSort} 
+            />
             <tbody className="bg-white divide-y divide-gray-200">
               {paginatedETFs.map((etf) => (
                 <ETFTableRow
@@ -81,8 +82,6 @@ const ETFTable: React.FC<ETFTableProps> = ({
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
-        totalItems={filteredETFs.length}
-        itemsPerPage={itemsPerPage}
       />
     </div>
   );
