@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { Menu, Mail } from 'lucide-react';
 import Logo from './Logo';
 
 interface LayoutProps {
@@ -106,6 +106,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 Váš moderní a komplexní průvodce světem ETF fondů pro české investory. 
                 Srovnání, analýzy a vzdělávací obsah pro vaše investiční rozhodnutí.
               </p>
+              <div className="flex items-center gap-2 text-slate-400">
+                <Mail className="h-4 w-4" />
+                <a href="mailto:info@etfpruvodce.cz" className="hover:text-white transition-colors">
+                  info@etfpruvodce.cz
+                </a>
+              </div>
             </div>
             <div>
               <h4 className="text-md font-semibold text-slate-200 mb-4 uppercase tracking-wider">Sekce</h4>
