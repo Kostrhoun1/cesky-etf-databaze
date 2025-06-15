@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Plus, Check, Loader2 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Loader2 } from 'lucide-react';
 import { ETFListItem } from '@/types/etf';
 import { formatPercentage, formatTER, formatCurrency } from '@/utils/csvParser';
 import { getReturnColor, getDistributionPolicyLabel } from '@/utils/etfFormatters';
@@ -23,34 +23,47 @@ const ETFTableRow: React.FC<ETFTableRowProps> = ({
   canAddMore = true,
   isLoading = false,
 }) => {
-  const handleSelectClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (onSelect && !isLoading) {
+  const handleSelectClick = (checked: boolean) => {
+    if (onSelect && !isLoading && (canAddMore || isSelected)) {
       onSelect();
     }
   };
 
   return (
-    <tr className="hover:bg-gray-50 cursor-pointer">
+    <tr className="hover:bg-gray-50">
       <td className="px-6 py-4 whitespace-nowrap">
-        <div className="flex flex-col space-y-1">
-          <Link
-            to={`/etf/${etf.isin}`}
-            className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline"
-          >
-            {etf.name}
-          </Link>
-          <div className="text-xs text-gray-500">{etf.isin}</div>
-          <div className="flex flex-wrap gap-1 mt-1">
-            <Badge variant="outline" className="text-xs">
-              {etf.fund_provider}
-            </Badge>
-            {etf.degiro_free && (
-              <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
-                DEGIRO Free
+        <div className="flex items-start space-x-3">
+          {onSelect && (
+            <div className="flex items-center pt-1">
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+              ) : (
+                <Checkbox
+                  checked={isSelected}
+                  onCheckedChange={handleSelectClick}
+                  disabled={!canAddMore && !isSelected}
+                />
+              )}
+            </div>
+          )}
+          <div className="flex flex-col space-y-1 flex-1">
+            <Link
+              to={`/etf/${etf.isin}`}
+              className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              {etf.name}
+            </Link>
+            <div className="text-xs text-gray-500">{etf.isin}</div>
+            <div className="flex flex-wrap gap-1 mt-1">
+              <Badge variant="outline" className="text-xs">
+                {etf.fund_provider}
               </Badge>
-            )}
+              {etf.degiro_free && (
+                <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
+                  DEGIRO Free
+                </Badge>
+              )}
+            </div>
           </div>
         </div>
       </td>
@@ -78,34 +91,6 @@ const ETFTableRow: React.FC<ETFTableRowProps> = ({
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {getDistributionPolicyLabel(etf.distribution_policy)}
       </td>
-      {onSelect && (
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-          <Button
-            variant={isSelected ? "default" : "outline"}
-            size="sm"
-            onClick={handleSelectClick}
-            disabled={(!canAddMore && !isSelected) || isLoading}
-            className="flex items-center gap-1"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="h-3 w-3 animate-spin" />
-                Načítání...
-              </>
-            ) : isSelected ? (
-              <>
-                <Check className="h-3 w-3" />
-                Vybráno
-              </>
-            ) : (
-              <>
-                <Plus className="h-3 w-3" />
-                Vybrat
-              </>
-            )}
-          </Button>
-        </td>
-      )}
     </tr>
   );
 };

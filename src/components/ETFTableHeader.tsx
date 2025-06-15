@@ -84,9 +84,6 @@ const ETFTableHeader: React.FC<ETFTableHeaderProps> = ({
         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           Typ fondu
         </th>
-        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Akce
-        </th>
       </tr>
     </thead>
   );
