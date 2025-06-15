@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -38,7 +37,7 @@ const WhatAreETFs: React.FC = () => {
                 <Link to="/srovnani-etf">Porovnat ETF fondy</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-2 border-violet-200 text-violet-700 hover:bg-violet-50 px-8 py-4 text-lg font-semibold">
-                <Link to="#jak-zacit">Jak začít investovat</Link>
+                <Link to="/navod-pro-zacatecniky">Jak začít investovat</Link>
               </Button>
             </div>
           </div>
@@ -396,7 +395,7 @@ const WhatAreETFs: React.FC = () => {
                   <Link to="/srovnani-etf">Porovnat ETF a brokery</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline" className="border-2 border-orange-300 text-orange-700 hover:bg-orange-50 font-bold transition-all">
-                  <Link to="/nastroje">Návod pro začátečníky</Link>
+                  <Link to="/navod-pro-zacatecniky">Návod pro začátečníky</Link>
                 </Button>
               </div>
             </div>
@@ -468,7 +467,7 @@ const WhatAreETFs: React.FC = () => {
                     <Link to="/srovnani-etf">Porovnat ETF fondy</Link>
                   </Button>
                   <Button asChild size="lg" variant="outline" className="border-2 border-white/30 text-white hover:bg-white/10 hover:text-white font-bold px-8 py-4 text-lg transition-all hover:scale-105">
-                    <Link to="/nastroje">Investiční kalkulačka</Link>
+                    <Link to="/navod-pro-zacatecniky">Návod pro začátečníky</Link>
                   </Button>
                 </div>
               </div>

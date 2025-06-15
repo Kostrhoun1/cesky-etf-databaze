@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -11,6 +12,7 @@ import Tools from "./pages/Tools";
 import ETFDetail from "./pages/ETFDetail";
 import NotFound from "./pages/NotFound";
 import BlogPage from "./pages/BlogPage";
+import BeginnerGuide from "./pages/BeginnerGuide";
 import NejlepsiETF2025 from "./pages/blog/NejlepsiETF2025";
 import NejlepsiETFNaAmerickeAkcie from "./pages/blog/NejlepsiETFNaAmerickeAkcie";
 import NejlepsiETFNaNASDAQ from "./pages/blog/NejlepsiETFNaNASDAQ";
@@ -34,6 +36,7 @@ const App = () => (
         <Route path="/kde-koupit-etf" element={<WhereToBuyETFs />} />
         <Route path="/degiro-recenze" element={<DEGIROReview />} />
         <Route path="/nastroje" element={<Tools />} />
+        <Route path="/navod-pro-zacatecniky" element={<BeginnerGuide />} />
         <Route path="/etf/:isin" element={<ETFDetail />} />
         <Route path="/tipy" element={<BlogPage />} />
         <Route path="/tipy/nejlepsi-etf-2025" element={<NejlepsiETF2025 />} />
