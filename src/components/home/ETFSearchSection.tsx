@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -134,6 +133,12 @@ const ETFSearchSection: React.FC = () => {
     return '';
   };
 
+  const getDistributionPolicyLabel = (policy: string) => {
+    if (policy === 'Accumulating') return 'Akumulační';
+    if (policy === 'Distributing') return 'Distribuční';
+    return policy || '-';
+  };
+
   return (
     <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -230,7 +235,7 @@ const ETFSearchSection: React.FC = () => {
                             Výnos 1Y
                             {getSortIcon('return_1y')}
                           </th>
-                          <th>Kategorie</th>
+                          <th>Typ fondu</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -264,7 +269,7 @@ const ETFSearchSection: React.FC = () => {
                             </td>
                             <td className="p-3">
                               <Badge variant="outline" className="text-xs">
-                                {etf.category}
+                                {getDistributionPolicyLabel(etf.distribution_policy)}
                               </Badge>
                             </td>
                           </tr>
