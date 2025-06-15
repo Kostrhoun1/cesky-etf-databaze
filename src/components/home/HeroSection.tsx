@@ -27,7 +27,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ totalCount }) => {
             <Button asChild size="lg" className="hover-scale bg-violet-600 hover:bg-violet-700 text-white">
               <Link to="/srovnani-etf">Porovnat ETF fondy</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white/70 text-white hover:bg-white hover:text-gray-900 hover-scale">
+            <Button asChild size="lg" variant="outline" className="border-white/70 text-gray-900 bg-white hover:bg-gray-100 hover:text-gray-900 hover-scale">
               <Link to="/co-jsou-etf">Co jsou ETF?</Link>
             </Button>
           </div>

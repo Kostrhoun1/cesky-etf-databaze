@@ -20,10 +20,10 @@ const CTASection: React.FC<CTASectionProps> = ({ totalCount }) => {
           Srovnejte si přes {displayCount.toLocaleString()}+ ETF a vytvořte si ideální portfolio ještě dnes.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" variant="secondary" className="bg-white text-violet-700 hover:bg-violet-50 font-semibold">
+          <Button asChild size="lg" variant="secondary" className="bg-white text-violet-700 hover:bg-gray-100 hover:text-violet-700 font-semibold">
             <Link to="/srovnani-etf">Srovnat ETF fondy</Link>
           </Button>
-          <Button asChild size="lg" variant="outline" className="text-white border-white/50 hover:bg-white/10 hover:text-white">
+          <Button asChild size="lg" variant="outline" className="text-white border-white/70 bg-transparent hover:bg-white hover:text-violet-700">
             <Link to="/co-jsou-etf">Zjistit více o ETF</Link>
           </Button>
         </div>
