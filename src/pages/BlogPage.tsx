@@ -22,8 +22,7 @@ const BlogPage: React.FC = () => {
       slug: 'nejlepsi-etf-2025',
       category: 'Doporučení',
       readTime: '8 min',
-      icon: <TrendingUp className="h-5 w-5" />,
-      featured: true
+      icon: <TrendingUp className="h-5 w-5" />
     },
     {
       title: 'Nejlepší ETF na americké akcie',
@@ -100,38 +99,9 @@ const BlogPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Featured Article */}
-        {articles.filter(article => article.featured).map((article) => (
-          <Card key={article.slug} className="mb-8 bg-gradient-to-r from-violet-50 to-blue-50 border-violet-200">
-            <CardHeader>
-              <div className="flex items-center gap-2 mb-2">
-                <Badge className="bg-violet-600 hover:bg-violet-700">
-                  Doporučujeme
-                </Badge>
-                <span className="text-sm text-gray-500">{article.readTime} čtení</span>
-              </div>
-              <CardTitle className="text-2xl mb-2 flex items-center gap-3">
-                {article.icon}
-                {article.title}
-              </CardTitle>
-              <CardDescription className="text-base">
-                {article.description}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button asChild className="group">
-                <Link to={`/tipy/${article.slug}`}>
-                  Číst článek
-                  <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-
         {/* Articles Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.filter(article => !article.featured).map((article) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {articles.map((article) => (
             <Card key={article.slug} className="hover:shadow-lg transition-shadow group">
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
@@ -161,7 +131,7 @@ const BlogPage: React.FC = () => {
         </div>
 
         {/* Call to Action Section */}
-        <Card className="mt-12 bg-gray-50 border-gray-200">
+        <Card className="bg-gray-50 border-gray-200">
           <CardContent className="p-8 text-center">
             <h3 className="text-2xl font-semibold mb-4">
               Hledáte konkrétní ETF fond?
