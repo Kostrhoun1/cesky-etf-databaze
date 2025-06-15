@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,8 +18,8 @@ const ETFSearchSection: React.FC = () => {
   const [etfs, setEtfs] = useState<ETFListItem[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>();
-  const [sortBy, setSortBy] = useState<string>('fund_size_numeric');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortBy, setSortBy] = useState<string>('ter_numeric');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [showDetailedComparison, setShowDetailedComparison] = useState(false);
 
   const {
@@ -181,6 +182,30 @@ const ETFSearchSection: React.FC = () => {
       .sort((a, b) => {
         let aValue: any = a[sortBy as keyof ETFListItem];
         let bValue: any = b[sortBy as keyof ETFListItem];
+        
+        // Speciální logika pro TER - hodnoty 0 (N/A) řadíme vždy na konec
+        if (sortBy === 'ter_numeric') {
+          const aTer = aValue || 0;
+          const bTer = bValue || 0;
+          
+          // Pokud je jeden z TER roven 0 (N/A), řadíme ho jako nejhorší
+          if (aTer === 0 && bTer !== 0) {
+            return sortOrder === 'asc' ? 1 : -1; // N/A na konec při asc, na konec při desc
+          }
+          if (bTer === 0 && aTer !== 0) {
+            return sortOrder === 'asc' ? -1 : 1; // N/A na konec při asc, na konec při desc
+          }
+          if (aTer === 0 && bTer === 0) {
+            return 0; // Oba jsou N/A, zachováme pořadí
+          }
+          
+          // Normální řazení pro nenulové hodnoty
+          if (sortOrder === 'asc') {
+            return aTer - bTer;
+          } else {
+            return bTer - aTer;
+          }
+        }
         
         if (typeof aValue === 'string') {
           aValue = aValue.toLowerCase();
