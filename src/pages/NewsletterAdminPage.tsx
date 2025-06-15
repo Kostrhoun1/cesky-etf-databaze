@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 
+// Newsletter zůstává stejné
 type Newsletter = {
   id: string;
   created_at: string;
@@ -16,14 +17,25 @@ type Newsletter = {
   sent_by: string | null;
 };
 
+type Subscriber = {
+  id: string;
+  email: string;
+  subscribed_at: string;
+  unsubscribed_at: string | null;
+};
+
 const NewsletterAdminPage: React.FC = () => {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
   const [sending, setSending] = useState(false);
 
-  // Load previously sent newsletters
+  // Nově - seznam odběratelů
+  const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
+  const [showSubscribers, setShowSubscribers] = useState(false);
+
   useEffect(() => {
+    // Získáme newslettery
     supabase
       .from("newsletters")
       .select("*")
@@ -31,9 +43,33 @@ const NewsletterAdminPage: React.FC = () => {
       .then(({ data, error }) => {
         if (!error && data) setNewsletters(data as Newsletter[]);
       });
+
+    // Získáme aktuální odběratele
+    supabase
+      .from("newsletter_subscribers")
+      .select("*")
+      .is("unsubscribed_at", null)
+      .order("subscribed_at", { ascending: true })
+      .limit(500)
+      .then(({ data, error }) => {
+        if (!error && data) setSubscribers(data as Subscriber[]);
+      });
   }, []);
 
-  // For demonstration: For "sending", we just save to the newsletters table
+  // Pro opakovaný reload po přihlášení nového
+  const reloadSubscribers = () => {
+    supabase
+      .from("newsletter_subscribers")
+      .select("*")
+      .is("unsubscribed_at", null)
+      .order("subscribed_at", { ascending: true })
+      .limit(500)
+      .then(({ data, error }) => {
+        if (!error && data) setSubscribers(data as Subscriber[]);
+      });
+  };
+
+  // Stávající funkcionalita zůstává, jen přidáme reload odběratelů
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!subject || !body) {
@@ -43,7 +79,7 @@ const NewsletterAdminPage: React.FC = () => {
     setSending(true);
     const { error } = await supabase
       .from("newsletters")
-      .insert({ subject, body }); // sent_at a sent_by budou null prozatím
+      .insert({ subject, body });
 
     setSending(false);
 
@@ -65,8 +101,50 @@ const NewsletterAdminPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto my-10">
+    <div className="max-w-3xl mx-auto my-10">
       <h1 className="text-3xl font-bold mb-6">Newsletter Admin</h1>
+      
+      {/* Přehled odběratelů */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <span className="font-semibold text-violet-700">
+            Odběratelů:{" "}
+            <span className="text-2xl font-mono">{subscribers.length}</span>
+          </span>
+        </div>
+        <Button variant="outline" onClick={() => setShowSubscribers(v => !v)}>
+          {showSubscribers ? "Skrýt seznam" : "Zobrazit všechny e-maily"}
+        </Button>
+      </div>
+
+      {showSubscribers && (
+        <div className="mb-10 bg-white rounded shadow p-6">
+          <div className="font-semibold mb-3 text-sm text-violet-700">
+            Seznam všech aktivních odběratelů ({subscribers.length})
+          </div>
+          <div className="overflow-auto max-h-80 border rounded bg-gray-50">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Přihlášeno</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {subscribers.map((s) => (
+                  <TableRow key={s.id}>
+                    <TableCell>{s.email}</TableCell>
+                    <TableCell>
+                      {new Date(s.subscribed_at).toLocaleString()}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSend} className="bg-white rounded shadow p-6 space-y-4 mb-8">
         <Input
           type="text"
@@ -135,3 +213,4 @@ const NewsletterAdminPage: React.FC = () => {
 };
 
 export default NewsletterAdminPage;
+
