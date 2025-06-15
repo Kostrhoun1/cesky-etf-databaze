@@ -9,6 +9,7 @@ import { runMonteCarloSimulation } from "@/utils/monteCarloUtils";
 import { AssetAllocation, SimulationResult } from "@/types/monteCarlo";
 import { ASSETS, ASSET_KEYS } from "@/utils/monteCarloUtils";
 import MonteCarloChart from "./MonteCarloChart";
+import MonteCarloDataSources from "./MonteCarloDataSources";
 
 // Helper to construct empty allocation
 function getDefaultAllocation(): AssetAllocation {
@@ -170,6 +171,10 @@ const MonteCarloSimulator: React.FC = () => {
           </Button>
         </CardContent>
       </Card>
+
+      {/* Data Sources Note */}
+      <MonteCarloDataSources />
+
       {/* Výsledky */}
       {results && results.length > 0 && (
         <Card>
