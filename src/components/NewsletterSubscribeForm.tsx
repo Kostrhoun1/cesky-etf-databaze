@@ -16,22 +16,62 @@ const NewsletterSubscribeForm: React.FC = () => {
       toast({ title: "Neplatný email", description: "Zadejte platný email." });
       return;
     }
-
     setSubmitting(true);
-    const { error } = await supabase.from("newsletter_subscribers").insert({ email });
-    setSubmitting(false);
 
-    if (error) {
-      if (error.code === "23505") {
-        setSuccess(true);
-        toast({ title: "Již přihlášeno", description: "Tento e-mail je již přihlášen k newsletteru." });
-      } else {
-        toast({ title: "Chyba při přihlášení", description: error.message || "Zkuste to prosím znovu." });
-      }
-    } else {
+    // Zkusíme insert – pokud selže na unique, znamená to, že už záznam existuje
+    const { error: insertError } = await supabase
+      .from("newsletter_subscribers")
+      .insert({ email });
+
+    if (!insertError) {
       setSuccess(true);
+      setSubmitting(false);
       toast({ title: "Přihlášeno!", description: "Brzy Vám přijde newsletter do e-mailu." });
+      return;
     }
+
+    // Pokud chyba je "duplicate key", pokusíme se obnovit odběr update-em
+    if (insertError.code === "23505") {
+      // Zjistíme, zda již v DB existuje řádek s tímto e-mailem a zda je odhlášen
+      const { data, error: selectError } = await supabase
+        .from("newsletter_subscribers")
+        .select("id, unsubscribed_at")
+        .eq("email", email)
+        .maybeSingle();
+
+      if (selectError) {
+        setSubmitting(false);
+        toast({ title: "Chyba ověření", description: selectError.message });
+        return;
+      }
+
+      // Pokud je unsubscribed_at nenulové, povolíme „znovupřihlášení“ update-em
+      if (data && data.unsubscribed_at) {
+        const { error: updateError } = await supabase
+          .from("newsletter_subscribers")
+          .update({ unsubscribed_at: null, subscribed_at: new Date().toISOString() })
+          .eq("id", data.id);
+
+        setSubmitting(false);
+
+        if (!updateError) {
+          setSuccess(true);
+          toast({ title: "Znovupřihlášeno!", description: "Váš e-mail byl znovu přihlášen k odběru newsletteru." });
+        } else {
+          toast({ title: "Chyba při obnově přihlášení", description: updateError.message });
+        }
+        return;
+      }
+
+      // Pokud unsubscribed_at je null, je už přihlášen — standardní hláška
+      setSubmitting(false);
+      setSuccess(true);
+      toast({ title: "Již přihlášeno", description: "Tento e-mail je již přihlášen k newsletteru." });
+      return;
+    }
+
+    setSubmitting(false);
+    toast({ title: "Chyba při přihlášení", description: insertError.message || "Zkuste to prosím znovu." });
   };
 
   if (success) {
