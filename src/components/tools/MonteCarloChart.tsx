@@ -14,6 +14,7 @@ import {
   Area,
   CartesianGrid,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 
 interface MonteCarloChartProps {
@@ -30,7 +31,12 @@ const chartConfig = {
 };
 
 export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => {
-  if (!results || results.length === 0) return null;
+  console.log("MonteCarloChart rendering with results:", results);
+  
+  if (!results || results.length === 0) {
+    console.log("No results available for chart");
+    return null;
+  }
 
   // Formátování Y osa v Kč
   const formatCurrency = (num: number) =>
@@ -41,37 +47,47 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
     }).format(num);
 
   return (
-    // Zvětšená výška + padding pro komfortní rozestup
-    <div className="w-full h-[440px] pb-8 flex items-start">
-      <ChartContainer config={chartConfig}>
-        <AreaChart data={results} margin={{ top: 16, right: 24, left: 4, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="year" tickFormatter={(year) => `${year}. rok`} />
+    <div className="w-full h-[440px] pb-8">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={results} margin={{ top: 16, right: 24, left: 60, bottom: 40 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+          <XAxis 
+            dataKey="year" 
+            tickFormatter={(year) => `${year}. rok`}
+            tick={{ fontSize: 12 }}
+            tickLine={{ stroke: "#94a3b8" }}
+            axisLine={{ stroke: "#94a3b8" }}
+          />
           <YAxis
             tickFormatter={formatCurrency}
-            width={90}
+            width={80}
             domain={["auto", "auto"]}
+            tick={{ fontSize: 12 }}
+            tickLine={{ stroke: "#94a3b8" }}
+            axisLine={{ stroke: "#94a3b8" }}
           />
           <ChartTooltip
             content={
               <ChartTooltipContent
                 labelKey="year"
-                formatter={(value: number, name: string) => (
-                  <span>
-                    {formatCurrency(value)} – {chartConfig[name as keyof typeof chartConfig]?.label}
-                  </span>
-                )}
+                formatter={(value: number, name: string) => [
+                  formatCurrency(value),
+                  chartConfig[name as keyof typeof chartConfig]?.label || name
+                ]}
+                labelFormatter={(year) => `${year}. rok`}
               />
             }
           />
-          <Legend content={<ChartLegendContent nameKey="dataKey" />} />
+          <Legend 
+            content={<ChartLegendContent nameKey="dataKey" />}
+            wrapperStyle={{ paddingTop: "20px" }}
+          />
           <Area
             type="monotone"
             dataKey="percentile5"
             stroke={chartConfig.percentile5.color}
             fill={chartConfig.percentile5.color}
             fillOpacity={0.13}
-            dot={false}
             strokeWidth={2}
           />
           <Area
@@ -80,7 +96,6 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
             stroke={chartConfig.percentile25.color}
             fill={chartConfig.percentile25.color}
             fillOpacity={0.18}
-            dot={false}
             strokeWidth={2}
           />
           <Area
@@ -89,7 +104,6 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
             stroke={chartConfig.percentile50.color}
             fill={chartConfig.percentile50.color}
             fillOpacity={0.22}
-            dot={false}
             strokeWidth={3}
           />
           <Area
@@ -98,7 +112,6 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
             stroke={chartConfig.percentile75.color}
             fill={chartConfig.percentile75.color}
             fillOpacity={0.18}
-            dot={false}
             strokeWidth={2}
           />
           <Area
@@ -107,7 +120,6 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
             stroke={chartConfig.percentile95.color}
             fill={chartConfig.percentile95.color}
             fillOpacity={0.13}
-            dot={false}
             strokeWidth={2}
           />
           <Area
@@ -115,15 +127,13 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
             dataKey="mean"
             stroke={chartConfig.mean.color}
             fill="none"
-            dot={false}
             strokeDasharray="6 3"
             strokeWidth={2}
           />
         </AreaChart>
-      </ChartContainer>
+      </ResponsiveContainer>
     </div>
   );
 };
 
 export default MonteCarloChart;
-
