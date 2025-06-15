@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -36,12 +35,12 @@ const ETFSearchSection: React.FC = () => {
     }
   }, [maxTerFromData]);
 
-  // Load ETFs only once when component mounts
+  // Load all ETFs without limit
   useEffect(() => {
     const loadETFs = async () => {
-      console.log('Loading ETFs for search section...');
+      console.log('Loading all ETFs for search section...');
       try {
-        const data = await fetchETFs(200); // Limit to 200 for homepage
+        const data = await fetchETFs(); // Remove the limit parameter
         console.log('Successfully loaded', data.length, 'ETFs for search section');
         setEtfs(data);
       } catch (error) {
@@ -50,7 +49,7 @@ const ETFSearchSection: React.FC = () => {
     };
 
     loadETFs();
-  }, [fetchETFs]); // Only depend on fetchETFs which is now memoized
+  }, [fetchETFs]);
 
   const categories = useMemo(() => 
     [...new Set(etfs.map(etf => etf.category).filter(Boolean))].sort(),
