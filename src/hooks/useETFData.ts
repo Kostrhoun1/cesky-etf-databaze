@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { ETF, ETFListItem } from '@/types/etf';
@@ -7,7 +7,7 @@ export const useETFData = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const upsertETFs = async (etfs: ETF[]) => {
+  const upsertETFs = useCallback(async (etfs: ETF[]) => {
     setIsLoading(true);
     try {
       console.log('Starting upsert of', etfs.length, 'ETFs');
@@ -169,9 +169,9 @@ export const useETFData = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
-  const fetchETFs = async (limit?: number): Promise<ETFListItem[]> => {
+  const fetchETFs = useCallback(async (limit?: number): Promise<ETFListItem[]> => {
     setIsLoading(true);
     try {
       // Now fetch the actual data
@@ -216,9 +216,9 @@ export const useETFData = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
-  const getETFCount = async () => {
+  const getETFCount = useCallback(async () => {
     try {
       const { count, error } = await supabase
         .from('etf_funds')
@@ -234,7 +234,7 @@ export const useETFData = () => {
       console.error('Error in getETFCount:', error);
       return 0;
     }
-  };
+  }, []);
 
   return {
     upsertETFs,
