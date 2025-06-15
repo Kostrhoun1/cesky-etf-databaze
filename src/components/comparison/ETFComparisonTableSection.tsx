@@ -2,21 +2,37 @@
 import React from 'react';
 import { ETFListItem } from '@/types/etf';
 import ETFTable from '@/components/ETFTable';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 
 interface ETFComparisonTableSectionProps {
-  filteredETFs: ETFListItem[];
+  etfs: ETFListItem[];
+  searchTerm: string;
+  onSearchChange: (value: string) => void;
+  sortBy: string;
+  sortOrder: 'asc' | 'desc';
+  onSort: (field: string) => void;
   isLoading: boolean;
   onSelectETF: (etf: ETFListItem) => Promise<boolean>;
   isETFSelected: (isin: string) => boolean;
   canAddMore: boolean;
+  selectedETFs: any[];
+  onRemoveETF: (isin: string) => void;
 }
 
 const ETFComparisonTableSection: React.FC<ETFComparisonTableSectionProps> = ({
-  filteredETFs,
+  etfs,
+  searchTerm,
+  onSearchChange,
+  sortBy,
+  sortOrder,
+  onSort,
   isLoading,
   onSelectETF,
   isETFSelected,
   canAddMore,
+  selectedETFs,
+  onRemoveETF,
 }) => {
   if (isLoading) {
     return (
@@ -27,12 +43,28 @@ const ETFComparisonTableSection: React.FC<ETFComparisonTableSectionProps> = ({
   }
 
   return (
-    <ETFTable 
-      etfs={filteredETFs}
-      onSelectETF={onSelectETF}
-      isETFSelected={isETFSelected}
-      canAddMore={canAddMore}
-    />
+    <div className="space-y-4">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+        <Input
+          type="text"
+          placeholder="Hledat podle názvu, ISIN nebo tickeru..."
+          value={searchTerm}
+          onChange={(e) => onSearchChange(e.target.value)}
+          className="pl-10"
+        />
+      </div>
+      
+      <ETFTable 
+        etfs={etfs}
+        onSelectETF={onSelectETF}
+        isETFSelected={isETFSelected}
+        canAddMore={canAddMore}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSort={onSort}
+      />
+    </div>
   );
 };
 
