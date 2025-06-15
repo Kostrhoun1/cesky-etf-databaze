@@ -3,12 +3,14 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import ETFTable from '@/components/ETFTable';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useETFData } from '@/hooks/useETFData';
 import { useETFComparison } from '@/hooks/useETFComparison';
 import { ETFListItem } from '@/types/etf';
 import ETFComparisonPanel from '@/components/ETFComparisonPanel';
 import ETFDetailedComparison from '@/components/ETFDetailedComparison';
+import ETFAdvancedFilters from '@/components/ETFAdvancedFilters';
+import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
 
 const ETFComparison: React.FC = () => {
   const [etfs, setEtfs] = useState<ETFListItem[]>([]);
@@ -24,6 +26,24 @@ const ETFComparison: React.FC = () => {
     canAddMore,
   } = useETFComparison();
 
+  const maxTerFromData = useMemo(() => {
+    if (etfs.length === 0) return 1;
+    return Math.max(...etfs.map(etf => etf.ter_numeric || 0), 1);
+  }, [etfs]);
+
+  const [advancedFilters, setAdvancedFilters] = useState<AdvancedFiltersState>({
+    distributionPolicy: 'all',
+    indexName: 'all',
+    fundCurrency: 'all',
+    maxTer: 1,
+  });
+
+  useEffect(() => {
+    if (maxTerFromData > 1) {
+      setAdvancedFilters(prev => ({ ...prev, maxTer: maxTerFromData }));
+    }
+  }, [maxTerFromData]);
+
   useEffect(() => {
     document.title = 'Srovnání ETF fondů - ETF průvodce.cz';
     document.querySelector('meta[name="description"]')?.setAttribute('content', 
@@ -36,6 +56,22 @@ const ETFComparison: React.FC = () => {
     };
     loadETFs();
   }, [fetchETFs]);
+
+  // Filtrování ETF podle pokročilých filtrů
+  const filteredETFs = useMemo(() => {
+    return etfs.filter(etf => {
+      const { distributionPolicy, indexName, fundCurrency, maxTer } = advancedFilters;
+      const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
+      const indexMatch = indexName === 'all' || etf.index_name === indexName;
+      const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
+      const terMatch = (etf.ter_numeric || 0) <= maxTer;
+      return distPolicyMatch && indexMatch && currencyMatch && terMatch;
+    });
+  }, [etfs, advancedFilters]);
+
+  const handleAdvancedFilterChange = (key: keyof AdvancedFiltersState, value: any) => {
+    setAdvancedFilters(prevFilters => ({...prevFilters, [key]: value}));
+  };
 
   const handleShowDetailedComparison = () => {
     setShowDetailedComparison(true);
@@ -68,18 +104,30 @@ const ETFComparison: React.FC = () => {
           </p>
         </div>
 
-        {isLoading ? (
-          <div className="text-center py-12">
-            <p className="text-lg">Načítání ETF fondů...</p>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+          <div className="lg:col-span-3">
+            {isLoading ? (
+              <div className="text-center py-12">
+                <p className="text-lg">Načítání ETF fondů...</p>
+              </div>
+            ) : (
+              <ETFTable 
+                etfs={filteredETFs}
+                onSelectETF={addETFToComparison}
+                isETFSelected={isETFSelected}
+                canAddMore={canAddMore}
+              />
+            )}
           </div>
-        ) : (
-          <ETFTable 
-            etfs={etfs}
-            onSelectETF={addETFToComparison}
-            isETFSelected={isETFSelected}
-            canAddMore={canAddMore}
-          />
-        )}
+          
+          <div className="lg:col-span-1">
+            <ETFAdvancedFilters
+              etfs={etfs}
+              filters={advancedFilters}
+              onFilterChange={handleAdvancedFilterChange}
+            />
+          </div>
+        </div>
 
         <ETFComparisonPanel
           selectedETFs={selectedETFs}
