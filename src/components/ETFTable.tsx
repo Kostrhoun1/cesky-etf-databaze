@@ -36,8 +36,7 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
     handleSearch,
     handleCategoryChange,
     setCurrentPage,
-    handleAdvancedFilterChange,
-    handleSortByChange
+    handleAdvancedFilterChange
   } = useETFTableLogic(etfs);
 
   return (
@@ -72,9 +71,7 @@ const ETFTable: React.FC<ETFTableProps> = ({ etfs, onRefresh }) => {
 
             <ETFTableFilters
               searchTerm={searchTerm}
-              sortBy={sortBy}
               onSearchChange={handleSearch}
-              onSortByChange={handleSortByChange}
             />
 
             {/* Pagination info */}

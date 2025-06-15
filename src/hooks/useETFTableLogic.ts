@@ -108,11 +108,6 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     setAdvancedFilters(prevFilters => ({...prevFilters, [key]: value}));
     setCurrentPage(1);
   };
-  
-  const handleSortByChange = (value: string) => {
-    setSortBy(value);
-    setCurrentPage(1);
-  };
 
   return {
     searchTerm,
@@ -132,7 +127,6 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     handleSearch,
     handleCategoryChange,
     setCurrentPage,
-    handleAdvancedFilterChange,
-    handleSortByChange
+    handleAdvancedFilterChange
   };
 };
