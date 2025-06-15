@@ -1,20 +1,17 @@
 
 import React from 'react';
-import { TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
 interface ETFTableHeaderProps {
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   onSort: (field: string) => void;
-  showComparisonColumn?: boolean;
 }
 
 const ETFTableHeader: React.FC<ETFTableHeaderProps> = ({
   sortBy,
   sortOrder,
   onSort,
-  showComparisonColumn = false,
 }) => {
   const getSortIcon = (field: string) => {
     if (sortBy === field) {
@@ -26,45 +23,72 @@ const ETFTableHeader: React.FC<ETFTableHeaderProps> = ({
   };
 
   return (
-    <TableHeader>
-      <TableRow>
-        {showComparisonColumn && (
-          <TableHead className="w-12">
-            Porovnat
-          </TableHead>
-        )}
-        <TableHead 
-          className="cursor-pointer hover:bg-gray-50"
+    <thead className="bg-gray-50">
+      <tr>
+        <th 
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
           onClick={() => onSort('name')}
         >
-          Název / ISIN
+          Název / ISIN / Poskytovatel
           {getSortIcon('name')}
-        </TableHead>
-        <TableHead 
-          className="text-right cursor-pointer hover:bg-gray-50"
+        </th>
+        <th 
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+          onClick={() => onSort('category')}
+        >
+          Kategorie
+          {getSortIcon('category')}
+        </th>
+        <th 
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
           onClick={() => onSort('ter_numeric')}
         >
           TER
           {getSortIcon('ter_numeric')}
-        </TableHead>
-        <TableHead 
-          className="text-right cursor-pointer hover:bg-gray-50"
+        </th>
+        <th 
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+          onClick={() => onSort('fund_size_numeric')}
+        >
+          Velikost fondu
+          {getSortIcon('fund_size_numeric')}
+        </th>
+        <th 
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
           onClick={() => onSort('return_ytd')}
         >
           YTD výnos
           {getSortIcon('return_ytd')}
-        </TableHead>
-        <TableHead 
-          className="text-right cursor-pointer hover:bg-gray-50"
+        </th>
+        <th 
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
           onClick={() => onSort('return_1y')}
         >
           Výnos 1Y
           {getSortIcon('return_1y')}
-        </TableHead>
-        <TableHead>Typ fondu</TableHead>
-        <TableHead>Sledovaný index</TableHead>
-      </TableRow>
-    </TableHeader>
+        </th>
+        <th 
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+          onClick={() => onSort('return_3y')}
+        >
+          Výnos 3Y
+          {getSortIcon('return_3y')}
+        </th>
+        <th 
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+          onClick={() => onSort('return_5y')}
+        >
+          Výnos 5Y
+          {getSortIcon('return_5y')}
+        </th>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Typ fondu
+        </th>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Akce
+        </th>
+      </tr>
+    </thead>
   );
 };
 
