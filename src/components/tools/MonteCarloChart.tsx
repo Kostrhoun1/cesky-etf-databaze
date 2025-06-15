@@ -3,6 +3,7 @@ import React from "react";
 import { SimulationResult } from "@/types/monteCarlo";
 import {
   ChartContainer,
+  ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
@@ -13,7 +14,6 @@ import {
   YAxis,
   Area,
   CartesianGrid,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -48,7 +48,7 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
 
   return (
     <div className="w-full h-[440px] pb-8">
-      <ResponsiveContainer width="100%" height="100%">
+      <ChartContainer config={chartConfig} className="w-full h-full">
         <AreaChart data={results} margin={{ top: 16, right: 24, left: 60, bottom: 40 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
           <XAxis 
@@ -78,7 +78,7 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
               />
             }
           />
-          <Legend 
+          <ChartLegend 
             content={<ChartLegendContent nameKey="dataKey" />}
             wrapperStyle={{ paddingTop: "20px" }}
           />
@@ -131,7 +131,7 @@ export const MonteCarloChart: React.FC<MonteCarloChartProps> = ({ results }) => 
             strokeWidth={2}
           />
         </AreaChart>
-      </ResponsiveContainer>
+      </ChartContainer>
     </div>
   );
 };
