@@ -1,11 +1,15 @@
 
 import React, { useState, useMemo } from 'react';
 import { ETFListItem } from '@/types/etf';
-import ETFTableHeader from './ETFTableHeader';
-import ETFTableRow from './ETFTableRow';
 import ETFTableFilters from './ETFTableFilters';
 import ETFTablePagination from './ETFTablePagination';
 import { useETFTableLogic } from '@/hooks/useETFTableLogic';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Link } from 'react-router-dom';
+import { ChevronUp, ChevronDown, Loader2 } from 'lucide-react';
+import { formatPercentage, formatTER } from '@/utils/csvParser';
 
 interface ETFTableProps {
   etfs: ETFListItem[];
@@ -47,6 +51,27 @@ const ETFTable: React.FC<ETFTableProps> = ({
     }
   };
 
+  const getSortIcon = (field: string) => {
+    if (sortBy === field) {
+      return sortOrder === 'asc' ?
+        <ChevronUp className="inline ml-1 h-4 w-4" /> :
+        <ChevronDown className="inline ml-1 h-4 w-4" />;
+    }
+    return null;
+  };
+
+  const getReturnColor = (value: number) => {
+    if (value > 0) return 'text-green-600';
+    if (value < 0) return 'text-red-600';
+    return '';
+  };
+
+  const getDistributionPolicyLabel = (policy: string) => {
+    if (policy === 'Accumulating') return 'Akumulační';
+    if (policy === 'Distributing') return 'Distribuční';
+    return policy || '-';
+  };
+
   return (
     <div className="space-y-6">
       <ETFTableFilters
@@ -56,25 +81,107 @@ const ETFTable: React.FC<ETFTableProps> = ({
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <ETFTableHeader 
-              sortBy={sortBy} 
-              sortOrder={sortOrder} 
-              onSort={handleSort} 
-            />
-            <tbody className="bg-white divide-y divide-gray-200">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead
+                  className="cursor-pointer hover:bg-gray-50 text-left"
+                  onClick={() => handleSort('name')}
+                >
+                  Název / ISIN
+                  {getSortIcon('name')}
+                </TableHead>
+                <TableHead
+                  className="text-right cursor-pointer hover:bg-gray-50"
+                  onClick={() => handleSort('ter_numeric')}
+                >
+                  TER
+                  {getSortIcon('ter_numeric')}
+                </TableHead>
+                <TableHead
+                  className="text-right cursor-pointer hover:bg-gray-50"
+                  onClick={() => handleSort('return_ytd')}
+                >
+                  YTD výnos
+                  {getSortIcon('return_ytd')}
+                </TableHead>
+                <TableHead
+                  className="text-right cursor-pointer hover:bg-gray-50"
+                  onClick={() => handleSort('return_1y')}
+                >
+                  Výnos 1Y
+                  {getSortIcon('return_1y')}
+                </TableHead>
+                <TableHead className="text-left">Typ fondu</TableHead>
+                <TableHead className="text-left">Sledovaný index</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {paginatedETFs.map((etf) => (
-                <ETFTableRow
-                  key={etf.isin}
-                  etf={etf}
-                  onSelect={onSelectETF ? () => handleSelectETF(etf) : undefined}
-                  isSelected={isETFSelected ? isETFSelected(etf.isin) : false}
-                  canAddMore={canAddMore}
-                  isLoading={loadingETF === etf.isin}
-                />
+                <TableRow key={etf.isin} className="border-b hover:bg-gray-50">
+                  <TableCell className="p-3">
+                    <div className="flex items-start gap-3">
+                      {onSelectETF && (
+                        <div className="flex pt-1">
+                          {isETFSelected && isETFSelected(etf.isin) ? (
+                            <Checkbox checked={true} disabled />
+                          ) : (
+                            <Checkbox
+                              checked={false}
+                              disabled={!canAddMore || loadingETF === etf.isin}
+                              onCheckedChange={() => handleSelectETF(etf)}
+                              aria-label="Porovnat fond"
+                            />
+                          )}
+                          {loadingETF === etf.isin && (
+                            <Loader2 className="h-4 w-4 animate-spin ml-2" />
+                          )}
+                        </div>
+                      )}
+                      <div>
+                        <div className="font-medium">
+                          <Link
+                            to={`/etf/${etf.isin}`}
+                            className="text-blue-600 hover:text-blue-800 hover:underline"
+                          >
+                            {etf.name}
+                          </Link>
+                        </div>
+                        <div className="text-sm text-gray-500">{etf.isin}</div>
+                        {etf.primary_ticker && (
+                          <div className="text-xs text-blue-600">{etf.primary_ticker}</div>
+                        )}
+                        {etf.degiro_free && (
+                          <div className="mt-1">
+                            <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                              DEGIRO Free
+                            </Badge>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right font-mono p-3">
+                    {formatTER(etf.ter_numeric)}
+                  </TableCell>
+                  <TableCell className={`p-3 text-right ${getReturnColor(etf.return_ytd)}`}>
+                    {etf.return_ytd ? formatPercentage(etf.return_ytd) : '-'}
+                  </TableCell>
+                  <TableCell className={`p-3 text-right ${getReturnColor(etf.return_1y)}`}>
+                    {etf.return_1y ? formatPercentage(etf.return_1y) : '-'}
+                  </TableCell>
+                  <TableCell className="p-3">
+                    <Badge variant="outline" className="text-xs">
+                      {getDistributionPolicyLabel(etf.distribution_policy)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="p-3 text-sm text-gray-600">
+                    {etf.index_name || '-'}
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
 
