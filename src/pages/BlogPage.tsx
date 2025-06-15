@@ -1,162 +1,127 @@
 
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Layout from '@/components/Layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Calendar, TrendingUp, PieChart, Target, Shield } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
 
-const BlogPage: React.FC = () => {
-  useEffect(() => {
-    document.title = 'Tipy pro ETF investory - ETF průvodce.cz';
-    document.querySelector('meta[name="description"]')?.setAttribute('content', 
-      'Užitečné tipy, návody a strategie pro ETF investory. Naučte se správně investovat do ETF fondů.'
-    );
-  }, []);
+const PLACEHOLDER_IMAGE = "/placeholder.svg"; // existuje v public složce
 
-  const articles = [
-    {
-      title: 'Nejlepší ETF fondy pro rok 2025',
-      description: 'Komplexní přehled nejlepších ETF fondů pro investování v roce 2025 s důrazem na diverzifikaci a nízké poplatky.',
-      slug: 'nejlepsi-etf-2025',
-      category: 'Doporučení',
-      readTime: '8 min',
-      icon: <TrendingUp className="h-5 w-5" />
-    },
-    {
-      title: 'Nejlepší ETF na americké akcie',
-      description: 'Detailní srovnání ETF fondů zaměřených na americký akciový trh s analýzou výkonnosti a poplatků.',
-      slug: 'nejlepsi-etf-na-americke-akcie',
-      category: 'Srovnání',
-      readTime: '6 min',
-      icon: <PieChart className="h-5 w-5" />
-    },
-    {
-      title: 'Nejlepší ETF na NASDAQ',
-      description: 'Průvodce ETF fondy sledujícími index NASDAQ s focus na technologické společnosti.',
-      slug: 'nejlepsi-etf-na-nasdaq',
-      category: 'Analýza',
-      readTime: '5 min',
-      icon: <Target className="h-5 w-5" />
-    },
-    {
-      title: 'Nejlepší dividendové ETF',
-      description: 'Výběr nejlepších ETF fondů zaměřených na dividendové výnosy pro pasivní příjem.',
-      slug: 'nejlepsi-dividendove-etf',
-      category: 'Strategie',
-      readTime: '7 min',
-      icon: <Shield className="h-5 w-5" />
-    },
-    {
-      title: 'Nejlepší ETF na evropské akcie',
-      description: 'Analýza ETF fondů investujících do evropského akciového trhu včetně výhod a rizik.',
-      slug: 'nejlepsi-etf-na-evropske-akcie',
-      category: 'Regionální',
-      readTime: '6 min',
-      icon: <PieChart className="h-5 w-5" />
-    },
-    {
-      title: 'All Weather Portfolio',
-      description: 'Strategie Ray Dalia pro vytvoření odolného portfolia ve všech ekonomických podmínkách.',
-      slug: 'all-weather-portfolio',
-      category: 'Strategie',
-      readTime: '10 min',
-      icon: <Shield className="h-5 w-5" />
-    }
-  ];
-
-  const categories = ['Všechny', 'Doporučení', 'Srovnání', 'Analýza', 'Strategie', 'Regionální'];
-
-  return (
-    <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-100 text-violet-700 rounded-full text-sm font-semibold mb-6">
-            <Calendar className="h-4 w-4" />
-            Aktuální tipy a návody
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Tipy pro ETF investory
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Objevte nejlepší strategie, doporučení a analýzy pro úspěšné investování do ETF fondů. 
-            Naše články vám pomohou udělat informovaná rozhodnutí.
-          </p>
-        </div>
-
-        {/* Categories Filter */}
-        <div className="flex flex-wrap gap-2 justify-center mb-8">
-          {categories.map((category) => (
-            <Badge
-              key={category}
-              variant={category === 'Všechny' ? 'default' : 'outline'}
-              className="cursor-pointer hover:bg-violet-100 hover:text-violet-700 transition-colors"
-            >
-              {category}
-            </Badge>
-          ))}
-        </div>
-
-        {/* Articles Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {articles.map((article) => (
-            <Card key={article.slug} className="hover:shadow-lg transition-shadow group">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-2">
-                  <Badge variant="outline" className="text-xs">
-                    {article.category}
-                  </Badge>
-                  <span className="text-sm text-gray-500">{article.readTime}</span>
-                </div>
-                <CardTitle className="text-lg group-hover:text-violet-600 transition-colors flex items-center gap-2">
-                  {article.icon}
-                  {article.title}
-                </CardTitle>
-                <CardDescription>
-                  {article.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button asChild variant="outline" className="w-full group">
-                  <Link to={`/tipy/${article.slug}`}>
-                    Číst více
-                    <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Call to Action Section */}
-        <Card className="bg-gray-50 border-gray-200">
-          <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-semibold mb-4">
-              Hledáte konkrétní ETF fond?
-            </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Použijte naše srovnávací nástroje k nalezení nejlepších ETF fondů podle vašich kritérií 
-              nebo si vypočítejte potenciální výnosy s našimi kalkulačkami.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg">
-                <Link to="/srovnani-etf">
-                  Srovnat ETF fondy
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link to="/nastroje">
-                  Investiční kalkulačky
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </Layout>
-  );
+const ARTICLE_IMAGES: Record<string, string> = {
+  "nejlepsi-etf-2025": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&h=600&fit=crop",
+  "nejlepsi-etf-na-americke-akcie": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop",
+  "nejlepsi-etf-na-nasdaq": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop",
+  "nejlepsi-dividendove-etf": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600&fit=crop",
+  "nejlepsi-etf-na-evropske-akcie": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=800&h=600&fit=crop",
+  "all-weather-portfolio": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
 };
+
+const ARTICLES = [
+  {
+    slug: "nejlepsi-etf-2025",
+    title: "Nejlepší ETF 2025",
+    perex:
+      "Výběr nejlepších ETF fondů pro rok 2025. Přehled podle správcovských poplatků, velikosti fondu i výkonnosti.",
+  },
+  {
+    slug: "nejlepsi-etf-na-americke-akcie",
+    title: "Nejlepší ETF na americké akcie",
+    perex:
+      "Chcete investovat do akcií v USA? Vyberte si z nejlepších ETF na americký akciový trh.",
+  },
+  {
+    slug: "nejlepsi-etf-na-nasdaq",
+    title: "Nejlepší ETF na NASDAQ",
+    perex:
+      "ETF fondy zaměřené na technologický index NASDAQ. Srovnání podle výnosu, poplatků i velikosti.",
+  },
+  {
+    slug: "nejlepsi-dividendove-etf",
+    title: "Nejlepší dividendové ETF",
+    perex:
+      "Seznam nejlepších ETF fondů s pravidelnou dividendou pro budování pasivního příjmu.",
+  },
+  {
+    slug: "nejlepsi-etf-na-evropske-akcie",
+    title: "Nejlepší ETF na evropské akcie",
+    perex:
+      "ETF fondy zaměřené na evropské společnosti. Inspirace pro diverzifikaci portfolia v rámci Evropy.",
+  },
+  {
+    slug: "all-weather-portfolio",
+    title: "All-Weather Portfolio podle Raya Dalia",
+    perex:
+      "Jak sestavit robustní portfolio, které funguje v každém ekonomickém prostředí? Průvodce legendární strategií Ray Dalia s ETF.",
+  },
+];
+
+const BlogPage: React.FC = () => (
+  <div className="w-full min-h-screen bg-gradient-to-t from-violet-50 to-white">
+    {/* Hero sekce */}
+    <section className="relative flex flex-col items-center justify-center px-4 py-12 md:py-20 mb-6">
+      <img
+        src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=1200&h=800&fit=crop"
+        alt="Investování – tipy"
+        className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none rounded-xl"
+        loading="lazy"
+        style={{ zIndex: 0 }}
+      />
+      <div className="relative z-10 max-w-2xl text-center">
+        <span className="uppercase text-xs font-bold text-violet-700 tracking-widest">TIPY PRO INVESTORY</span>
+        <h1 className="font-extrabold text-4xl md:text-5xl text-gray-900 mt-3 mb-4 drop-shadow-xl">
+          Chytré tipy a srovnání ETF fondů
+        </h1>
+        <p className="text-gray-700 text-lg md:text-xl mb-6">
+          Nejlepší ETF pro vaše portfolio, aktuální doporučení a inspirace – vše na jednom místě s expertní analýzou. Klikněte na článek a dozvíte se detaily, které vám usnadní investiční rozhodování.
+        </p>
+      </div>
+    </section>
+
+    {/* Výpis článků */}
+    <section className="max-w-6xl mx-auto px-2 md:px-6 py-5">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-7">
+        {ARTICLES.map((article, idx) => (
+          <Card
+            key={article.slug}
+            className="group bg-white/90 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-200 animate-fade-in flex flex-col h-full"
+          >
+            <Link to={`/tipy/${article.slug}`} className="block h-full focus:outline-none group flex flex-col">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                <img
+                  src={ARTICLE_IMAGES[article.slug] || PLACEHOLDER_IMAGE}
+                  alt={article.title}
+                  className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+                  loading="lazy"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (target.src !== PLACEHOLDER_IMAGE) {
+                      target.src = PLACEHOLDER_IMAGE;
+                    }
+                  }}
+                />
+                <span className="absolute left-3 top-3 bg-violet-600 text-white text-xs px-3 py-1 rounded-full">
+                  TIP #{idx + 1}
+                </span>
+              </div>
+              <CardContent className="flex flex-col h-full justify-between p-5 flex-1">
+                <div className="flex-1">
+                  <h2 className="font-bold text-lg leading-tight mb-3 text-gray-900 group-hover:text-violet-700 transition-colors">
+                    {article.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">{article.perex}</p>
+                </div>
+                <div className="flex items-center gap-1 mt-auto">
+                  <span className="text-violet-700 font-medium text-sm group-hover:underline underline-offset-2 transition-colors">
+                    Číst více
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-violet-700 transition-transform group-hover:translate-x-1" />
+                </div>
+              </CardContent>
+            </Link>
+          </Card>
+        ))}
+      </div>
+    </section>
+  </div>
+);
 
 export default BlogPage;
