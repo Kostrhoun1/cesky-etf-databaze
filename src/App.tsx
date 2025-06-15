@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -16,6 +17,7 @@ import NejlepsiETFNaAmerickeAkcie from "./pages/blog/NejlepsiETFNaAmerickeAkcie"
 import NejlepsiETFNaNASDAQ from "./pages/blog/NejlepsiETFNaNASDAQ";
 import NejlepsiDividendoveETF from "./pages/blog/NejlepsiDividendoveETF";
 import NejlepsiETFNaEvropskeAkcie from "./pages/blog/NejlepsiETFNaEvropskeAkcie";
+import AllWeatherPortfolio from "./pages/blog/AllWeatherPortfolio";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,7 @@ const App = () => (
         <Route path="/blog/nejlepsi-etf-na-nasdaq" element={<NejlepsiETFNaNASDAQ />} />
         <Route path="/blog/nejlepsi-dividendove-etf" element={<NejlepsiDividendoveETF />} />
         <Route path="/blog/nejlepsi-etf-na-evropske-akcie" element={<NejlepsiETFNaEvropskeAkcie />} />
+        <Route path="/blog/all-weather-portfolio" element={<AllWeatherPortfolio />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
