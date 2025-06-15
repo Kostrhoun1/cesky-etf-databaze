@@ -4,16 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import NewsletterSubscribersList, { Subscriber } from "@/components/newsletter/NewsletterSubscribersList";
 import NewsletterForm from "@/components/newsletter/NewsletterForm";
-import NewsletterList from "@/components/newsletter/NewsletterList";
-
-type Newsletter = {
-  id: string;
-  created_at: string;
-  subject: string;
-  body: string;
-  sent_at: string | null;
-  sent_by: string | null;
-};
+import NewsletterList, { Newsletter } from "@/components/newsletter/NewsletterList";
 
 const NewsletterAdminPage: React.FC = () => {
   const [subject, setSubject] = useState("");
@@ -21,12 +12,14 @@ const NewsletterAdminPage: React.FC = () => {
   const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
   const [sending, setSending] = useState(false);
 
-  // Nově - seznam odběratelů
+  // Nově
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [showSubscribers, setShowSubscribers] = useState(false);
 
-  useEffect(() => {
-    // Získáme newslettery
+  // Pro odesílání
+  const [sendingId, setSendingId] = useState<string | null>(null);
+
+  const reloadNewsletters = () => {
     supabase
       .from("newsletters")
       .select("*")
@@ -34,7 +27,10 @@ const NewsletterAdminPage: React.FC = () => {
       .then(({ data, error }) => {
         if (!error && data) setNewsletters(data as Newsletter[]);
       });
+  };
 
+  useEffect(() => {
+    reloadNewsletters();
     // Získáme aktuální odběratele
     supabase
       .from("newsletter_subscribers")
@@ -47,7 +43,6 @@ const NewsletterAdminPage: React.FC = () => {
       });
   }, []);
 
-  // Pro opakovaný reload po přihlášení nového
   const reloadSubscribers = () => {
     supabase
       .from("newsletter_subscribers")
@@ -60,7 +55,49 @@ const NewsletterAdminPage: React.FC = () => {
       });
   };
 
-  // Stávající funkcionalita zůstává, jen přidáme reload odběratelů
+  // Odeslat newsletter přes edge funkci
+  const handleSendNewsletter = async (newsletterId: string) => {
+    if (!window.confirm("Opravdu chcete odeslat tento newsletter všem odběratelům? Akce je nevratná."))
+      return;
+
+    setSendingId(newsletterId);
+
+    try {
+      const res = await fetch(
+        "https://nbhwnatadyubiuadfakx.supabase.co/functions/v1/send-newsletter",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ newsletter_id: newsletterId }),
+        }
+      );
+      const result = await res.json();
+      if (!res.ok || result.status === "failed" || result.error) {
+        toast({
+          title: "Chyba při odesílání",
+          description:
+            result.error ||
+            (result.errors && result.errors.join(", ")) ||
+            "Neznámá chyba.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Newsletter byl odeslán",
+          description: `E-maily odeslány ${result.sent} odběratelům. Neúspěšné: ${result.failed}`,
+        });
+        reloadNewsletters();
+      }
+    } catch (e: any) {
+      toast({
+        title: "Chyba spojení",
+        description: e.message,
+        variant: "destructive",
+      });
+    }
+    setSendingId(null);
+  };
+
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!subject || !body) {
@@ -80,14 +117,7 @@ const NewsletterAdminPage: React.FC = () => {
       setSubject("");
       setBody("");
       toast({ title: "Newsletter uložen", description: "Zpráva byla uložena, připravte rozeslání." });
-      // reload newsletters
-      supabase
-        .from("newsletters")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .then(({ data, error }) => {
-          if (!error && data) setNewsletters(data as Newsletter[]);
-        });
+      reloadNewsletters();
     }
   };
 
@@ -110,7 +140,11 @@ const NewsletterAdminPage: React.FC = () => {
         handleSend={handleSend}
       />
 
-      <NewsletterList newsletters={newsletters} />
+      <NewsletterList
+        newsletters={newsletters}
+        onSend={handleSendNewsletter}
+        sendingId={sendingId}
+      />
     </div>
   );
 };
