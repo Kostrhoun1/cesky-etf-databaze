@@ -7,11 +7,11 @@ import { ArrowRight } from "lucide-react";
 const PLACEHOLDER_IMAGE = "/placeholder.svg"; // existuje v public složce
 
 const ARTICLE_IMAGES: Record<string, string> = {
-  "nejlepsi-etf-2025": "/lovable-uploads/photo-1488590528505-98d2b5aba04b.jpg",
-  "nejlepsi-etf-na-americke-akcie": "/lovable-uploads/photo-1581091226825-a6a2a5aee158.jpg",
-  "nejlepsi-etf-na-nasdaq": "/lovable-uploads/photo-1498050108023-c5249f4df085.jpg",
-  "nejlepsi-dividendove-etf": "/lovable-uploads/photo-1486312338219-ce68d2c6f44d.jpg",
-  "nejlepsi-etf-na-evropske-akcie": "/lovable-uploads/photo-1501854140801-50d01698950b.jpg",
+  "nejlepsi-etf-2025": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&h=600&fit=crop",
+  "nejlepsi-etf-na-americke-akcie": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop",
+  "nejlepsi-etf-na-nasdaq": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop",
+  "nejlepsi-dividendove-etf": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600&fit=crop",
+  "nejlepsi-etf-na-evropske-akcie": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=800&h=600&fit=crop",
 };
 
 const ARTICLES = [
@@ -52,7 +52,7 @@ const BlogPage: React.FC = () => (
     {/* Hero sekce */}
     <section className="relative flex flex-col items-center justify-center px-4 py-12 md:py-20 mb-6">
       <img
-        src="/lovable-uploads/photo-1649972904349-6e44c42644a7.jpg"
+        src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=1200&h=800&fit=crop"
         alt="Investování – tipy"
         className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none rounded-xl"
         loading="lazy"
@@ -86,7 +86,7 @@ const BlogPage: React.FC = () => (
                   loading="lazy"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    if (target.src !== window.location.origin + PLACEHOLDER_IMAGE) {
+                    if (target.src !== PLACEHOLDER_IMAGE) {
                       target.src = PLACEHOLDER_IMAGE;
                     }
                   }}
