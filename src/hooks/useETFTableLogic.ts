@@ -61,6 +61,55 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
         sizeInMillions: etf.fund_size_numeric // Už je v milionech
       }));
       console.log('Fund size sample (first 10 ETFs):', fundSizeSample);
+
+      // Debug specific fund IE00B6YX5C33
+      const specificFund = etfs.find(etf => etf.isin === 'IE00B6YX5C33');
+      if (specificFund) {
+        console.log('=== DEBUG SPECIFIC FUND IE00B6YX5C33 ===');
+        console.log('Fund details:', {
+          name: specificFund.name,
+          isin: specificFund.isin,
+          fund_size_numeric: specificFund.fund_size_numeric,
+          category: specificFund.category,
+          distribution_policy: specificFund.distribution_policy,
+          index_name: specificFund.index_name,
+          fund_currency: specificFund.fund_currency,
+          replication: specificFund.replication
+        });
+        console.log('Fund size in millions:', specificFund.fund_size_numeric);
+        console.log('Selected fund size range:', advancedFilters.fundSizeRange);
+        
+        // Test fund size filter logic for this specific fund
+        if (specificFund.fund_size_numeric) {
+          const fundSizeInMillions = specificFund.fund_size_numeric;
+          let fundSizeMatch = true;
+          
+          switch (advancedFilters.fundSizeRange) {
+            case 'small':
+              fundSizeMatch = fundSizeInMillions < 100;
+              console.log(`Small fund test: ${fundSizeInMillions} < 100 = ${fundSizeMatch}`);
+              break;
+            case 'medium':
+              fundSizeMatch = fundSizeInMillions >= 100 && fundSizeInMillions < 1000;
+              console.log(`Medium fund test: ${fundSizeInMillions} >= 100 && ${fundSizeInMillions} < 1000 = ${fundSizeMatch}`);
+              break;
+            case 'large':
+              fundSizeMatch = fundSizeInMillions >= 1000 && fundSizeInMillions < 10000;
+              console.log(`Large fund test: ${fundSizeInMillions} >= 1000 && ${fundSizeInMillions} < 10000 = ${fundSizeMatch}`);
+              break;
+            case 'xlarge':
+              fundSizeMatch = fundSizeInMillions >= 10000;
+              console.log(`XLarge fund test: ${fundSizeInMillions} >= 10000 = ${fundSizeMatch}`);
+              break;
+            default:
+              fundSizeMatch = true;
+          }
+          
+          console.log(`Final fund size match for IE00B6YX5C33: ${fundSizeMatch}`);
+        }
+      } else {
+        console.log('Fund IE00B6YX5C33 NOT FOUND in etfs array');
+      }
     }
 
     // Pokud hledáme konkrétní ISIN, přidáme debug informace
@@ -125,8 +174,8 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
           (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower)) ||
           (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase().includes(searchLower)) ||
           (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase().includes(searchLower)) ||
-          (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().includes(searchLower)) ||
-          (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes('sxr8')) ||
+          (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().includes('sxr8')) ||
+          (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes(searchLower)) ||
           (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes(searchLower));
         
         return basicFieldsMatch || tickerFieldsMatch;
@@ -169,25 +218,27 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
               fundSizeMatch = true;
           }
           
-          // Debug pro konkrétní ETF
-          if (advancedFilters.fundSizeRange !== 'all') {
-            console.log(`ETF ${etf.name}: size=${fundSizeInMillions} mil., range=${fundSizeRange}, match=${fundSizeMatch}`);
+          // Debug pro konkrétní ETF IE00B6YX5C33
+          if (etf.isin === 'IE00B6YX5C33') {
+            console.log(`=== FUND SIZE FILTER FOR IE00B6YX5C33 ===`);
+            console.log(`Fund size: ${fundSizeInMillions} millions`);
+            console.log(`Filter range: ${fundSizeRange}`);
+            console.log(`Match result: ${fundSizeMatch}`);
           }
         }
         
         const allFiltersMatch = distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch;
         
-        // Debug pro filtry, pokud není fund size 'all'
-        if (advancedFilters.fundSizeRange !== 'all' && !allFiltersMatch) {
-          console.log(`ETF ${etf.name} filtered out:`, {
-            distPolicyMatch,
-            indexMatch,
-            currencyMatch,
-            terMatch,
-            replicationMatch,
-            fundSizeMatch,
-            fund_size_numeric: etf.fund_size_numeric
-          });
+        // Debug pro IE00B6YX5C33 - proč prošel/neprošel filtry
+        if (etf.isin === 'IE00B6YX5C33') {
+          console.log(`=== ALL FILTERS DEBUG FOR IE00B6YX5C33 ===`);
+          console.log(`distPolicyMatch: ${distPolicyMatch}`);
+          console.log(`indexMatch: ${indexMatch}`);
+          console.log(`currencyMatch: ${currencyMatch}`);
+          console.log(`terMatch: ${terMatch}`);
+          console.log(`replicationMatch: ${replicationMatch}`);
+          console.log(`fundSizeMatch: ${fundSizeMatch}`);
+          console.log(`Final result (allFiltersMatch): ${allFiltersMatch}`);
         }
         
         return allFiltersMatch;
@@ -233,6 +284,16 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
       });
 
     console.log(`Filtered ETFs: ${result.length} out of ${etfs.length}`);
+    
+    // Debug - pokud je aktivní filtr "small" a IE00B6YX5C33 je ve výsledcích
+    if (advancedFilters.fundSizeRange === 'small') {
+      const problematicFund = result.find(etf => etf.isin === 'IE00B6YX5C33');
+      if (problematicFund) {
+        console.log('=== PROBLEMATIC FUND FOUND IN SMALL FILTER RESULTS ===');
+        console.log('Fund:', problematicFund);
+      }
+    }
+    
     return result;
   }, [etfs, searchTerm, activeCategory, advancedFilters, sortBy, sortOrder]);
 
