@@ -78,7 +78,6 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
       <Table>
         <TableHeader>
           <TableRow>
-            {/* Odstranili jsme TableHead s Porovnat */}
             <TableHead
               className="cursor-pointer hover:bg-gray-50 text-left"
               onClick={() => onSort('name')}
@@ -95,20 +94,26 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
             </TableHead>
             <TableHead
               className="text-right cursor-pointer hover:bg-gray-50"
-              onClick={() => onSort('return_ytd')}
-            >
-              YTD výnos
-              {getSortIcon('return_ytd')}
-            </TableHead>
-            <TableHead
-              className="text-right cursor-pointer hover:bg-gray-50"
               onClick={() => onSort('return_1y')}
             >
               Výnos 1Y
               {getSortIcon('return_1y')}
             </TableHead>
+            <TableHead
+              className="text-right cursor-pointer hover:bg-gray-50"
+              onClick={() => onSort('return_3y')}
+            >
+              Výnos 3Y
+              {getSortIcon('return_3y')}
+            </TableHead>
+            <TableHead
+              className="text-right cursor-pointer hover:bg-gray-50"
+              onClick={() => onSort('return_5y')}
+            >
+              Výnos 5Y
+              {getSortIcon('return_5y')}
+            </TableHead>
             <TableHead className="text-left">Typ fondu</TableHead>
-            <TableHead className="text-left">Sledovaný index</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -157,19 +162,19 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
               <TableCell className="text-right font-mono p-3">
                 {formatTER(etf.ter_numeric)}
               </TableCell>
-              <TableCell className={`p-3 text-right ${getReturnColor(etf.return_ytd)}`}>
-                {etf.return_ytd ? formatPercentage(etf.return_ytd) : '-'}
-              </TableCell>
               <TableCell className={`p-3 text-right ${getReturnColor(etf.return_1y)}`}>
                 {etf.return_1y ? formatPercentage(etf.return_1y) : '-'}
+              </TableCell>
+              <TableCell className={`p-3 text-right ${getReturnColor(etf.return_3y)}`}>
+                {etf.return_3y ? formatPercentage(etf.return_3y) : '-'}
+              </TableCell>
+              <TableCell className={`p-3 text-right ${getReturnColor(etf.return_5y)}`}>
+                {etf.return_5y ? formatPercentage(etf.return_5y) : '-'}
               </TableCell>
               <TableCell className="p-3">
                 <Badge variant="outline" className="text-xs">
                   {getDistributionPolicyLabel(etf.distribution_policy)}
                 </Badge>
-              </TableCell>
-              <TableCell className="p-3 text-sm text-gray-600">
-                {etf.index_name || '-'}
               </TableCell>
             </TableRow>
           ))}
