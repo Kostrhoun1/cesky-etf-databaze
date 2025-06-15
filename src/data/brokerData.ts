@@ -1,11 +1,10 @@
-
 import { Broker, ComparisonRow } from '../types/broker';
 
 export const brokers: Broker[] = [
   {
     id: 'degiro',
     name: 'DEGIRO',
-    logo: '🟠',
+    logo: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=100&h=100&fit=crop&crop=center',
     description: 'Populární broker s nízkými poplatky a širokou nabídkou ETF',
     rating: 4.5,
     regulation: 'BaFin (DE), DNB/AFM (NL)',
@@ -38,7 +37,7 @@ export const brokers: Broker[] = [
   {
     id: 'xtb',
     name: 'XTB',
-    logo: '🟡',
+    logo: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=100&h=100&fit=crop&crop=center',
     description: 'Polský broker s výbornou českou podporou a vzdělávacími materiály',
     rating: 4.7,
     regulation: 'CySEC (EU), ČNB (CZ)',
@@ -71,7 +70,7 @@ export const brokers: Broker[] = [
   {
     id: 'fio',
     name: 'Fio e-Broker',
-    logo: '🔵',
+    logo: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=100&h=100&fit=crop&crop=center',
     description: 'Český broker s lokální podporou a standardním zdaněním českých dividend',
     rating: 4.0,
     regulation: 'ČNB (CZ)',
@@ -104,7 +103,7 @@ export const brokers: Broker[] = [
   {
     id: 'trading212',
     name: 'Trading 212',
-    logo: '🟢',
+    logo: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=100&h=100&fit=crop&crop=center',
     description: 'Bezpoplatkový broker s intuitivní aplikací a frakčním investováním',
     rating: 4.2,
     regulation: 'FCA (UK), CySEC (EU), BaFin (DE)',
@@ -137,7 +136,7 @@ export const brokers: Broker[] = [
   {
     id: 'ibkr',
     name: 'Interactive Brokers',
-    logo: '🟣',
+    logo: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=100&h=100&fit=crop&crop=center',
     description: 'Globální broker s nejširší nabídkou a pokročilými nástroji',
     rating: 4.8,
     regulation: 'CBI (IE), SEC (US), FCA (UK), ČNB (CZ)',
