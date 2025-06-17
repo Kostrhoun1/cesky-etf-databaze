@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -124,7 +123,7 @@ const InvestmentCalculator: React.FC = () => {
                 type="number"
                 value={initialInvestment || ''}
                 onChange={(e) => setInitialInvestment(Number(e.target.value) || 0)}
-                placeholder="100 000"
+                placeholder="0"
               />
             </div>
 
@@ -135,7 +134,7 @@ const InvestmentCalculator: React.FC = () => {
                 type="number"
                 value={recurringInvestment || ''}
                 onChange={(e) => setRecurringInvestment(Number(e.target.value) || 0)}
-                placeholder="5 000"
+                placeholder="0"
               />
             </div>
 
