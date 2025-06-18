@@ -2,7 +2,16 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, Tooltip } from 'recharts';
-import { CalculationData } from '@/utils/investmentCalculations';
+
+interface CalculationData {
+  year: number;
+  totalInvested: number;
+  grossValue: number;
+  netValue: number;
+  grossGain: number;
+  netGain: number;
+  tax: number;
+}
 
 interface InvestmentChartProps {
   data: CalculationData[];
