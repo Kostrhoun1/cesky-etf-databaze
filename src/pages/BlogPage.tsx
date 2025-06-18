@@ -3,7 +3,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
-import Layout from "@/components/Layout";
 
 const PLACEHOLDER_IMAGE = "/placeholder.svg"; // existuje v public složce
 
@@ -56,68 +55,66 @@ const ARTICLES = [
 ];
 
 const BlogPage: React.FC = () => (
-  <Layout>
-    <div className="w-full min-h-screen bg-gray-50">
-      {/* Hero sekce */}
-      <section className="relative flex flex-col items-center justify-center px-4 py-12 md:py-20 mb-6 bg-gradient-to-br from-violet-600 to-violet-800">
-        <div className="relative z-10 max-w-2xl text-center">
-          <span className="uppercase text-xs font-bold text-violet-200 tracking-widest">TIPY PRO INVESTORY</span>
-          <h1 className="font-extrabold text-4xl md:text-5xl text-white mt-3 mb-4">
-            Chytré tipy a srovnání ETF fondů
-          </h1>
-          <p className="text-violet-100 text-lg md:text-xl mb-6">
-            Nejlepší ETF pro vaše portfolio, aktuální doporučení a inspirace – vše na jednom místě s expertní analýzou. Klikněte na článek a dozvíte se detaily, které vám usnadní investiční rozhodování.
-          </p>
-        </div>
-      </section>
+  <div className="w-full min-h-screen bg-gray-50">
+    {/* Hero sekce */}
+    <section className="relative flex flex-col items-center justify-center px-4 py-12 md:py-20 mb-6 bg-gradient-to-br from-violet-600 to-violet-800">
+      <div className="relative z-10 max-w-2xl text-center">
+        <span className="uppercase text-xs font-bold text-violet-200 tracking-widest">TIPY PRO INVESTORY</span>
+        <h1 className="font-extrabold text-4xl md:text-5xl text-white mt-3 mb-4">
+          Chytré tipy a srovnání ETF fondů
+        </h1>
+        <p className="text-violet-100 text-lg md:text-xl mb-6">
+          Nejlepší ETF pro vaše portfolio, aktuální doporučení a inspirace – vše na jednom místě s expertní analýzou. Klikněte na článek a dozvíte se detaily, které vám usnadní investiční rozhodování.
+        </p>
+      </div>
+    </section>
 
-      {/* Výpis článků */}
-      <section className="max-w-6xl mx-auto px-2 md:px-6 py-8">
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-7">
-          {ARTICLES.map((article, idx) => (
-            <Card
-              key={article.slug}
-              className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-200 animate-fade-in flex flex-col h-full"
-            >
-              <Link to={`/tipy/${article.slug}`} className="block h-full focus:outline-none group flex flex-col">
-                <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
-                  <img
-                    src={ARTICLE_IMAGES[article.slug] || PLACEHOLDER_IMAGE}
-                    alt={article.title}
-                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
-                    loading="lazy"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      if (target.src !== PLACEHOLDER_IMAGE) {
-                        target.src = PLACEHOLDER_IMAGE;
-                      }
-                    }}
-                  />
-                  <span className="absolute left-3 top-3 bg-violet-600 text-white text-xs px-3 py-1 rounded-full">
-                    TIP #{idx + 1}
-                  </span>
+    {/* Výpis článků */}
+    <section className="max-w-6xl mx-auto px-2 md:px-6 py-8">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-7">
+        {ARTICLES.map((article, idx) => (
+          <Card
+            key={article.slug}
+            className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-200 animate-fade-in flex flex-col h-full"
+          >
+            <Link to={`/tipy/${article.slug}`} className="block h-full focus:outline-none group flex flex-col">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                <img
+                  src={ARTICLE_IMAGES[article.slug] || PLACEHOLDER_IMAGE}
+                  alt={article.title}
+                  className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+                  loading="lazy"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (target.src !== PLACEHOLDER_IMAGE) {
+                      target.src = PLACEHOLDER_IMAGE;
+                    }
+                  }}
+                />
+                <span className="absolute left-3 top-3 bg-violet-600 text-white text-xs px-3 py-1 rounded-full">
+                  TIP #{idx + 1}
+                </span>
+              </div>
+              <CardContent className="flex flex-col h-full justify-between p-5 flex-1">
+                <div className="flex-1">
+                  <h2 className="font-bold text-lg leading-tight mb-3 text-gray-900 group-hover:text-violet-700 transition-colors">
+                    {article.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">{article.perex}</p>
                 </div>
-                <CardContent className="flex flex-col h-full justify-between p-5 flex-1">
-                  <div className="flex-1">
-                    <h2 className="font-bold text-lg leading-tight mb-3 text-gray-900 group-hover:text-violet-700 transition-colors">
-                      {article.title}
-                    </h2>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4">{article.perex}</p>
-                  </div>
-                  <div className="flex items-center gap-1 mt-auto">
-                    <span className="text-violet-700 font-medium text-sm group-hover:underline underline-offset-2 transition-colors">
-                      Číst více
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-violet-700 transition-transform group-hover:translate-x-1" />
-                  </div>
-                </CardContent>
-              </Link>
-            </Card>
-          ))}
-        </div>
-      </section>
-    </div>
-  </Layout>
+                <div className="flex items-center gap-1 mt-auto">
+                  <span className="text-violet-700 font-medium text-sm group-hover:underline underline-offset-2 transition-colors">
+                    Číst více
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-violet-700 transition-transform group-hover:translate-x-1" />
+                </div>
+              </CardContent>
+            </Link>
+          </Card>
+        ))}
+      </div>
+    </section>
+  </div>
 );
 
 export default BlogPage;

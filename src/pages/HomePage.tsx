@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import Layout from '@/components/Layout';
 import { useETFData } from '@/hooks/useETFData';
 import HeroSection from '@/components/home/HeroSection';
 import USPSection from '@/components/home/USPSection';
@@ -26,7 +25,7 @@ const HomePage: React.FC = () => {
   }, [getETFCount]);
 
   return (
-    <Layout>
+    <>
       {/* HERO sekce */}
       <HeroSection totalCount={totalCount} />
 
@@ -50,7 +49,7 @@ const HomePage: React.FC = () => {
         </p>
         <NewsletterSubscribeForm />
       </section>
-    </Layout>
+    </>
   );
 };
 
