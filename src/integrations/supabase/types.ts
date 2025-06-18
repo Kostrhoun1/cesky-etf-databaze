@@ -40,12 +40,18 @@ export type Database = {
           country_5_name: string | null
           country_5_weight: number | null
           created_at: string
+          current_dividend_yield: string | null
+          current_dividend_yield_numeric: number | null
           current_price: number | null
           degiro_free: boolean | null
           description_cs: string | null
           description_en: string | null
           distribution_frequency: string | null
           distribution_policy: string | null
+          dividend_extraction_method: string | null
+          dividends_12m: string | null
+          dividends_12m_currency: string | null
+          dividends_12m_numeric: number | null
           exchange_1_bloomberg: string | null
           exchange_1_currency: string | null
           exchange_1_market_maker: string | null
@@ -117,6 +123,7 @@ export type Database = {
           name: string | null
           primary_exchange: string | null
           primary_ticker: string | null
+          region: string | null
           replication: string | null
           retry_count: number | null
           return_10y_percent: number | null
@@ -170,12 +177,18 @@ export type Database = {
           country_5_name?: string | null
           country_5_weight?: number | null
           created_at?: string
+          current_dividend_yield?: string | null
+          current_dividend_yield_numeric?: number | null
           current_price?: number | null
           degiro_free?: boolean | null
           description_cs?: string | null
           description_en?: string | null
           distribution_frequency?: string | null
           distribution_policy?: string | null
+          dividend_extraction_method?: string | null
+          dividends_12m?: string | null
+          dividends_12m_currency?: string | null
+          dividends_12m_numeric?: number | null
           exchange_1_bloomberg?: string | null
           exchange_1_currency?: string | null
           exchange_1_market_maker?: string | null
@@ -247,6 +260,7 @@ export type Database = {
           name?: string | null
           primary_exchange?: string | null
           primary_ticker?: string | null
+          region?: string | null
           replication?: string | null
           retry_count?: number | null
           return_10y_percent?: number | null
@@ -300,12 +314,18 @@ export type Database = {
           country_5_name?: string | null
           country_5_weight?: number | null
           created_at?: string
+          current_dividend_yield?: string | null
+          current_dividend_yield_numeric?: number | null
           current_price?: number | null
           degiro_free?: boolean | null
           description_cs?: string | null
           description_en?: string | null
           distribution_frequency?: string | null
           distribution_policy?: string | null
+          dividend_extraction_method?: string | null
+          dividends_12m?: string | null
+          dividends_12m_currency?: string | null
+          dividends_12m_numeric?: number | null
           exchange_1_bloomberg?: string | null
           exchange_1_currency?: string | null
           exchange_1_market_maker?: string | null
@@ -377,6 +397,7 @@ export type Database = {
           name?: string | null
           primary_exchange?: string | null
           primary_ticker?: string | null
+          region?: string | null
           replication?: string | null
           retry_count?: number | null
           return_10y_percent?: number | null

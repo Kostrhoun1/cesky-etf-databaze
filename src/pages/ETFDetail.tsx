@@ -152,6 +152,7 @@ const ETFDetail: React.FC = () => {
               )}
               <Badge variant="outline">{etf.category}</Badge>
               <Badge variant="outline">{etf.fund_domicile}</Badge>
+              {etf.region && <Badge variant="outline">{etf.region}</Badge>}
             </div>
           </div>
         </div>
@@ -183,9 +184,9 @@ const ETFDetail: React.FC = () => {
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <p className="text-sm text-gray-500 mb-1">3 roky</p>
-            <p className={`text-xl font-bold ${getReturnColor(etf.return_3y)}`}>
-              {etf.return_3y ? formatPercentage(etf.return_3y) : '-'}
+            <p className="text-sm text-gray-500 mb-1">Div. výnos</p>
+            <p className="text-xl font-bold">
+              {etf.current_dividend_yield_numeric ? formatPercentage(etf.current_dividend_yield_numeric) : '-'}
             </p>
           </CardContent>
         </Card>
@@ -216,6 +217,12 @@ const ETFDetail: React.FC = () => {
                 <span className="text-gray-600">Domicil:</span>
                 <span className="font-medium">{etf.fund_domicile}</span>
               </div>
+              {etf.region && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Region:</span>
+                  <span className="font-medium">{etf.region}</span>
+                </div>
+              )}
               <div className="flex justify-between">
                 <span className="text-gray-600">Datum založení:</span>
                 <span className="font-medium">{etf.inception_date}</span>
@@ -231,6 +238,50 @@ const ETFDetail: React.FC = () => {
               <div className="flex justify-between">
                 <span className="text-gray-600">Sledovaný index:</span>
                 <span className="font-medium">{etf.index_name}</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Dividend Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Dividendové informace</CardTitle>
+            <CardDescription>Informace o dividendách a výnosech</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Aktuální div. výnos:</span>
+                <span className="font-medium">
+                  {etf.current_dividend_yield_numeric ? formatPercentage(etf.current_dividend_yield_numeric) : '-'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Dividendy za 12 měsíců:</span>
+                <span className="font-medium">
+                  {etf.dividends_12m || '-'}
+                </span>
+              </div>
+              {etf.dividends_12m_currency && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Měna dividend:</span>
+                  <span className="font-medium">{etf.dividends_12m_currency}</span>
+                </div>
+              )}
+              {etf.dividend_extraction_method && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Způsob výplaty:</span>
+                  <span className="font-medium">{etf.dividend_extraction_method}</span>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span className="text-gray-600">Distribuční politika:</span>
+                <span className="font-medium">{etf.distribution_policy}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Frekvence distribuce:</span>
+                <span className="font-medium">{etf.distribution_frequency || '-'}</span>
               </div>
             </div>
           </CardContent>
