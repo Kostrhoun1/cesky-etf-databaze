@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Layout from '../components/Layout';
 import DetailedBrokerComparison from '../components/home/DetailedBrokerComparison';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { DollarSign, Shield, TrendingUp } from 'lucide-react';
@@ -25,7 +26,7 @@ const WhereToBuyETFs = () => {
   ];
 
   return (
-    <>
+    <Layout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero sekce */}
         <div className="text-center mb-16">
@@ -111,7 +112,7 @@ const WhereToBuyETFs = () => {
           </div>
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 
