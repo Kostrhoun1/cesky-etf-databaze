@@ -42,19 +42,28 @@ function App() {
                 <Route index element={<Index />} />
                 <Route path="home" element={<HomePage />} />
                 <Route path="auth" element={<AuthPage />} />
+                <Route path="srovnani-etf" element={<ETFComparison />} />
                 <Route path="porovnani-etf" element={<ETFComparison />} />
                 <Route path="etf/:isin" element={<ETFDetail />} />
                 <Route path="co-jsou-etf" element={<WhatAreETFs />} />
                 <Route path="kde-koupit-etf" element={<WhereToBuyETFs />} />
                 <Route path="degiro-recenze" element={<DEGIROReview />} />
                 <Route path="pruvodce-pro-zacatecniky" element={<BeginnerGuide />} />
+                <Route path="nastroje" element={<Tools />} />
                 <Route path="kalkulacky" element={<Tools />} />
+                <Route path="tipy" element={<BlogPage />} />
                 <Route path="blog" element={<BlogPage />} />
+                <Route path="tipy/nejlepsi-etf-2025" element={<NejlepsiETF2025 />} />
                 <Route path="blog/nejlepsi-etf-2025" element={<NejlepsiETF2025 />} />
+                <Route path="tipy/nejlepsi-etf-na-americke-akcie" element={<NejlepsiETFNaAmerickeAkcie />} />
                 <Route path="blog/nejlepsi-etf-na-americke-akcie" element={<NejlepsiETFNaAmerickeAkcie />} />
+                <Route path="tipy/nejlepsi-etf-na-evropske-akcie" element={<NejlepsiETFNaEvropskeAkcie />} />
                 <Route path="blog/nejlepsi-etf-na-evropske-akcie" element={<NejlepsiETFNaEvropskeAkcie />} />
+                <Route path="tipy/nejlepsi-etf-na-nasdaq" element={<NejlepsiETFNaNASDAQ />} />
                 <Route path="blog/nejlepsi-etf-na-nasdaq" element={<NejlepsiETFNaNASDAQ />} />
+                <Route path="tipy/nejlepsi-dividendove-etf" element={<NejlepsiDividendoveETF />} />
                 <Route path="blog/nejlepsi-dividendove-etf" element={<NejlepsiDividendoveETF />} />
+                <Route path="tipy/all-weather-portfolio" element={<AllWeatherPortfolio />} />
                 <Route path="blog/all-weather-portfolio" element={<AllWeatherPortfolio />} />
                 <Route path="newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
                 <Route 
