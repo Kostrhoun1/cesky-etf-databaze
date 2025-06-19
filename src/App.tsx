@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
+import Layout from "./components/Layout";
 import HomePage from "./pages/HomePage";
 import ETFComparison from "./pages/ETFComparison";
 import WhatAreETFs from "./pages/WhatAreETFs";
@@ -33,25 +34,27 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
           <Route path="/auth" element={<AuthPage />} />
-          <Route path="/srovnani-etf" element={<ETFComparison />} />
-          <Route path="/co-jsou-etf" element={<WhatAreETFs />} />
-          <Route path="/kde-koupit-etf" element={<WhereToBuyETFs />} />
-          <Route path="/degiro-recenze" element={<DEGIROReview />} />
-          <Route path="/nastroje" element={<Tools />} />
-          <Route path="/navod-pro-zacatecniky" element={<BeginnerGuide />} />
-          <Route path="/etf/:isin" element={<ETFDetail />} />
-          <Route path="/tipy" element={<BlogPage />} />
-          <Route path="/tipy/nejlepsi-etf-2025" element={<NejlepsiETF2025 />} />
-          <Route path="/tipy/nejlepsi-etf-na-americke-akcie" element={<NejlepsiETFNaAmerickeAkcie />} />
-          <Route path="/tipy/nejlepsi-etf-na-nasdaq" element={<NejlepsiETFNaNASDAQ />} />
-          <Route path="/tipy/nejlepsi-dividendove-etf" element={<NejlepsiDividendoveETF />} />
-          <Route path="/tipy/nejlepsi-etf-na-evropske-akcie" element={<NejlepsiETFNaEvropskeAkcie />} />
-          <Route path="/tipy/all-weather-portfolio" element={<AllWeatherPortfolio />} />
-          <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
-          <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
-          <Route path="*" element={<NotFound />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/srovnani-etf" element={<ETFComparison />} />
+            <Route path="/co-jsou-etf" element={<WhatAreETFs />} />
+            <Route path="/kde-koupit-etf" element={<WhereToBuyETFs />} />
+            <Route path="/degiro-recenze" element={<DEGIROReview />} />
+            <Route path="/nastroje" element={<Tools />} />
+            <Route path="/navod-pro-zacatecniky" element={<BeginnerGuide />} />
+            <Route path="/etf/:isin" element={<ETFDetail />} />
+            <Route path="/tipy" element={<BlogPage />} />
+            <Route path="/tipy/nejlepsi-etf-2025" element={<NejlepsiETF2025 />} />
+            <Route path="/tipy/nejlepsi-etf-na-americke-akcie" element={<NejlepsiETFNaAmerickeAkcie />} />
+            <Route path="/tipy/nejlepsi-etf-na-nasdaq" element={<NejlepsiETFNaNASDAQ />} />
+            <Route path="/tipy/nejlepsi-dividendove-etf" element={<NejlepsiDividendoveETF />} />
+            <Route path="/tipy/nejlepsi-etf-na-evropske-akcie" element={<NejlepsiETFNaEvropskeAkcie />} />
+            <Route path="/tipy/all-weather-portfolio" element={<AllWeatherPortfolio />} />
+            <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
+            <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
