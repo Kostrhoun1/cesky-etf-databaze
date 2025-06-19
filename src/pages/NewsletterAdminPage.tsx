@@ -2,15 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
-import { useAuth } from "@/hooks/useAuth";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { sanitizeText } from "@/utils/sanitize";
 import NewsletterSubscribersList, { Subscriber } from "@/components/newsletter/NewsletterSubscribersList";
 import NewsletterForm from "@/components/newsletter/NewsletterForm";
 import NewsletterList, { Newsletter } from "@/components/newsletter/NewsletterList";
 
-const NewsletterAdminPageContent: React.FC = () => {
-  const { user } = useAuth();
+const NewsletterAdminPage: React.FC = () => {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
@@ -132,7 +129,7 @@ const NewsletterAdminPageContent: React.FC = () => {
         .insert({ 
           subject: sanitizedSubject, 
           body: sanitizedBody,
-          sent_by: user?.id 
+          sent_by: null // Removed user dependency
         });
 
       if (error) {
@@ -186,14 +183,6 @@ const NewsletterAdminPageContent: React.FC = () => {
         sendingId={sendingId}
       />
     </div>
-  );
-};
-
-const NewsletterAdminPage: React.FC = () => {
-  return (
-    <ProtectedRoute requireAdmin={true}>
-      <NewsletterAdminPageContent />
-    </ProtectedRoute>
   );
 };
 
