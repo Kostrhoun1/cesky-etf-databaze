@@ -3,11 +3,90 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { sanitizeText } from "@/utils/sanitize";
 import NewsletterSubscribersList, { Subscriber } from "@/components/newsletter/NewsletterSubscribersList";
 import NewsletterForm from "@/components/newsletter/NewsletterForm";
 import NewsletterList, { Newsletter } from "@/components/newsletter/NewsletterList";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+const LoginForm: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) {
+        toast({
+          title: "Chyba při přihlášení",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Přihlášení úspěšné",
+          description: "Vítejte v admin rozhraní!",
+        });
+        onLogin();
+      }
+    } catch (error: any) {
+      toast({
+        title: "Chyba",
+        description: "Něco se pokazilo. Zkuste to znovu.",
+        variant: "destructive",
+      });
+    }
+    
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-center">
+            Admin přihlášení
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Input
+              type="password"
+              placeholder="Heslo"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <Button 
+              type="submit" 
+              className="w-full"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Přihlašuji...' : 'Přihlásit se'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
 
 const NewsletterAdminPageContent: React.FC = () => {
   const { user } = useAuth();
@@ -18,6 +97,29 @@ const NewsletterAdminPageContent: React.FC = () => {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [showSubscribers, setShowSubscribers] = useState(false);
   const [sendingId, setSendingId] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminCheckLoading, setAdminCheckLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      // Check if user is admin
+      supabase
+        .from('app_admins')
+        .select('user_email')
+        .eq('user_email', user.email)
+        .maybeSingle()
+        .then(({ data, error }) => {
+          if (!error && data) {
+            setIsAdmin(true);
+          } else {
+            setIsAdmin(false);
+          }
+          setAdminCheckLoading(false);
+        });
+    } else {
+      setAdminCheckLoading(false);
+    }
+  }, [user]);
 
   const reloadNewsletters = () => {
     supabase
@@ -42,9 +144,28 @@ const NewsletterAdminPageContent: React.FC = () => {
   };
 
   useEffect(() => {
-    reloadNewsletters();
-    reloadSubscribers();
-  }, []);
+    if (isAdmin) {
+      reloadNewsletters();
+      reloadSubscribers();
+    }
+  }, [isAdmin]);
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Chyba při odhlášení",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      setIsAdmin(false);
+      toast({
+        title: "Odhlášení úspěšné",
+        description: "Byli jste úspěšně odhlášeni.",
+      });
+    }
+  };
 
   // Validate and sanitize input
   const validateInput = (subject: string, body: string): boolean => {
@@ -161,9 +282,43 @@ const NewsletterAdminPageContent: React.FC = () => {
     setSending(false);
   };
 
+  if (adminCheckLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg">Načítání...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <LoginForm onLogin={() => {}} />;
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Přístup odepřen</h1>
+          <p className="text-gray-600 mb-4">Nemáte oprávnění k přístupu na tuto stránku.</p>
+          <Button onClick={handleSignOut}>
+            Odhlásit se
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-3xl mx-auto my-10">
-      <h1 className="text-3xl font-bold mb-6">Newsletter Admin</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Newsletter Admin</h1>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-gray-600">{user.email}</span>
+          <Button variant="outline" onClick={handleSignOut}>
+            Odhlásit se
+          </Button>
+        </div>
+      </div>
 
       <NewsletterSubscribersList
         subscribers={subscribers}
@@ -190,11 +345,7 @@ const NewsletterAdminPageContent: React.FC = () => {
 };
 
 const NewsletterAdminPage: React.FC = () => {
-  return (
-    <ProtectedRoute requireAdmin={true}>
-      <NewsletterAdminPageContent />
-    </ProtectedRoute>
-  );
+  return <NewsletterAdminPageContent />;
 };
 
 export default NewsletterAdminPage;
