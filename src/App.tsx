@@ -14,6 +14,7 @@ import ETFDetail from "./pages/ETFDetail";
 import NotFound from "./pages/NotFound";
 import BlogPage from "./pages/BlogPage";
 import BeginnerGuide from "./pages/BeginnerGuide";
+import AuthPage from "./pages/AuthPage";
 import NejlepsiETF2025 from "./pages/blog/NejlepsiETF2025";
 import NejlepsiETFNaAmerickeAkcie from "./pages/blog/NejlepsiETFNaAmerickeAkcie";
 import NejlepsiETFNaNASDAQ from "./pages/blog/NejlepsiETFNaNASDAQ";
@@ -33,6 +34,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/auth" element={<AuthPage />} />
           <Route path="/srovnani-etf" element={<ETFComparison />} />
           <Route path="/co-jsou-etf" element={<WhatAreETFs />} />
           <Route path="/kde-koupit-etf" element={<WhereToBuyETFs />} />
