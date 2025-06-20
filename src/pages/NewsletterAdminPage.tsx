@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
@@ -6,6 +5,9 @@ import { sanitizeText } from "@/utils/sanitize";
 import NewsletterSubscribersList, { Subscriber } from "@/components/newsletter/NewsletterSubscribersList";
 import NewsletterForm from "@/components/newsletter/NewsletterForm";
 import NewsletterList, { Newsletter } from "@/components/newsletter/NewsletterList";
+import CSVUploader from "@/components/CSVUploader";
+import { parseCSV } from "@/utils/csvParser";
+import { useETFData } from "@/hooks/useETFData";
 
 const NewsletterAdminPage: React.FC = () => {
   const [subject, setSubject] = useState("");
@@ -15,6 +17,8 @@ const NewsletterAdminPage: React.FC = () => {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [showSubscribers, setShowSubscribers] = useState(false);
   const [sendingId, setSendingId] = useState<string | null>(null);
+  const { upsertETFs, getETFCount } = useETFData();
+  const [etfCount, setEtfCount] = useState(0);
 
   const reloadNewsletters = () => {
     supabase
@@ -38,10 +42,43 @@ const NewsletterAdminPage: React.FC = () => {
       });
   };
 
+  const loadETFCount = async () => {
+    const count = await getETFCount();
+    setEtfCount(count);
+  };
+
   useEffect(() => {
     reloadNewsletters();
     reloadSubscribers();
+    loadETFCount();
   }, []);
+
+  const handleCSVUpload = async (csvContent: string) => {
+    try {
+      console.log('Zpracovávám CSV obsah...');
+      const parsedETFs = parseCSV(csvContent);
+      console.log('Úspěšně naparsováno', parsedETFs.length, 'ETF fondů');
+      
+      // Upsert do databáze
+      await upsertETFs(parsedETFs);
+      
+      // Aktualizovat počet ETF fondů
+      await loadETFCount();
+      
+      toast({
+        title: "CSV soubor úspěšně nahrán",
+        description: `${parsedETFs.length} ETF fondů bylo aktualizováno v databázi.`,
+      });
+      
+    } catch (error) {
+      console.error('Chyba při zpracování CSV:', error);
+      toast({
+        title: "Chyba při zpracování CSV",
+        description: "Nepodařilo se nahrát a zpracovat CSV soubor.",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Validate and sanitize input
   const validateInput = (subject: string, body: string): boolean => {
@@ -161,6 +198,16 @@ const NewsletterAdminPage: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto my-10">
       <h1 className="text-3xl font-bold mb-6">Newsletter Admin</h1>
+
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Aktualizace ETF databáze</h2>
+        <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+          <p className="text-sm text-blue-700">
+            Aktuální počet ETF fondů v databázi: <strong>{etfCount}</strong>
+          </p>
+        </div>
+        <CSVUploader onFileUpload={handleCSVUpload} />
+      </div>
 
       <NewsletterSubscribersList
         subscribers={subscribers}
