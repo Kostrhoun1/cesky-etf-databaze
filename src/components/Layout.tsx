@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Mail } from 'lucide-react';
+import { Menu, Mail, Settings } from 'lucide-react';
 import Logo from './Logo';
 
 interface LayoutProps {
@@ -54,6 +54,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               ))}
             </nav>
             
+            {/* Admin link */}
+            <div className="hidden md:flex items-center space-x-2">
+              <Link
+                to="/admin/etf"
+                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                title="Správa ETF databáze"
+              >
+                <Settings className="h-5 w-5" />
+              </Link>
+            </div>
+            
             {/* Mobile menu */}
             <div className="md:hidden">
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -80,6 +91,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                           {item.name}
                         </Link>
                       ))}
+                      <Link
+                        to="/admin/etf"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="px-4 py-3 rounded-md text-base font-medium text-gray-600 hover:text-violet-600 hover:bg-violet-50 transition-colors flex items-center gap-2"
+                      >
+                        <Settings className="h-4 w-4" />
+                        Správa ETF
+                      </Link>
                     </nav>
                   </div>
                 </SheetContent>

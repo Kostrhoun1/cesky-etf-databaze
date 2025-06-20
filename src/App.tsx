@@ -22,6 +22,7 @@ import NejlepsiETFNaEvropskeAkcie from "./pages/blog/NejlepsiETFNaEvropskeAkcie"
 import AllWeatherPortfolio from "./pages/blog/AllWeatherPortfolio";
 import NewsletterUnsubscribe from "./pages/NewsletterUnsubscribe";
 import NewsletterAdminPage from "./pages/NewsletterAdminPage";
+import PublicETFAdminPage from "./pages/PublicETFAdminPage";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
           <Route path="/tipy/all-weather-portfolio" element={<AllWeatherPortfolio />} />
           <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
           <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
+          <Route path="/admin/etf" element={<PublicETFAdminPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
