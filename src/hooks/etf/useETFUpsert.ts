@@ -19,6 +19,7 @@ export const useETFUpsert = () => {
         name: etf.name,
         url: etf.url,
         description_en: etf.description_en,
+        description_cs: etf.description_cs,
         ter: etf.ter,
         ter_numeric: etf.ter_numeric || 0,
         fund_size: etf.fund_size,
@@ -36,6 +37,7 @@ export const useETFUpsert = () => {
         investment_focus: etf.investment_focus,
         sustainability: etf.sustainability,
         category: etf.category,
+        region: etf.region,
         total_holdings: etf.total_holdings || 0,
         return_1y: etf.return_1y || 0,
         return_3y: etf.return_3y || 0,
@@ -58,6 +60,13 @@ export const useETFUpsert = () => {
         primary_exchange: etf.primary_exchange,
         primary_ticker: etf.primary_ticker,
         total_exchanges: etf.total_exchanges || 0,
+        // Dividend fields that were missing
+        current_dividend_yield: etf.current_dividend_yield,
+        current_dividend_yield_numeric: etf.current_dividend_yield_numeric || 0,
+        dividends_12m: etf.dividends_12m,
+        dividends_12m_numeric: etf.dividends_12m_numeric || 0,
+        dividends_12m_currency: etf.dividends_12m_currency,
+        dividend_extraction_method: etf.dividend_extraction_method,
         scraping_date: etf.scraping_date,
         scraping_status: etf.scraping_status,
         retry_count: etf.retry_count || 0,
@@ -137,6 +146,13 @@ export const useETFUpsert = () => {
         exchange_5_reuters: etf.exchange_5_reuters,
         exchange_5_market_maker: etf.exchange_5_market_maker,
       }));
+
+      console.log('Sample transformed ETF dividend/region data:', transformedETFs[0] ? {
+        name: transformedETFs[0].name,
+        current_dividend_yield: transformedETFs[0].current_dividend_yield,
+        current_dividend_yield_numeric: transformedETFs[0].current_dividend_yield_numeric,
+        region: transformedETFs[0].region
+      } : 'No data');
 
       // Use upsert to insert or update records
       const { data, error } = await supabase

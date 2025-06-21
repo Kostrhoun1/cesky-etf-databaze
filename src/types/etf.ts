@@ -4,6 +4,7 @@ export interface ETF {
   name: string;
   url: string;
   description_en: string;
+  description_cs: string;
   ter: string;
   ter_numeric: number;
   fund_size: string;
@@ -21,6 +22,7 @@ export interface ETF {
   investment_focus: string;
   sustainability: string;
   category: string;
+  region: string;
   total_holdings: number;
   return_1y: number;
   return_3y: number;
@@ -43,6 +45,13 @@ export interface ETF {
   primary_exchange: string;
   primary_ticker: string;
   total_exchanges: number;
+  // Dividend fields that were missing
+  current_dividend_yield: string;
+  current_dividend_yield_numeric: number;
+  dividends_12m: string;
+  dividends_12m_numeric: number;
+  dividends_12m_currency: string;
+  dividend_extraction_method: string;
   scraping_date: string;
   scraping_status: string;
   retry_count: number;
@@ -141,6 +150,8 @@ export interface ETFListItem {
   index_name: string;
   fund_currency: string;
   replication: string;
+  region?: string;
+  current_dividend_yield_numeric?: number;
   // Přidání všech ticker polí pro rozšířené vyhledávání
   exchange_1_ticker?: string;
   exchange_2_ticker?: string;

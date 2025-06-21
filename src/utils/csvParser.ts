@@ -8,9 +8,54 @@ export const parseCSV = (csvContent: string): ETF[] => {
   console.log('CSV Headers:', headers);
   console.log('Total lines:', lines.length);
   
-  // Debug: Check which headers contain TER
-  const terHeaders = headers.filter(h => h.toLowerCase().includes('ter'));
-  console.log('TER related headers:', terHeaders);
+  // List of numeric fields that should be converted to numbers
+  const numericFields = [
+    'ter_numeric',
+    'fund_size_numeric', 
+    'total_holdings',
+    'return_1y',
+    'return_3y', 
+    'return_5y',
+    'return_ytd',
+    'volatility_1y',
+    'volatility_3y',
+    'volatility_5y',
+    'return_per_risk_1y',
+    'return_per_risk_3y', 
+    'return_per_risk_5y',
+    'max_drawdown_1y',
+    'max_drawdown_3y',
+    'max_drawdown_5y',
+    'max_drawdown_inception',
+    'beta',
+    'correlation',
+    'tracking_error',
+    'information_ratio',
+    'total_exchanges',
+    'current_dividend_yield_numeric',
+    'dividends_12m_numeric',
+    'retry_count',
+    'holding_1_weight',
+    'holding_2_weight',
+    'holding_3_weight',
+    'holding_4_weight',
+    'holding_5_weight',
+    'holding_6_weight',
+    'holding_7_weight',
+    'holding_8_weight',
+    'holding_9_weight',
+    'holding_10_weight',
+    'country_1_weight',
+    'country_2_weight',
+    'country_3_weight',
+    'country_4_weight',
+    'country_5_weight',
+    'sector_1_weight',
+    'sector_2_weight',
+    'sector_3_weight',
+    'sector_4_weight',
+    'sector_5_weight'
+  ];
   
   const etfs: ETF[] = [];
   
@@ -27,41 +72,35 @@ export const parseCSV = (csvContent: string): ETF[] => {
     headers.forEach((header, index) => {
       const value = values[index]?.trim();
       
-      // Debug TER values specifically
-      if (header.toLowerCase().includes('ter')) {
-        console.log(`Processing TER field "${header}":`, value);
-      }
-      
       // Convert numeric fields
-      if (header.includes('_numeric') || 
-          header.includes('return_') || 
-          header.includes('volatility_') || 
-          header.includes('max_drawdown_') ||
-          header.includes('_weight') ||
-          header === 'total_holdings' ||
-          header === 'total_exchanges' ||
-          header === 'retry_count' ||
-          header === 'beta' ||
-          header === 'correlation' ||
-          header === 'tracking_error' ||
-          header === 'information_ratio') {
+      if (numericFields.includes(header)) {
         const numValue = value && value !== '' ? parseFloat(value.replace(',', '.')) : 0;
         etf[header] = numValue;
         
-        // Debug TER numeric values
-        if (header === 'ter_numeric') {
-          console.log(`Converted ter_numeric "${value}" to:`, numValue);
+        // Debug dividend and region related fields
+        if (header.includes('dividend') || header === 'region') {
+          console.log(`Processing field "${header}":`, value, '-> converted to:', numValue);
         }
       } else {
         etf[header] = value || '';
+        
+        // Debug dividend and region related fields
+        if (header.includes('dividend') || header === 'region') {
+          console.log(`Processing field "${header}":`, value);
+        }
       }
     });
     
-    // Debug first few ETFs TER values
+    // Debug first few ETFs dividend and region values
     if (i <= 3) {
-      console.log(`ETF ${i} TER values:`, {
-        ter: etf.ter,
-        ter_numeric: etf.ter_numeric,
+      console.log(`ETF ${i} dividend/region values:`, {
+        current_dividend_yield: etf.current_dividend_yield,
+        current_dividend_yield_numeric: etf.current_dividend_yield_numeric,
+        dividends_12m: etf.dividends_12m,
+        dividends_12m_numeric: etf.dividends_12m_numeric,
+        dividends_12m_currency: etf.dividends_12m_currency,
+        dividend_extraction_method: etf.dividend_extraction_method,
+        region: etf.region,
         name: etf.name
       });
     }
@@ -71,12 +110,13 @@ export const parseCSV = (csvContent: string): ETF[] => {
   
   console.log('Parsed ETFs:', etfs.length);
   
-  // Debug: Check TER values in first few parsed ETFs
-  console.log('Sample TER values from parsed ETFs:', 
+  // Debug: Check dividend/region values in first few parsed ETFs
+  console.log('Sample dividend/region values from parsed ETFs:', 
     etfs.slice(0, 5).map(etf => ({
       name: etf.name,
-      ter: etf.ter,
-      ter_numeric: etf.ter_numeric
+      current_dividend_yield: etf.current_dividend_yield,
+      current_dividend_yield_numeric: etf.current_dividend_yield_numeric,
+      region: etf.region
     }))
   );
   
