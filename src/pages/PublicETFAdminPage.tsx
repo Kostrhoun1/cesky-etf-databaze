@@ -9,10 +9,20 @@ import Layout from "@/components/Layout";
 const PublicETFAdminPage: React.FC = () => {
   const { upsertETFs, getETFCount } = useETFData();
   const [etfCount, setEtfCount] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
 
   const loadETFCount = async () => {
-    const count = await getETFCount();
-    setEtfCount(count);
+    try {
+      const count = await getETFCount();
+      setEtfCount(count);
+    } catch (error) {
+      console.error('Error loading ETF count:', error);
+      toast({
+        title: "Chyba při načítání",
+        description: "Nepodařilo se načíst počet ETF fondů.",
+        variant: "destructive",
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -20,10 +30,22 @@ const PublicETFAdminPage: React.FC = () => {
   }, []);
 
   const handleCSVUpload = async (csvContent: string) => {
+    if (isUploading) return;
+    
+    setIsUploading(true);
     try {
       console.log('Zpracovávám CSV obsah...');
       const parsedETFs = parseCSV(csvContent);
       console.log('Úspěšně naparsováno', parsedETFs.length, 'ETF fondů');
+      
+      if (parsedETFs.length === 0) {
+        toast({
+          title: "Prázdný soubor",
+          description: "CSV soubor neobsahuje žádná validní data.",
+          variant: "destructive",
+        });
+        return;
+      }
       
       // Upsert do databáze
       await upsertETFs(parsedETFs);
@@ -40,9 +62,11 @@ const PublicETFAdminPage: React.FC = () => {
       console.error('Chyba při zpracování CSV:', error);
       toast({
         title: "Chyba při zpracování CSV",
-        description: "Nepodařilo se nahrát a zpracovat CSV soubor.",
+        description: error instanceof Error ? error.message : "Nepodařilo se nahrát a zpracovat CSV soubor.",
         variant: "destructive",
       });
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -58,13 +82,23 @@ const PublicETFAdminPage: React.FC = () => {
               Aktuální počet ETF fondů v databázi: <strong>{etfCount}</strong>
             </p>
           </div>
-          <CSVUploader onFileUpload={handleCSVUpload} />
+          <CSVUploader 
+            onFileUpload={handleCSVUpload} 
+            disabled={isUploading}
+          />
+          {isUploading && (
+            <div className="mt-4 p-4 bg-yellow-50 rounded-lg">
+              <p className="text-sm text-yellow-700">
+                Nahrávám a zpracovávám CSV soubor...
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="mt-8 p-4 bg-gray-50 rounded-lg">
           <h3 className="text-lg font-semibold mb-2">Jak nahrát CSV soubor:</h3>
           <ol className="list-decimal list-inside space-y-1 text-sm text-gray-700">
-            <li>Připravte CSV soubor s ETF daty</li>
+            <li>Připravte CSV soubor s ETF daty (oddělovač středník)</li>
             <li>Klikněte na "Vybrat CSV soubor" nebo přetáhněte soubor do oblasti</li>
             <li>Počkejte na zpracování a aktualizaci databáze</li>
             <li>Zkontrolujte aktualizovaný počet ETF fondů</li>
