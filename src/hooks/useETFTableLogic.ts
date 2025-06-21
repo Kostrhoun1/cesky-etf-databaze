@@ -8,6 +8,7 @@ export interface AdvancedFiltersState {
   maxTer: number;
   replicationMethod: string;
   fundSizeRange: string;
+  region: string;
 }
 
 export const useETFTableLogic = (etfs: ETFListItem[]) => {
@@ -26,6 +27,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     maxTer: initialMaxTer,
     replicationMethod: 'all',
     fundSizeRange: 'all',
+    region: 'all',
   });
 
   const categories = useMemo(() => 
@@ -182,11 +184,12 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
       })
       .filter(etf => etf.category === activeCategory)
       .filter(etf => {
-        const { distributionPolicy, indexName, fundCurrency, maxTer, replicationMethod, fundSizeRange } = advancedFilters;
+        const { distributionPolicy, indexName, fundCurrency, maxTer, replicationMethod, fundSizeRange, region } = advancedFilters;
         const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
         const indexMatch = indexName === 'all' || etf.index_name === indexName;
         const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
         const terMatch = (etf.ter_numeric || 0) <= maxTer;
+        const regionMatch = region === 'all' || etf.region === region;
         
         // Replication method filter
         const replicationMatch = replicationMethod === 'all' || etf.replication === replicationMethod;
@@ -227,7 +230,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
           }
         }
         
-        const allFiltersMatch = distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch;
+        const allFiltersMatch = distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch && regionMatch;
         
         // Debug pro IE00B6YX5C33 - proč prošel/neprošel filtry
         if (etf.isin === 'IE00B6YX5C33') {
@@ -238,6 +241,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
           console.log(`terMatch: ${terMatch}`);
           console.log(`replicationMatch: ${replicationMatch}`);
           console.log(`fundSizeMatch: ${fundSizeMatch}`);
+          console.log(`regionMatch: ${regionMatch}`);
           console.log(`Final result (allFiltersMatch): ${allFiltersMatch}`);
         }
         

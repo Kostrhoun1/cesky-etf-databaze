@@ -44,6 +44,7 @@ const ETFSearchLogic: React.FC<ETFSearchLogicProps> = ({
     maxTer: 1,
     replicationMethod: 'all',
     fundSizeRange: 'all',
+    region: 'all',
   });
 
   useEffect(() => {
@@ -113,11 +114,12 @@ const ETFSearchLogic: React.FC<ETFSearchLogicProps> = ({
       })
       .filter(etf => etf.category === activeCategory)
       .filter(etf => {
-        const { distributionPolicy, indexName, fundCurrency, maxTer, replicationMethod, fundSizeRange } = advancedFilters;
+        const { distributionPolicy, indexName, fundCurrency, maxTer, replicationMethod, fundSizeRange, region } = advancedFilters;
         const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
         const indexMatch = indexName === 'all' || etf.index_name === indexName;
         const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
         const terMatch = (etf.ter_numeric || 0) <= maxTer;
+        const regionMatch = region === 'all' || etf.region === region;
         
         // Replication method filter
         const replicationMatch = replicationMethod === 'all' || etf.replication === replicationMethod;
@@ -150,7 +152,7 @@ const ETFSearchLogic: React.FC<ETFSearchLogicProps> = ({
           }
         }
         
-        return distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch;
+        return distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch && regionMatch;
       })
       .sort((a, b) => {
         let aValue: any = a[sortBy as keyof ETFListItem];

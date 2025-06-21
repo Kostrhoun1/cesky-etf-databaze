@@ -24,6 +24,7 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
   const uniqueIndexes = [...new Set(etfs.map(etf => etf.index_name).filter(Boolean))].sort();
   const uniqueCurrencies = [...new Set(etfs.map(etf => etf.fund_currency).filter(Boolean))].sort();
   const uniqueReplications = [...new Set(etfs.map(etf => etf.replication).filter(Boolean))].sort();
+  const uniqueRegions = [...new Set(etfs.map(etf => etf.region).filter(Boolean))].sort();
   
   const maxTerFromData = React.useMemo(() => Math.max(...etfs.map(etf => etf.ter_numeric || 0), 1), [etfs]);
 
@@ -93,6 +94,24 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
                   <SelectItem value="medium">Střední (100 mil. - 1 mld.)</SelectItem>
                   <SelectItem value="large">Velké (1 - 10 mld.)</SelectItem>
                   <SelectItem value="xlarge">Velmi velké (&gt; 10 mld.)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="region-filter-adv" className="font-semibold">Region</Label>
+              <Select
+                value={filters.region}
+                onValueChange={(value) => onFilterChange('region', value)}
+              >
+                <SelectTrigger id="region-filter-adv" className="mt-2">
+                  <SelectValue placeholder="Všechny regiony" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Všechny regiony</SelectItem>
+                  {uniqueRegions.map(region => (
+                    <SelectItem key={region} value={region}>{region}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

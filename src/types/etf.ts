@@ -150,7 +150,7 @@ export interface ETFListItem {
   index_name: string;
   fund_currency: string;
   replication: string;
-  region?: string;
+  region: string;
   current_dividend_yield_numeric?: number;
   // Přidání všech ticker polí pro rozšířené vyhledávání
   exchange_1_ticker?: string;

@@ -8,6 +8,7 @@ import {
   getDistributionFrequencyLabel, 
   getReplicationLabel 
 } from '@/utils/etfFormatters';
+import { formatPercentage } from '@/utils/csvParser';
 
 interface ETFFundDetailsTableProps {
   selectedETFs: ETF[];
@@ -47,6 +48,29 @@ const ETFFundDetailsTable: React.FC<ETFFundDetailsTableProps> = ({
                 <td className="p-3 font-medium">Domicil fondu</td>
                 {selectedETFs.map((etf) => (
                   <td key={etf.isin} className="p-3">{etf.fund_domicile || '-'}</td>
+                ))}
+              </tr>
+              <tr className="border-b">
+                <td className="p-3 font-medium">Region</td>
+                {selectedETFs.map((etf) => (
+                  <td key={etf.isin} className="p-3">{etf.region || '-'}</td>
+                ))}
+              </tr>
+              <tr className="border-b">
+                <td className="p-3 font-medium">Aktuální dividendový výnos</td>
+                {selectedETFs.map((etf) => (
+                  <td key={etf.isin} className="p-3 font-mono">
+                    {etf.current_dividend_yield_numeric ? formatPercentage(etf.current_dividend_yield_numeric) : '-'}
+                  </td>
+                ))}
+              </tr>
+              <tr className="border-b">
+                <td className="p-3 font-medium">Dividendy za 12 měsíců</td>
+                {selectedETFs.map((etf) => (
+                  <td key={etf.isin} className="p-3">
+                    {etf.dividends_12m && etf.dividends_12m_currency ? 
+                      `${etf.dividends_12m} ${etf.dividends_12m_currency}` : '-'}
+                  </td>
                 ))}
               </tr>
               <tr className="border-b">
