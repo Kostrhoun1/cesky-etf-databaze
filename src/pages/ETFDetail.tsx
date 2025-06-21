@@ -243,6 +243,50 @@ const ETFDetail: React.FC = () => {
             </CardContent>
           </Card>
 
+          {/* Dividend Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Dividendové informace</CardTitle>
+              <CardDescription>Informace o dividendách a výnosech</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Aktuální dividendový výnos:</span>
+                  <span className="font-medium font-mono">
+                    {etf.current_dividend_yield_numeric ? 
+                      formatPercentage(etf.current_dividend_yield_numeric) : 
+                      (etf.current_dividend_yield || '-')
+                    }
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Dividendy za 12 měsíců:</span>
+                  <span className="font-medium">
+                    {etf.dividends_12m_numeric ? 
+                      `${etf.dividends_12m_numeric.toFixed(4)} ${etf.dividends_12m_currency || etf.fund_currency}` : 
+                      (etf.dividends_12m || '-')
+                    }
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Frekvence dividend:</span>
+                  <span className="font-medium">{etf.distribution_frequency || '-'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Způsob výplaty:</span>
+                  <span className="font-medium">{etf.distribution_policy || '-'}</span>
+                </div>
+                {etf.dividend_extraction_method && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Metoda získání dividend:</span>
+                    <span className="font-medium text-sm">{etf.dividend_extraction_method}</span>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Performance Metrics Table */}
           <Card>
             <CardHeader>
