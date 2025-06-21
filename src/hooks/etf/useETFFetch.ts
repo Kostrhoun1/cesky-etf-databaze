@@ -49,7 +49,8 @@ export const useETFFetch = () => {
               distribution_policy,
               index_name,
               fund_currency,
-              replication
+              replication,
+              region
             `)
             .order('fund_size_numeric', { ascending: false })
             .range(offset, offset + batchSize - 1);
@@ -95,7 +96,8 @@ export const useETFFetch = () => {
             distribution_policy,
             index_name,
             fund_currency,
-            replication
+            replication,
+            region
           `)
           .order('fund_size_numeric', { ascending: false })
           .limit(limit);
