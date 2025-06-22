@@ -31,6 +31,7 @@ const ETFSearchSection: React.FC = () => {
   if (showDetailedComparison) {
     return (
       <ETFDetailedComparison
+        selectedETFs={selectedETFs}
         onBack={handleBackToList}
       />
     );

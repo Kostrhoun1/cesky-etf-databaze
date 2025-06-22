@@ -11,18 +11,18 @@ import ETFHoldingsTable from './comparison/ETFHoldingsTable';
 import ETFCountriesTable from './comparison/ETFCountriesTable';
 import ETFSectorsTable from './comparison/ETFSectorsTable';
 import ETFExchangesTable from './comparison/ETFExchangesTable';
-import { useETFComparison } from '@/hooks/useETFComparison';
 
 interface ETFDetailedComparisonProps {
+  selectedETFs: ETF[];
   onBack: () => void;
 }
 
 const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
+  selectedETFs,
   onBack,
 }) => {
-  const { selectedETFs } = useETFComparison();
-
   console.log('ETFDetailedComparison - selectedETFs:', selectedETFs);
+  console.log('ETFDetailedComparison - selectedETFs length:', selectedETFs.length);
 
   const basicInfoData = [
     { label: 'Poskytovatel', key: 'fund_provider' },
