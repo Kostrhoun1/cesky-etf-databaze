@@ -50,7 +50,13 @@ export const useETFFetch = () => {
               index_name,
               fund_currency,
               replication,
-              region
+              region,
+              current_dividend_yield_numeric,
+              exchange_1_ticker,
+              exchange_2_ticker,
+              exchange_3_ticker,
+              exchange_4_ticker,
+              exchange_5_ticker
             `)
             .order('fund_size_numeric', { ascending: false })
             .range(offset, offset + batchSize - 1);
@@ -97,7 +103,13 @@ export const useETFFetch = () => {
             index_name,
             fund_currency,
             replication,
-            region
+            region,
+            current_dividend_yield_numeric,
+            exchange_1_ticker,
+            exchange_2_ticker,
+            exchange_3_ticker,
+            exchange_4_ticker,
+            exchange_5_ticker
           `)
           .order('fund_size_numeric', { ascending: false })
           .limit(limit);
