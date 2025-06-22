@@ -20,6 +20,9 @@ const ETFComparisonTableSection: React.FC<ETFComparisonTableSectionProps> = ({
   isETFSelected,
   canAddMore,
 }) => {
+  console.log('ETFComparisonTableSection - etfs count:', etfs.length);
+  console.log('ETFComparisonTableSection - first 3 ETFs:', etfs.slice(0, 3));
+
   if (isLoading) {
     return (
       <div className="text-center py-12">

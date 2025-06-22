@@ -27,6 +27,11 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
     advancedFilters
   } = useETFTableLogic(etfs);
 
+  console.log('ETFComparisonContainer - etfs from useETFSearchData:', etfs.length);
+  console.log('ETFComparisonContainer - filteredETFs from useETFTableLogic:', filteredETFs.length);
+  console.log('ETFComparisonContainer - first filteredETF:', filteredETFs[0]);
+  console.log('ETFComparisonContainer - selectedETFs:', selectedETFs.length);
+
   return (
     <div className="space-y-6">
       <ETFComparisonHeader
