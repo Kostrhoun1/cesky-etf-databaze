@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useETFComparison } from '@/hooks/useETFComparison';
 import { useETFSearchData } from '@/hooks/useETFSearchData';
@@ -32,7 +31,6 @@ const ETFSearchSection: React.FC = () => {
   if (showDetailedComparison) {
     return (
       <ETFDetailedComparison
-        selectedETFs={selectedETFs}
         onBack={handleBackToList}
       />
     );
