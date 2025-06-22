@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ETF } from '@/types/etf';
 import { formatPercentage, formatTER } from '@/utils/csvParser';
@@ -10,16 +11,19 @@ import ETFHoldingsTable from './comparison/ETFHoldingsTable';
 import ETFCountriesTable from './comparison/ETFCountriesTable';
 import ETFSectorsTable from './comparison/ETFSectorsTable';
 import ETFExchangesTable from './comparison/ETFExchangesTable';
+import { useETFComparison } from '@/hooks/useETFComparison';
 
 interface ETFDetailedComparisonProps {
-  selectedETFs: ETF[];
   onBack: () => void;
 }
 
 const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
-  selectedETFs,
   onBack,
 }) => {
+  const { selectedETFs } = useETFComparison();
+
+  console.log('ETFDetailedComparison - selectedETFs:', selectedETFs);
+
   const basicInfoData = [
     { label: 'Poskytovatel', key: 'fund_provider' },
     { label: 'Kategorie', key: 'category' },
@@ -41,6 +45,19 @@ const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
     { label: 'Výnos 3 roky', key: 'return_3y', format: (value: number) => formatPercentage(value), className: 'font-mono' },
     { label: 'Výnos 5 let', key: 'return_5y', format: (value: number) => formatPercentage(value), className: 'font-mono' },
   ];
+
+  if (selectedETFs.length === 0) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <ETFDetailedComparisonHeader onBack={onBack} />
+        <div className="text-center py-12">
+          <p className="text-lg text-gray-600">
+            Nejsou vybrány žádné fondy pro porovnání.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

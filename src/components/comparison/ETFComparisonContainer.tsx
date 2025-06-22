@@ -4,6 +4,7 @@ import ETFComparisonHeader from './ETFComparisonHeader';
 import ETFCategoryTabs from './ETFCategoryTabs';
 import ETFComparisonTableSection from './ETFComparisonTableSection';
 import ETFComparisonFilters from './ETFComparisonFilters';
+import ETFComparisonPanel from '@/components/ETFComparisonPanel';
 import { useETFSearchData } from '@/hooks/useETFSearchData';
 import { useETFComparison } from '@/hooks/useETFComparison';
 import { useETFTableLogic } from '@/hooks/useETFTableLogic';
@@ -67,6 +68,13 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
           />
         </div>
       </div>
+
+      <ETFComparisonPanel
+        selectedETFs={selectedETFs}
+        onRemoveETF={removeETFFromComparison}
+        onClearAll={clearComparison}
+        onShowComparison={onShowDetailedComparison}
+      />
     </div>
   );
 };
