@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import ETFDetailedComparison from '@/components/ETFDetailedComparison';
 import ETFComparisonContainer from '@/components/comparison/ETFComparisonContainer';
-import { useETFComparison } from '@/hooks/useETFComparison';
+import { ETF } from '@/types/etf';
 
 const ETFComparison: React.FC = () => {
   const [showDetailedComparison, setShowDetailedComparison] = useState(false);
-  const { selectedETFs } = useETFComparison();
+  const [selectedETFsForComparison, setSelectedETFsForComparison] = useState<ETF[]>([]);
 
   useEffect(() => {
     document.title = 'Srovnání ETF fondů - ETF průvodce.cz';
@@ -16,7 +16,9 @@ const ETFComparison: React.FC = () => {
     );
   }, []);
 
-  const handleShowDetailedComparison = () => {
+  const handleShowDetailedComparison = (selectedETFs: ETF[]) => {
+    console.log('ETFComparison - handleShowDetailedComparison called with:', selectedETFs.length, 'ETFs');
+    setSelectedETFsForComparison(selectedETFs);
     setShowDetailedComparison(true);
   };
 
@@ -28,7 +30,7 @@ const ETFComparison: React.FC = () => {
     return (
       <Layout>
         <ETFDetailedComparison
-          selectedETFs={selectedETFs}
+          selectedETFs={selectedETFsForComparison}
           onBack={handleBackToList}
         />
       </Layout>

@@ -8,9 +8,10 @@ import ETFComparisonPanel from '@/components/ETFComparisonPanel';
 import { useETFSearchData } from '@/hooks/useETFSearchData';
 import { useETFComparison } from '@/hooks/useETFComparison';
 import { useETFTableLogic } from '@/hooks/useETFTableLogic';
+import { ETF } from '@/types/etf';
 
 interface ETFComparisonContainerProps {
-  onShowDetailedComparison: () => void;
+  onShowDetailedComparison: (selectedETFs: ETF[]) => void;
 }
 
 const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
@@ -33,11 +34,15 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
   console.log('ETFComparisonContainer - first filteredETF:', filteredETFs[0]);
   console.log('ETFComparisonContainer - selectedETFs:', selectedETFs.length);
 
+  const handleShowDetailedComparison = () => {
+    onShowDetailedComparison(selectedETFs);
+  };
+
   return (
     <div className="space-y-6">
       <ETFComparisonHeader
         selectedCount={selectedETFs.length}
-        onShowDetailedComparison={onShowDetailedComparison}
+        onShowDetailedComparison={handleShowDetailedComparison}
         onClearAll={clearComparison}
       />
 
@@ -73,7 +78,7 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
         selectedETFs={selectedETFs}
         onRemoveETF={removeETFFromComparison}
         onClearAll={clearComparison}
-        onShowComparison={onShowDetailedComparison}
+        onShowComparison={handleShowDetailedComparison}
       />
     </div>
   );
