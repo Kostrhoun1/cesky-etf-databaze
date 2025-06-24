@@ -30,7 +30,6 @@ export const calculateInvestment = (params: InvestmentParams): CalculationData[]
 
   const data: CalculationData[] = [];
   const annualReturn = averageReturn / 100;
-  const monthlyReturn = annualReturn / 12;
   
   console.log('Starting calculation with:', params);
 
@@ -39,15 +38,14 @@ export const calculateInvestment = (params: InvestmentParams): CalculationData[]
 
   for (let year = 1; year <= investmentPeriod; year++) {
     if (recurringFrequency === 'monthly') {
-      // Měsíční investování
-      for (let month = 1; month <= 12; month++) {
-        // Přidej měsíční investici
-        currentValue += recurringInvestment;
-        totalInvested += recurringInvestment;
-        
-        // Aplikuj měsíční výnos
-        currentValue = currentValue * (1 + monthlyReturn);
-      }
+      // Měsíční investování - přidáme všechny měsíční investice na začátku roku
+      // a pak aplikujeme roční výnos na celou částku
+      const yearlyRecurringAmount = recurringInvestment * 12;
+      currentValue += yearlyRecurringAmount;
+      totalInvested += yearlyRecurringAmount;
+      
+      // Aplikuj roční výnos na celou částku
+      currentValue = currentValue * (1 + annualReturn);
     } else {
       // Roční investování
       // Přidej roční investici na začátku roku
