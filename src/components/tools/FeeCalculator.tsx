@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -75,11 +76,13 @@ const FeeCalculator: React.FC = () => {
       const netAnnualReturn = grossAnnualReturn - (scenario.totalExpenseRatio / 100);
 
       for (let year = 1; year <= investmentPeriod; year++) {
-        let yearlyFees = 0;
+        let yearlyEntryFees = 0;
+        let yearlyTERFees = 0;
 
         if (recurringFrequency === 'monthly') {
           // Měsíční investování s měsíčním compoundingem
           const monthlyNetReturn = Math.pow(1 + netAnnualReturn, 1/12) - 1;
+          const monthlyGrossReturn = Math.pow(1 + grossAnnualReturn, 1/12) - 1;
           
           for (let month = 1; month <= 12; month++) {
             // Přidej měsíční investici na začátku měsíce
@@ -89,7 +92,11 @@ const FeeCalculator: React.FC = () => {
             // Aplikuj vstupní poplatek na měsíční investici
             const monthlyEntryFee = (recurringInvestment * scenario.entryFee) / 100;
             currentValue -= monthlyEntryFee;
-            yearlyFees += monthlyEntryFee;
+            yearlyEntryFees += monthlyEntryFee;
+            
+            // Vypočítej TER poplatek z aktuální hodnoty před výnosem
+            const monthlyTERFee = currentValue * (scenario.totalExpenseRatio / 100 / 12);
+            yearlyTERFees += monthlyTERFee;
             
             // Aplikuj čistý měsíční výnos (už zahrnuje TER)
             currentValue = currentValue * (1 + monthlyNetReturn);
@@ -103,13 +110,16 @@ const FeeCalculator: React.FC = () => {
           // Aplikuj vstupní poplatek na roční investici
           const yearlyEntryFee = (recurringInvestment * scenario.entryFee) / 100;
           currentValue -= yearlyEntryFee;
-          yearlyFees += yearlyEntryFee;
+          yearlyEntryFees += yearlyEntryFee;
+          
+          // Vypočítej TER poplatek z aktuální hodnoty před výnosem
+          yearlyTERFees = currentValue * (scenario.totalExpenseRatio / 100);
           
           // Aplikuj čistý roční výnos (už zahrnuje TER)
           currentValue = currentValue * (1 + netAnnualReturn);
         }
 
-        totalFeesPaid += yearlyFees;
+        totalFeesPaid += yearlyEntryFees + yearlyTERFees;
 
         // Vypočítej hodnotu bez poplatků pro srovnání (hrubý výnos)
         let grossValue = initialInvestment;
@@ -137,6 +147,8 @@ const FeeCalculator: React.FC = () => {
           currentValue,
           grossValue,
           totalFeesPaid,
+          yearlyEntryFees,
+          yearlyTERFees,
           feeImpact,
           netAnnualReturn: netAnnualReturn * 100
         });
