@@ -109,7 +109,11 @@ export async function runMonteCarloSimulation(params: SimulationParameters): Pro
     
     let value = initialInvestment;
     const values: number[] = [initialInvestment];
+    
     for (let month = 1; month <= monthsTotal; month++) {
+      // Přidej měsíční příspěvek na začátku měsíce
+      value += monthlyContribution;
+      
       // Korelované výnosy pro všechna aktiva
       const rets = generateMonthlyReturns();
       // Vážený výnos portfolia
@@ -119,8 +123,11 @@ export async function runMonteCarloSimulation(params: SimulationParameters): Pro
         const weight = allocation[key];
         portRet += (weight / 100) * rets[i];
       }
-      // aplikace výnosu a příspěvku
-      value = value * (1 + portRet) + monthlyContribution;
+      
+      // Aplikace výnosu na celou hodnotu (včetně nového příspěvku)
+      value = value * (1 + portRet);
+      
+      // Zaznamenej hodnotu na konci každého roku
       if (month % 12 === 0) values.push(value);
     }
     allSimulations.push(values);

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -51,8 +50,7 @@ const FeeCalculator: React.FC = () => {
 
   const calculateFeeImpact = () => {
     const allResults: FeeCalculationResult[] = [];
-    const annualReturn = averageReturn / 100;
-    const monthlyReturn = annualReturn / 12;
+    const grossAnnualReturn = averageReturn / 100;
 
     console.log('Starting fee calculation with:', {
       initialInvestment,
@@ -73,13 +71,18 @@ const FeeCalculator: React.FC = () => {
       currentValue -= initialEntryFee;
       totalFeesPaid += initialEntryFee;
 
+      // Čistý roční výnos po TER poplatcích
+      const netAnnualReturn = grossAnnualReturn - (scenario.totalExpenseRatio / 100);
+
       for (let year = 1; year <= investmentPeriod; year++) {
         let yearlyFees = 0;
 
         if (recurringFrequency === 'monthly') {
-          // Měsíční investování
+          // Měsíční investování s měsíčním compoundingem
+          const monthlyNetReturn = Math.pow(1 + netAnnualReturn, 1/12) - 1;
+          
           for (let month = 1; month <= 12; month++) {
-            // Přidej měsíční investici
+            // Přidej měsíční investici na začátku měsíce
             currentValue += recurringInvestment;
             totalInvested += recurringInvestment;
             
@@ -88,14 +91,8 @@ const FeeCalculator: React.FC = () => {
             currentValue -= monthlyEntryFee;
             yearlyFees += monthlyEntryFee;
             
-            // Aplikuj měsíční výnos
-            currentValue = currentValue * (1 + monthlyReturn);
-            
-            // Odečti měsíční TER
-            const monthlyTER = (scenario.totalExpenseRatio / 100) / 12;
-            const monthlyTERFee = currentValue * monthlyTER;
-            currentValue -= monthlyTERFee;
-            yearlyFees += monthlyTERFee;
+            // Aplikuj čistý měsíční výnos (už zahrnuje TER)
+            currentValue = currentValue * (1 + monthlyNetReturn);
           }
         } else {
           // Roční investování
@@ -108,33 +105,28 @@ const FeeCalculator: React.FC = () => {
           currentValue -= yearlyEntryFee;
           yearlyFees += yearlyEntryFee;
           
-          // Aplikuj roční výnos
-          currentValue = currentValue * (1 + annualReturn);
-          
-          // Odečti roční TER
-          const yearlyTER = scenario.totalExpenseRatio / 100;
-          const yearlyTERFee = currentValue * yearlyTER;
-          currentValue -= yearlyTERFee;
-          yearlyFees += yearlyTERFee;
+          // Aplikuj čistý roční výnos (už zahrnuje TER)
+          currentValue = currentValue * (1 + netAnnualReturn);
         }
 
         totalFeesPaid += yearlyFees;
 
-        // Vypočítej hodnotu bez poplatků pro srovnání
+        // Vypočítej hodnotu bez poplatků pro srovnání (hrubý výnos)
         let grossValue = initialInvestment;
         let grossTotalInvested = initialInvestment;
         
         for (let i = 1; i <= year; i++) {
           if (recurringFrequency === 'monthly') {
+            const monthlyGrossReturn = Math.pow(1 + grossAnnualReturn, 1/12) - 1;
             for (let m = 1; m <= 12; m++) {
               grossValue += recurringInvestment;
               grossTotalInvested += recurringInvestment;
-              grossValue = grossValue * (1 + monthlyReturn);
+              grossValue = grossValue * (1 + monthlyGrossReturn);
             }
           } else {
             grossValue += recurringInvestment;
             grossTotalInvested += recurringInvestment;
-            grossValue = grossValue * (1 + annualReturn);
+            grossValue = grossValue * (1 + grossAnnualReturn);
           }
         }
 
@@ -145,7 +137,8 @@ const FeeCalculator: React.FC = () => {
           currentValue,
           grossValue,
           totalFeesPaid,
-          feeImpact
+          feeImpact,
+          netAnnualReturn: netAnnualReturn * 100
         });
 
         allResults.push({
