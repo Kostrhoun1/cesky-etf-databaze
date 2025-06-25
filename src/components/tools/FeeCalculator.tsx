@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Percent } from 'lucide-react';
+import FeeCalculatorForm from './FeeCalculatorForm';
+import FeeScenarioManager from './FeeScenarioManager';
+import FeeCalculatorResults from './FeeCalculatorResults';
 import FeeComparisonChart from './FeeComparisonChart';
 import FeeComparisonTable from './FeeComparisonTable';
+import { calculateFeeImpact } from '@/utils/feeCalculations';
 
 interface FeeScenario {
   name: string;
@@ -49,128 +50,18 @@ const FeeCalculator: React.FC = () => {
     setScenarios(newScenarios);
   };
 
-  const calculateFeeImpact = () => {
-    const allResults: FeeCalculationResult[] = [];
-    const grossAnnualReturn = averageReturn / 100;
-
-    console.log('Starting fee calculation with:', {
+  const handleCalculate = () => {
+    const calculationResults = calculateFeeImpact({
+      scenarios,
       initialInvestment,
       recurringInvestment,
       recurringFrequency,
       averageReturn,
-      investmentPeriod,
-      scenarios
+      investmentPeriod
     });
-
-    scenarios.forEach(scenario => {
-      let currentValue = initialInvestment;
-      let totalInvested = initialInvestment;
-      let totalFeesPaid = 0;
-
-      // Aplikuj vstupní poplatek na počáteční investici
-      const initialEntryFee = (initialInvestment * scenario.entryFee) / 100;
-      currentValue -= initialEntryFee;
-      totalFeesPaid += initialEntryFee;
-
-      // Čistý roční výnos po TER poplatcích
-      const netAnnualReturn = grossAnnualReturn - (scenario.totalExpenseRatio / 100);
-
-      for (let year = 1; year <= investmentPeriod; year++) {
-        let yearlyEntryFees = 0;
-        let yearlyTERFees = 0;
-
-        if (recurringFrequency === 'monthly') {
-          // Měsíční investování s měsíčním compoundingem
-          const monthlyNetReturn = Math.pow(1 + netAnnualReturn, 1/12) - 1;
-          const monthlyGrossReturn = Math.pow(1 + grossAnnualReturn, 1/12) - 1;
-          
-          for (let month = 1; month <= 12; month++) {
-            // Přidej měsíční investici na začátku měsíce
-            currentValue += recurringInvestment;
-            totalInvested += recurringInvestment;
-            
-            // Aplikuj vstupní poplatek na měsíční investici
-            const monthlyEntryFee = (recurringInvestment * scenario.entryFee) / 100;
-            currentValue -= monthlyEntryFee;
-            yearlyEntryFees += monthlyEntryFee;
-            
-            // Vypočítej TER poplatek z aktuální hodnoty před výnosem
-            const monthlyTERFee = currentValue * (scenario.totalExpenseRatio / 100 / 12);
-            yearlyTERFees += monthlyTERFee;
-            
-            // Aplikuj čistý měsíční výnos (už zahrnuje TER)
-            currentValue = currentValue * (1 + monthlyNetReturn);
-          }
-        } else {
-          // Roční investování
-          // Přidej roční investici na začátku roku
-          currentValue += recurringInvestment;
-          totalInvested += recurringInvestment;
-          
-          // Aplikuj vstupní poplatek na roční investici
-          const yearlyEntryFee = (recurringInvestment * scenario.entryFee) / 100;
-          currentValue -= yearlyEntryFee;
-          yearlyEntryFees += yearlyEntryFee;
-          
-          // Vypočítej TER poplatek z aktuální hodnoty před výnosem
-          yearlyTERFees = currentValue * (scenario.totalExpenseRatio / 100);
-          
-          // Aplikuj čistý roční výnos (už zahrnuje TER)
-          currentValue = currentValue * (1 + netAnnualReturn);
-        }
-
-        totalFeesPaid += yearlyEntryFees + yearlyTERFees;
-
-        // Vypočítej hodnotu bez poplatků pro srovnání (hrubý výnos)
-        let grossValue = initialInvestment;
-        let grossTotalInvested = initialInvestment;
-        
-        for (let i = 1; i <= year; i++) {
-          if (recurringFrequency === 'monthly') {
-            const monthlyGrossReturn = Math.pow(1 + grossAnnualReturn, 1/12) - 1;
-            for (let m = 1; m <= 12; m++) {
-              grossValue += recurringInvestment;
-              grossTotalInvested += recurringInvestment;
-              grossValue = grossValue * (1 + monthlyGrossReturn);
-            }
-          } else {
-            grossValue += recurringInvestment;
-            grossTotalInvested += recurringInvestment;
-            grossValue = grossValue * (1 + grossAnnualReturn);
-          }
-        }
-
-        const feeImpact = grossValue - currentValue;
-
-        console.log(`${scenario.name} - Year ${year}:`, {
-          totalInvested,
-          currentValue,
-          grossValue,
-          totalFeesPaid,
-          yearlyEntryFees,
-          yearlyTERFees,
-          feeImpact,
-          netAnnualReturn: netAnnualReturn * 100
-        });
-
-        allResults.push({
-          scenario,
-          year,
-          grossValue: Math.round(grossValue),
-          netValue: Math.round(currentValue),
-          totalFees: Math.round(totalFeesPaid),
-          feeImpact: Math.round(feeImpact)
-        });
-      }
-    });
-
-    console.log('Fee calculation results:', allResults);
-    setResults(allResults);
+    
+    setResults(calculationResults);
     setShowResults(true);
-  };
-
-  const formatNumber = (num: number) => {
-    return new Intl.NumberFormat('cs-CZ').format(num);
   };
 
   const finalResults = results.filter(r => r.year === investmentPeriod);
@@ -190,142 +81,31 @@ const FeeCalculator: React.FC = () => {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="initial">Jednorázová investice (Kč)</Label>
-              <Input
-                id="initial"
-                type="number"
-                value={initialInvestment || ''}
-                onChange={(e) => setInitialInvestment(Number(e.target.value) || 0)}
-                placeholder="100 000"
-              />
-            </div>
+          <FeeCalculatorForm
+            initialInvestment={initialInvestment}
+            setInitialInvestment={setInitialInvestment}
+            recurringInvestment={recurringInvestment}
+            setRecurringInvestment={setRecurringInvestment}
+            recurringFrequency={recurringFrequency}
+            setRecurringFrequency={setRecurringFrequency}
+            averageReturn={averageReturn}
+            setAverageReturn={setAverageReturn}
+            investmentPeriod={investmentPeriod}
+            setInvestmentPeriod={setInvestmentPeriod}
+          />
 
-            <div className="space-y-2">
-              <Label htmlFor="recurring">Pravidelná investice (Kč)</Label>
-              <Input
-                id="recurring"
-                type="number"
-                value={recurringInvestment || ''}
-                onChange={(e) => setRecurringInvestment(Number(e.target.value) || 0)}
-                placeholder="5 000"
-              />
-            </div>
+          <FeeScenarioManager
+            scenarios={scenarios}
+            updateScenario={updateScenario}
+          />
 
-            <div className="space-y-2">
-              <Label htmlFor="frequency">Frekvence pravidelné investice</Label>
-              <Select value={recurringFrequency} onValueChange={(value: 'monthly' | 'yearly') => setRecurringFrequency(value)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="monthly">Měsíčně</SelectItem>
-                  <SelectItem value="yearly">Ročně</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="return">Průměrný roční výnos (%)</Label>
-              <Input
-                id="return"
-                type="number"
-                step="0.1"
-                value={averageReturn || ''}
-                onChange={(e) => setAverageReturn(Number(e.target.value) || 0)}
-                placeholder="7"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="period">Doba investice (roky)</Label>
-              <Input
-                id="period"
-                type="number"
-                value={investmentPeriod || ''}
-                onChange={(e) => setInvestmentPeriod(Number(e.target.value) || 0)}
-                placeholder="20"
-              />
-            </div>
-          </div>
-
-          {/* Scenarios Configuration */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Scénáře poplatků</h3>
-            <div className="grid gap-4">
-              {scenarios.map((scenario, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-lg">
-                  <div className="space-y-2">
-                    <Label>Název scénáře</Label>
-                    <Input
-                      value={scenario.name}
-                      onChange={(e) => updateScenario(index, 'name', e.target.value)}
-                      placeholder="Název"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>TER - celkové % roční náklady</Label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      value={scenario.totalExpenseRatio || ''}
-                      onChange={(e) => updateScenario(index, 'totalExpenseRatio', e.target.value)}
-                      placeholder="0.15"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Vstupní poplatek (%)</Label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      value={scenario.entryFee || ''}
-                      onChange={(e) => updateScenario(index, 'entryFee', e.target.value)}
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-blue-900 mb-2">Vysvětlení poplatků:</h4>
-              <ul className="text-sm text-blue-800 space-y-1">
-                <li><strong>TER (Total Expense Ratio):</strong> Roční náklady na správu fondu v % z investované částky</li>
-                <li><strong>Vstupní poplatek:</strong> Jednorázový poplatek při nákupu v % z investované částky</li>
-              </ul>
-            </div>
-          </div>
-
-          <Button onClick={calculateFeeImpact} className="w-full md:w-auto">
+          <Button onClick={handleCalculate} className="w-full md:w-auto">
             Spočítat dopad poplatků
           </Button>
 
           {showResults && finalResults.length > 0 && (
             <div className="pt-6 border-t">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                {finalResults.map((result) => (
-                  <div key={result.scenario.name} className="p-4 rounded-lg border" style={{ borderColor: result.scenario.color }}>
-                    <h4 className="font-semibold mb-2" style={{ color: result.scenario.color }}>
-                      {result.scenario.name}
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      <div>
-                        <span className="text-gray-600">Konečná hodnota:</span>
-                        <span className="font-medium ml-2">{formatNumber(result.netValue)} Kč</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">Celkové poplatky:</span>
-                        <span className="font-medium ml-2">{formatNumber(result.totalFees)} Kč</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">Ztráta kvůli poplatkům:</span>
-                        <span className="font-medium ml-2">{formatNumber(result.feeImpact)} Kč</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <FeeCalculatorResults finalResults={finalResults} />
             </div>
           )}
         </CardContent>
