@@ -6,6 +6,7 @@ import { ETFListItem } from '@/types/etf';
 
 export const useETFFetch = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const { toast } = useToast();
   const loadingRef = useRef(false);
 
@@ -28,6 +29,7 @@ export const useETFFetch = () => {
         let allData: any[] = [];
         let hasMore = true;
         let offset = 0;
+        let latestUpdate: Date | null = null;
         const batchSize = 1000;
 
         while (hasMore) {
@@ -56,7 +58,8 @@ export const useETFFetch = () => {
               exchange_2_ticker,
               exchange_3_ticker,
               exchange_4_ticker,
-              exchange_5_ticker
+              exchange_5_ticker,
+              updated_at
             `)
             .order('fund_size_numeric', { ascending: false })
             .range(offset, offset + batchSize - 1);
@@ -68,6 +71,17 @@ export const useETFFetch = () => {
 
           if (data && data.length > 0) {
             allData = [...allData, ...data];
+            
+            // Track the latest update date
+            data.forEach(item => {
+              if (item.updated_at) {
+                const updateDate = new Date(item.updated_at);
+                if (!latestUpdate || updateDate > latestUpdate) {
+                  latestUpdate = updateDate;
+                }
+              }
+            });
+            
             offset += batchSize;
             console.log(`Loaded batch: ${data.length} ETFs, total so far: ${allData.length}`);
             
@@ -80,7 +94,9 @@ export const useETFFetch = () => {
           }
         }
 
+        setLastUpdated(latestUpdate);
         console.log('Successfully loaded', allData.length, 'ETFs from database (all records)');
+        console.log('Latest update date:', latestUpdate);
         return allData || [];
       } else {
         // Original logic for when limit is specified
@@ -109,7 +125,8 @@ export const useETFFetch = () => {
             exchange_2_ticker,
             exchange_3_ticker,
             exchange_4_ticker,
-            exchange_5_ticker
+            exchange_5_ticker,
+            updated_at
           `)
           .order('fund_size_numeric', { ascending: false })
           .limit(limit);
@@ -121,7 +138,22 @@ export const useETFFetch = () => {
           throw new Error(`Failed to fetch ETFs: ${error.message}`);
         }
 
+        // Track the latest update date
+        let latestUpdate: Date | null = null;
+        if (data) {
+          data.forEach(item => {
+            if (item.updated_at) {
+              const updateDate = new Date(item.updated_at);
+              if (!latestUpdate || updateDate > latestUpdate) {
+                latestUpdate = updateDate;
+              }
+            }
+          });
+        }
+        
+        setLastUpdated(latestUpdate);
         console.log('Successfully loaded', data?.length || 0, 'ETFs from database');
+        console.log('Latest update date:', latestUpdate);
         return data || [];
       }
     } catch (error) {
@@ -138,5 +170,5 @@ export const useETFFetch = () => {
     }
   }, [toast]);
 
-  return { fetchETFs, isLoading };
+  return { fetchETFs, isLoading, lastUpdated };
 };

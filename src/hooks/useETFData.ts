@@ -5,7 +5,7 @@ import { useETFCount } from './etf/useETFCount';
 
 export const useETFData = () => {
   const { upsertETFs, isLoading: isUpserting } = useETFUpsert();
-  const { fetchETFs, isLoading: isFetching } = useETFFetch();
+  const { fetchETFs, isLoading: isFetching, lastUpdated } = useETFFetch();
   const { getETFCount } = useETFCount();
 
   // Return true if any operation is loading
@@ -15,6 +15,7 @@ export const useETFData = () => {
     upsertETFs,
     fetchETFs,
     getETFCount,
-    isLoading
+    isLoading,
+    lastUpdated
   };
 };

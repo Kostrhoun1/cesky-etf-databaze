@@ -5,6 +5,7 @@ import ETFCategoryTabs from './ETFCategoryTabs';
 import ETFComparisonTableSection from './ETFComparisonTableSection';
 import ETFComparisonFilters from './ETFComparisonFilters';
 import ETFComparisonPanel from '@/components/ETFComparisonPanel';
+import LastUpdatedInfo from '@/components/LastUpdatedInfo';
 import { useETFSearchData } from '@/hooks/useETFSearchData';
 import { useETFComparison } from '@/hooks/useETFComparison';
 import { useETFTableLogic } from '@/hooks/useETFTableLogic';
@@ -17,7 +18,7 @@ interface ETFComparisonContainerProps {
 const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
   onShowDetailedComparison,
 }) => {
-  const { etfs, categories, maxTerFromData, isLoading } = useETFSearchData();
+  const { etfs, categories, maxTerFromData, isLoading, lastUpdated } = useETFSearchData();
   const { selectedETFs, addETFToComparison, removeETFFromComparison, clearComparison, isETFSelected, canAddMore } = useETFComparison();
 
   const {
@@ -40,11 +41,14 @@ const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
 
   return (
     <div className="space-y-6">
-      <ETFComparisonHeader
-        selectedCount={selectedETFs.length}
-        onShowDetailedComparison={handleShowDetailedComparison}
-        onClearAll={clearComparison}
-      />
+      <div className="flex flex-col gap-4">
+        <ETFComparisonHeader
+          selectedCount={selectedETFs.length}
+          onShowDetailedComparison={handleShowDetailedComparison}
+          onClearAll={clearComparison}
+        />
+        <LastUpdatedInfo lastUpdated={lastUpdated} />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3 space-y-6">

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useETFComparison } from '@/hooks/useETFComparison';
 import { useETFSearchData } from '@/hooks/useETFSearchData';
@@ -8,7 +9,7 @@ import ETFComparisonPanel from '@/components/ETFComparisonPanel';
 import ETFDetailedComparison from '@/components/ETFDetailedComparison';
 
 const ETFSearchSection: React.FC = () => {
-  const { etfs, categories, maxTerFromData, isLoading } = useETFSearchData();
+  const { etfs, categories, maxTerFromData, isLoading, lastUpdated } = useETFSearchData();
   const [showDetailedComparison, setShowDetailedComparison] = useState(false);
 
   const {
@@ -49,7 +50,8 @@ const ETFSearchSection: React.FC = () => {
             <>
               <ETFSearchHeader 
                 filteredCount={searchLogicProps.filteredETFs.length} 
-                totalCount={etfs.length} 
+                totalCount={etfs.length}
+                lastUpdated={lastUpdated}
               />
 
               <ETFSearchInterface
