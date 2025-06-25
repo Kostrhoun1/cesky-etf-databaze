@@ -32,12 +32,12 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
   // Získej finální výsledky pro každý scénář
   const finalResults = data.filter(result => result.year === investmentPeriod);
 
-  // Najdi nejlepší scénář (s nejvyšší konečnou hodnotou)
+  // Najdi nejlepší scénář (s nejnižšími poplatky)
   const bestScenario = finalResults.reduce((best, current) => 
-    current.netValue > best.netValue ? current : best
+    current.totalFees < best.totalFees ? current : best
   );
 
-  console.log('Best scenario:', bestScenario);
+  console.log('Best scenario (lowest fees):', bestScenario);
   console.log('All final results:', finalResults);
 
   return (
@@ -55,14 +55,14 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
                 <TableHead className="text-right">Vstupní poplatek (%)</TableHead>
                 <TableHead className="text-right">Konečná hodnota (Kč)</TableHead>
                 <TableHead className="text-right">Celkové poplatky (Kč)</TableHead>
-                <TableHead className="text-right">Ztráta oproti nejlepšímu (Kč)</TableHead>
+                <TableHead className="text-right">Přeplatek oproti nejlepšímu (Kč)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {finalResults.map((result) => {
-                const lossVsBest = bestScenario.netValue - result.netValue;
+                const feeOverpayment = result.totalFees - bestScenario.totalFees;
                 
-                console.log(`${result.scenario.name}: Best=${bestScenario.netValue}, Current=${result.netValue}, Loss=${lossVsBest}`);
+                console.log(`${result.scenario.name}: Best fees=${bestScenario.totalFees}, Current fees=${result.totalFees}, Overpayment=${feeOverpayment}`);
                 
                 return (
                   <TableRow key={result.scenario.name}>
@@ -93,8 +93,8 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
                       {formatNumber(result.totalFees)}
                     </TableCell>
                     <TableCell className="text-right">
-                      {lossVsBest > 0 ? (
-                        <span className="text-red-600">{formatNumber(lossVsBest)}</span>
+                      {feeOverpayment > 0 ? (
+                        <span className="text-red-600">{formatNumber(feeOverpayment)}</span>
                       ) : (
                         <span className="text-green-600">-</span>
                       )}
@@ -113,7 +113,7 @@ const FeeComparisonTable: React.FC<FeeComparisonTableProps> = ({ data, investmen
             <li>• <strong>TER</strong> působí každý rok a má compound efekt</li>
             <li>• ETF fondy typicky nemají vstupní poplatky a mají nízký TER (0,1-0,5%)</li>
             <li>• Aktivní fondy mívají vyšší TER (1-3%) a někdy i vstupní poplatky</li>
-            <li>• <strong>Nejlepší scénář</strong> je označen zeleně - ostatní ukazují ztrátu oproti němu</li>
+            <li>• <strong>Nejlepší scénář</strong> má nejnižší celkové poplatky - ostatní ukazují přeplatek</li>
           </ul>
         </div>
       </CardContent>
