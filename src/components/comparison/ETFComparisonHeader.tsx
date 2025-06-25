@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
 
 interface ETFComparisonHeaderProps {
   selectedCount: number;
@@ -15,31 +14,29 @@ const ETFComparisonHeader: React.FC<ETFComparisonHeaderProps> = ({
   onClearAll 
 }) => {
   return (
-    <div className="mb-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Porovnání ETF fondů
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Vyberte až 3 fondy pro detailní porovnání
-          </p>
-        </div>
-        
-        <div className="flex gap-3">
-          {selectedCount > 0 && (
-            <>
-              <Button variant="outline" onClick={onClearAll}>
-                Vymazat výběr ({selectedCount})
+    <div className="flex items-center justify-between">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Srovnání ETF fondů
+        </h1>
+        <p className="text-gray-600 mt-1">
+          Vyberte až 3 fondy pro detailní porovnání
+        </p>
+      </div>
+      
+      <div className="flex gap-3">
+        {selectedCount > 0 && (
+          <>
+            <Button variant="outline" onClick={onClearAll}>
+              Vymazat výběr ({selectedCount})
+            </Button>
+            {selectedCount >= 2 && (
+              <Button onClick={onShowDetailedComparison}>
+                Porovnat vybrané fondy
               </Button>
-              {selectedCount >= 2 && (
-                <Button onClick={onShowDetailedComparison}>
-                  Porovnat vybrané fondy
-                </Button>
-              )}
-            </>
-          )}
-        </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
