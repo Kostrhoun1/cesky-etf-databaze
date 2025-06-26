@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { CheckCircle, XCircle, BarChart, Users, Scale, Shield, ShoppingCart, HelpCircle, TrendingUp, DollarSign, Target, Zap } from 'lucide-react';
 import ChartFeeImpact from "@/components/ChartFeeImpact";
+import YouTubeVideosSection from '@/components/YouTubeVideosSection';
 
 const WhatAreETFs: React.FC = () => {
   useEffect(() => {
@@ -14,6 +15,21 @@ const WhatAreETFs: React.FC = () => {
       'Vše, co potřebujete vědět o ETF. Zjistěte co jsou ETF, jak fungují, jejich výhody, nevýhody, typy a jak do nich investovat. Nejlepší průvodce pro české investory 2025.'
     );
   }, []);
+
+  const recommendedVideos = [
+    {
+      title: "Warren Buffett vysvětluje indexové fondy",
+      description: "Legendární investor Warren Buffett vysvětluje, proč doporučuje indexové fondy běžným investorům a jak mohou být lepší volbou než aktivně spravované fondy.",
+      videoUrl: "https://youtu.be/ZXISzZlVeLg",
+      author: "Warren Buffett"
+    },
+    {
+      title: "Buffettova rada pro začínající investory",
+      description: "Warren Buffett sdílí své nejlepší rady pro začínající investory, včetně důležitosti dlouhodobého investování a diverzifikace prostřednictvím indexových fondů.",
+      videoUrl: "https://youtu.be/paruIsAkK-0",
+      author: "Warren Buffett"
+    }
+  ];
 
   return (
     <Layout>
@@ -266,7 +282,14 @@ const WhatAreETFs: React.FC = () => {
               </div>
             </div>
 
-            {/* Section 5: Jak začít? */}
+            {/* Section 5: Doporučená videa */}
+            <YouTubeVideosSection
+              title="Doporučená videa o ETF"
+              description="Poslechněte si rady od legendárního investora Warrena Buffetta"
+              videos={recommendedVideos}
+            />
+
+            {/* Section 6: Jak začít? */}
             <div id="jak-zacit" className="animate-fade-in">
               <div className="text-center mb-16">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-600 text-white rounded-2xl mb-6 shadow-lg">
@@ -327,7 +350,7 @@ const WhatAreETFs: React.FC = () => {
               </div>
             </div>
 
-            {/* Section 5b: Kde koupit ETF */}
+            {/* Section 7: Kde koupit ETF */}
             <div className="animate-fade-in">
               <div className="text-center mb-16">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 text-white rounded-2xl mb-6 shadow-lg">
@@ -336,7 +359,7 @@ const WhatAreETFs: React.FC = () => {
                 <h2 className="text-4xl font-bold text-gray-900 mb-4">Kde koupit ETF?</h2>
                 <p className="text-xl text-gray-600 max-w-3xl mx-auto">Ověření brokeři pro české investory</p>
               </div>
-
+              
               <Card className="bg-white border-0 shadow-xl">
                 <CardContent className="p-8">
                   <p className="text-lg text-gray-700 leading-relaxed mb-8">
@@ -400,7 +423,7 @@ const WhatAreETFs: React.FC = () => {
               </div>
             </div>
 
-            {/* Section 6: FAQ */}
+            {/* Section 8: FAQ */}
             <div className="animate-fade-in">
               <div className="text-center mb-16">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-gray-500 to-slate-600 text-white rounded-2xl mb-6 shadow-lg">
