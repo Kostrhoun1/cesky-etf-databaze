@@ -1,10 +1,11 @@
+
 import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { CheckCircle, XCircle, BarChart, Users, Scale, Shield, ShoppingCart, HelpCircle, TrendingUp, DollarSign, Target, Zap } from 'lucide-react';
+import { CheckCircle, XCircle, BarChart, Users, Scale, Shield, ShoppingCart, HelpCircle, TrendingUp, DollarSign, Target, Zap, Play } from 'lucide-react';
 import ChartFeeImpact from "@/components/ChartFeeImpact";
 
 const WhatAreETFs: React.FC = () => {
@@ -57,7 +58,7 @@ const WhatAreETFs: React.FC = () => {
                 <p className="text-xl text-gray-600 max-w-3xl mx-auto">Jednoduché vysvětlení pro každého</p>
               </div>
               
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
                 <Card className="bg-white border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
                   <CardContent className="p-8">
                     <div className="prose prose-lg max-w-none text-gray-700">
@@ -81,6 +82,28 @@ const WhatAreETFs: React.FC = () => {
                   <blockquote className="text-lg leading-relaxed">
                     Jedním ETF můžete najednou investovat například do všech velkých firem v Evropě, v USA nebo na celém světě – jednoduše, levně a bez složitého vybírání konkrétních akcií.
                   </blockquote>
+                </div>
+              </div>
+
+              {/* YouTube Video Section */}
+              <div className="bg-white rounded-2xl p-8 shadow-xl">
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-red-500 text-white rounded-xl mb-4">
+                    <Play className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Vysvětlení ETF ve videu</h3>
+                  <p className="text-gray-600">Podívejte se na praktické vysvětlení ETF fondů</p>
+                </div>
+                
+                <div className="aspect-video max-w-4xl mx-auto">
+                  <iframe
+                    className="w-full h-full rounded-lg shadow-lg"
+                    src="https://www.youtube.com/embed/-mBZSFto4Kk"
+                    title="Co jsou ETF fondy?"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
                 </div>
               </div>
             </div>
