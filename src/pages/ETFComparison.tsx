@@ -45,7 +45,7 @@ const ETFComparison: React.FC = () => {
             Srovnání ETF fondů
           </h1>
           <p className="text-lg text-gray-600">
-            Detailní srovnání a analýza ETF fondů s možností filtrování podle různých kritérií
+            Filtrujte podle kategorií, poplatků a výkonnosti. Vyberte až 3 fondy pro detailní analýzu.
           </p>
         </div>
 
