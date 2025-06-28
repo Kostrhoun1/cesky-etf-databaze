@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import ETFComparison from "./pages/ETFComparison";
 import WhatAreETFs from "./pages/WhatAreETFs";
@@ -23,6 +24,7 @@ import AllWeatherPortfolio from "./pages/blog/AllWeatherPortfolio";
 import NewsletterUnsubscribe from "./pages/NewsletterUnsubscribe";
 import NewsletterAdminPage from "./pages/NewsletterAdminPage";
 import PublicETFAdminPage from "./pages/PublicETFAdminPage";
+import AuthPage from "./pages/AuthPage";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/auth" element={<AuthPage />} />
           <Route path="/srovnani-etf" element={<ETFComparison />} />
           <Route path="/co-jsou-etf" element={<WhatAreETFs />} />
           <Route path="/kde-koupit-etf" element={<WhereToBuyETFs />} />
@@ -49,8 +52,16 @@ const App = () => (
           <Route path="/tipy/nejlepsi-etf-na-evropske-akcie" element={<NejlepsiETFNaEvropskeAkcie />} />
           <Route path="/tipy/all-weather-portfolio" element={<AllWeatherPortfolio />} />
           <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
-          <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
-          <Route path="/admin/etf" element={<PublicETFAdminPage />} />
+          <Route path="/admin/newsletter" element={
+            <ProtectedRoute requireAdmin={true}>
+              <NewsletterAdminPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/etf" element={
+            <ProtectedRoute requireAdmin={true}>
+              <PublicETFAdminPage />
+            </ProtectedRoute>
+          } />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
