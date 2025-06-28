@@ -12,14 +12,17 @@ export type Database = {
       app_admins: {
         Row: {
           id: string
+          updated_at: string | null
           user_email: string
         }
         Insert: {
           id?: string
+          updated_at?: string | null
           user_email: string
         }
         Update: {
           id?: string
+          updated_at?: string | null
           user_email?: string
         }
         Relationships: []
