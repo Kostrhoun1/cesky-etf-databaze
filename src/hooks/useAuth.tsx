@@ -45,7 +45,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log('Checking admin status for email:', userEmail);
     
     try {
-      // Use direct query without RLS to avoid recursion issues
       const { data: adminCheck, error } = await supabase
         .from('app_admins')
         .select('user_email')
@@ -78,10 +77,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         
         // Check admin status if user is logged in
         if (session?.user?.email) {
-          // Use setTimeout to avoid potential recursion issues
-          setTimeout(() => {
-            checkAdminStatus(session.user.email);
-          }, 100);
+          await checkAdminStatus(session.user.email);
         } else {
           setIsAdmin(false);
         }
@@ -91,13 +87,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       console.log('Initial session check:', session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user?.email) {
-        checkAdminStatus(session.user.email);
+        await checkAdminStatus(session.user.email);
       }
       
       setLoading(false);
