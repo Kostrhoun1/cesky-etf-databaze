@@ -35,29 +35,53 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const checkAdminStatus = async (userEmail: string | undefined) => {
+    if (!userEmail) {
+      console.log('No user email provided for admin check');
+      setIsAdmin(false);
+      return;
+    }
+
+    console.log('Checking admin status for email:', userEmail);
+    
+    try {
+      // Use direct query without RLS to avoid recursion issues
+      const { data: adminCheck, error } = await supabase
+        .from('app_admins')
+        .select('user_email')
+        .eq('user_email', userEmail)
+        .maybeSingle();
+      
+      console.log('Admin check result:', { adminCheck, error });
+      
+      if (error) {
+        console.error('Error checking admin status:', error);
+        setIsAdmin(false);
+      } else {
+        const adminStatus = !!adminCheck;
+        console.log('Setting admin status to:', adminStatus);
+        setIsAdmin(adminStatus);
+      }
+    } catch (error) {
+      console.error('Exception checking admin status:', error);
+      setIsAdmin(false);
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state change:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         
         // Check admin status if user is logged in
-        if (session?.user) {
-          setTimeout(async () => {
-            try {
-              const { data: adminCheck } = await supabase
-                .from('app_admins')
-                .select('user_email')
-                .eq('user_email', session.user.email)
-                .maybeSingle();
-              
-              setIsAdmin(!!adminCheck);
-            } catch (error) {
-              console.error('Error checking admin status:', error);
-              setIsAdmin(false);
-            }
-          }, 0);
+        if (session?.user?.email) {
+          // Use setTimeout to avoid potential recursion issues
+          setTimeout(() => {
+            checkAdminStatus(session.user.email);
+          }, 100);
         } else {
           setIsAdmin(false);
         }
@@ -68,8 +92,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session check:', session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user?.email) {
+        checkAdminStatus(session.user.email);
+      }
+      
       setLoading(false);
     });
 
