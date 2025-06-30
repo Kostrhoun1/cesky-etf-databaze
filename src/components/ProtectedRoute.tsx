@@ -18,13 +18,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     user: user?.email,
     loading,
     isAdmin,
-    requireAdmin
+    requireAdmin,
+    timestamp: new Date().toISOString()
   });
 
   if (loading) {
+    console.log('ProtectedRoute: Still loading auth state');
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg">Načítání...</p>
+        <div className="text-center">
+          <p className="text-lg">Načítání...</p>
+          <p className="text-sm text-gray-500 mt-2">Ověřování přístupu...</p>
+        </div>
       </div>
     );
   }
@@ -42,12 +47,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           <h1 className="text-2xl font-bold text-red-600 mb-4">Přístup odepřen</h1>
           <p className="text-gray-600">Nemáte oprávnění k přístupu na tuto stránku.</p>
           <p className="text-sm text-gray-500 mt-2">Debug: Email: {user.email}, Admin: {isAdmin ? 'Ano' : 'Ne'}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Zkusit znovu načíst
+          </button>
         </div>
       </div>
     );
   }
 
-  console.log('Access granted');
+  console.log('Access granted to', user.email, 'Admin status:', isAdmin);
   return <>{children}</>;
 };
 

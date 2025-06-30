@@ -65,6 +65,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   useEffect(() => {
+    console.log('AuthProvider: Setting up auth listeners');
+    
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -96,8 +98,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log('AuthProvider: Cleaning up auth listeners');
+      subscription.unsubscribe();
+    };
   }, []);
+
+  // Add debugging for state changes
+  useEffect(() => {
+    console.log('Auth state updated:', {
+      user: user?.email,
+      loading,
+      isAdmin,
+      timestamp: new Date().toISOString()
+    });
+  }, [user, loading, isAdmin]);
 
   return (
     <AuthContext.Provider value={{ user, session, loading, isAdmin }}>
