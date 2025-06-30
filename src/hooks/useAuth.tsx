@@ -45,18 +45,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log('Checking admin status for email:', userEmail);
     
     try {
-      // Call the RPC function with proper typing
-      const { data: isAdminResult, error } = await supabase
-        .rpc('is_user_admin' as any, { user_email: userEmail });
+      // Direct query to check admin status
+      const { data, error } = await supabase
+        .from('app_admins')
+        .select('user_email')
+        .eq('user_email', userEmail)
+        .single();
       
-      console.log('Admin check result:', { isAdminResult, error });
+      console.log('Direct admin check result:', { data, error });
       
       if (error) {
-        console.error('Error checking admin status:', error);
-        setIsAdmin(false);
+        if (error.code === 'PGRST116') {
+          // No rows returned - user is not admin
+          console.log('User is not admin (no record found)');
+          setIsAdmin(false);
+        } else {
+          console.error('Error checking admin status:', error);
+          setIsAdmin(false);
+        }
       } else {
-        console.log('Setting admin status to:', isAdminResult);
-        setIsAdmin(!!isAdminResult);
+        console.log('User IS admin! Setting admin status to true');
+        setIsAdmin(true);
       }
     } catch (error) {
       console.error('Exception checking admin status:', error);
