@@ -45,21 +45,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log('Checking admin status for email:', userEmail);
     
     try {
-      const { data: adminCheck, error } = await supabase
-        .from('app_admins')
-        .select('user_email')
-        .eq('user_email', userEmail)
-        .maybeSingle();
+      // Use a more direct approach - call the RPC function we'll create
+      const { data: isAdminResult, error } = await supabase
+        .rpc('is_user_admin', { user_email: userEmail });
       
-      console.log('Admin check result:', { adminCheck, error });
+      console.log('Admin check result:', { isAdminResult, error });
       
       if (error) {
         console.error('Error checking admin status:', error);
         setIsAdmin(false);
       } else {
-        const adminStatus = !!adminCheck;
-        console.log('Setting admin status to:', adminStatus);
-        setIsAdmin(adminStatus);
+        console.log('Setting admin status to:', isAdminResult);
+        setIsAdmin(!!isAdminResult);
       }
     } catch (error) {
       console.error('Exception checking admin status:', error);
