@@ -45,9 +45,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log('Checking admin status for email:', userEmail);
     
     try {
-      // Call the RPC function we created
+      // Call the RPC function with proper typing
       const { data: isAdminResult, error } = await supabase
-        .rpc('is_user_admin', { user_email: userEmail });
+        .rpc('is_user_admin' as any, { user_email: userEmail });
       
       console.log('Admin check result:', { isAdminResult, error });
       
