@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log('Checking admin status for email:', userEmail);
     
     try {
-      // Simple query now that RLS is disabled
+      // Simple query - RLS is now disabled on app_admins table
       const { data, error } = await supabase
         .from('app_admins')
         .select('user_email')
