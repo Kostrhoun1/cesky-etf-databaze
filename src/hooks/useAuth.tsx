@@ -45,27 +45,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log('Checking admin status for email:', userEmail);
     
     try {
-      // Direct query to check admin status
+      // Simple query now that RLS is disabled
       const { data, error } = await supabase
         .from('app_admins')
         .select('user_email')
         .eq('user_email', userEmail)
-        .single();
+        .maybeSingle();
       
-      console.log('Direct admin check result:', { data, error });
+      console.log('Admin check result:', { data, error });
       
       if (error) {
-        if (error.code === 'PGRST116') {
-          // No rows returned - user is not admin
-          console.log('User is not admin (no record found)');
-          setIsAdmin(false);
-        } else {
-          console.error('Error checking admin status:', error);
-          setIsAdmin(false);
-        }
-      } else {
+        console.error('Error checking admin status:', error);
+        setIsAdmin(false);
+      } else if (data) {
         console.log('User IS admin! Setting admin status to true');
         setIsAdmin(true);
+      } else {
+        console.log('User is not admin (no record found)');
+        setIsAdmin(false);
       }
     } catch (error) {
       console.error('Exception checking admin status:', error);
