@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if (!userEmail) {
       console.log('No user email provided for admin check');
       setIsAdmin(false);
+      setLoading(false);
       return;
     }
 
@@ -67,6 +68,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } catch (error) {
       console.error('Exception checking admin status:', error);
       setIsAdmin(false);
+    } finally {
+      console.log('Admin check completed, setting loading to false');
+      setLoading(false);
     }
   };
 
@@ -85,9 +89,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           await checkAdminStatus(session.user.email);
         } else {
           setIsAdmin(false);
+          setLoading(false);
         }
-        
-        setLoading(false);
       }
     );
 
@@ -99,9 +102,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       
       if (session?.user?.email) {
         await checkAdminStatus(session.user.email);
+      } else {
+        setLoading(false);
       }
-      
-      setLoading(false);
     });
 
     return () => {
