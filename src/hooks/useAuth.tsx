@@ -82,6 +82,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     console.log('AuthProvider: Setting up auth listeners');
     
+    let isInitialized = false;
+    
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -99,24 +101,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     );
 
-    // Check for existing session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      console.log('Initial session check:', session?.user?.email);
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user?.email) {
-        await checkAdminStatus(session.user.email);
-      } else {
-        setLoading(false);
-      }
-    });
+    // Check for existing session only once
+    if (!isInitialized) {
+      isInitialized = true;
+      supabase.auth.getSession().then(async ({ data: { session } }) => {
+        console.log('Initial session check:', session?.user?.email);
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (session?.user?.email) {
+          await checkAdminStatus(session.user.email);
+        } else {
+          setLoading(false);
+        }
+      });
+    }
 
     return () => {
       console.log('AuthProvider: Cleaning up auth listeners');
       subscription.unsubscribe();
     };
-  }, []);
+  }, []); // Empty dependency array to run only once
 
   // Add debugging for state changes
   useEffect(() => {
