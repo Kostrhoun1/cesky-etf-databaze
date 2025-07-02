@@ -36,6 +36,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const checkAdminStatus = async (userEmail: string | undefined) => {
+    console.log('=== checkAdminStatus called ===');
+    console.log('userEmail:', userEmail);
+    console.log('current loading state:', loading);
+    console.log('current isAdmin state:', isAdmin);
+    
     if (!userEmail) {
       console.log('No user email provided for admin check');
       setIsAdmin(false);
