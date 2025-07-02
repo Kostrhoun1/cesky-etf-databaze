@@ -86,7 +86,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       try {
         // Check current session first
         console.log('Getting current session...');
-        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        // Add timeout to prevent hanging
+        const sessionPromise = supabase.auth.getSession();
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Session timeout')), 5000);
+        });
+        
+        const { data: { session }, error } = await Promise.race([sessionPromise, timeoutPromise]) as any;
+        
+        console.log('Session result:', { session: session?.user?.email || 'No session', error });
         
         if (error) {
           console.error('Error getting session:', error);
