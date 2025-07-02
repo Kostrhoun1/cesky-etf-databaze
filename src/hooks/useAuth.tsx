@@ -58,23 +58,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         .eq('user_email', userEmail)
         .maybeSingle();
       
-      console.log('Admin check result:', { data, error });
+      console.log('Admin check result:', { data, error, userEmail });
       
       if (error) {
         console.error('Error checking admin status:', error);
         setIsAdmin(false);
       } else if (data) {
-        console.log('User IS admin! Setting admin status to true');
+        console.log('User IS admin! Setting admin status to true. Data:', data);
         setIsAdmin(true);
       } else {
-        console.log('User is not admin (no record found)');
+        console.log('User is not admin (no record found). Data:', data);
         setIsAdmin(false);
       }
     } catch (error) {
       console.error('Exception checking admin status:', error);
       setIsAdmin(false);
     } finally {
-      console.log('Admin check completed, setting loading to false');
+      console.log('Admin check completed, setting loading to false. Final isAdmin:', isAdmin);
       setLoading(false);
     }
   };
