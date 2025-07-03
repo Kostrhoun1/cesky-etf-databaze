@@ -5,6 +5,17 @@ const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
+    // Handle static files that should not be processed by React Router
+    if (location.pathname === '/sitemap.xml') {
+      window.location.href = '/sitemap.xml';
+      return;
+    }
+    
+    if (location.pathname === '/robots.txt') {
+      window.location.href = '/robots.txt';
+      return;
+    }
+    
     console.error(
       "404 Error: User attempted to access non-existent route:",
       location.pathname
