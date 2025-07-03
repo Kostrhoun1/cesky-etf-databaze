@@ -20,13 +20,14 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
 
   useEffect(() => {
     const loadData = async () => {
-      console.log("=== LOADING DATA ===", filter);
       setIsLoading(true);
       setError(null);
       
       try {
-        // Přímé volání Supabase
-        const { data: etfs, error } = await supabase
+        console.log(`=== LOADING ${filter.sortBy} (${filter.sortOrder}) ===`);
+        
+        // Použiju direktní sortování v SQL
+        let query = supabase
           .from('etf_funds')
           .select(`
             isin,
@@ -52,8 +53,28 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
             exchange_3_ticker,
             exchange_4_ticker,
             exchange_5_ticker
-          `)
-          .limit(4000); // Zvýším limit na všechny fondy
+          `);
+        
+        // Aplikuj SQL filtrování a sortování
+        if (filter.sortBy) {
+          // Nejprv odfiltruj nulové hodnoty v SQL
+          if (filter.sortBy === 'fund_size_numeric') {
+            query = query.gt('fund_size_numeric', 0);
+          } else if (filter.sortBy === 'ter_numeric') {
+            query = query.gt('ter_numeric', 0);
+          } else if (filter.sortBy === 'return_1y') {
+            query = query.not('return_1y', 'is', null);
+          }
+          
+          // Sortování v SQL
+          const ascending = filter.sortOrder === 'asc';
+          query = query.order(filter.sortBy, { ascending });
+        }
+        
+        // Vezmi více než potřebujem a pak ořežu
+        query = query.limit(filter.top ? filter.top * 2 : 50);
+        
+        const { data: etfs, error } = await query;
         
         if (error) {
           console.error("Supabase error:", error);
@@ -67,58 +88,17 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
           return;
         }
         
-        console.log(`Loaded ${etfs.length} ETFs`);
+        console.log(`Loaded ${etfs.length} ETFs from SQL query`);
         
-        let result = [...etfs];
-        
-        console.log(`=== DEBUGGING ${filter.sortBy} ===`);
-        console.log(`Raw data count: ${result.length}`);
-        
-        // Nejprve ukážeme sample dat před filtrováním
-        console.log('Sample raw data:');
-        result.slice(0, 10).forEach((etf, i) => {
-          console.log(`${i+1}. ${etf.name}:`);
-          console.log(`  TER: ${etf.ter_numeric}`);
-          console.log(`  Size: ${etf.fund_size_numeric}`);
-          console.log(`  Return1Y: ${etf.return_1y}`);
-        });
-        
-        // ODSTRANÍM VŠECHNO FILTROVÁNÍ - jen sortování
-        console.log(`Sorting by ${filter.sortBy} (${filter.sortOrder}) - NO FILTERING`);
-        
-        result.sort((a, b) => {
-          const aVal = a[filter.sortBy as keyof ETFListItem];
-          const bVal = b[filter.sortBy as keyof ETFListItem];
-          
-          // Pro string hodnoty
-          if (typeof aVal === "string" && typeof bVal === "string") {
-            return filter.sortOrder === "asc"
-              ? aVal.localeCompare(bVal)
-              : bVal.localeCompare(aVal);
-          }
-          
-          // Pro numerické hodnoty - nulls na konec
-          const aNum = Number(aVal);
-          const bNum = Number(bVal);
-          
-          // Handle NaN a null
-          if (isNaN(aNum) && isNaN(bNum)) return 0;
-          if (isNaN(aNum)) return 1;
-          if (isNaN(bNum)) return -1;
-          
-          return filter.sortOrder === "asc" ? aNum - bNum : bNum - aNum;
-        });
-        
-        console.log(`=== TOP 20 after sorting by ${filter.sortBy} ===`);
-        result.slice(0, 20).forEach((etf, i) => {
+        // Zobraz prvních 10 pro debug
+        console.log(`Top 10 results for ${filter.sortBy}:`);
+        etfs.slice(0, 10).forEach((etf, i) => {
           const value = etf[filter.sortBy as keyof ETFListItem];
           console.log(`${i+1}. ${etf.name}: ${value}`);
         });
         
-        // Take top N
-        if (filter.top) {
-          result = result.slice(0, filter.top);
-        }
+        // Vezmi jen požadovaný počet
+        const result = filter.top ? etfs.slice(0, filter.top) : etfs;
         
         console.log(`Final result: ${result.length} ETFs`);
         setData(result);
@@ -132,9 +112,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
     };
 
     loadData();
-  }, [filter.sortBy, filter.sortOrder, filter.top, filter.category]);
-
-  console.log("Render state:", { isLoading, error: !!error, dataLength: data.length });
+  }, [filter.sortBy, filter.sortOrder, filter.top]);
 
   if (isLoading) {
     return (
@@ -160,7 +138,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
     return (
       <Card className="mt-6">
         <CardContent className="p-6">
-          <p>Žádné fondy nenalezeny</p>
+          <p>Žádné fondy nenalezeny pro {filter.sortBy}</p>
         </CardContent>
       </Card>
     );
