@@ -128,7 +128,34 @@ const NejlepsiETF2025: React.FC = () => (
       <strong>Upozornění:</strong> Investování do ETF nese investiční riziko. Minulé výnosy nejsou zárukou výnosů budoucích. Výše uvedené fondy nejsou investičním doporučením.
     </div>
 
-    <h2 className="text-xl font-semibold mt-10 mb-3">Přehled největších a nejvýkonnějších ETF v tabulce:</h2>
+    <h2 className="text-xl font-semibold mt-10 mb-4">Aktuální přehled nejlepších ETF podle dat z naší databáze</h2>
+    
+    <h3 className="text-lg font-semibold mt-8 mb-3">🏆 TOP 10 nejlevnějších ETF podle poplatků (TER)</h3>
+    <p className="text-gray-600 mb-4">
+      Přehled ETF s nejnižšími ročními poplatky - ideální pro dlouhodobé investory, kteří chtějí minimalizovat náklady.
+    </p>
+    <FilteredETFList filter={{
+      top: 10,
+      category: undefined,
+      sortBy: "ter_numeric",
+      sortOrder: "asc",
+    }} />
+
+    <h3 className="text-lg font-semibold mt-10 mb-3">📈 TOP 10 nejvýnosnějších ETF za letošní rok (YTD)</h3>
+    <p className="text-gray-600 mb-4">
+      ETF s nejlepší výkonností od začátku roku 2025 - data se aktualizují podle aktuálních tržních výsledků.
+    </p>
+    <FilteredETFList filter={{
+      top: 10,
+      category: undefined,
+      sortBy: "return_ytd",
+      sortOrder: "desc",
+    }} />
+
+    <h3 className="text-lg font-semibold mt-10 mb-3">💰 TOP 10 největších ETF podle spravovaných aktiv</h3>
+    <p className="text-gray-600 mb-4">
+      Největší ETF fondy podle objemu spravovaných prostředků - obvykle nejstabilnější a nejlikvidnější volba.
+    </p>
     <FilteredETFList filter={{
       top: 10,
       category: undefined,
