@@ -68,12 +68,13 @@ const RECOMMENDED_US_ETFS = [
   }
 ];
 
-// Obecnější filtr pro tabulkový výpis dalších vhodných ETF na americké akcie
+// Filtr pro americké ETF
 const US_ETF_TABLE_FILTER = {
-  category: "Equity",
   top: 12,
   sortBy: "return_5y" as const,
   sortOrder: "desc" as const,
+  regionKeywords: ["north america", "united states", "usa"],
+  indexNameKeywords: ["s&p 500", "s&p500", "nasdaq", "dow jones", "russell", "msci usa"],
 };
 
 const NejlepsiETFNaAmerickeAkcie: React.FC = () => (

@@ -34,10 +34,11 @@ const RECOMMENDED_EU_ETFS = [
 ];
 
 const TABLE_FILTER = {
-  category: "Europe",
   top: 12,
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
+  regionKeywords: ["europe", "developed europe", "eurozone"],
+  indexNameKeywords: ["msci europe", "stoxx", "ftse developed europe", "europe 600"],
 };
 
 const NejlepsiETFNaEvropskeAkcie: React.FC = () => (

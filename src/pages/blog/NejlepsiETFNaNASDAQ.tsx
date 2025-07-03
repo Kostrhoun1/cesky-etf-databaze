@@ -34,10 +34,10 @@ const RECOMMENDED_NASDAQ_ETFS = [
 ];
 
 const NASDAQ_ETF_TABLE_FILTER = {
-  category: "Nasdaq",
   top: 10,
   sortBy: "return_5y" as const,
   sortOrder: "desc" as const,
+  indexNameKeywords: ["nasdaq", "nasdaq 100", "qqq"],
 };
 
 const NejlepsiETFNaNASDAQ: React.FC = () => (

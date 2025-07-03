@@ -33,12 +33,12 @@ const RECOMMENDED_DIVIDEND_ETFS = [
   }
 ];
 
-// Filtr pro tabulku dalších dividendových ETF (dle velikosti fondu)
+// Filtr pro dividendové ETF
 const filter = {
-  category: "Dividend",
   top: 12,
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
+  nameKeywords: ["dividend", "yield", "income", "aristocrat"],
 };
 
 const NejlepsiDividendoveETF: React.FC = () => (
