@@ -94,54 +94,81 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         
         console.log(`Loaded ${etfs.length} ETFs from SQL query`);
         
-        // Zobraz prvních 10 pro debug
-        console.log(`Top 10 results for ${filter.sortBy}:`);
-        etfs.slice(0, 10).forEach((etf, i) => {
-          const value = etf[filter.sortBy as keyof ETFListItem];
-          console.log(`${i+1}. ${etf.name}: ${value}`);
+        // Debug: ukázat sample dat před filtrováním
+        console.log('Sample data before filtering:');
+        etfs.slice(0, 5).forEach((etf, i) => {
+          console.log(`${i+1}. ${etf.name}:`);
+          console.log(`  Index: ${etf.index_name}`);
+          console.log(`  Region: ${etf.region}`);
+          console.log(`  Provider: ${etf.fund_provider}`);
         });
         
         // Aplikuj JavaScript filtry
         let filteredETFs = etfs;
+        console.log(`Starting with ${filteredETFs.length} ETFs`);
         
         // Filtrování podle klíčových slov v indexu
         if (filter.indexNameKeywords && filter.indexNameKeywords.length > 0) {
+          console.log(`Filtering by index keywords: ${filter.indexNameKeywords.join(', ')}`);
           filteredETFs = filteredETFs.filter(etf => {
             const indexName = (etf.index_name || '').toLowerCase();
-            return filter.indexNameKeywords!.some(keyword => 
+            const matches = filter.indexNameKeywords!.some(keyword => 
               indexName.includes(keyword.toLowerCase())
             );
+            if (matches) {
+              console.log(`✓ Match: ${etf.name} (${etf.index_name})`);
+            }
+            return matches;
           });
+          console.log(`After index filtering: ${filteredETFs.length} ETFs`);
         }
         
         // Filtrování podle regionu
         if (filter.regionKeywords && filter.regionKeywords.length > 0) {
+          console.log(`Filtering by region keywords: ${filter.regionKeywords.join(', ')}`);
           filteredETFs = filteredETFs.filter(etf => {
             const region = (etf.region || '').toLowerCase();
-            return filter.regionKeywords!.some(keyword => 
+            const matches = filter.regionKeywords!.some(keyword => 
               region.includes(keyword.toLowerCase())
             );
+            if (matches) {
+              console.log(`✓ Match: ${etf.name} (${etf.region})`);
+            }
+            return matches;
           });
+          console.log(`After region filtering: ${filteredETFs.length} ETFs`);
         }
         
         // Filtrování podle názvu ETF
         if (filter.nameKeywords && filter.nameKeywords.length > 0) {
+          console.log(`Filtering by name keywords: ${filter.nameKeywords.join(', ')}`);
           filteredETFs = filteredETFs.filter(etf => {
             const name = (etf.name || '').toLowerCase();
-            return filter.nameKeywords!.some(keyword => 
+            const matches = filter.nameKeywords!.some(keyword => 
               name.includes(keyword.toLowerCase())
             );
+            if (matches) {
+              console.log(`✓ Match: ${etf.name}`);
+            }
+            return matches;
           });
+          console.log(`After name filtering: ${filteredETFs.length} ETFs`);
         }
         
         // Filtrování podle správce
         if (filter.fundProviderKeywords && filter.fundProviderKeywords.length > 0) {
+          console.log(`Filtering by provider keywords: ${filter.fundProviderKeywords.join(', ')}`);
           filteredETFs = filteredETFs.filter(etf => {
             const provider = (etf.fund_provider || '').toLowerCase();
-            return filter.fundProviderKeywords!.some(keyword => 
+            const matches = filter.fundProviderKeywords!.some(keyword => 
               provider.includes(keyword.toLowerCase())
             );
+            if (matches) {
+              console.log(`✓ Match: ${etf.name} (${etf.fund_provider})`);
+            }
+            return matches;
           });
+          console.log(`After provider filtering: ${filteredETFs.length} ETFs`);
         }
         
         // Vezmi jen požadovaný počet
@@ -159,7 +186,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
     };
 
     loadData();
-  }, [filter.sortBy, filter.sortOrder, filter.top]);
+  }, [filter.sortBy, filter.sortOrder, filter.top, filter.indexNameKeywords, filter.regionKeywords, filter.nameKeywords, filter.fundProviderKeywords]);
 
   if (isLoading) {
     return (
