@@ -12,12 +12,15 @@ const PublicETFAdminPage: React.FC = () => {
   const { upsertETFs, getETFCount } = useETFData();
   const [etfCount, setEtfCount] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const [hasAccess, setHasAccess] = useState(false);
+  const [hasAccess, setHasAccess] = useState<boolean | null>(null); // null = loading, false = no access, true = has access
 
   useEffect(() => {
     const password = searchParams.get('password');
+    console.log('Checking password:', password); // Debug log
     if (password === 'Omitac116') {
       setHasAccess(true);
+    } else {
+      setHasAccess(false);
     }
   }, [searchParams]);
 
@@ -80,7 +83,17 @@ const PublicETFAdminPage: React.FC = () => {
     }
   };
 
-  if (!hasAccess) {
+  // Počkej na vyhodnocení hesla
+  if (hasAccess === null) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg">Načítání...</p>
+      </div>
+    );
+  }
+
+  // Pokud nemá přístup, přesměruj
+  if (hasAccess === false) {
     return <Navigate to="/" replace />;
   }
 
