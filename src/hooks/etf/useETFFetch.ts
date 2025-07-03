@@ -66,6 +66,7 @@ export const useETFFetch = () => {
 
           if (error) {
             console.error('Error fetching ETFs batch:', error);
+            console.error('Error details:', error.message, error.details, error.hint);
             throw new Error(`Failed to fetch ETFs: ${error.message}`);
           }
 
