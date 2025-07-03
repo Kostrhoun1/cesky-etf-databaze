@@ -48,8 +48,8 @@ const BONDS_ETF_FILTER = {
   top: 8,
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
-  regionKeywords: ["Evropa", "Globální"],
-  nameKeywords: ["government", "bond", "dluhopis"],
+  regionKeywords: ["Rozvinuté země"],
+  nameKeywords: ["government", "bond"],
 };
 
 const COMMODITIES_ETF_FILTER = {
@@ -149,9 +149,9 @@ const AllWeatherPortfolio: React.FC = () => (
     </p>
     <FilteredETFList filter={GLOBAL_STOCKS_FILTER} />
 
-    <h3 className="text-lg font-semibold mt-8 mb-2">Dostupné dluhopisové ETF pro All-Weather strategii</h3>
+    <h3 className="text-lg font-semibold mt-8 mb-2">Dostupné globální dluhopisové ETF pro All-Weather strategii</h3>
     <p className="mb-3">
-      Dluhopisová část tvoří většinu portfolia (55%), proto je důležitý výběr kvalitních fondů:
+      Dluhopisová část tvoří většinu portfolia (55%), proto je důležitý výběr kvalitních globálních government bondů:
     </p>
     <FilteredETFList filter={BONDS_ETF_FILTER} />
 
