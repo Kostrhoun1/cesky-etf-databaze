@@ -53,7 +53,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
             exchange_4_ticker,
             exchange_5_ticker
           `)
-          .limit(1000);
+          .limit(3000); // Zvýším limit
         
         if (error) {
           console.error("Supabase error:", error);
@@ -70,6 +70,24 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         console.log(`Loaded ${etfs.length} ETFs`);
         
         let result = [...etfs];
+        
+        // Pro velikost fondu odfiltruj fondy s nulovou velikostí
+        if (filter.sortBy === 'fund_size_numeric') {
+          result = result.filter(etf => etf.fund_size_numeric && etf.fund_size_numeric > 0);
+          console.log(`After filtering zero fund sizes: ${result.length} ETFs`);
+        }
+        
+        // Pro TER odfiltruj fondy s nulowym nebo prázdnym TER
+        if (filter.sortBy === 'ter_numeric') {
+          result = result.filter(etf => etf.ter_numeric && etf.ter_numeric > 0);
+          console.log(`After filtering zero TER: ${result.length} ETFs`);
+        }
+        
+        // Pro výnosy odfiltruj pouze null/undefined
+        if (filter.sortBy === 'return_1y') {
+          result = result.filter(etf => etf.return_1y != null);
+          console.log(`After filtering null returns: ${result.length} ETFs`);
+        }
         
         // Sorting
         if (filter.sortBy) {
