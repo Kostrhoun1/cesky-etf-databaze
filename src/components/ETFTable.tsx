@@ -134,7 +134,7 @@ const ETFTable: React.FC<ETFTableProps> = ({
                    className="text-right cursor-pointer hover:bg-gray-50"
                    onClick={() => handleSort('fund_size_numeric')}
                  >
-                   Velikost fondu
+                   Velikost fondu (EUR)
                    {getSortIcon('fund_size_numeric')}
                  </TableHead>
                  <TableHead className="text-left">Typ fondu</TableHead>

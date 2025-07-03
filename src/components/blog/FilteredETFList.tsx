@@ -42,11 +42,20 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         etfs = etfs.filter((etf) => {
           const value = etf[filter.sortBy as keyof ETFListItem];
           
-          // Pro numerické hodnoty - filtruj ty, které nejsou null, undefined, 0 nebo NaN
-          if (filter.sortBy === 'ter_numeric' || filter.sortBy === 'fund_size_numeric' || 
-              filter.sortBy === 'return_ytd' || filter.sortBy === 'return_1y' || 
-              filter.sortBy === 'return_3y' || filter.sortBy === 'return_5y') {
+          // Pro TER - filtruj pouze null/undefined, ale nech i nulové hodnoty
+          if (filter.sortBy === 'ter_numeric') {
+            return value != null && !isNaN(Number(value)) && Number(value) >= 0;
+          }
+          
+          // Pro velikost fondu - filtruj pouze null/undefined/0
+          if (filter.sortBy === 'fund_size_numeric') {
             return value != null && !isNaN(Number(value)) && Number(value) > 0;
+          }
+          
+          // Pro výnosy - jsou často záporné, takže jen filtruj null/undefined/NaN
+          if (filter.sortBy === 'return_1y' || filter.sortBy === 'return_3y' || 
+              filter.sortBy === 'return_5y' || filter.sortBy === 'return_ytd') {
+            return value != null && !isNaN(Number(value));
           }
           
           // Pro string hodnoty
