@@ -75,27 +75,22 @@ const ETFTable: React.FC<ETFTableProps> = ({
   const formatFundSize = (size: number) => {
     if (!size) return '-';
     
-    // Předpokládáme, že data jsou v EUR (možná již v milionech?)
-    // Zkusíme různé varianty podle velikosti čísla
+    // Převést vše na miliardy EUR
+    // Předpokládáme, že hodnoty jsou v EUR (nebo milionech EUR)
+    let sizeInBillions;
+    
     if (size >= 1000000000) {
-      // Pokud je číslo větší než miliarda, je pravděpodobně v jednotkách
-      return `${(size / 1000000000).toFixed(1)} mld €`;
-    } else if (size >= 1000000) {
-      // Pokud je větší než milion, je pravděpodobně v jednotkách
-      return `${(size / 1000000).toFixed(0)} mil €`;
+      // Hodnota je pravděpodobně v jednotkách EUR
+      sizeInBillions = size / 1000000000;
     } else if (size >= 1000) {
-      // Pokud je větší než tisíc, může být v tisících nebo jednotkách
-      if (size < 10000) {
-        // Malé číslo - pravděpodobně už v milionech
-        return `${size.toFixed(0)} mil €`;
-      } else {
-        // Větší číslo - pravděpodobně v jednotkách
-        return `${(size / 1000000).toFixed(0)} mil €`;
-      }
+      // Hodnota je pravděpodobně v tisících nebo milionech EUR
+      sizeInBillions = size / 1000000;
     } else {
-      // Velmi malé číslo - pravděpodobně už v miliardách
-      return `${size.toFixed(1)} mld €`;
+      // Hodnota je už pravděpodobně v miliardách nebo je velmi malá
+      sizeInBillions = size;
     }
+    
+    return sizeInBillions.toFixed(2);
   };
 
   return (
@@ -149,7 +144,7 @@ const ETFTable: React.FC<ETFTableProps> = ({
                    className="text-right cursor-pointer hover:bg-gray-50"
                    onClick={() => handleSort('fund_size_numeric')}
                  >
-                   Velikost fondu (EUR)
+                   Velikost fondu (mld EUR)
                    {getSortIcon('fund_size_numeric')}
                  </TableHead>
                  <TableHead className="text-left">Typ fondu</TableHead>
