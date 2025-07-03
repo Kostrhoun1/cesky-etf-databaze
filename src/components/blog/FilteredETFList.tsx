@@ -96,11 +96,12 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         
         // Debug: ukázat sample dat před filtrováním
         console.log('Sample data before filtering:');
-        etfs.slice(0, 5).forEach((etf, i) => {
+        etfs.slice(0, 10).forEach((etf, i) => {
           console.log(`${i+1}. ${etf.name}:`);
-          console.log(`  Index: ${etf.index_name}`);
-          console.log(`  Region: ${etf.region}`);
-          console.log(`  Provider: ${etf.fund_provider}`);
+          console.log(`  Index: "${etf.index_name}"`);
+          console.log(`  Region: "${etf.region}"`);
+          console.log(`  Provider: "${etf.fund_provider}"`);
+          console.log(`  Category: "${etf.category}"`);
         });
         
         // Aplikuj JavaScript filtry
