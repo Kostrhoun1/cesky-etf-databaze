@@ -10,6 +10,8 @@ import SEOHead from "@/components/SEO/SEOHead";
 import etf2025Image from "@/assets/etf-2025-performance.jpg";
 import usStocksImage from "@/assets/us-stocks-etf.jpg";
 import nasdaqTechImage from "@/assets/nasdaq-tech-etf.jpg";
+import ImageWithAlt from "@/components/SEO/ImageWithAlt";
+import PerformanceMetrics from "@/components/SEO/PerformanceMetrics";
 
 const PLACEHOLDER_IMAGE = "/placeholder.svg"; // existuje v public složce
 
@@ -20,6 +22,16 @@ const ARTICLE_IMAGES: Record<string, string> = {
   "nejlepsi-dividendove-etf": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600&fit=crop",
   "nejlepsi-etf-na-evropske-akcie": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=800&h=600&fit=crop",
   "all-weather-portfolio": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+};
+
+// Optimalizované alt texty pro SEO
+const ARTICLE_ALT_TEXTS: Record<string, string> = {
+  "nejlepsi-etf-2025": "Graf výkonnosti nejlepších ETF fondů pro rok 2025 s analýzou poplatků TER",
+  "nejlepsi-etf-na-americke-akcie": "Americký akciový trh ETF fondy zaměřené na S&P 500 a americké společnosti",
+  "nejlepsi-etf-na-nasdaq": "NASDAQ technologické ETF fondy s výkonnostními daty a porovnáním poplatků",
+  "nejlepsi-dividendove-etf": "Dividendové ETF fondy pro pasivní příjem a dlouhodobé investování",
+  "nejlepsi-etf-na-evropske-akcie": "Evropské akciové ETF fondy zaměřené na STOXX 600 a evropské společnosti",
+  "all-weather-portfolio": "All-Weather portfolio strategie Ray Dalia s ETF fondy pro každé ekonomické prostředí",
 };
 
 const ARTICLES = [
@@ -84,6 +96,7 @@ const BlogPage: React.FC = () => {
 
   return (
     <Layout>
+      <PerformanceMetrics pageName="Tipy pro investory" />
       <SEOHead
         title="Tipy pro investory - Nejlepší ETF fondy a strategie | ETF průvodce.cz"
         description="Chytré tipy a srovnání ETF fondů pro české investory. Nejlepší ETF 2025, dividendové ETF, americké akcie a investiční strategie."
@@ -115,17 +128,11 @@ const BlogPage: React.FC = () => {
               >
                 <Link to={`/tipy/${article.slug}`} className="block h-full focus:outline-none group flex flex-col">
                   <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
-                    <img
+                    <ImageWithAlt
                       src={ARTICLE_IMAGES[article.slug] || PLACEHOLDER_IMAGE}
-                      alt={article.title}
+                      alt={ARTICLE_ALT_TEXTS[article.slug] || `${article.title} - ilustrační obrázek`}
                       className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
-                      loading="lazy"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        if (target.src !== PLACEHOLDER_IMAGE) {
-                          target.src = PLACEHOLDER_IMAGE;
-                        }
-                      }}
+                      fallback={PLACEHOLDER_IMAGE}
                     />
                     <span className="absolute left-3 top-3 bg-violet-600 text-white text-xs px-3 py-1 rounded-full">
                       TIP #{idx + 1}
