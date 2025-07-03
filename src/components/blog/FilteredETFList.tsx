@@ -37,29 +37,34 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         console.log(`ETFs after category filter (${filter.category}): ${etfs.length}`);
       }
       
-      // Filtrování podle platných dat podle sortBy pole
+      // Filtrování podle platných dat - ale méně přísné
       if (filter.sortBy) {
+        console.log(`Filtering by ${filter.sortBy}`);
+        
         etfs = etfs.filter((etf) => {
           const value = etf[filter.sortBy as keyof ETFListItem];
           
-          // Pro TER - filtruj pouze null/undefined, ale nech i nulové hodnoty
-          if (filter.sortBy === 'ter_numeric') {
-            return value != null && !isNaN(Number(value)) && Number(value) >= 0;
-          }
-          
-          // Pro velikost fondu - filtruj pouze null/undefined/0
-          if (filter.sortBy === 'fund_size_numeric') {
-            return value != null && !isNaN(Number(value)) && Number(value) > 0;
-          }
-          
-          // Pro výnosy - jsou často záporné, takže jen filtruj null/undefined/NaN
-          if (filter.sortBy === 'return_1y' || filter.sortBy === 'return_3y' || 
+          // Pro všechny numerické hodnoty - pouze vyfiltruj null/undefined/NaN
+          // Nefiltruj nuly nebo záporné hodnoty
+          if (filter.sortBy === 'ter_numeric' || filter.sortBy === 'fund_size_numeric' || 
+              filter.sortBy === 'return_1y' || filter.sortBy === 'return_3y' || 
               filter.sortBy === 'return_5y' || filter.sortBy === 'return_ytd') {
-            return value != null && !isNaN(Number(value));
+            const isValid = value != null && value !== '' && !isNaN(Number(value));
+            if (!isValid) {
+              console.log(`Filtered out ${etf.name}: ${filter.sortBy} = ${value}`);
+            }
+            return isValid;
           }
           
           // Pro string hodnoty
           return value != null && value !== '' && value !== 'N/A';
+        });
+        
+        console.log(`ETFs after validation filter: ${etfs.length}`);
+        
+        // Výpis prvních pár hodnot pro debugging
+        etfs.slice(0, 5).forEach(etf => {
+          console.log(`${etf.name}: ${filter.sortBy} = ${etf[filter.sortBy as keyof ETFListItem]}`);
         });
         
         console.log(`ETFs after valid data filter: ${etfs.length}`);

@@ -74,13 +74,28 @@ const ETFTable: React.FC<ETFTableProps> = ({
 
   const formatFundSize = (size: number) => {
     if (!size) return '-';
+    
+    // Předpokládáme, že data jsou v EUR (možná již v milionech?)
+    // Zkusíme různé varianty podle velikosti čísla
     if (size >= 1000000000) {
-      return `${(size / 1000000000).toFixed(1)}B €`;
+      // Pokud je číslo větší než miliarda, je pravděpodobně v jednotkách
+      return `${(size / 1000000000).toFixed(1)} mld €`;
+    } else if (size >= 1000000) {
+      // Pokud je větší než milion, je pravděpodobně v jednotkách
+      return `${(size / 1000000).toFixed(0)} mil €`;
+    } else if (size >= 1000) {
+      // Pokud je větší než tisíc, může být v tisících nebo jednotkách
+      if (size < 10000) {
+        // Malé číslo - pravděpodobně už v milionech
+        return `${size.toFixed(0)} mil €`;
+      } else {
+        // Větší číslo - pravděpodobně v jednotkách
+        return `${(size / 1000000).toFixed(0)} mil €`;
+      }
+    } else {
+      // Velmi malé číslo - pravděpodobně už v miliardách
+      return `${size.toFixed(1)} mld €`;
     }
-    if (size >= 1000000) {
-      return `${(size / 1000000).toFixed(0)}M €`;
-    }
-    return `${(size / 1000).toFixed(0)}K €`;
   };
 
   return (
