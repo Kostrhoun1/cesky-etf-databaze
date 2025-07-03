@@ -113,6 +113,13 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
               Výnos 5Y
               {getSortIcon('return_5y')}
             </TableHead>
+            <TableHead
+              className="text-right cursor-pointer hover:bg-gray-50"
+              onClick={() => onSort('fund_size_numeric')}
+            >
+              Velikost fondu (mil EUR)
+              {getSortIcon('fund_size_numeric')}
+            </TableHead>
             <TableHead className="text-left">Typ fondu</TableHead>
           </TableRow>
         </TableHeader>
@@ -170,6 +177,12 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
               </TableCell>
               <TableCell className={`p-3 text-right ${getReturnColor(etf.return_5y)}`}>
                 {etf.return_5y ? formatPercentage(etf.return_5y) : '-'}
+              </TableCell>
+              <TableCell className="text-right font-mono p-3 text-sm">
+                {etf.fund_size_numeric ? etf.fund_size_numeric.toLocaleString('cs-CZ', {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0
+                }) : '-'}
               </TableCell>
               <TableCell className="p-3">
                 <Badge variant="outline" className="text-xs">
