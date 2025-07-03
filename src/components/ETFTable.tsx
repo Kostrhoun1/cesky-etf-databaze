@@ -72,6 +72,17 @@ const ETFTable: React.FC<ETFTableProps> = ({
     return policy || '-';
   };
 
+  const formatFundSize = (size: number) => {
+    if (!size) return '-';
+    if (size >= 1000000000) {
+      return `${(size / 1000000000).toFixed(1)}B €`;
+    }
+    if (size >= 1000000) {
+      return `${(size / 1000000).toFixed(0)}M €`;
+    }
+    return `${(size / 1000).toFixed(0)}K €`;
+  };
+
   return (
     <div className="space-y-6">
       <ETFTableFilters
@@ -116,10 +127,17 @@ const ETFTable: React.FC<ETFTableProps> = ({
                   className="text-right cursor-pointer hover:bg-gray-50"
                   onClick={() => handleSort('return_5y')}
                 >
-                  Výnos 5Y
-                  {getSortIcon('return_5y')}
-                </TableHead>
-                <TableHead className="text-left">Typ fondu</TableHead>
+                   Výnos 5Y
+                   {getSortIcon('return_5y')}
+                 </TableHead>
+                 <TableHead
+                   className="text-right cursor-pointer hover:bg-gray-50"
+                   onClick={() => handleSort('fund_size_numeric')}
+                 >
+                   Velikost fondu
+                   {getSortIcon('fund_size_numeric')}
+                 </TableHead>
+                 <TableHead className="text-left">Typ fondu</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -176,14 +194,17 @@ const ETFTable: React.FC<ETFTableProps> = ({
                   <TableCell className={`p-3 text-right ${getReturnColor(etf.return_3y)}`}>
                     {etf.return_3y ? formatPercentage(etf.return_3y) : '-'}
                   </TableCell>
-                  <TableCell className={`p-3 text-right ${getReturnColor(etf.return_5y)}`}>
-                    {etf.return_5y ? formatPercentage(etf.return_5y) : '-'}
-                  </TableCell>
-                  <TableCell className="p-3">
-                    <Badge variant="outline" className="text-xs">
-                      {getDistributionPolicyLabel(etf.distribution_policy)}
-                    </Badge>
-                  </TableCell>
+                   <TableCell className={`p-3 text-right ${getReturnColor(etf.return_5y)}`}>
+                     {etf.return_5y ? formatPercentage(etf.return_5y) : '-'}
+                   </TableCell>
+                   <TableCell className="text-right font-mono p-3 text-sm">
+                     {formatFundSize(etf.fund_size_numeric)}
+                   </TableCell>
+                   <TableCell className="p-3">
+                     <Badge variant="outline" className="text-xs">
+                       {getDistributionPolicyLabel(etf.distribution_policy)}
+                     </Badge>
+                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>

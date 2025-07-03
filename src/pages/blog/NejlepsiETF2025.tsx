@@ -141,14 +141,14 @@ const NejlepsiETF2025: React.FC = () => (
       sortOrder: "asc",
     }} />
 
-    <h3 className="text-lg font-semibold mt-10 mb-3">📈 TOP 10 nejvýnosnějších ETF za letošní rok (YTD)</h3>
+    <h3 className="text-lg font-semibold mt-10 mb-3">📈 TOP 10 nejvýnosnějších ETF za posledních 12 měsíců</h3>
     <p className="text-gray-600 mb-4">
-      ETF s nejlepší výkonností od začátku roku 2025 - data se aktualizují podle aktuálních tržních výsledků.
+      ETF s nejlepší výkonností za posledních 12 měsíců - aktuální data z naší databáze.
     </p>
     <FilteredETFList filter={{
       top: 10,
       category: undefined,
-      sortBy: "return_ytd",
+      sortBy: "return_1y",
       sortOrder: "desc",
     }} />
 
