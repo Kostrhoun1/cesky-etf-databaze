@@ -17,9 +17,10 @@ interface FilteredETFListProps {
     hasDividendYield?: boolean; // Filtr pro dividendové ETF (current_dividend_yield_numeric > 0)
     minDividendYield?: number; // Minimální dividendový výnos
   };
+  showDividendYield?: boolean; // Nový prop pro zobrazení dividendového sloupce
 }
 
-const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
+const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter, showDividendYield = false }) => {
   const [data, setData] = useState<ETFListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -194,6 +195,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
             sortOrder={filter.sortOrder || 'asc'}
             onSort={() => {}} // Čtení pouze - bez sort funkcionality
             isLoading={false}
+            showDividendYield={showDividendYield}
           />
         </div>
       </CardContent>

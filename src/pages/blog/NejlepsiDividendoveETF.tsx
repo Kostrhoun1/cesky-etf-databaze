@@ -99,7 +99,7 @@ const NejlepsiDividendoveETF: React.FC = () => (
     <p className="mb-3">
       Tabulka níže obsahuje další kvalitní dividendové ETF vyfiltrované dle celkové velikosti fondu (AUM) – najdete zde různé správcovské domy, regionální i globální zaměření a můžete je vzájemně porovnat podle poplatků i výnosů.
     </p>
-    <FilteredETFList filter={filter} />
+    <FilteredETFList filter={filter} showDividendYield={true} />
 
     <div className="bg-yellow-50 border-l-4 border-yellow-400 px-4 py-3 my-6 rounded">
       <b>Upozornění:</b> Výše dividend ani jejich růst nejsou nikdy zaručeny, závisí na výsledcích firem i tržním vývoji. Investování do ETF vždy zahrnuje riziko kolísání hodnoty.

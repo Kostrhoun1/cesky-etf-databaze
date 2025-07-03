@@ -18,6 +18,7 @@ interface ETFSearchTableProps {
   onSelectETF?: (etf: ETFListItem) => void;
   isETFSelected?: (isin: string) => boolean;
   canAddMore?: boolean;
+  showDividendYield?: boolean;
 }
 
 const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
@@ -29,6 +30,7 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
   onSelectETF,
   isETFSelected,
   canAddMore = true,
+  showDividendYield = false,
 }) => {
   const getSortIcon = (field: string) => {
     if (sortBy === field) {
@@ -120,6 +122,15 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
               Velikost fondu (mil EUR)
               {getSortIcon('fund_size_numeric')}
             </TableHead>
+            {showDividendYield && (
+              <TableHead
+                className="text-right cursor-pointer hover:bg-gray-50"
+                onClick={() => onSort('current_dividend_yield_numeric')}
+              >
+                Dividend. výnos
+                {getSortIcon('current_dividend_yield_numeric')}
+              </TableHead>
+            )}
             <TableHead className="text-left">Typ fondu</TableHead>
           </TableRow>
         </TableHeader>
@@ -184,6 +195,12 @@ const ETFSearchTable: React.FC<ETFSearchTableProps> = ({
                   maximumFractionDigits: 0
                 }) : '-'}
               </TableCell>
+              {showDividendYield && (
+                <TableCell className="text-right font-mono p-3 text-sm">
+                  {etf.current_dividend_yield_numeric ? 
+                    `${etf.current_dividend_yield_numeric.toFixed(2)}%` : '-'}
+                </TableCell>
+              )}
               <TableCell className="p-3">
                 <Badge variant="outline" className="text-xs">
                   {getDistributionPolicyLabel(etf.distribution_policy)}
