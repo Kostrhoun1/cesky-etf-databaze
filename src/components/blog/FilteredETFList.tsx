@@ -61,15 +61,49 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
             exchange_5_ticker
           `);
         
-        // Aplikuj jen základní sortování v SQL, BEZ filtrování
+        // Aplikuj SQL filtrování podle zadaných kritérií
+        if (filter.indexNameKeywords && filter.indexNameKeywords.length > 0) {
+          console.log(`SQL filtering by index keywords: ${filter.indexNameKeywords.join(', ')}`);
+          const indexConditions = filter.indexNameKeywords.map(keyword => 
+            `index_name.ilike.%${keyword}%`
+          ).join(',');
+          query = query.or(indexConditions);
+        }
+        
+        if (filter.regionKeywords && filter.regionKeywords.length > 0) {
+          console.log(`SQL filtering by region keywords: ${filter.regionKeywords.join(', ')}`);
+          const regionConditions = filter.regionKeywords.map(keyword => 
+            `region.ilike.%${keyword}%`
+          ).join(',');
+          query = query.or(regionConditions);
+        }
+        
+        if (filter.nameKeywords && filter.nameKeywords.length > 0) {
+          console.log(`SQL filtering by name keywords: ${filter.nameKeywords.join(', ')}`);
+          const nameConditions = filter.nameKeywords.map(keyword => 
+            `name.ilike.%${keyword}%`
+          ).join(',');
+          query = query.or(nameConditions);
+        }
+        
+        if (filter.hasDividendYield) {
+          console.log('SQL filtering by dividend yield > 0');
+          query = query.gt('current_dividend_yield_numeric', 0);
+        }
+        
+        if (filter.minDividendYield) {
+          console.log(`SQL filtering by minimum dividend yield: ${filter.minDividendYield}%`);
+          query = query.gte('current_dividend_yield_numeric', filter.minDividendYield);
+        }
+        
+        // Sortování v SQL
         if (filter.sortBy) {
-          // Sortování v SQL
           const ascending = filter.sortOrder === 'asc';
           query = query.order(filter.sortBy, { ascending });
         }
         
-        // Vezmi hodně dat pro JavaScript filtrování
-        query = query.limit(500);
+        // Limit výsledků
+        query = query.limit(filter.top || 50);
         
         const { data: etfs, error } = await query;
         
@@ -87,114 +121,18 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         
         console.log(`Loaded ${etfs.length} ETFs from SQL query`);
         
-        // Debug: ukázat ALL sample dat před filtrováním
-        console.log('=== NASDAQ FILTER DEBUG ===');
-        console.log('Sample data before filtering:');
-        etfs.slice(0, 15).forEach((etf, i) => {
+        // Debug: ukázat výsledky SQL dotazu
+        console.log('=== SQL QUERY RESULTS ===');
+        console.log(`Found ${etfs.length} ETFs matching criteria`);
+        etfs.slice(0, 5).forEach((etf, i) => {
           console.log(`\n${i+1}. "${etf.name}"`);
           console.log(`  Index: "${etf.index_name || 'NULL'}"`);
           console.log(`  Region: "${etf.region || 'NULL'}"`);
-          console.log(`  Provider: "${etf.fund_provider || 'NULL'}"`);
-          console.log(`  Category: "${etf.category || 'NULL'}"`);
-          console.log(`  ISIN: ${etf.isin}`);
+          console.log(`  Dividend yield: ${etf.current_dividend_yield_numeric || 0}%`);
         });
-        console.log('=== END SAMPLE DATA ===');
+        console.log('=== END RESULTS ===');
         
-        // Aplikuj JavaScript filtry
-        let filteredETFs = etfs;
-        console.log(`Starting with ${filteredETFs.length} ETFs`);
-        
-        // Filtrování podle klíčových slov v indexu
-        if (filter.indexNameKeywords && filter.indexNameKeywords.length > 0) {
-          console.log(`Filtering by index keywords: ${filter.indexNameKeywords.join(', ')}`);
-          filteredETFs = filteredETFs.filter(etf => {
-            const indexName = (etf.index_name || '').toLowerCase();
-            const matches = filter.indexNameKeywords!.some(keyword => 
-              indexName.includes(keyword.toLowerCase())
-            );
-            if (matches) {
-              console.log(`✓ Match: ${etf.name} (${etf.index_name})`);
-            }
-            return matches;
-          });
-          console.log(`After index filtering: ${filteredETFs.length} ETFs`);
-        }
-        
-        // Filtrování podle regionu
-        if (filter.regionKeywords && filter.regionKeywords.length > 0) {
-          console.log(`Filtering by region keywords: ${filter.regionKeywords.join(', ')}`);
-          filteredETFs = filteredETFs.filter(etf => {
-            const region = (etf.region || '').toLowerCase();
-            const matches = filter.regionKeywords!.some(keyword => 
-              region.includes(keyword.toLowerCase())
-            );
-            if (matches) {
-              console.log(`✓ Match: ${etf.name} (${etf.region})`);
-            }
-            return matches;
-          });
-          console.log(`After region filtering: ${filteredETFs.length} ETFs`);
-        }
-        
-        // Filtrování podle názvu ETF
-        if (filter.nameKeywords && filter.nameKeywords.length > 0) {
-          console.log(`Filtering by name keywords: ${filter.nameKeywords.join(', ')}`);
-          filteredETFs = filteredETFs.filter(etf => {
-            const name = (etf.name || '').toLowerCase();
-            const matches = filter.nameKeywords!.some(keyword => 
-              name.includes(keyword.toLowerCase())
-            );
-            if (matches) {
-              console.log(`✓ Match: ${etf.name}`);
-            }
-            return matches;
-          });
-          console.log(`After name filtering: ${filteredETFs.length} ETFs`);
-        }
-        
-        // Filtrování podle správce
-        if (filter.fundProviderKeywords && filter.fundProviderKeywords.length > 0) {
-          console.log(`Filtering by provider keywords: ${filter.fundProviderKeywords.join(', ')}`);
-          filteredETFs = filteredETFs.filter(etf => {
-            const provider = (etf.fund_provider || '').toLowerCase();
-            const matches = filter.fundProviderKeywords!.some(keyword => 
-              provider.includes(keyword.toLowerCase())
-            );
-            if (matches) {
-              console.log(`✓ Match: ${etf.name} (${etf.fund_provider})`);
-            }
-            return matches;
-          });
-          console.log(`After provider filtering: ${filteredETFs.length} ETFs`);
-        }
-        
-        // Filtrování podle dividendového výnosu
-        if (filter.hasDividendYield) {
-          console.log('Filtering by dividend yield > 0');
-          filteredETFs = filteredETFs.filter(etf => {
-            const hasDividend = (etf.current_dividend_yield_numeric || 0) > 0;
-            if (hasDividend) {
-              console.log(`✓ Dividend match: ${etf.name} (${etf.current_dividend_yield_numeric}%)`);
-            }
-            return hasDividend;
-          });
-          console.log(`After dividend filtering: ${filteredETFs.length} ETFs`);
-        }
-        
-        if (filter.minDividendYield) {
-          console.log(`Filtering by minimum dividend yield: ${filter.minDividendYield}%`);
-          filteredETFs = filteredETFs.filter(etf => {
-            const dividendYield = etf.current_dividend_yield_numeric || 0;
-            return dividendYield >= filter.minDividendYield!;
-          });
-          console.log(`After minimum dividend filtering: ${filteredETFs.length} ETFs`);
-        }
-        
-        // Vezmi jen požadovaný počet
-        const result = filter.top ? filteredETFs.slice(0, filter.top) : filteredETFs;
-        
-        console.log(`Final result: ${result.length} ETFs`);
-        setData(result);
+        setData(etfs);
         
       } catch (err) {
         console.error("Load error:", err);
