@@ -71,48 +71,49 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         
         let result = [...etfs];
         
-        // Pro velikost fondu odfiltruj fondy s nulovou velikostí
-        if (filter.sortBy === 'fund_size_numeric') {
-          result = result.filter(etf => etf.fund_size_numeric && etf.fund_size_numeric > 0);
-          console.log(`After filtering zero fund sizes: ${result.length} ETFs`);
-        }
+        console.log(`=== DEBUGGING ${filter.sortBy} ===`);
+        console.log(`Raw data count: ${result.length}`);
         
-        // Pro TER odfiltruj fondy s nulowym nebo prázdnym TER
-        if (filter.sortBy === 'ter_numeric') {
-          result = result.filter(etf => etf.ter_numeric && etf.ter_numeric > 0);
-          console.log(`After filtering zero TER: ${result.length} ETFs`);
-        }
+        // Nejprve ukážeme sample dat před filtrováním
+        console.log('Sample raw data:');
+        result.slice(0, 10).forEach((etf, i) => {
+          console.log(`${i+1}. ${etf.name}:`);
+          console.log(`  TER: ${etf.ter_numeric}`);
+          console.log(`  Size: ${etf.fund_size_numeric}`);
+          console.log(`  Return1Y: ${etf.return_1y}`);
+        });
         
-        // Pro výnosy odfiltruj pouze null/undefined
-        if (filter.sortBy === 'return_1y') {
-          result = result.filter(etf => etf.return_1y != null);
-          console.log(`After filtering null returns: ${result.length} ETFs`);
-        }
+        // ODSTRANÍM VŠECHNO FILTROVÁNÍ - jen sortování
+        console.log(`Sorting by ${filter.sortBy} (${filter.sortOrder}) - NO FILTERING`);
         
-        // Sorting
-        if (filter.sortBy) {
-          console.log(`Sorting by ${filter.sortBy} (${filter.sortOrder})`);
+        result.sort((a, b) => {
+          const aVal = a[filter.sortBy as keyof ETFListItem];
+          const bVal = b[filter.sortBy as keyof ETFListItem];
           
-          result.sort((a, b) => {
-            const aVal = a[filter.sortBy as keyof ETFListItem];
-            const bVal = b[filter.sortBy as keyof ETFListItem];
-            
-            // Nulls last
-            if (aVal == null && bVal == null) return 0;
-            if (aVal == null) return 1;
-            if (bVal == null) return -1;
-            
-            const aNum = Number(aVal) || 0;
-            const bNum = Number(bVal) || 0;
-            
-            return filter.sortOrder === "asc" ? aNum - bNum : bNum - aNum;
-          });
+          // Pro string hodnoty
+          if (typeof aVal === "string" && typeof bVal === "string") {
+            return filter.sortOrder === "asc"
+              ? aVal.localeCompare(bVal)
+              : bVal.localeCompare(aVal);
+          }
           
-          console.log(`Top 5 after sorting:`, result.slice(0, 5).map(etf => ({
-            name: etf.name,
-            value: etf[filter.sortBy as keyof ETFListItem]
-          })));
-        }
+          // Pro numerické hodnoty - nulls na konec
+          const aNum = Number(aVal);
+          const bNum = Number(bVal);
+          
+          // Handle NaN a null
+          if (isNaN(aNum) && isNaN(bNum)) return 0;
+          if (isNaN(aNum)) return 1;
+          if (isNaN(bNum)) return -1;
+          
+          return filter.sortOrder === "asc" ? aNum - bNum : bNum - aNum;
+        });
+        
+        console.log(`=== TOP 20 after sorting by ${filter.sortBy} ===`);
+        result.slice(0, 20).forEach((etf, i) => {
+          const value = etf[filter.sortBy as keyof ETFListItem];
+          console.log(`${i+1}. ${etf.name}: ${value}`);
+        });
         
         // Take top N
         if (filter.top) {
