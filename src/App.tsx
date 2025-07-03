@@ -23,7 +23,6 @@ import AllWeatherPortfolio from "./pages/blog/AllWeatherPortfolio";
 import NewsletterUnsubscribe from "./pages/NewsletterUnsubscribe";
 import NewsletterAdminPage from "./pages/NewsletterAdminPage";
 import PublicETFAdminPage from "./pages/PublicETFAdminPage";
-import Sitemap from "./pages/Sitemap";
 
 const queryClient = new QueryClient();
 
@@ -52,7 +51,6 @@ const App = () => (
           <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
           <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
           <Route path="/database-management-secure-2024" element={<PublicETFAdminPage />} />
-          <Route path="/sitemap.xml" element={<Sitemap />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
