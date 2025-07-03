@@ -61,24 +61,15 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
             exchange_5_ticker
           `);
         
-        // Aplikuj SQL filtrování a sortování
+        // Aplikuj jen základní sortování v SQL, BEZ filtrování
         if (filter.sortBy) {
-          // Nejprv odfiltruj nulové hodnoty v SQL
-          if (filter.sortBy === 'fund_size_numeric') {
-            query = query.gt('fund_size_numeric', 0);
-          } else if (filter.sortBy === 'ter_numeric') {
-            query = query.gt('ter_numeric', 0);
-          } else if (filter.sortBy === 'return_1y') {
-            query = query.not('return_1y', 'is', null);
-          }
-          
           // Sortování v SQL
           const ascending = filter.sortOrder === 'asc';
           query = query.order(filter.sortBy, { ascending });
         }
         
-        // Vezmi více než potřebujem a pak ořežu
-        query = query.limit(filter.top ? filter.top * 2 : 50);
+        // Vezmi hodně dat pro JavaScript filtrování
+        query = query.limit(500);
         
         const { data: etfs, error } = await query;
         
