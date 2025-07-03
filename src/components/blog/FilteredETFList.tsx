@@ -61,29 +61,28 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
             exchange_5_ticker
           `);
         
+        // Debug: jaké filtry používáme
+        console.log('=== FILTER DEBUG ===');
+        console.log('Filter object:', filter);
+        
         // Aplikuj SQL filtrování podle zadaných kritérií
         if (filter.indexNameKeywords && filter.indexNameKeywords.length > 0) {
           console.log(`SQL filtering by index keywords: ${filter.indexNameKeywords.join(', ')}`);
-          const indexConditions = filter.indexNameKeywords.map(keyword => 
-            `index_name.ilike.%${keyword}%`
-          ).join(',');
-          query = query.or(indexConditions);
+          const firstIndexKeyword = filter.indexNameKeywords[0];
+          query = query.ilike('index_name', `%${firstIndexKeyword}%`);
         }
         
         if (filter.regionKeywords && filter.regionKeywords.length > 0) {
           console.log(`SQL filtering by region keywords: ${filter.regionKeywords.join(', ')}`);
-          const regionConditions = filter.regionKeywords.map(keyword => 
-            `region.ilike.%${keyword}%`
-          ).join(',');
-          query = query.or(regionConditions);
+          // Pro region filtry zkusím jeden po druhém
+          const firstRegionKeyword = filter.regionKeywords[0];
+          query = query.ilike('region', `%${firstRegionKeyword}%`);
         }
         
         if (filter.nameKeywords && filter.nameKeywords.length > 0) {
           console.log(`SQL filtering by name keywords: ${filter.nameKeywords.join(', ')}`);
-          const nameConditions = filter.nameKeywords.map(keyword => 
-            `name.ilike.%${keyword}%`
-          ).join(',');
-          query = query.or(nameConditions);
+          const firstNameKeyword = filter.nameKeywords[0];
+          query = query.ilike('name', `%${firstNameKeyword}%`);
         }
         
         if (filter.hasDividendYield) {
