@@ -52,16 +52,8 @@ const App = () => (
           <Route path="/tipy/nejlepsi-etf-na-evropske-akcie" element={<NejlepsiETFNaEvropskeAkcie />} />
           <Route path="/tipy/all-weather-portfolio" element={<AllWeatherPortfolio />} />
           <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
-          <Route path="/admin/newsletter" element={
-            <ProtectedRoute requireAdmin={true}>
-              <NewsletterAdminPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/etf" element={
-            <ProtectedRoute requireAdmin={true}>
-              <PublicETFAdminPage />
-            </ProtectedRoute>
-          } />
+          <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
+          <Route path="/admin/etf" element={<PublicETFAdminPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
