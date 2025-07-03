@@ -6,12 +6,17 @@ import { ArrowRight } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEOHead from "@/components/SEO/SEOHead";
 
+// Import nových tematických obrázků
+import etf2025Image from "@/assets/etf-2025-performance.jpg";
+import usStocksImage from "@/assets/us-stocks-etf.jpg";
+import nasdaqTechImage from "@/assets/nasdaq-tech-etf.jpg";
+
 const PLACEHOLDER_IMAGE = "/placeholder.svg"; // existuje v public složce
 
 const ARTICLE_IMAGES: Record<string, string> = {
-  "nejlepsi-etf-2025": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&h=600&fit=crop",
-  "nejlepsi-etf-na-americke-akcie": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop",
-  "nejlepsi-etf-na-nasdaq": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop",
+  "nejlepsi-etf-2025": etf2025Image,
+  "nejlepsi-etf-na-americke-akcie": usStocksImage,
+  "nejlepsi-etf-na-nasdaq": nasdaqTechImage,
   "nejlepsi-dividendove-etf": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600&fit=crop",
   "nejlepsi-etf-na-evropske-akcie": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=800&h=600&fit=crop",
   "all-weather-portfolio": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
