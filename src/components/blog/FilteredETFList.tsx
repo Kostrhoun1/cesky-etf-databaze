@@ -119,7 +119,10 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         throw error;
       }
     },
-    staleTime: 60000, // Cache for 1 minute
+    staleTime: 0, // Force fresh data
+    gcTime: 0, // Don't cache
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
 
   console.log("Component render - loading:", isLoading, "error:", !!error, "data length:", data.length);
