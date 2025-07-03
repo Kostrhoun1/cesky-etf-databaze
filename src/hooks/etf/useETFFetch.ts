@@ -25,63 +25,79 @@ export const useETFFetch = () => {
 
       // If no limit specified, fetch all records in batches to avoid Supabase limits
       if (!limit) {
-        console.log('Fetching all ETFs with simple query...');
-        
-        const { data, error } = await supabase
-          .from('etf_funds')
-          .select(`
-            isin,
-            name,
-            fund_provider,
-            category,
-            ter_numeric,
-            return_1y,
-            return_3y,
-            return_5y,
-            return_ytd,
-            fund_size_numeric,
-            degiro_free,
-            primary_ticker,
-            distribution_policy,
-            index_name,
-            fund_currency,
-            replication,
-            region,
-            current_dividend_yield_numeric,
-            exchange_1_ticker,
-            exchange_2_ticker,
-            exchange_3_ticker,
-            exchange_4_ticker,
-            exchange_5_ticker,
-            updated_at
-          `)
-          .order('fund_size_numeric', { ascending: false });
-
-        console.log('Supabase query completed. Error:', error, 'Data length:', data?.length);
-
-        if (error) {
-          console.error('Error fetching ETFs:', error);
-          console.error('Error details:', error.message, error.details, error.hint);
-          throw new Error(`Failed to fetch ETFs: ${error.message}`);
-        }
-
-        // Track the latest update date
+        console.log('Fetching all ETFs without limit...');
+        let allData: any[] = [];
+        let hasMore = true;
+        let offset = 0;
         let latestUpdate: Date | null = null;
-        if (data) {
-          data.forEach(item => {
-            if (item.updated_at) {
-              const updateDate = new Date(item.updated_at);
-              if (!latestUpdate || updateDate > latestUpdate) {
-                latestUpdate = updateDate;
+        const batchSize = 1000;
+
+        while (hasMore) {
+          const { data, error } = await supabase
+            .from('etf_funds')
+            .select(`
+              isin,
+              name,
+              fund_provider,
+              category,
+              ter_numeric,
+              return_1y,
+              return_3y,
+              return_5y,
+              return_ytd,
+              fund_size_numeric,
+              degiro_free,
+              primary_ticker,
+              distribution_policy,
+              index_name,
+              fund_currency,
+              replication,
+              region,
+              current_dividend_yield_numeric,
+              exchange_1_ticker,
+              exchange_2_ticker,
+              exchange_3_ticker,
+              exchange_4_ticker,
+              exchange_5_ticker,
+              updated_at
+            `)
+            .order('fund_size_numeric', { ascending: false })
+            .range(offset, offset + batchSize - 1);
+
+          if (error) {
+            console.error('Error fetching ETFs batch:', error);
+            throw new Error(`Failed to fetch ETFs: ${error.message}`);
+          }
+
+          if (data && data.length > 0) {
+            allData = [...allData, ...data];
+            
+            // Track the latest update date
+            data.forEach(item => {
+              if (item.updated_at) {
+                const updateDate = new Date(item.updated_at);
+                if (!latestUpdate || updateDate > latestUpdate) {
+                  latestUpdate = updateDate;
+                }
               }
+            });
+            
+            offset += batchSize;
+            console.log(`Loaded batch: ${data.length} ETFs, total so far: ${allData.length}`);
+            
+            // If we got less than batchSize, we've reached the end
+            if (data.length < batchSize) {
+              hasMore = false;
             }
-          });
+          } else {
+            hasMore = false;
+          }
         }
 
         setLastUpdated(latestUpdate);
-        console.log('Successfully loaded', data?.length || 0, 'ETFs from database (all records)');
+        console.log('Successfully loaded', allData.length, 'ETFs from database (all records)');
         console.log('Latest update date:', latestUpdate);
-        return data || [];
+        return allData || [];
       } else {
         // Original logic for when limit is specified
         let query = supabase

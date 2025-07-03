@@ -4,7 +4,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import ETFComparison from "./pages/ETFComparison";
 import WhatAreETFs from "./pages/WhatAreETFs";
@@ -24,7 +23,6 @@ import AllWeatherPortfolio from "./pages/blog/AllWeatherPortfolio";
 import NewsletterUnsubscribe from "./pages/NewsletterUnsubscribe";
 import NewsletterAdminPage from "./pages/NewsletterAdminPage";
 import PublicETFAdminPage from "./pages/PublicETFAdminPage";
-import AuthPage from "./pages/AuthPage";
 
 const queryClient = new QueryClient();
 
@@ -36,7 +34,6 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/auth" element={<AuthPage />} />
           <Route path="/srovnani-etf" element={<ETFComparison />} />
           <Route path="/co-jsou-etf" element={<WhatAreETFs />} />
           <Route path="/kde-koupit-etf" element={<WhereToBuyETFs />} />
