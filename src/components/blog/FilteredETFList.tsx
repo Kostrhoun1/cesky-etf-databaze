@@ -22,7 +22,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["direct-etfs", filter.sortBy, filter.sortOrder, filter.top],
+    queryKey: ["direct-etfs-v2", filter.sortBy, filter.sortOrder, filter.top, Math.random()],
     queryFn: async () => {
       console.log("=== DIRECT SUPABASE QUERY START ===");
       
