@@ -37,7 +37,7 @@ const TABLE_FILTER = {
   top: 12,
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
-  regionKeywords: ["europe", "developed europe"],
+  regionKeywords: ["Evropa"],
 };
 
 const NejlepsiETFNaEvropskeAkcie: React.FC = () => (

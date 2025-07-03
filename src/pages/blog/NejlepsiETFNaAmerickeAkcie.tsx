@@ -73,7 +73,7 @@ const US_ETF_TABLE_FILTER = {
   top: 12,
   sortBy: "return_5y" as const,
   sortOrder: "desc" as const,
-  regionKeywords: ["united states", "north america"],
+  regionKeywords: ["US"],
 };
 
 const NejlepsiETFNaAmerickeAkcie: React.FC = () => (
