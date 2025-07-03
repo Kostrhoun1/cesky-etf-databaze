@@ -53,7 +53,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
             exchange_4_ticker,
             exchange_5_ticker
           `)
-          .limit(3000); // Zvýším limit
+          .limit(4000); // Zvýším limit na všechny fondy
         
         if (error) {
           console.error("Supabase error:", error);
