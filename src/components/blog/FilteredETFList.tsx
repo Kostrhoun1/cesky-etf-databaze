@@ -28,36 +28,54 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
       
       console.log(`Total ETFs loaded: ${etfs.length}`);
       
+      // Filtrování kategorie pokud je definována
       if (filter.category) {
         console.log(`Filter category: ${filter.category}`);
-        
-        // Zobrazit všechny dostupné kategorie pro debugging
-        const allCategories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
-        console.log('All available categories:', allCategories.sort());
-        
-        // Filtrujeme podle kategorie s partial match
         etfs = etfs.filter((etf) => 
           etf.category?.toLowerCase().includes(filter.category?.toLowerCase() || "")
         );
-        
         console.log(`ETFs after category filter (${filter.category}): ${etfs.length}`);
       }
       
+      // Filtrování podle platných dat podle sortBy pole
       if (filter.sortBy) {
+        etfs = etfs.filter((etf) => {
+          const value = etf[filter.sortBy as keyof ETFListItem];
+          
+          // Pro numerické hodnoty - filtruj ty, které nejsou null, undefined, 0 nebo NaN
+          if (filter.sortBy === 'ter_numeric' || filter.sortBy === 'fund_size_numeric' || 
+              filter.sortBy === 'return_ytd' || filter.sortBy === 'return_1y' || 
+              filter.sortBy === 'return_3y' || filter.sortBy === 'return_5y') {
+            return value != null && !isNaN(Number(value)) && Number(value) > 0;
+          }
+          
+          // Pro string hodnoty
+          return value != null && value !== '' && value !== 'N/A';
+        });
+        
+        console.log(`ETFs after valid data filter: ${etfs.length}`);
+        
+        // Sortování
         etfs = etfs.sort((a, b) => {
           const aVal = a[filter.sortBy as keyof ETFListItem];
           const bVal = b[filter.sortBy as keyof ETFListItem];
+          
           if (typeof aVal === "string" && typeof bVal === "string") {
             return filter.sortOrder === "asc"
               ? aVal.localeCompare(bVal)
               : bVal.localeCompare(aVal);
           }
+          
+          const aNum = Number(aVal) || 0;
+          const bNum = Number(bVal) || 0;
+          
           return filter.sortOrder === "asc"
-            ? (Number(aVal) || 0) - (Number(bVal) || 0)
-            : (Number(bVal) || 0) - (Number(aVal) || 0);
+            ? aNum - bNum
+            : bNum - aNum;
         });
       }
       
+      // Omezení na top N
       if (filter.top) {
         etfs = etfs.slice(0, filter.top);
       }
