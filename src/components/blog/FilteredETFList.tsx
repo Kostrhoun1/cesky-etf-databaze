@@ -14,6 +14,8 @@ interface FilteredETFListProps {
     regionKeywords?: string[]; // Hledání v region
     nameKeywords?: string[]; // Hledání v názvu
     fundProviderKeywords?: string[]; // Hledání podle správce
+    hasDividendYield?: boolean; // Filtr pro dividendové ETF (current_dividend_yield_numeric > 0)
+    minDividendYield?: number; // Minimální dividendový výnos
   };
 }
 
@@ -175,6 +177,28 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
           console.log(`After provider filtering: ${filteredETFs.length} ETFs`);
         }
         
+        // Filtrování podle dividendového výnosu
+        if (filter.hasDividendYield) {
+          console.log('Filtering by dividend yield > 0');
+          filteredETFs = filteredETFs.filter(etf => {
+            const hasDividend = (etf.current_dividend_yield_numeric || 0) > 0;
+            if (hasDividend) {
+              console.log(`✓ Dividend match: ${etf.name} (${etf.current_dividend_yield_numeric}%)`);
+            }
+            return hasDividend;
+          });
+          console.log(`After dividend filtering: ${filteredETFs.length} ETFs`);
+        }
+        
+        if (filter.minDividendYield) {
+          console.log(`Filtering by minimum dividend yield: ${filter.minDividendYield}%`);
+          filteredETFs = filteredETFs.filter(etf => {
+            const dividendYield = etf.current_dividend_yield_numeric || 0;
+            return dividendYield >= filter.minDividendYield!;
+          });
+          console.log(`After minimum dividend filtering: ${filteredETFs.length} ETFs`);
+        }
+        
         // Vezmi jen požadovaný počet
         const result = filter.top ? filteredETFs.slice(0, filter.top) : filteredETFs;
         
@@ -190,7 +214,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
     };
 
     loadData();
-  }, [filter.sortBy, filter.sortOrder, filter.top, filter.indexNameKeywords, filter.regionKeywords, filter.nameKeywords, filter.fundProviderKeywords]);
+  }, [filter.sortBy, filter.sortOrder, filter.top, filter.indexNameKeywords, filter.regionKeywords, filter.nameKeywords, filter.fundProviderKeywords, filter.hasDividendYield, filter.minDividendYield]);
 
   if (isLoading) {
     return (

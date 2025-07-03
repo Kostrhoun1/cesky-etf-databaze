@@ -36,9 +36,9 @@ const RECOMMENDED_DIVIDEND_ETFS = [
 // Filtr pro dividendové ETF
 const filter = {
   top: 12,
-  sortBy: "fund_size_numeric" as const,
+  sortBy: "current_dividend_yield_numeric" as const,
   sortOrder: "desc" as const,
-  nameKeywords: ["dividend", "yield", "income", "aristocrat"],
+  hasDividendYield: true,
 };
 
 const NejlepsiDividendoveETF: React.FC = () => (

@@ -73,8 +73,7 @@ const US_ETF_TABLE_FILTER = {
   top: 12,
   sortBy: "return_5y" as const,
   sortOrder: "desc" as const,
-  regionKeywords: ["north america", "united states", "usa"],
-  indexNameKeywords: ["s&p 500", "s&p500", "nasdaq", "dow jones", "russell", "msci usa"],
+  regionKeywords: ["united states", "north america"],
 };
 
 const NejlepsiETFNaAmerickeAkcie: React.FC = () => (
