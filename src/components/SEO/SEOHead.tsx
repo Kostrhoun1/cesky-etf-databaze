@@ -74,6 +74,14 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     setMetaTag('twitter:title', title, true);
     setMetaTag('twitter:description', description, true);
     setMetaTag('twitter:image', ogImage, true);
+    
+    // Additional meta tags for better SEO
+    setMetaTag('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    setMetaTag('language', 'cs');
+    setMetaTag('revisit-after', '7 days');
+    setMetaTag('distribution', 'global');
+    setMetaTag('rating', 'general');
+    setMetaTag('viewport', 'width=device-width, initial-scale=1.0');
 
     // Article specific tags
     if (publishedTime) {

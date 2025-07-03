@@ -53,6 +53,7 @@ const ETFComparison: React.FC = () => {
         description="Detailní srovnání ETF fondů. Filtrujte podle kategorií, poplatků a výkonnosti. Porovnejte až 3 fondy současně. Více než 3500 ETF fondů k dispozici."
         canonical="https://etfpruvodce.cz/srovnani-etf"
         keywords="srovnání ETF, porovnání ETF fondů, filtrování ETF, výkonnost ETF, poplatky ETF, TER porovnání"
+        ogImage="https://etfpruvodce.cz/og-etf-comparison.jpg"
         schema={webAppSchema}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

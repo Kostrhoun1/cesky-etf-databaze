@@ -6,6 +6,7 @@ import DetailedBrokerComparison from '../components/home/DetailedBrokerCompariso
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { DollarSign, Shield, TrendingUp } from 'lucide-react';
 import SEOHead from '@/components/SEO/SEOHead';
+import InternalLinking, { BrokerGuideRelatedLinks } from '@/components/SEO/InternalLinking';
 
 const WhereToBuyETFs = () => {
   const brokerSchema = {
@@ -62,6 +63,7 @@ const WhereToBuyETFs = () => {
         description="Srovnání nejlepších brokerů pro nákup ETF v České republice. DEGIRO, Interactive Brokers, XTB, Trading 212. Poplatky, bezpečnost a nabídka ETF."
         canonical="https://etfpruvodce.cz/kde-koupit-etf"
         keywords="kde koupit ETF, nejlepší brokeři, DEGIRO, Interactive Brokers, XTB, Trading 212, Portu, poplatky brokerů"
+        ogImage="https://etfpruvodce.cz/og-where-to-buy.jpg"
         schema={brokerSchema}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -148,6 +150,12 @@ const WhereToBuyETFs = () => {
             </Link>
           </div>
         </div>
+
+        {/* Internal Linking */}
+        <InternalLinking 
+          relatedLinks={BrokerGuideRelatedLinks} 
+          className="mt-16"
+        />
       </div>
     </Layout>
   );
