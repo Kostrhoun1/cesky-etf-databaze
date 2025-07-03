@@ -21,7 +21,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["etfs", filter],
+    queryKey: ["etfs-filtered", filter, Date.now()], // Přidám timestamp pro force refresh
     queryFn: async () => {
       let etfs = await fetchETFs();
       

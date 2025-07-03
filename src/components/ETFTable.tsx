@@ -75,22 +75,11 @@ const ETFTable: React.FC<ETFTableProps> = ({
   const formatFundSize = (size: number) => {
     if (!size) return '-';
     
-    // Převést vše na miliardy EUR
-    // Předpokládáme, že hodnoty jsou v EUR (nebo milionech EUR)
-    let sizeInBillions;
-    
-    if (size >= 1000000000) {
-      // Hodnota je pravděpodobně v jednotkách EUR
-      sizeInBillions = size / 1000000000;
-    } else if (size >= 1000) {
-      // Hodnota je pravděpodobně v tisících nebo milionech EUR
-      sizeInBillions = size / 1000000;
-    } else {
-      // Hodnota je už pravděpodobně v miliardách nebo je velmi malá
-      sizeInBillions = size;
-    }
-    
-    return sizeInBillions.toFixed(2);
+    // Data jsou už v milionech EUR podle uživatele
+    return size.toLocaleString('cs-CZ', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
   };
 
   return (
@@ -144,7 +133,7 @@ const ETFTable: React.FC<ETFTableProps> = ({
                    className="text-right cursor-pointer hover:bg-gray-50"
                    onClick={() => handleSort('fund_size_numeric')}
                  >
-                   Velikost fondu (mld EUR)
+                   Velikost fondu (mil EUR)
                    {getSortIcon('fund_size_numeric')}
                  </TableHead>
                  <TableHead className="text-left">Typ fondu</TableHead>
