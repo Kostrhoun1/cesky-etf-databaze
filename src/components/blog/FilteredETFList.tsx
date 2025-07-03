@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useETFData } from "@/hooks/useETFData";
+import { supabase } from "@/integrations/supabase/client";
 import { ETFListItem } from "@/types/etf";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import ETFTable from "../ETFTable";
@@ -15,46 +15,80 @@ interface FilteredETFListProps {
 }
 
 const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
-  console.log("=== FilteredETFList RENDER START ===");
-  console.log("Filter props:", filter);
-  
-  const { fetchETFs } = useETFData();
+  console.log("=== FilteredETFList RENDER ===", filter);
   
   const {
     data = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["filtered-etfs", filter.sortBy, filter.sortOrder, filter.top],
+    queryKey: ["direct-etfs", filter.sortBy, filter.sortOrder, filter.top],
     queryFn: async () => {
-      console.log("=== QUERY FUNCTION START ===");
+      console.log("=== DIRECT SUPABASE QUERY START ===");
       
       try {
-        const allETFs = await fetchETFs();
-        console.log("Raw ETFs count:", allETFs.length);
+        // Přímé volání Supabase bez hooků
+        const { data: etfs, error } = await supabase
+          .from('etf_funds')
+          .select(`
+            isin,
+            name,
+            fund_provider,
+            category,
+            ter_numeric,
+            return_1y,
+            return_3y,
+            return_5y,
+            return_ytd,
+            fund_size_numeric,
+            degiro_free,
+            primary_ticker,
+            distribution_policy,
+            index_name,
+            fund_currency,
+            replication,
+            region,
+            current_dividend_yield_numeric,
+            exchange_1_ticker,
+            exchange_2_ticker,
+            exchange_3_ticker,
+            exchange_4_ticker,
+            exchange_5_ticker
+          `)
+          .limit(1000); // Omezím na 1000 pro rychlost
         
-        if (allETFs.length === 0) {
-          console.log("ERROR: No ETFs loaded from database!");
+        if (error) {
+          console.error("Supabase error:", error);
+          throw error;
+        }
+        
+        if (!etfs || etfs.length === 0) {
+          console.log("No ETFs returned from Supabase");
           return [];
         }
         
-        let etfs = [...allETFs]; // Copy array
+        console.log(`Loaded ${etfs.length} ETFs from Supabase`);
         
-        // Debug first few ETFs
-        console.log("Sample ETFs:");
-        etfs.slice(0, 3).forEach((etf, i) => {
-          console.log(`${i+1}. ${etf.name} - TER: ${etf.ter_numeric} - Size: ${etf.fund_size_numeric} - Return1Y: ${etf.return_1y}`);
+        let result = [...etfs];
+        
+        // Debug sample
+        console.log("Sample ETFs from DB:");
+        result.slice(0, 3).forEach((etf, i) => {
+          console.log(`${i+1}. ${etf.name}:`);
+          console.log(`  - ter_numeric: ${etf.ter_numeric}`);
+          console.log(`  - fund_size_numeric: ${etf.fund_size_numeric}`);
+          console.log(`  - return_1y: ${etf.return_1y}`);
         });
         
-        // Simple sorting without any filtering
+        // Sorting
         if (filter.sortBy) {
-          console.log(`Sorting by: ${filter.sortBy} (${filter.sortOrder})`);
+          console.log(`Sorting by ${filter.sortBy} (${filter.sortOrder})`);
           
-          etfs.sort((a, b) => {
+          result.sort((a, b) => {
             const aVal = a[filter.sortBy as keyof ETFListItem];
             const bVal = b[filter.sortBy as keyof ETFListItem];
             
-            // Handle nulls
+            // Nulls last
             if (aVal == null && bVal == null) return 0;
             if (aVal == null) return 1;
             if (bVal == null) return -1;
@@ -65,8 +99,8 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
             return filter.sortOrder === "asc" ? aNum - bNum : bNum - aNum;
           });
           
-          console.log("After sorting - Top 5:");
-          etfs.slice(0, 5).forEach((etf, i) => {
+          console.log(`Top 5 after sorting by ${filter.sortBy}:`);
+          result.slice(0, 5).forEach((etf, i) => {
             const value = etf[filter.sortBy as keyof ETFListItem];
             console.log(`${i+1}. ${etf.name}: ${value}`);
           });
@@ -74,26 +108,23 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         
         // Take top N
         if (filter.top) {
-          etfs = etfs.slice(0, filter.top);
-          console.log(`Taking top ${filter.top}, final count: ${etfs.length}`);
+          result = result.slice(0, filter.top);
+          console.log(`Final result: ${result.length} ETFs`);
         }
         
-        console.log("=== QUERY FUNCTION END ===");
-        return etfs;
+        return result;
         
       } catch (error) {
-        console.error("Error in query function:", error);
+        console.error("Query error:", error);
         throw error;
       }
     },
-    staleTime: 0, // Force fresh data
-    gcTime: 0, // Don't cache
+    staleTime: 60000, // Cache for 1 minute
   });
 
-  console.log("Component state - isLoading:", isLoading, "error:", error, "data length:", data.length);
+  console.log("Component render - loading:", isLoading, "error:", !!error, "data length:", data.length);
 
   if (isLoading) {
-    console.log("Showing loading state");
     return (
       <Card className="mt-6">
         <CardContent className="p-6">
@@ -104,31 +135,26 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
   }
 
   if (error) {
-    console.log("Showing error state:", error);
+    console.error("Render error:", error);
     return (
       <Card className="mt-6">
         <CardContent className="p-6">
-          <p>Chyba při načítání ETF fondů: {String(error)}</p>
+          <p>Chyba při načítání: {String(error)}</p>
         </CardContent>
       </Card>
     );
   }
 
   if (data.length === 0) {
-    console.log("Showing empty state");
     return (
       <Card className="mt-6">
         <CardContent className="p-6">
-          <p>Žádné ETF fondy nenalezeny.</p>
-          <p className="text-sm text-muted-foreground mt-2">
-            Filter: {filter.sortBy} ({filter.sortOrder})
-          </p>
+          <p>Žádné fondy nenalezeny</p>
+          <p className="text-sm text-gray-500">Filter: {filter.sortBy}</p>
         </CardContent>
       </Card>
     );
   }
-
-  console.log("Showing table with", data.length, "ETFs");
 
   return (
     <Card className="mt-8">
