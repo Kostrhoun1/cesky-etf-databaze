@@ -21,7 +21,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["etfs-filtered", filter, Date.now()], // Přidám timestamp pro force refresh
+    queryKey: ["etfs-filtered", JSON.stringify(filter)],
     queryFn: async () => {
       let etfs = await fetchETFs();
       
@@ -38,31 +38,26 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         console.log(`ETFs after category filter: ${etfs.length}`);
       }
       
-      // Velmi jednoduché filtrování - pouze odstraň null/undefined
+      // BEZ JAKÉHOKOLIV FILTROVÁNÍ - jen sortování
       if (filter.sortBy) {
-        console.log(`\n=== Before filtering by ${filter.sortBy} ===`);
-        console.log(`Total ETFs before filter: ${etfs.length}`);
+        console.log(`\n=== Sortování podle ${filter.sortBy} ===`);
+        console.log(`ETFs před sortováním: ${etfs.length}`);
         
-        // Podívej se na prvních 10 hodnot
-        etfs.slice(0, 10).forEach((etf, i) => {
+        // Ukaž prvních 5 hodnot před sortováním
+        etfs.slice(0, 5).forEach((etf, i) => {
           const value = etf[filter.sortBy as keyof ETFListItem];
-          console.log(`${i+1}. ${etf.name}: ${filter.sortBy} = ${value} (type: ${typeof value})`);
+          console.log(`${i+1}. ${etf.name}: ${filter.sortBy} = ${value}`);
         });
         
-        // VELMI jednoduché filtrování - pouze null a undefined
-        const originalLength = etfs.length;
-        etfs = etfs.filter((etf) => {
-          const value = etf[filter.sortBy as keyof ETFListItem];
-          // Pouze odstraň skutečně null/undefined hodnoty
-          return value !== null && value !== undefined;
-        });
-        
-        console.log(`ETFs after null filter: ${etfs.length} (removed: ${originalLength - etfs.length})`);
-        
-        // Sortování
+        // Pouze sortování - ŽÁDNÉ filtrování
         etfs = etfs.sort((a, b) => {
           const aVal = a[filter.sortBy as keyof ETFListItem];
           const bVal = b[filter.sortBy as keyof ETFListItem];
+          
+          // Handle null/undefined values by putting them at the end
+          if (aVal == null && bVal == null) return 0;
+          if (aVal == null) return 1;
+          if (bVal == null) return -1;
           
           if (typeof aVal === "string" && typeof bVal === "string") {
             return filter.sortOrder === "asc"
@@ -78,7 +73,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
             : bNum - aNum;
         });
         
-        console.log(`\n=== Top 10 after sorting by ${filter.sortBy} (${filter.sortOrder}) ===`);
+        console.log(`\n=== Top 10 po sortování ===`);
         etfs.slice(0, 10).forEach((etf, i) => {
           const value = etf[filter.sortBy as keyof ETFListItem];
           console.log(`${i+1}. ${etf.name}: ${value}`);
