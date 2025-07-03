@@ -15,117 +15,131 @@ interface FilteredETFListProps {
 }
 
 const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
+  console.log("=== FilteredETFList RENDER START ===");
+  console.log("Filter props:", filter);
+  
   const { fetchETFs } = useETFData();
+  
   const {
     data = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["etfs-filtered", JSON.stringify(filter)],
+    queryKey: ["filtered-etfs", filter.sortBy, filter.sortOrder, filter.top],
     queryFn: async () => {
-      let etfs = await fetchETFs();
+      console.log("=== QUERY FUNCTION START ===");
       
-      console.log(`=== DEBUG FilteredETFList ===`);
-      console.log(`Total ETFs loaded: ${etfs.length}`);
-      console.log(`Filter:`, filter);
-      
-      // Filtrování kategorie pokud je definována
-      if (filter.category) {
-        console.log(`Filter category: ${filter.category}`);
-        etfs = etfs.filter((etf) => 
-          etf.category?.toLowerCase().includes(filter.category?.toLowerCase() || "")
-        );
-        console.log(`ETFs after category filter: ${etfs.length}`);
-      }
-      
-      // BEZ JAKÉHOKOLIV FILTROVÁNÍ - jen sortování
-      if (filter.sortBy) {
-        console.log(`\n=== Sortování podle ${filter.sortBy} ===`);
-        console.log(`ETFs před sortováním: ${etfs.length}`);
+      try {
+        const allETFs = await fetchETFs();
+        console.log("Raw ETFs count:", allETFs.length);
         
-        // Ukaž prvních 5 hodnot před sortováním
-        etfs.slice(0, 5).forEach((etf, i) => {
-          const value = etf[filter.sortBy as keyof ETFListItem];
-          console.log(`${i+1}. ${etf.name}: ${filter.sortBy} = ${value}`);
+        if (allETFs.length === 0) {
+          console.log("ERROR: No ETFs loaded from database!");
+          return [];
+        }
+        
+        let etfs = [...allETFs]; // Copy array
+        
+        // Debug first few ETFs
+        console.log("Sample ETFs:");
+        etfs.slice(0, 3).forEach((etf, i) => {
+          console.log(`${i+1}. ${etf.name} - TER: ${etf.ter_numeric} - Size: ${etf.fund_size_numeric} - Return1Y: ${etf.return_1y}`);
         });
         
-        // Pouze sortování - ŽÁDNÉ filtrování
-        etfs = etfs.sort((a, b) => {
-          const aVal = a[filter.sortBy as keyof ETFListItem];
-          const bVal = b[filter.sortBy as keyof ETFListItem];
+        // Simple sorting without any filtering
+        if (filter.sortBy) {
+          console.log(`Sorting by: ${filter.sortBy} (${filter.sortOrder})`);
           
-          // Handle null/undefined values by putting them at the end
-          if (aVal == null && bVal == null) return 0;
-          if (aVal == null) return 1;
-          if (bVal == null) return -1;
+          etfs.sort((a, b) => {
+            const aVal = a[filter.sortBy as keyof ETFListItem];
+            const bVal = b[filter.sortBy as keyof ETFListItem];
+            
+            // Handle nulls
+            if (aVal == null && bVal == null) return 0;
+            if (aVal == null) return 1;
+            if (bVal == null) return -1;
+            
+            const aNum = Number(aVal) || 0;
+            const bNum = Number(bVal) || 0;
+            
+            return filter.sortOrder === "asc" ? aNum - bNum : bNum - aNum;
+          });
           
-          if (typeof aVal === "string" && typeof bVal === "string") {
-            return filter.sortOrder === "asc"
-              ? aVal.localeCompare(bVal)
-              : bVal.localeCompare(aVal);
-          }
-          
-          const aNum = Number(aVal) || 0;
-          const bNum = Number(bVal) || 0;
-          
-          return filter.sortOrder === "asc"
-            ? aNum - bNum
-            : bNum - aNum;
-        });
+          console.log("After sorting - Top 5:");
+          etfs.slice(0, 5).forEach((etf, i) => {
+            const value = etf[filter.sortBy as keyof ETFListItem];
+            console.log(`${i+1}. ${etf.name}: ${value}`);
+          });
+        }
         
-        console.log(`\n=== Top 10 po sortování ===`);
-        etfs.slice(0, 10).forEach((etf, i) => {
-          const value = etf[filter.sortBy as keyof ETFListItem];
-          console.log(`${i+1}. ${etf.name}: ${value}`);
-        });
+        // Take top N
+        if (filter.top) {
+          etfs = etfs.slice(0, filter.top);
+          console.log(`Taking top ${filter.top}, final count: ${etfs.length}`);
+        }
+        
+        console.log("=== QUERY FUNCTION END ===");
+        return etfs;
+        
+      } catch (error) {
+        console.error("Error in query function:", error);
+        throw error;
       }
-      
-      // Omezení na top N
-      if (filter.top) {
-        etfs = etfs.slice(0, filter.top);
-      }
-      
-      console.log(`Final ETFs count: ${etfs.length}`);
-      console.log(`=== END DEBUG ===\n`);
-      return etfs;
     },
+    staleTime: 0, // Force fresh data
+    gcTime: 0, // Don't cache
   });
 
-  if (isLoading)
+  console.log("Component state - isLoading:", isLoading, "error:", error, "data length:", data.length);
+
+  if (isLoading) {
+    console.log("Showing loading state");
     return (
       <Card className="mt-6">
-        <CardContent>Načítání ETF fondů...</CardContent>
+        <CardContent className="p-6">
+          <p>Načítání ETF fondů...</p>
+        </CardContent>
       </Card>
     );
+  }
 
-  if (error)
+  if (error) {
+    console.log("Showing error state:", error);
     return (
       <Card className="mt-6">
-        <CardContent>Chyba při načítání ETF fondů.</CardContent>
+        <CardContent className="p-6">
+          <p>Chyba při načítání ETF fondů: {String(error)}</p>
+        </CardContent>
       </Card>
     );
+  }
 
-  if (data.length === 0)
+  if (data.length === 0) {
+    console.log("Showing empty state");
     return (
       <Card className="mt-6">
-        <CardContent>
-          <p>Žádné ETF fondy nesplňují podmínky filtru tohoto článku.</p>
+        <CardContent className="p-6">
+          <p>Žádné ETF fondy nenalezeny.</p>
           <p className="text-sm text-muted-foreground mt-2">
-            Filtr kategorie: {filter.category || "Žádný"}
+            Filter: {filter.sortBy} ({filter.sortOrder})
           </p>
         </CardContent>
       </Card>
     );
+  }
+
+  console.log("Showing table with", data.length, "ETFs");
 
   return (
     <Card className="mt-8">
       <CardHeader>
-        <CardTitle>Výběr ETF k této kategorii</CardTitle>
+        <CardTitle>
+          {filter.sortBy === 'ter_numeric' && 'Nejlevnější ETF podle poplatků (TER)'}
+          {filter.sortBy === 'return_1y' && 'Nejvýnosnější ETF za posledních 12 měsíců'}
+          {filter.sortBy === 'fund_size_numeric' && 'Největší ETF podle spravovaných aktiv'}
+        </CardTitle>
         <p className="text-sm text-muted-foreground">
-          {filter.category 
-            ? `Nalezeno ${data.length} fondů v kategorii "${filter.category}"`
-            : `Nalezeno ${data.length} nejlepších fondů`
-          }
+          Nalezeno {data.length} fondů
         </p>
       </CardHeader>
       <CardContent>
