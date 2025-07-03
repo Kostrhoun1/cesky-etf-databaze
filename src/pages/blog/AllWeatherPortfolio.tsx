@@ -63,7 +63,6 @@ const GLOBAL_STOCKS_FILTER = {
   top: 8,
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
-  regionKeywords: ["Globální"],
   indexNameKeywords: ["msci world", "ftse all-world"],
 };
 
