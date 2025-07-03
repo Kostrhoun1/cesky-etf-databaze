@@ -33,6 +33,7 @@ export const useETFFetch = () => {
         const batchSize = 1000;
 
         while (hasMore) {
+          console.log(`Fetching batch at offset ${offset} with size ${batchSize}`);
           const { data, error } = await supabase
             .from('etf_funds')
             .select(`
@@ -64,6 +65,8 @@ export const useETFFetch = () => {
             .order('fund_size_numeric', { ascending: false })
             .range(offset, offset + batchSize - 1);
 
+          console.log('Supabase query completed. Error:', error, 'Data length:', data?.length);
+
           if (error) {
             console.error('Error fetching ETFs batch:', error);
             console.error('Error details:', error.message, error.details, error.hint);
@@ -91,6 +94,7 @@ export const useETFFetch = () => {
               hasMore = false;
             }
           } else {
+            console.log('No data returned, ending fetch');
             hasMore = false;
           }
         }
