@@ -5,8 +5,38 @@ import Layout from '../components/Layout';
 import DetailedBrokerComparison from '../components/home/DetailedBrokerComparison';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { DollarSign, Shield, TrendingUp } from 'lucide-react';
+import SEOHead from '@/components/SEO/SEOHead';
 
 const WhereToBuyETFs = () => {
+  const brokerSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Nejlepší brokeři pro nákup ETF v České republice",
+    "description": "Srovnání brokerů pro investování do ETF fondů",
+    "url": "https://etfpruvodce.cz/kde-koupit-etf",
+    "numberOfItems": 5,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "DEGIRO",
+        "description": "Nizozemský broker s nízkými poplatky"
+      },
+      {
+        "@type": "ListItem", 
+        "position": 2,
+        "name": "Interactive Brokers",
+        "description": "Americký broker s širokou nabídkou"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "XTB",
+        "description": "Polský broker s českým zázemím"
+      }
+    ]
+  };
+
   const considerations = [
     {
       icon: <DollarSign className="h-6 w-6 text-green-600" />,
@@ -27,6 +57,13 @@ const WhereToBuyETFs = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title="Kde koupit ETF? Srovnání nejlepších brokerů 2025 | ETF průvodce.cz"
+        description="Srovnání nejlepších brokerů pro nákup ETF v České republice. DEGIRO, Interactive Brokers, XTB, Trading 212. Poplatky, bezpečnost a nabídka ETF."
+        canonical="https://etfpruvodce.cz/kde-koupit-etf"
+        keywords="kde koupit ETF, nejlepší brokeři, DEGIRO, Interactive Brokers, XTB, Trading 212, Portu, poplatky brokerů"
+        schema={brokerSchema}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero sekce */}
         <div className="text-center mb-16">

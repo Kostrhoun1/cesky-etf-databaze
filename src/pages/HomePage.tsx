@@ -8,6 +8,7 @@ import ETFSearchSection from '@/components/home/ETFSearchSection';
 import BrokerComparisonSection from '@/components/home/BrokerComparisonSection';
 import CTASection from '@/components/home/CTASection';
 import NewsletterSubscribeForm from "@/components/NewsletterSubscribeForm";
+import SEOHead from '@/components/SEO/SEOHead';
 
 const HomePage: React.FC = () => {
   const [totalCount, setTotalCount] = useState(0);
@@ -25,8 +26,37 @@ const HomePage: React.FC = () => {
     loadData();
   }, [getETFCount]);
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ETF průvodce.cz",
+    "url": "https://etfpruvodce.cz",
+    "description": "Nejlepší ETF fondy pro české investory. Srovnání, analýza a detailní informace o ETF fondech. Kalkulačky, nástroje a vzdělávací obsah o investování.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "ETF průvodce.cz",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://etfpruvodce.cz/og-image.jpg"
+      }
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://etfpruvodce.cz/srovnani-etf?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   return (
     <Layout>
+      <SEOHead
+        title="ETF průvodce.cz - Komplexní průvodce ETF fondy pro české investory"
+        description="Nejlepší ETF fondy pro české investory. Srovnání, analýza a detailní informace o ETF fondech. Kalkulačky, nástroje a vzdělávací obsah o investování."
+        canonical="https://etfpruvodce.cz/"
+        keywords="ETF fondy, investování, srovnání ETF, české investování, DEGIRO, Trading 212, nejlepší ETF 2025"
+        schema={websiteSchema}
+      />
+      
       {/* HERO sekce */}
       <HeroSection totalCount={totalCount} />
 

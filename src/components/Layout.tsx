@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Mail, Settings } from 'lucide-react';
 import Logo from './Logo';
+import BreadcrumbNav from './SEO/BreadcrumbNav';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -89,6 +90,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
       </header>
+      
+      {/* Breadcrumb Navigation */}
+      <BreadcrumbNav />
       
       {/* Main content */}
       <main>
