@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ETFListItem } from "@/types/etf";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import ETFTable from "../ETFTable";
+import ETFSearchTable from "../home/ETFSearchTable";
 
 interface FilteredETFListProps {
   filter: {
@@ -158,7 +158,13 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
-          <ETFTable etfs={data} />
+          <ETFSearchTable 
+            etfs={data} 
+            sortBy={filter.sortBy || 'ter_numeric'}
+            sortOrder={filter.sortOrder || 'asc'}
+            onSort={() => {}} // Čtení pouze - bez sort funkcionality
+            isLoading={false}
+          />
         </div>
       </CardContent>
     </Card>
