@@ -50,7 +50,7 @@ const App = () => (
           <Route path="/tipy/all-weather-portfolio" element={<AllWeatherPortfolio />} />
           <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
           <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
-          <Route path="/admin/etf" element={<PublicETFAdminPage />} />
+          <Route path="/database-management-secure-2024" element={<PublicETFAdminPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

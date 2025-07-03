@@ -1,5 +1,6 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams, Navigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import CSVUploader from "@/components/CSVUploader";
 import { parseCSV } from "@/utils/csvParser";
@@ -7,9 +8,18 @@ import { useETFData } from "@/hooks/useETFData";
 import Layout from "@/components/Layout";
 
 const PublicETFAdminPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const { upsertETFs, getETFCount } = useETFData();
   const [etfCount, setEtfCount] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [hasAccess, setHasAccess] = useState(false);
+
+  useEffect(() => {
+    const password = searchParams.get('password');
+    if (password === 'Omitac116') {
+      setHasAccess(true);
+    }
+  }, [searchParams]);
 
   const loadETFCount = async () => {
     try {
@@ -69,6 +79,10 @@ const PublicETFAdminPage: React.FC = () => {
       setIsUploading(false);
     }
   };
+
+  if (!hasAccess) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <Layout>

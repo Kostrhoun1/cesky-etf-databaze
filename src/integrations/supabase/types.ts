@@ -12,14 +12,17 @@ export type Database = {
       app_admins: {
         Row: {
           id: string
+          updated_at: string | null
           user_email: string
         }
         Insert: {
           id?: string
+          updated_at?: string | null
           user_email: string
         }
         Update: {
           id?: string
+          updated_at?: string | null
           user_email?: string
         }
         Relationships: []
@@ -494,7 +497,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_user_admin: {
+        Args: { user_email: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
