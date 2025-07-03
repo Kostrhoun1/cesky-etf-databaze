@@ -94,15 +94,18 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter }) => {
         
         console.log(`Loaded ${etfs.length} ETFs from SQL query`);
         
-        // Debug: ukázat sample dat před filtrováním
+        // Debug: ukázat ALL sample dat před filtrováním
+        console.log('=== NASDAQ FILTER DEBUG ===');
         console.log('Sample data before filtering:');
-        etfs.slice(0, 10).forEach((etf, i) => {
-          console.log(`${i+1}. ${etf.name}:`);
-          console.log(`  Index: "${etf.index_name}"`);
-          console.log(`  Region: "${etf.region}"`);
-          console.log(`  Provider: "${etf.fund_provider}"`);
-          console.log(`  Category: "${etf.category}"`);
+        etfs.slice(0, 15).forEach((etf, i) => {
+          console.log(`\n${i+1}. "${etf.name}"`);
+          console.log(`  Index: "${etf.index_name || 'NULL'}"`);
+          console.log(`  Region: "${etf.region || 'NULL'}"`);
+          console.log(`  Provider: "${etf.fund_provider || 'NULL'}"`);
+          console.log(`  Category: "${etf.category || 'NULL'}"`);
+          console.log(`  ISIN: ${etf.isin}`);
         });
+        console.log('=== END SAMPLE DATA ===');
         
         // Aplikuj JavaScript filtry
         let filteredETFs = etfs;
