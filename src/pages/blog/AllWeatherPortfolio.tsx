@@ -43,12 +43,28 @@ const ALL_WEATHER_ETF_RECOMMENDATIONS = [
   }
 ];
 
-// Tabulka ETF pro dluhopisy a akcie
+// Filtry pro různé složky All-Weather portfolia
 const BONDS_ETF_FILTER = {
-  category: "Government Bond",
   top: 8,
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
+  regionKeywords: ["Evropa", "Globální"],
+  nameKeywords: ["government", "bond", "dluhopis"],
+};
+
+const COMMODITIES_ETF_FILTER = {
+  top: 6,
+  sortBy: "fund_size_numeric" as const,
+  sortOrder: "desc" as const,
+  nameKeywords: ["gold", "commodity", "zlato"],
+};
+
+const GLOBAL_STOCKS_FILTER = {
+  top: 8,
+  sortBy: "fund_size_numeric" as const,
+  sortOrder: "desc" as const,
+  regionKeywords: ["Globální"],
+  indexNameKeywords: ["msci world", "ftse all-world"],
 };
 
 const AllWeatherPortfolio: React.FC = () => (
@@ -128,11 +144,23 @@ const AllWeatherPortfolio: React.FC = () => (
       <li><b>Minimalizace korelace:</b> Jednotlivá aktiva reagují odlišně na stejné ekonomické události.</li>
     </ul>
 
+    <h3 className="text-lg font-semibold mt-8 mb-2">Dostupné globální akciové ETF</h3>
+    <p className="mb-3">
+      Akciová část portfolia (30%) by měla být široce diverzifikovaná. Zde najdete nejlepší globální akciové ETF:
+    </p>
+    <FilteredETFList filter={GLOBAL_STOCKS_FILTER} />
+
     <h3 className="text-lg font-semibold mt-8 mb-2">Dostupné dluhopisové ETF pro All-Weather strategii</h3>
     <p className="mb-3">
-      Dluhopisová část tvoří většinu portfolia (55%), proto je důležitý výběr kvalitních fondů. Zde najdete přehled nejlepších evropských dluhopisových ETF:
+      Dluhopisová část tvoří většinu portfolia (55%), proto je důležitý výběr kvalitních fondů:
     </p>
     <FilteredETFList filter={BONDS_ETF_FILTER} />
+
+    <h3 className="text-lg font-semibold mt-8 mb-2">Komodity a zlato pro ochranu před inflací</h3>
+    <p className="mb-3">
+      Komoditní část (15%) chrání portfolio před inflací a měnovou devalvací:
+    </p>
+    <FilteredETFList filter={COMMODITIES_ETF_FILTER} />
 
     <div className="bg-yellow-50 border-l-4 border-yellow-400 px-4 py-3 my-6 rounded">
       <b>Upozornění:</b> All-Weather portfolio není zárukou zisku. Je navrženo pro stabilitu, ne maximální výnosy. V bull trzích může zaostávat za čistě akciovými portfolii.
