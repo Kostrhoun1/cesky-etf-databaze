@@ -44,23 +44,6 @@ const DetailedBrokerComparison: React.FC = () => {
             <BrokerRecommendations />
           </TabsContent>
         </Tabs>
-
-        {/* Link to detailed DEGIRO review */}
-        <div className="mt-8 p-6 bg-blue-50 rounded-lg">
-          <h3 className="text-lg font-semibold text-blue-900 mb-3">
-            Detailní recenze DEGIRO
-          </h3>
-          <p className="text-blue-800 text-sm mb-4">
-            Přečtěte si kompletní hodnocení brokera DEGIRO se zaměřením na české investory, 
-            včetně detailního rozboru poplatků, daňových aspektů a srovnání s konkurencí.
-          </p>
-          <Link 
-            to="/degiro-recenze" 
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
-          >
-            Přečíst detailní recenzi DEGIRO
-          </Link>
-        </div>
       </div>
     </section>
   );
