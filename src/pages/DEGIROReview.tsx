@@ -7,8 +7,18 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { CheckCircle, XCircle, AlertTriangle, Star, Shield, TrendingUp, ArrowLeft } from 'lucide-react';
 import SEOHead from '@/components/SEO/SEOHead';
+import { generateBrokerSchema, generateBreadcrumbSchema } from '@/components/SEO/BrokerSEO';
 
 const DEGIROReview = () => {
+  const currentYear = new Date().getFullYear();
+  
+  const combinedSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      generateBrokerSchema("DEGIRO"),
+      generateBreadcrumbSchema("DEGIRO")
+    ]
+  };
   const reviewSchema = {
     "@context": "https://schema.org",
     "@type": "Review",
@@ -32,11 +42,14 @@ const DEGIROReview = () => {
   return (
     <Layout>
       <SEOHead
-        title="DEGIRO recenze 2025: Kompletní hodnocení pro české investory | ETF průvodce.cz"
-        description="Detailní recenze brokera DEGIRO - poplatky, bezpečnost, daňové aspekty pro ČR. Výhody a nevýhody, srovnání s konkurencí. Hodnocení 4.5/5."
+        title={`DEGIRO recenze ${currentYear}: Kompletní hodnocení pro české investory | ETF průvodce.cz`}
+        description={`Detailní DEGIRO recenze ${currentYear} - poplatky, bezpečnost, daňové aspekty pro ČR. Výhody a nevýhody, srovnání s konkurencí. Hodnocení 4.5/5.`}
         canonical="https://etfpruvodce.cz/degiro-recenze"
-        keywords="DEGIRO recenze, DEGIRO zkušenosti, DEGIRO poplatky, DEGIRO Česká republika, online broker hodnocení"
-        schema={reviewSchema}
+        keywords={`DEGIRO recenze ${currentYear}, DEGIRO zkušenosti, DEGIRO poplatky, DEGIRO Česká republika, online broker hodnocení`}
+        schema={combinedSchema}
+        publishedTime={`${currentYear}-01-01`}
+        modifiedTime={new Date().toISOString()}
+        author="ETF průvodce.cz"
       />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb navigation */}

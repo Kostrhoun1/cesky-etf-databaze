@@ -6,8 +6,18 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { CheckCircle, XCircle, AlertTriangle, Star, Shield, TrendingUp, ArrowLeft, Globe, Users, Zap } from 'lucide-react';
 import SEOHead from '@/components/SEO/SEOHead';
+import { generateBrokerSchema, generateBreadcrumbSchema } from '@/components/SEO/BrokerSEO';
 
 const XTBReview = () => {
+  const currentYear = new Date().getFullYear();
+  
+  const combinedSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      generateBrokerSchema("XTB"),
+      generateBreadcrumbSchema("XTB")
+    ]
+  };
   const reviewSchema = {
     "@context": "https://schema.org",
     "@type": "Review",
@@ -31,11 +41,14 @@ const XTBReview = () => {
   return (
     <Layout>
       <SEOHead
-        title="XTB recenze 2025: Kompletní hodnocení pro české investory | ETF průvodce.cz"
-        description="Detailní recenze brokera XTB - nulové poplatky, česká podpora, daňové aspekty pro ČR. Výhody a nevýhody, srovnání s konkurencí. Hodnocení 4.7/5."
+        title={`XTB recenze ${currentYear}: Komplexní hodnocení pro české investory | ETF průvodce.cz`}
+        description={`Detailní XTB recenze ${currentYear} - poplatky, česká podpora, xStation platforma, vzdělávání. Nejlepší broker pro začátečníky? Hodnocení 4.7/5.`}
         canonical="https://etfpruvodce.cz/xtb-recenze"
-        keywords="XTB recenze, XTB zkušenosti, XTB poplatky, XTB Česká republika, online broker hodnocení"
-        schema={reviewSchema}
+        keywords={`XTB recenze ${currentYear}, XTB hodnocení, XTB Česká republika, XTB zkušenosti, xStation platforma, broker pro začátečníky`}
+        schema={combinedSchema}
+        publishedTime={`${currentYear}-01-01`}
+        modifiedTime={new Date().toISOString()}
+        author="ETF průvodce.cz"
       />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb navigation */}

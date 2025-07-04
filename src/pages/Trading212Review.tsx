@@ -1,17 +1,33 @@
 import React from 'react';
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
+import { generateBrokerSchema, generateBreadcrumbSchema } from '@/components/SEO/BrokerSEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, XCircle, Star, Smartphone, Globe, DollarSign, Shield, TrendingUp, AlertCircle } from 'lucide-react';
 
 const Trading212Review = () => {
+  const currentYear = new Date().getFullYear();
+  
+  const combinedSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      generateBrokerSchema("Trading 212"),
+      generateBreadcrumbSchema("Trading 212")
+    ]
+  };
   return (
     <Layout>
       <SEOHead 
-        title="Trading 212 recenze 2025 - Investování zdarma v moderní aplikaci"
-        description="Kompletní recenze Trading 212 - britsko-bulharský broker s nulovými poplatky, frakčními akciemi a AutoInvest funkcí. Výhody, nevýhody a zkušenosti českých investorů."
-        keywords="trading 212, trading212, recenze, broker, investování zdarma, ETF, akcie, frakční akcie, autoinvest"
+        title={`Trading 212 recenze ${currentYear}: Investování zdarma v moderní aplikaci | ETF průvodce.cz`}
+        description={`Kompletní Trading 212 recenze ${currentYear}: bezplatné ETF obchody, frakční akcie, AutoInvest funkce. Výhody a nevýhody pro české investory. Hodnocení 4.2/5.`}
+        keywords={`Trading 212 recenze ${currentYear}, Trading212 hodnocení, Trading 212 zkušenosti, bezplatné ETF, frakční akcie, AutoInvest, broker bez poplatků`}
+        canonical="https://etfpruvodce.cz/trading212-recenze"
+        ogImage="https://etfpruvodce.cz/og-trading212-review.jpg"
+        schema={combinedSchema}
+        publishedTime={`${currentYear}-01-01`}
+        modifiedTime={new Date().toISOString()}
+        author="ETF průvodce.cz"
       />
       
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">

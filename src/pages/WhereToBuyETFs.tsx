@@ -7,34 +7,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { DollarSign, Shield, TrendingUp } from 'lucide-react';
 import SEOHead from '@/components/SEO/SEOHead';
 import InternalLinking, { BrokerGuideRelatedLinks } from '@/components/SEO/InternalLinking';
+import { generateBrokerSchema, generateFAQSchema, generateBreadcrumbSchema } from '@/components/SEO/BrokerSEO';
 
 const WhereToBuyETFs = () => {
-  const brokerSchema = {
+  const currentYear = new Date().getFullYear();
+  
+  const combinedSchema = {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Nejlepší brokeři pro nákup ETF v České republice",
-    "description": "Srovnání brokerů pro investování do ETF fondů",
-    "url": "https://etfpruvodce.cz/kde-koupit-etf",
-    "numberOfItems": 5,
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "DEGIRO",
-        "description": "Nizozemský broker s nízkými poplatky"
-      },
-      {
-        "@type": "ListItem", 
-        "position": 2,
-        "name": "Interactive Brokers",
-        "description": "Americký broker s širokou nabídkou"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": "XTB",
-        "description": "Polský broker s českým zázemím"
-      }
+    "@graph": [
+      generateBrokerSchema(),
+      generateFAQSchema(),
+      generateBreadcrumbSchema()
     ]
   };
 
@@ -59,22 +42,25 @@ const WhereToBuyETFs = () => {
   return (
     <Layout>
       <SEOHead
-        title="Kde koupit ETF? Srovnání nejlepších brokerů 2025 | ETF průvodce.cz"
-        description="Srovnání nejlepších brokerů pro nákup ETF v České republice. DEGIRO, Interactive Brokers, XTB, Trading 212. Poplatky, bezpečnost a nabídka ETF."
+        title={`Kde koupit ETF? Srovnání nejlepších brokerů ${currentYear} | ETF průvodce.cz`}
+        description={`Kompletní srovnání brokerů pro ETF investice ${currentYear}. DEGIRO, XTB, Trading 212, Interactive Brokers, Fio. Poplatky, recenze, zkušenosti českých investorů.`}
         canonical="https://etfpruvodce.cz/kde-koupit-etf"
-        keywords="kde koupit ETF, nejlepší brokeři, DEGIRO, Interactive Brokers, XTB, Trading 212, Portu, poplatky brokerů"
+        keywords={`kde koupit ETF ${currentYear}, nejlepší brokeři ${currentYear}, DEGIRO recenze ${currentYear}, XTB recenze ${currentYear}, Trading 212 recenze ${currentYear}, Interactive Brokers recenze ${currentYear}, srovnání brokerů ${currentYear}, poplatky brokerů, broker pro ETF Česká republika`}
         ogImage="https://etfpruvodce.cz/og-where-to-buy.jpg"
-        schema={brokerSchema}
+        schema={combinedSchema}
+        publishedTime={`${currentYear}-01-01`}
+        modifiedTime={new Date().toISOString()}
+        author="ETF průvodce.cz"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero sekce */}
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold text-gray-900 mb-6">
-            Kde koupit ETF
+            Kde koupit ETF? Srovnání brokerů {currentYear}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Srovnání nejlepších brokerů pro nákup ETF v České republice. 
-            Najděte si platformu, která nejlépe vyhovuje vašim potřebám a investičnímu stylu.
+            Kompletní srovnání nejlepších brokerů pro nákup ETF v České republice v roce {currentYear}. 
+            Detailní recenze DEGIRO, XTB, Trading 212, Interactive Brokers a Fio e-Broker s aktuálními poplatky a zkušenostmi uživatelů.
           </p>
         </div>
 
@@ -144,9 +130,15 @@ const WhereToBuyETFs = () => {
           <div className="mt-8 text-center">
             <Link 
               to="/navod-pro-zacatecniky" 
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors mr-4"
             >
               Přečtěte si náš kompletní návod pro začátečníky
+            </Link>
+            <Link 
+              to="/srovnani-brokeru" 
+              className="inline-flex items-center px-6 py-3 border border-blue-600 text-base font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 transition-colors"
+            >
+              Detailní srovnání brokerů {currentYear}
             </Link>
           </div>
         </div>

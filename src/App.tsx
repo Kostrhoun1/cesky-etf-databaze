@@ -13,6 +13,7 @@ import XTBReview from "./pages/XTBReview";
 import InteractiveBrokersReview from "./pages/InteractiveBrokersReview";
 import FioReview from "./pages/FioReview";
 import Trading212Review from "./pages/Trading212Review";
+import BrokerComparison2025 from "./pages/BrokerComparison2025";
 import Tools from "./pages/Tools";
 import ETFDetail from "./pages/ETFDetail";
 import NotFound from "./pages/NotFound";
@@ -46,6 +47,7 @@ const App = () => (
           <Route path="/interactive-brokers-recenze" element={<InteractiveBrokersReview />} />
           <Route path="/fio-ebroker-recenze" element={<FioReview />} />
           <Route path="/trading212-recenze" element={<Trading212Review />} />
+          <Route path="/srovnani-brokeru" element={<BrokerComparison2025 />} />
           <Route path="/nastroje" element={<Tools />} />
           <Route path="/navod-pro-zacatecniky" element={<BeginnerGuide />} />
           <Route path="/etf/:isin" element={<ETFDetail />} />
