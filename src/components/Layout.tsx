@@ -133,7 +133,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <ul className="space-y-3 text-slate-400">
                 <li><Link to="/degiro-recenze" className="hover:text-white transition-colors">DEGIRO - detailní recenze</Link></li>
                 <li><Link to="/xtb-recenze" className="hover:text-white transition-colors">XTB - detailní recenze</Link></li>
-                <li>Interactive Brokers</li>
+                <li><Link to="/interactive-brokers-recenze" className="hover:text-white transition-colors">Interactive Brokers - recenze</Link></li>
                 <li>Portu</li>
                 <li>Trading 212</li>
               </ul>

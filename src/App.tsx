@@ -10,6 +10,7 @@ import WhatAreETFs from "./pages/WhatAreETFs";
 import WhereToBuyETFs from "./pages/WhereToBuyETFs";
 import DEGIROReview from "./pages/DEGIROReview";
 import XTBReview from "./pages/XTBReview";
+import InteractiveBrokersReview from "./pages/InteractiveBrokersReview";
 import Tools from "./pages/Tools";
 import ETFDetail from "./pages/ETFDetail";
 import NotFound from "./pages/NotFound";
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/kde-koupit-etf" element={<WhereToBuyETFs />} />
           <Route path="/degiro-recenze" element={<DEGIROReview />} />
           <Route path="/xtb-recenze" element={<XTBReview />} />
+          <Route path="/interactive-brokers-recenze" element={<InteractiveBrokersReview />} />
           <Route path="/nastroje" element={<Tools />} />
           <Route path="/navod-pro-zacatecniky" element={<BeginnerGuide />} />
           <Route path="/etf/:isin" element={<ETFDetail />} />

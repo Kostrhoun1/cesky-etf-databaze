@@ -135,6 +135,19 @@ const BrokerOverview: React.FC = () => {
                 </Link>
               </div>
             )}
+            {broker.name === 'Interactive Brokers' && (
+              <div className="border-t pt-4">
+                <Link to="/interactive-brokers-recenze">
+                  <Button 
+                    variant="outline" 
+                    className="w-full text-blue-600 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Detailní recenze IBKR
+                  </Button>
+                </Link>
+              </div>
+            )}
           </CardContent>
         </Card>
       ))}
