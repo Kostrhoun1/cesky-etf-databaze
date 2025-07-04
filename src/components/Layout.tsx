@@ -134,7 +134,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li><Link to="/degiro-recenze" className="hover:text-white transition-colors">DEGIRO - detailní recenze</Link></li>
                 <li><Link to="/xtb-recenze" className="hover:text-white transition-colors">XTB - detailní recenze</Link></li>
                 <li><Link to="/interactive-brokers-recenze" className="hover:text-white transition-colors">Interactive Brokers - recenze</Link></li>
-                <li>Portu</li>
+                <li><Link to="/fio-ebroker-recenze" className="hover:text-white transition-colors">Fio e-Broker - recenze</Link></li>
                 <li>Trading 212</li>
               </ul>
             </div>
