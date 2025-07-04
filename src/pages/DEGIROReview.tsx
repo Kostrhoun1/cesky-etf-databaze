@@ -1,15 +1,55 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { CheckCircle, XCircle, AlertTriangle, Star, Shield, TrendingUp } from 'lucide-react';
+import { CheckCircle, XCircle, AlertTriangle, Star, Shield, TrendingUp, ArrowLeft } from 'lucide-react';
+import SEOHead from '@/components/SEO/SEOHead';
 
 const DEGIROReview = () => {
+  const reviewSchema = {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "itemReviewed": {
+      "@type": "FinancialService",
+      "name": "DEGIRO",
+      "description": "Online broker pro investování do ETF a akcií"
+    },
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "4.5",
+      "bestRating": "5"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "ETF průvodce.cz"
+    },
+    "reviewBody": "Komplexní hodnocení brokera DEGIRO pro české investory"
+  };
+
   return (
     <Layout>
+      <SEOHead
+        title="DEGIRO recenze 2025: Kompletní hodnocení pro české investory | ETF průvodce.cz"
+        description="Detailní recenze brokera DEGIRO - poplatky, bezpečnost, daňové aspekty pro ČR. Výhody a nevýhody, srovnání s konkurencí. Hodnocení 4.5/5."
+        canonical="https://etfpruvodce.cz/degiro-recenze"
+        keywords="DEGIRO recenze, DEGIRO zkušenosti, DEGIRO poplatky, DEGIRO Česká republika, online broker hodnocení"
+        schema={reviewSchema}
+      />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Breadcrumb navigation */}
+        <div className="mb-8">
+          <Link 
+            to="/kde-koupit-etf" 
+            className="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium mb-4"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Zpět na srovnání brokerů
+          </Link>
+        </div>
+
         {/* Hlavička */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -327,6 +367,38 @@ const DEGIROReview = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Navigation to related content */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="font-semibold mb-3">Srovnání brokerů</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Porovnejte DEGIRO s dalšími brokery pro český trh
+              </p>
+              <Link 
+                to="/kde-koupit-etf" 
+                className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+              >
+                Přejít na srovnání →
+              </Link>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="font-semibold mb-3">Návod pro začátečníky</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Jak začít investovat do ETF přes brokera
+              </p>
+              <Link 
+                to="/navod-pro-zacatecniky" 
+                className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+              >
+                Číst návod →
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </Layout>
   );
