@@ -16,69 +16,86 @@ const BrokerRecommendations: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="p-6 bg-blue-50 rounded-lg">
-            <h3 className="font-semibold text-lg mb-3">💰 Pasivní investoři s menším kapitálem</h3>
+            <h3 className="font-semibold text-lg mb-3">💰 Začínající investoři s menším kapitálem</h3>
             <p className="text-gray-700 mb-3">
-              Pro investory s pravidelnými menšími vklady (DCA strategie) jsou klíčové nízké poplatky a podpora frakčních ETF.
+              Pro nové investory s pravidelnými menšími vklady jsou klíčové nulové poplatky, jednoduchost použití a podpora frakčních ETF.
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-100 text-green-800">1. volba</Badge>
-                <strong>Trading 212</strong> - 0% poplatky, frakční ETF
+                <strong>Trading 212</strong> - 0% poplatky, intuitivní appka, frakční ETF od 1 EUR
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant="outline">2. volba</Badge>
-                <strong>XTB</strong> - 0% do 100k EUR/měsíc, česká podpora
+                <strong>XTB</strong> - 0% do 100k EUR/měsíc, česká podpora, vzdělávací materiály
               </div>
             </div>
           </div>
 
           <div className="p-6 bg-green-50 rounded-lg">
-            <h3 className="font-semibold text-lg mb-3">💎 Investoři s větším kapitálem</h3>
+            <h3 className="font-semibold text-lg mb-3">💎 Investoři vyžadující českou podporu</h3>
             <p className="text-gray-700 mb-3">
-              Pro větší investice jsou důležité nízké procentuální poplatky a široká nabídka ETF.
+              Pro investory, kteří preferují českou zákaznickou podporu a lokalizaci platformy.
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-100 text-green-800">1. volba</Badge>
-                <strong>DEGIRO</strong> - velmi nízké poplatky, široká nabídka
+                <strong>XTB</strong> - plná česká lokalizace, telefon 24/5, vzdělávání
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant="outline">2. volba</Badge>
-                <strong>Interactive Brokers</strong> - nejširší nabídka, pokročilé nástroje
+                <strong>DEGIRO</strong> - částečná česká podpora, nízké poplatky
               </div>
             </div>
           </div>
 
           <div className="p-6 bg-yellow-50 rounded-lg">
-            <h3 className="font-semibold text-lg mb-3">🇨🇿 Preferující české dividendy</h3>
+            <h3 className="font-semibold text-lg mb-3">🇨🇿 Investoři do českých akcií</h3>
             <p className="text-gray-700 mb-3">
-              Pro investory do českých akcií je klíčové optimální zdanění dividend.
+              Pro investory zaměřené na české akcie je klíčové optimální zdanění dividend a přístup k domácím titulům.
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-100 text-green-800">1. volba</Badge>
-                <strong>Fio e-Broker</strong> - 15% zdanění CZ dividend
+                <strong>Fio e-Broker</strong> - 15% zdanění CZ dividend, české akcie
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant="outline">2. volba</Badge>
-                <strong>Interactive Brokers</strong> - 15% zdanění CZ dividend
+                <strong>Interactive Brokers</strong> - 15% zdanění CZ dividend, globální nabídka
               </div>
             </div>
           </div>
 
           <div className="p-6 bg-purple-50 rounded-lg">
-            <h3 className="font-semibold text-lg mb-3">📈 Pokročilí investoři a tradeři</h3>
+            <h3 className="font-semibold text-lg mb-3">📈 Pokročilí investoři a aktivní tradeři</h3>
             <p className="text-gray-700 mb-3">
-              Pro zkušené uživatele jsou důležité pokročilé nástroje a široká nabídka trhů.
+              Pro zkušené uživatele jsou důležité pokročilé nástroje, široká nabídka instrumentů a nízké náklady při větších objemech.
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-100 text-green-800">1. volba</Badge>
-                <strong>Interactive Brokers</strong> - TWS platforma, široká nabídka
+                <strong>Interactive Brokers</strong> - TWS platforma, globální trhy, opce
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant="outline">2. volba</Badge>
-                <strong>XTB</strong> - xStation 5, vzdělávací materiály
+                <strong>XTB</strong> - xStation 5, ekonomický kalendář, analýzy
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 bg-orange-50 rounded-lg">
+            <h3 className="font-semibold text-lg mb-3">🎯 Automatizované investování</h3>
+            <p className="text-gray-700 mb-3">
+              Pro investory preferující "set and forget" přístup s automatickými pravidelnými investicemi.
+            </p>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Badge className="bg-green-100 text-green-800">1. volba</Badge>
+                <strong>Trading 212</strong> - Pies & AutoInvest, nejvyspělejší automatizace
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline">2. volba</Badge>
+                <strong>XTB</strong> - investiční plány, pravidelné nákupy
               </div>
             </div>
           </div>
