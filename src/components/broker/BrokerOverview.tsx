@@ -108,7 +108,7 @@ const BrokerOverview: React.FC = () => {
               </div>
             </div>
 
-            {/* DEGIRO detailed review link */}
+            {/* Detailed review links */}
             {broker.name === 'DEGIRO' && (
               <div className="border-t pt-4">
                 <Link to="/degiro-recenze">
@@ -118,6 +118,19 @@ const BrokerOverview: React.FC = () => {
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Detailní recenze DEGIRO
+                  </Button>
+                </Link>
+              </div>
+            )}
+            {broker.name === 'XTB' && (
+              <div className="border-t pt-4">
+                <Link to="/xtb-recenze">
+                  <Button 
+                    variant="outline" 
+                    className="w-full text-blue-600 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Detailní recenze XTB
                   </Button>
                 </Link>
               </div>

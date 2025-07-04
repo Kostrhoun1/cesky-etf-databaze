@@ -132,8 +132,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <h4 className="text-md font-semibold text-slate-200 mb-4 uppercase tracking-wider">Brokeři</h4>
               <ul className="space-y-3 text-slate-400">
                 <li><Link to="/degiro-recenze" className="hover:text-white transition-colors">DEGIRO - detailní recenze</Link></li>
+                <li><Link to="/xtb-recenze" className="hover:text-white transition-colors">XTB - detailní recenze</Link></li>
                 <li>Interactive Brokers</li>
-                <li>XTB</li>
                 <li>Portu</li>
                 <li>Trading 212</li>
               </ul>
