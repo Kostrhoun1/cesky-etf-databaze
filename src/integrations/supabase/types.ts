@@ -27,6 +27,44 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_pnl: {
+        Row: {
+          created_at: string
+          id: string
+          pnl: number
+          session_id: string
+          trade_date: string
+          trades_count: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          pnl?: number
+          session_id: string
+          trade_date: string
+          trades_count?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          pnl?: number
+          session_id?: string
+          trade_date?: string
+          trades_count?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_pnl_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "trading_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       etf_funds: {
         Row: {
           beta: number | null
@@ -489,6 +527,166 @@ export type Database = {
           sent_at?: string | null
           sent_by?: string | null
           subject?: string
+        }
+        Relationships: []
+      }
+      positions: {
+        Row: {
+          avg_price: number
+          cost_basis: number
+          created_at: string
+          description: string | null
+          id: string
+          multiplier: number | null
+          quantity: number
+          session_id: string
+          symbol: string
+          user_id: string
+        }
+        Insert: {
+          avg_price: number
+          cost_basis: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          multiplier?: number | null
+          quantity: number
+          session_id: string
+          symbol: string
+          user_id: string
+        }
+        Update: {
+          avg_price?: number
+          cost_basis?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          multiplier?: number | null
+          quantity?: number
+          session_id?: string
+          symbol?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "positions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "trading_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trades: {
+        Row: {
+          action: string
+          amount: number
+          commission: number | null
+          created_at: string
+          currency: string | null
+          description: string | null
+          exchange: string | null
+          id: string
+          multiplier: number | null
+          pnl: number | null
+          price: number
+          quantity: number
+          session_id: string
+          symbol: string
+          trade_date: string
+          trade_id: string
+          trade_time: string | null
+          type: string | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          amount: number
+          commission?: number | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          exchange?: string | null
+          id?: string
+          multiplier?: number | null
+          pnl?: number | null
+          price: number
+          quantity: number
+          session_id: string
+          symbol: string
+          trade_date: string
+          trade_id: string
+          trade_time?: string | null
+          type?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          amount?: number
+          commission?: number | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          exchange?: string | null
+          id?: string
+          multiplier?: number | null
+          pnl?: number | null
+          price?: number
+          quantity?: number
+          session_id?: string
+          symbol?: string
+          trade_date?: string
+          trade_id?: string
+          trade_time?: string | null
+          type?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trades_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "trading_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trading_sessions: {
+        Row: {
+          created_at: string
+          file_name: string | null
+          id: string
+          session_name: string
+          total_pnl: number | null
+          total_trades: number | null
+          updated_at: string
+          upload_date: string
+          user_id: string
+          win_rate: number | null
+        }
+        Insert: {
+          created_at?: string
+          file_name?: string | null
+          id?: string
+          session_name: string
+          total_pnl?: number | null
+          total_trades?: number | null
+          updated_at?: string
+          upload_date?: string
+          user_id: string
+          win_rate?: number | null
+        }
+        Update: {
+          created_at?: string
+          file_name?: string | null
+          id?: string
+          session_name?: string
+          total_pnl?: number | null
+          total_trades?: number | null
+          updated_at?: string
+          upload_date?: string
+          user_id?: string
+          win_rate?: number | null
         }
         Relationships: []
       }

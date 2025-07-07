@@ -48,6 +48,9 @@ const PublicETFAdminPage: React.FC = () => {
     setIsUploading(true);
     try {
       console.log('Zpracovávám CSV obsah...');
+      console.log('CSV content length:', csvContent.length);
+      console.log('First 500 chars:', csvContent.substring(0, 500));
+      
       const parsedETFs = parseCSV(csvContent);
       console.log('Úspěšně naparsováno', parsedETFs.length, 'ETF fondů');
       
@@ -60,9 +63,11 @@ const PublicETFAdminPage: React.FC = () => {
         return;
       }
       
+      console.log('Ukládám do databáze...');
       // Upsert do databáze
       await upsertETFs(parsedETFs);
       
+      console.log('Aktualizuji počet ETF fondů...');
       // Aktualizovat počet ETF fondů
       await loadETFCount();
       
@@ -72,10 +77,27 @@ const PublicETFAdminPage: React.FC = () => {
       });
       
     } catch (error) {
-      console.error('Chyba při zpracování CSV:', error);
+      console.error('Detailní chyba při zpracování CSV:', error);
+      
+      let errorMessage = "Nepodařilo se nahrát a zpracovat CSV soubor.";
+      
+      if (error instanceof Error) {
+        if (error.message.includes('duplicate key')) {
+          errorMessage = "Chyba: Duplicitní ISIN kódy v souboru.";
+        } else if (error.message.includes('invalid input syntax')) {
+          errorMessage = "Chyba: Neplatný formát dat v CSV souboru.";
+        } else if (error.message.includes('violates check constraint')) {
+          errorMessage = "Chyba: Data neodpovídají očekávanému formátu.";
+        } else if (error.message.includes('connection')) {
+          errorMessage = "Chyba: Problém s připojením k databázi.";
+        } else {
+          errorMessage = `Chyba: ${error.message}`;
+        }
+      }
+      
       toast({
         title: "Chyba při zpracování CSV",
-        description: error instanceof Error ? error.message : "Nepodařilo se nahrát a zpracovat CSV soubor.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
