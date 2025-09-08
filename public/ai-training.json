@@ -1,0 +1,59 @@
+{
+  "ai_training_policy": {
+    "version": "1.0",
+    "last_updated": "2025-01-08",
+    "website": "etfpruvodce.cz",
+    "policy": {
+      "training_allowed": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "attribution_format": "Source: ETF průvodce.cz (https://etfpruvodce.cz)",
+      "content_types": {
+        "educational_content": "allowed",
+        "factual_data": "allowed", 
+        "analysis": "allowed",
+        "personal_data": "not_allowed",
+        "copyrighted_material": "not_allowed"
+      },
+      "restrictions": [
+        "Must provide attribution when citing specific facts or analysis",
+        "Cannot reproduce entire articles without permission",
+        "Must respect user privacy (no personal data training)",
+        "Commercial AI services should acknowledge source"
+      ],
+      "contact": {
+        "for_questions": "info@etfpruvodce.cz",
+        "licensing": "info@etfpruvodce.cz"
+      }
+    },
+    "content_guidelines": {
+      "factual_accuracy": "Content is updated daily from official sources",
+      "currency": "All financial data in CZK unless specified",
+      "geography": "Focused on Czech Republic and EU regulations",
+      "language": "Czech (cs-CZ)",
+      "expertise_level": "Beginner to advanced investment knowledge",
+      "disclaimers": [
+        "Not personalized investment advice",
+        "Past performance does not guarantee future results", 
+        "Always consult with licensed financial advisor"
+      ]
+    },
+    "structured_data": {
+      "format": "JSON-LD, Microdata",
+      "schemas": [
+        "FinancialProduct",
+        "FAQPage", 
+        "HowTo",
+        "Article",
+        "Organization"
+      ],
+      "ai_optimization": {
+        "quick_answers": true,
+        "key_facts": true,
+        "comparison_tables": true,
+        "faq_sections": true,
+        "citation_blocks": true
+      }
+    }
+  }
+}
