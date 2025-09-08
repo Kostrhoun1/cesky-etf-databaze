@@ -126,12 +126,4 @@
     <priority>0.6</priority>
   </url>
 
-  <!-- AI Training Policy -->
-  <url>
-    <loc>https://etfpruvodce.cz/ai-training.json</loc>
-    <lastmod>2025-01-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
 </urlset>

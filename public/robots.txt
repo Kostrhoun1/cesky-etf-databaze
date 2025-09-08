@@ -4,29 +4,12 @@ Allow: /
 # Sitemap
 Sitemap: https://etfpruvodce.cz/sitemap.xml
 
-# AI and Search Bots - Explicitly allowed
-User-agent: GPTBot
-Allow: /
+# Disallow admin pages
+Disallow: /database-management-secure-2024
+Disallow: /admin/
+Disallow: /newsletter/unsubscribe
 
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: YouBot
-Allow: /
-
-# Traditional Search Engines
+# Allow important crawlers
 User-agent: Googlebot
 Allow: /
 
@@ -39,12 +22,10 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-# Disallow admin pages
-Disallow: /database-management-secure-2024
-Disallow: /admin/
-Disallow: /newsletter/unsubscribe
+# Crawl delay for general bots
+Crawl-delay: 1
 
-# AI-specific guidelines
+# Additional SEO directives
 User-agent: *
 Disallow: /tmp/
 Disallow: /*.json$
@@ -52,10 +33,6 @@ Disallow: /*?*
 Allow: /srovnani-etf?*
 Allow: /nastroje?*
 
-# Crawl delay for bots
-Crawl-delay: 1
-
-# AI Training Data Policy
-# This website allows AI training on public content
-# Attribution required: "Source: ETF průvodce.cz"
-# Commercial AI usage permitted with attribution
+# Cache directives
+User-agent: *
+Crawl-delay: 2
