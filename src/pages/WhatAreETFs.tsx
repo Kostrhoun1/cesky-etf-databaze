@@ -12,7 +12,7 @@ import ETFFAQSection from '@/components/etf-guide/ETFFAQSection';
 import ETFCTASection from '@/components/etf-guide/ETFCTASection';
 import SEOHead from '@/components/SEO/SEOHead';
 import { FAQStructuredData, HowToStructuredData } from '@/components/SEO/StructuredData';
-import InternalLinking, { ETFGuideRelatedLinks } from '@/components/SEO/InternalLinking';
+import InternalLinking from '@/components/SEO/InternalLinking';
 
 const WhatAreETFs: React.FC = () => {
   const articleSchema = {
@@ -126,7 +126,28 @@ const WhatAreETFs: React.FC = () => {
             <ETFCTASection />
 
             {/* Internal Linking */}
-            <InternalLinking relatedLinks={ETFGuideRelatedLinks} />
+            <InternalLinking relatedLinks={[
+              {
+                title: "Srovnání ETF fondů",
+                description: "Porovnejte více než 3500 ETF fondů podle kategorií, poplatků a výkonnosti",
+                href: "/srovnani-etf"
+              },
+              {
+                title: "Kde koupit ETF",
+                description: "Najděte nejlepšího brokera pro investování do ETF fondů",
+                href: "/kde-koupit-etf"
+              },
+              {
+                title: "Investiční kalkulačka",
+                description: "Spočítejte si výnosy z pravidelného investování",
+                href: "/nastroje"
+              },
+              {
+                title: "Návod pro začátečníky",
+                description: "Kompletní průvodce jak začít investovat do ETF",
+                href: "/navod-pro-zacatecniky"
+              }
+            ]} />
           </div>
         </div>
       </div>
