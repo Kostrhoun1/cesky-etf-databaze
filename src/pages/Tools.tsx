@@ -6,16 +6,53 @@ import { Calculator, TrendingUp, BarChart } from 'lucide-react';
 import InvestmentCalculator from '@/components/tools/InvestmentCalculator';
 import FeeCalculator from '@/components/tools/FeeCalculator';
 import MonteCarloSimulator from '@/components/tools/MonteCarloSimulator';
+import SEOHead from '@/components/SEO/SEOHead';
+import StructuredData from '@/components/SEO/StructuredData';
+import BreadcrumbNav from '@/components/SEO/BreadcrumbNav';
+import InternalLinking from '@/components/SEO/InternalLinking';
 
 const Tools: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'calculator' | 'feeCalculator' | 'monteCarlo'>('overview');
 
-  useEffect(() => {
-    document.title = 'Investiční nástroje a kalkulačky - ETF průvodce.cz';
-    document.querySelector('meta[name="description"]')?.setAttribute('content', 
-      'Investiční kalkulačky, backtesting portfolia, analýza poplatků. Bezplatné nástroje pro ETF investory.'
-    );
-  }, []);
+  const toolsSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Investiční nástroje a kalkulačky 2025",
+    "description": "Bezplatné investiční kalkulačky a nástroje pro ETF investory. DCA kalkulačka, analýza poplatků, Monte Carlo simulace.",
+    "url": "https://etfpruvodce.cz/nastroje",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "CZK"
+    },
+    "featureList": [
+      "Investiční kalkulačka s compound interest",
+      "Kalkulačka poplatků ETF fondů",
+      "Monte Carlo simulátor portfolia",
+      "DCA strategie kalkulátor"
+    ]
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Domů",
+        "item": "https://etfpruvodce.cz"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Investiční nástroje",
+        "item": "https://etfpruvodce.cz/nastroje"
+      }
+    ]
+  };
 
   const tools = [
     {
@@ -50,7 +87,15 @@ const Tools: React.FC = () => {
   if (activeTab === 'calculator') {
     return (
       <Layout>
+        <SEOHead
+          title="Investiční kalkulačka DCA 2025 - Spočítejte si výnosy | ETF průvodce.cz"
+          description="Bezplatná investiční kalkulačka s compound interest. Spočítejte si výnosy z pravidelného investování (DCA) do ETF fondů. Včetně daní a inflace."
+          canonical="https://etfpruvodce.cz/nastroje/investicni-kalkulacka"
+          keywords="investiční kalkulačka, DCA kalkulačka, compound interest, výpočet výnosů, pravidelné investování, ETF kalkulačka 2025"
+          schema={toolsSchema}
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <BreadcrumbNav />
           <div className="mb-8">
             <Button 
               variant="outline" 
@@ -61,6 +106,13 @@ const Tools: React.FC = () => {
             </Button>
           </div>
           <InvestmentCalculator />
+          <InternalLinking 
+            relatedLinks={[
+              { title: "Kalkulačka poplatků ETF", href: "/nastroje", description: "Spočítejte si dopad poplatků na výnosy" },
+              { title: "Monte Carlo simulátor", href: "/nastroje", description: "Simulace možných výsledků portfolia" },
+              { title: "Srovnání ETF fondů", href: "/srovnani-etf", description: "Najděte si nejlepší ETF pro investování" }
+            ]}
+          />
         </div>
       </Layout>
     );
@@ -69,7 +121,15 @@ const Tools: React.FC = () => {
   if (activeTab === 'feeCalculator') {
     return (
       <Layout>
+        <SEOHead
+          title="Kalkulačka poplatků ETF 2025 - TER a dopad na výnosy | ETF průvodce.cz"
+          description="Spočítejte si dopad poplatků ETF na dlouhodobé výnosy. Srovnání TER, transakčních poplatků a jejich vliv na investice."
+          canonical="https://etfpruvodce.cz/nastroje/kalkulacka-poplatku"
+          keywords="kalkulačka poplatků ETF, TER kalkulačka, poplatky ETF fondů, dopad poplatků na výnosy, srovnání poplatků 2025"
+          schema={toolsSchema}
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <BreadcrumbNav />
           <div className="mb-8">
             <Button 
               variant="outline" 
@@ -80,6 +140,13 @@ const Tools: React.FC = () => {
             </Button>
           </div>
           <FeeCalculator />
+          <InternalLinking 
+            relatedLinks={[
+              { title: "Investiční kalkulačka", href: "/nastroje", description: "Spočítejte si výnosy z pravidelného investování" },
+              { title: "Srovnání ETF fondů", href: "/srovnani-etf", description: "Porovnejte poplatky různých ETF fondů" },
+              { title: "Nejlepší ETF 2025", href: "/tipy/nejlepsi-etf-2025", description: "ETF s nejnižšími poplatky" }
+            ]}
+          />
         </div>
       </Layout>
     );
@@ -88,7 +155,15 @@ const Tools: React.FC = () => {
   if (activeTab === 'monteCarlo') {
     return (
       <Layout>
+        <SEOHead
+          title="Monte Carlo simulátor portfolia 2025 - Analýza rizik | ETF průvodce.cz"
+          description="Monte Carlo simulace výsledků vašeho ETF portfolia. Analýza rizik, historická data a pravděpodobnostní scénáře pro investory."
+          canonical="https://etfpruvodce.cz/nastroje/monte-carlo"
+          keywords="Monte Carlo simulátor, analýza rizik portfolia, simulace ETF, pravděpodobnostní analýza, backtesting 2025"
+          schema={toolsSchema}
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <BreadcrumbNav />
           <div className="mb-8">
             <Button 
               variant="outline" 
@@ -99,6 +174,13 @@ const Tools: React.FC = () => {
             </Button>
           </div>
           <MonteCarloSimulator />
+          <InternalLinking 
+            relatedLinks={[
+              { title: "Investiční kalkulačka", href: "/nastroje", description: "Základní výpočty pro investování" },
+              { title: "Srovnání ETF fondů", href: "/srovnani-etf", description: "Najděte si ETF pro vaše portfolio" },
+              { title: "All Weather Portfolio", href: "/tipy/all-weather-portfolio", description: "Diverzifikovaná strategie" }
+            ]}
+          />
         </div>
       </Layout>
     );
@@ -106,10 +188,19 @@ const Tools: React.FC = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title="Investiční nástroje a kalkulačky 2025 - Bezplatné ETF nástroje | ETF průvodce.cz"
+        description="Bezplatné investiční kalkulačky a nástroje pro ETF investory. DCA kalkulačka, analýza poplatků, Monte Carlo simulace. Všechny nástroje zdarma."
+        canonical="https://etfpruvodce.cz/nastroje"
+        keywords="investiční nástroje, ETF kalkulačky, DCA kalkulačka, Monte Carlo simulátor, kalkulačka poplatků, bezplatné nástroje 2025"
+        schema={toolsSchema}
+      />
+      <StructuredData data={breadcrumbSchema} />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <BreadcrumbNav />
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Investiční nástroje a kalkulačky
+            Investiční nástroje a kalkulačky 2025
           </h1>
           <p className="text-lg text-gray-600">
             Bezplatné nástroje pro analýzu a plánování vašich ETF investic
@@ -176,6 +267,16 @@ const Tools: React.FC = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Related Content */}
+        <InternalLinking 
+          relatedLinks={[
+            { title: "Srovnání ETF fondů", href: "/srovnani-etf", description: "Najděte si nejlepší ETF pro investování" },
+            { title: "Návod pro začátečníky", href: "/navod-pro-zacatecniky", description: "Jak začít investovat do ETF" },
+            { title: "Nejlepší brokeři 2025", href: "/srovnani-brokeru", description: "Kde koupit ETF fondy" },
+            { title: "Nejlepší ETF 2025", href: "/tipy/nejlepsi-etf-2025", description: "Doporučené ETF fondy pro rok 2025" }
+          ]}
+        />
       </div>
     </Layout>
   );

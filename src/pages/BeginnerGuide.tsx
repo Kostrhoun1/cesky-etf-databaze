@@ -5,14 +5,110 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Target, Users, Calculator, TrendingUp, AlertTriangle, Lightbulb, DollarSign, Shield, BarChart } from 'lucide-react';
+import SEOHead from '@/components/SEO/SEOHead';
+import StructuredData from '@/components/SEO/StructuredData';
+import BreadcrumbNav from '@/components/SEO/BreadcrumbNav';
+import InternalLinking from '@/components/SEO/InternalLinking';
 
 const BeginnerGuide: React.FC = () => {
-  useEffect(() => {
-    document.title = 'Návod pro začátečníky - Jak začít investovat do ETF | ETF průvodce.cz';
-    document.querySelector('meta[name="description"]')?.setAttribute('content', 
-      'Kompletní návod pro začátečníky, jak začít investovat do ETF fondů. Krok za krokem od otevření účtu po první nákup. Praktické tipy pro české investory 2025.'
-    );
-  }, []);
+  const guideSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Návod pro začátečníky - Jak začít investovat do ETF 2025",
+    "description": "Kompletní krok za krokem návod pro začátečníky, jak začít investovat do ETF fondů. Praktické tipy pro české investory v roce 2025.",
+    "image": "https://etfpruvodce.cz/og-image.jpg",
+    "totalTime": "PT30M",
+    "estimatedCost": {
+      "@type": "MonetaryAmount",
+      "currency": "CZK",
+      "value": "500"
+    },
+    "supply": [
+      {
+        "@type": "HowToSupply",
+        "name": "Účet u brokera"
+      },
+      {
+        "@type": "HowToSupply", 
+        "name": "Nouzová rezerva (3-6 měsíčních výdajů)"
+      }
+    ],
+    "tool": [
+      {
+        "@type": "HowToTool",
+        "name": "Investiční kalkulačka"
+      }
+    ],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Stanovte si investiční cíl",
+        "text": "Určete si, proč chcete investovat a na jak dlouho. Může to být spoření na důchod (20+ let), nákup nemovitosti (5-10 let), nebo vytvoření rezervy.",
+        "image": "https://etfpruvodce.cz/og-image.jpg"
+      },
+      {
+        "@type": "HowToStep", 
+        "name": "Spočítejte si rozpočet",
+        "text": "Zjistěte, kolik můžete měsíčně investovat bez ohrožení financí. Nejdříve mějte nouzovou rezervu, pak investujte pouze přebytečné peníze.",
+        "image": "https://etfpruvodce.cz/og-image.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Vyberte si brokera", 
+        "text": "Založte si účet u spolehlivého brokera. Doporučujeme XTB pro začátečníky, DEGIRO pro nízké poplatky, nebo Trading 212 pro intuitivní aplikaci.",
+        "image": "https://etfpruvodce.cz/og-image.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Vyberte své první ETF",
+        "text": "Začněte s širokým světovým indexem jako MSCI World, Vanguard FTSE All-World nebo iShares Core MSCI World. Sledujte nízké poplatky (TER pod 0,5%).",
+        "image": "https://etfpruvodce.cz/og-image.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Proveďte první nákup",
+        "text": "Pošlete peníze na brokerský účet, najděte ETF podle ISIN kódu, zadejte částku a potvrďte nákup.",
+        "image": "https://etfpruvodce.cz/og-image.jpg"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Investujte pravidelně",
+        "text": "Nastavte si pravidelné investování (DCA). Investujte každý měsíc stejnou částku a držte se dlouhodobé strategie.",
+        "image": "https://etfpruvodce.cz/og-image.jpg"
+      }
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Kolik peněz potřebujem na začátek investování do ETF?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Můžete začít už s částkami od 500-2000 Kč měsíčně. Nejdříve si však vytvořte nouzovou rezervu v hodnotě 3-6 měsíčních výdajů."
+        }
+      },
+      {
+        "@type": "Question", 
+        "name": "Který broker je nejlepší pro začátečníky?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pro začátečníky doporučujeme XTB (dobrá podpora), DEGIRO (nízké poplatky) nebo Trading 212 (intuitivní aplikace). Všichni jsou regulovaní v EU."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Jaké ETF vybrat jako první?", 
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Začněte s širokým světovým indexem jako Vanguard FTSE All-World (VWCE) nebo iShares Core MSCI World (IWDA). Tyto fondy poskytují diverzifikaci a mají nízké poplatky."
+        }
+      }
+    ]
+  };
 
   const steps = [
     {
@@ -128,7 +224,16 @@ const BeginnerGuide: React.FC = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title="Návod pro začátečníky 2025 - Jak začít investovat do ETF | ETF průvodce.cz"
+        description="Kompletní návod pro začátečníky, jak začít investovat do ETF fondů. Krok za krokem od otevření účtu po první nákup. Praktické tipy pro české investory 2025."
+        canonical="https://etfpruvodce.cz/navod-pro-zacatecniky"
+        keywords="návod pro začátečníky ETF, jak začít investovat, první ETF, broker pro začátečníky, investování 2025, DCA strategie"
+        schema={guideSchema}
+      />
+      <StructuredData data={faqSchema} />
       <div className="bg-white">
+        <BreadcrumbNav />
         {/* Hero Section */}
         <div className="relative bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM4YjVjZjYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIxLjUiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-30"></div>
@@ -302,6 +407,16 @@ const BeginnerGuide: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* Related Content */}
+            <InternalLinking 
+              relatedLinks={[
+                { title: "Srovnání ETF fondů", href: "/srovnani-etf", description: "Najděte si své první ETF fondy" },
+                { title: "Investiční kalkulačka", href: "/nastroje", description: "Spočítejte si výnosy z investování" },
+                { title: "Nejlepší brokeři 2025", href: "/srovnani-brokeru", description: "Kde koupit ETF fondy" },
+                { title: "Nejlepší ETF 2025", href: "/tipy/nejlepsi-etf-2025", description: "Doporučené ETF pro začátečníky" }
+              ]}
+            />
           </div>
         </div>
       </div>

@@ -24,3 +24,15 @@ Allow: /
 
 # Crawl delay for general bots
 Crawl-delay: 1
+
+# Additional SEO directives
+User-agent: *
+Disallow: /tmp/
+Disallow: /*.json$
+Disallow: /*?*
+Allow: /srovnani-etf?*
+Allow: /nastroje?*
+
+# Cache directives
+User-agent: *
+Crawl-delay: 2

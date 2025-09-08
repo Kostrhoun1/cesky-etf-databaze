@@ -9,6 +9,8 @@ import BrokerComparisonSection from '@/components/home/BrokerComparisonSection';
 import CTASection from '@/components/home/CTASection';
 import NewsletterSubscribeForm from "@/components/NewsletterSubscribeForm";
 import SEOHead from '@/components/SEO/SEOHead';
+import GlobalSEO from '@/components/SEO/GlobalSEO';
+import InternalLinking from '@/components/SEO/InternalLinking';
 
 const HomePage: React.FC = () => {
   const [totalCount, setTotalCount] = useState(0);
@@ -49,11 +51,12 @@ const HomePage: React.FC = () => {
 
   return (
     <Layout>
+      <GlobalSEO />
       <SEOHead
-        title="ETF průvodce.cz - Komplexní průvodce ETF fondy pro české investory"
-        description="Nejlepší ETF fondy pro české investory. Srovnání, analýza a detailní informace o ETF fondech. Kalkulačky, nástroje a vzdělávací obsah o investování."
+        title="ETF průvodce.cz - Komplexní průvodce ETF fondy pro české investory 2025"
+        description="Nejlepší ETF fondy pro české investory 2025. Srovnání, analýza a detailní informace o ETF fondech. Kalkulačky, nástroje a vzdělávací obsah o investování."
         canonical="https://etfpruvodce.cz/"
-        keywords="ETF fondy, investování, srovnání ETF, české investování, DEGIRO, Trading 212, nejlepší ETF 2025"
+        keywords="ETF fondy, investování, srovnání ETF, české investování, DEGIRO, Trading 212, XTB, nejlepší ETF 2025, brokeři"
         schema={websiteSchema}
       />
       
@@ -80,6 +83,19 @@ const HomePage: React.FC = () => {
         </p>
         <NewsletterSubscribeForm />
       </section>
+
+      {/* Related Content Links */}
+      <InternalLinking 
+        relatedLinks={[
+          { title: "Srovnání ETF fondů", href: "/srovnani-etf", description: "Porovnejte více než 3500 ETF fondů" },
+          { title: "Návod pro začátečníky", href: "/navod-pro-zacatecniky", description: "Jak začít investovat do ETF" },
+          { title: "Nejlepší brokeři 2025", href: "/srovnani-brokeru", description: "Kde koupit ETF fondy" },
+          { title: "Investiční nástroje", href: "/nastroje", description: "Bezplatné kalkulačky a nástroje" },
+          { title: "Nejlepší ETF 2025", href: "/tipy/nejlepsi-etf-2025", description: "Doporučené ETF fondy pro rok 2025" }
+        ]}
+        title="Další užitečné stránky"
+        className="mt-16"
+      />
     </Layout>
   );
 };
