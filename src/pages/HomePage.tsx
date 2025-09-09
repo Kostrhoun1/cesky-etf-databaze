@@ -14,7 +14,7 @@ import InternalLinking from '@/components/SEO/InternalLinking';
 
 const HomePage: React.FC = () => {
   const [totalCount, setTotalCount] = useState(0);
-  const { getETFCount } = useETFData();
+  const { getETFCount, lastUpdated } = useETFData();
 
   useEffect(() => {
     const loadData = async () => {
@@ -50,7 +50,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <Layout>
+    <Layout lastUpdated={lastUpdated}>
       <GlobalSEO />
       <SEOHead
         title="ETF průvodce.cz - Komplexní průvodce ETF fondy pro české investory 2025"

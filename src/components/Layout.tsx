@@ -7,12 +7,14 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Mail, Settings } from 'lucide-react';
 import Logo from './Logo';
 import BreadcrumbNav from './SEO/BreadcrumbNav';
+import LastUpdatedInfo from './LastUpdatedInfo';
 
 interface LayoutProps {
   children: React.ReactNode;
+  lastUpdated?: Date | null;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, lastUpdated }) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -139,8 +141,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </ul>
             </div>
           </div>
-          <div className="mt-16 pt-8 border-t border-gray-800 text-center text-slate-500">
-            <p>&copy; 2025 ETF průvodce.cz. Všechna práva vyhrazena.</p>
+          <div className="mt-16 pt-8 border-t border-gray-800">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <p className="text-slate-500">&copy; 2025 ETF průvodce.cz. Všechna práva vyhrazena.</p>
+              {lastUpdated && (
+                <LastUpdatedInfo lastUpdated={lastUpdated} className="text-slate-500" />
+              )}
+            </div>
           </div>
         </div>
       </footer>

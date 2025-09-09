@@ -49,9 +49,7 @@ const ETFSearchSection: React.FC = () => {
           {(searchLogicProps) => (
             <>
               <ETFSearchHeader 
-                filteredCount={searchLogicProps.filteredETFs.length} 
                 totalCount={etfs.length}
-                lastUpdated={lastUpdated}
               />
 
               <ETFSearchInterface

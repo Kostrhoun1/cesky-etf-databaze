@@ -1,18 +1,13 @@
 
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
-import LastUpdatedInfo from '@/components/LastUpdatedInfo';
 
 interface ETFSearchHeaderProps {
-  filteredCount: number;
   totalCount: number;
-  lastUpdated?: Date | null;
 }
 
 const ETFSearchHeader: React.FC<ETFSearchHeaderProps> = ({ 
-  filteredCount, 
-  totalCount, 
-  lastUpdated 
+  totalCount
 }) => {
   return (
     <div className="text-center mb-8">
@@ -26,12 +21,6 @@ const ETFSearchHeader: React.FC<ETFSearchHeaderProps> = ({
         </Badge>
         {' '}podle různých kritérií
       </p>
-      {filteredCount !== totalCount && (
-        <p className="text-gray-500 mb-4">
-          Zobrazeno {filteredCount.toLocaleString('cs-CZ')} z {totalCount.toLocaleString('cs-CZ')} fondů
-        </p>
-      )}
-      <LastUpdatedInfo lastUpdated={lastUpdated} className="justify-center" />
     </div>
   );
 };
