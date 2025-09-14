@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Leaf, Shield, TrendingUp, Globe, Award, AlertTriangle } from 'lucide-react';
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
-import SocialSharing from '@/components/SocialSharing';
 import ETFTicker from '@/components/ETFTicker';
 import { getETFIsin } from '@/utils/etfTickerMapping';
 
@@ -431,13 +430,6 @@ const ESGUdrzitelneETF: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Social Sharing */}
-        <SocialSharing 
-          url="https://etfpruvodce.cz/tipy/esg-udrzitelne-etf"
-          title="ESG a udržitelné ETF - Investování s ohledem na životní prostředí"
-          description="Investování s ohledem na životní prostředí a společenskou odpovědnost. Přehled nejlepších ESG ETF a jak vybírat udržitelné investice."
-          className="mt-8"
-        />
       </div>
     </Layout>
   );

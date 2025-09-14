@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { DollarSign, TrendingDown, Calculator, Award, AlertCircle } from 'lucide-react';
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
-import SocialSharing from '@/components/SocialSharing';
 import ETFTicker from '@/components/ETFTicker';
 import { getETFIsin } from '@/utils/etfTickerMapping';
 
@@ -405,13 +404,6 @@ const NejlevnejsiETFFondy: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Social Sharing */}
-        <SocialSharing 
-          url="https://etfpruvodce.cz/tipy/nejlevnejsi-etf-fondy"
-          title="Nejlevnější ETF fondy - Fondy s nejnižšími poplatky 2025"
-          description="Fondy s nejnižšími poplatky TER na trhu. Analýza nákladů, skrytých poplatků a jejich vliv na dlouhodobé výnosy."
-          className="mt-8"
-        />
       </div>
     </Layout>
   );

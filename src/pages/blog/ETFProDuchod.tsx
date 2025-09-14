@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { PiggyBank, TrendingUp, Calendar, Shield, Target, Calculator } from 'lucide-react';
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
-import SocialSharing from '@/components/SocialSharing';
 import ETFTickerList from '@/components/ETFTickerList';
 import ETFTicker from '@/components/ETFTicker';
 import { getETFIsin } from '@/utils/etfTickerMapping';
@@ -378,13 +377,6 @@ const ETFProDuchod: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Social Sharing */}
-        <SocialSharing 
-          url="https://etfpruvodce.cz/tipy/etf-pro-duchod"
-          title="ETF pro důchod - Kompletní průvodce důchodovým spořením"
-          description="Jak sestavit ETF portfolio pro důchodové spoření. Strategie podle věku, optimalizace daní a plánování výběru."
-          className="mt-8"
-        />
       </div>
     </Layout>
   );

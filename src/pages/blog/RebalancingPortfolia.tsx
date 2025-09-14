@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { TrendingUp, Calendar, Calculator, AlertTriangle, CheckCircle, DollarSign } from 'lucide-react';
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
-import SocialSharing from '@/components/SocialSharing';
 
 const RebalancingPortfolia: React.FC = () => {
   const rebalancingStrategies = [
@@ -300,13 +299,6 @@ const RebalancingPortfolia: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Social Sharing */}
-        <SocialSharing 
-          url="https://etfpruvodce.cz/tipy/rebalancing-portfolia"
-          title="Rebalancing portfolia - Kompletní návod pro optimální výnosy"
-          description="Kdy a jak rebalancovat portfolio ETF fondů. Praktické strategie, náklady, daňové dopady a automatizace rebalancingu."
-          className="mt-8"
-        />
       </div>
     </Layout>
   );
