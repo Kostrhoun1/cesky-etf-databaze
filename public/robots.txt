@@ -1,0 +1,38 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://etfpruvodce.cz/sitemap.xml
+
+# Disallow admin pages
+Disallow: /database-management-secure-2024
+Disallow: /admin/
+Disallow: /newsletter/unsubscribe
+
+# Allow important crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+# Crawl delay for general bots
+Crawl-delay: 1
+
+# Additional SEO directives
+User-agent: *
+Disallow: /tmp/
+Disallow: /*.json$
+Disallow: /*?*
+Allow: /srovnani-etf?*
+Allow: /nastroje?*
+
+# Cache directives
+User-agent: *
+Crawl-delay: 2
