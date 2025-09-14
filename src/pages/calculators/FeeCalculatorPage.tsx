@@ -195,7 +195,7 @@ const FeeCalculatorPage: React.FC = () => {
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-red-800">❌ Vysoké poplatky (TER > 0,5%)</h3>
+              <h3 className="text-lg font-semibold mb-4 text-red-800">❌ Vysoké poplatky (TER &gt; 0,5%)</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
                   <span className="font-semibold">Aktivní fondy</span>
