@@ -18,8 +18,8 @@ const SocialSharing: React.FC<SocialSharingProps> = ({
   title, 
   description, 
   className = '',
-  shareTitle = "Sdílejte kalkulačku",
-  shareText = "Pomozte ostatním s finančním plánováním - sdílejte tuto kalkulačku"
+  shareTitle = "Sdílejte článek",
+  shareText = "Pomozte ostatním s investováním - sdílejte tento užitečný obsah"
 }) => {
   const [copied, setCopied] = useState(false);
   
