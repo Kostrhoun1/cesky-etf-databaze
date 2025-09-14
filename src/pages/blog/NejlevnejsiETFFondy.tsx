@@ -7,6 +7,8 @@ import { DollarSign, TrendingDown, Calculator, Award, AlertCircle } from 'lucide
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
 import SocialSharing from '@/components/SocialSharing';
+import ETFTicker from '@/components/ETFTicker';
+import { getETFIsin } from '@/utils/etfTickerMapping';
 
 const NejlevnejsiETFFondy: React.FC = () => {
   const cheapestETFs = [
@@ -224,7 +226,9 @@ const NejlevnejsiETFFondy: React.FC = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-lg">{etf.ticker}</h3>
+                        <h3 className="font-semibold text-lg">
+                          <ETFTicker ticker={etf.ticker} isin={etf.isin} size="lg" />
+                        </h3>
                         <Badge variant="outline" className="text-xs">{etf.category}</Badge>
                         <Badge variant="secondary" className="text-xs font-bold text-green-700 bg-green-100">
                           TER {etf.ter}

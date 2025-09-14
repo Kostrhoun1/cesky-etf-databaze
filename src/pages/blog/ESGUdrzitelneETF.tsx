@@ -7,6 +7,8 @@ import { Leaf, Shield, TrendingUp, Globe, Award, AlertTriangle } from 'lucide-re
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
 import SocialSharing from '@/components/SocialSharing';
+import ETFTicker from '@/components/ETFTicker';
+import { getETFIsin } from '@/utils/etfTickerMapping';
 
 const ESGUdrzitelneETF: React.FC = () => {
   const bestESGETFs = [
@@ -242,7 +244,9 @@ const ESGUdrzitelneETF: React.FC = () => {
                   <div className="flex flex-col lg:flex-row lg:items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-lg">{etf.ticker}</h3>
+                        <h3 className="font-semibold text-lg">
+                          <ETFTicker ticker={etf.ticker} isin={etf.isin} size="lg" />
+                        </h3>
                         <Badge variant="outline" className="text-xs">{etf.focus}</Badge>
                         <Badge variant="secondary" className="text-xs font-bold">
                           TER {etf.ter}

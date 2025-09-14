@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { TrendingUp, Shield, DollarSign, Globe, BarChart3, Star, ArrowRight } from 'lucide-react';
 import BlogArticleLayout from "./_BlogArticleLayout";
 import FilteredETFList from "../../components/blog/FilteredETFList";
+import ETFTicker from "../../components/ETFTicker";
 
 const RECOMMENDED_ETFS = [
   {
@@ -225,7 +226,9 @@ const NejlepsiETF2025: React.FC = () => {
                 </div>
               </div>
               
-              <h3 className="font-bold text-lg mb-2">{etf.ticker}</h3>
+              <h3 className="font-bold text-lg mb-2">
+                <ETFTicker ticker={etf.ticker} isin={etf.isin} size="lg" />
+              </h3>
               <p className="text-sm text-gray-600 mb-4">{etf.name}</p>
               
               <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
@@ -302,8 +305,8 @@ const NejlepsiETF2025: React.FC = () => {
                     <div className="text-sm text-gray-600">{etf.type}</div>
                   </div>
                 </td>
-                <td className="border border-gray-200 p-4 text-center font-mono font-bold">
-                  {etf.ticker}
+                <td className="border border-gray-200 p-4 text-center">
+                  <ETFTicker ticker={etf.ticker} isin={etf.isin} />
                 </td>
                 <td className="border border-gray-200 p-4 text-center">
                   <span className={etf.ter <= "0.15%" ? "text-green-600 font-semibold" : ""}>

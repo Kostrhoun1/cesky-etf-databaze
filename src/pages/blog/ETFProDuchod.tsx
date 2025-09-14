@@ -7,6 +7,9 @@ import { PiggyBank, TrendingUp, Calendar, Shield, Target, Calculator } from 'luc
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
 import SocialSharing from '@/components/SocialSharing';
+import ETFTickerList from '@/components/ETFTickerList';
+import ETFTicker from '@/components/ETFTicker';
+import { getETFIsin } from '@/utils/etfTickerMapping';
 
 const ETFProDuchod: React.FC = () => {
   const ageBasedStrategies = [
@@ -228,7 +231,7 @@ const ETFProDuchod: React.FC = () => {
                       <h4 className="font-medium mb-2">Doporučené ETF</h4>
                       <div className="flex gap-1">
                         {strategy.etfs.map((etf, i) => (
-                          <Badge key={i} variant="outline" className="text-xs">{etf}</Badge>
+                          <ETFTicker key={i} ticker={etf} isin={getETFIsin(etf)} />
                         ))}
                       </div>
                     </div>
@@ -273,7 +276,7 @@ const ETFProDuchod: React.FC = () => {
                   <li>• Ideální pro spoření</li>
                 </ul>
                 <div className="mt-4 text-xs text-green-600 font-medium">
-                  Doporučeno: VWCE, IWDA, CSPX
+                  Doporučeno: <ETFTickerList tickers={['VWCE', 'IWDA', 'CSPX']} />
                 </div>
               </div>
               <div className="border rounded-lg p-6">
@@ -285,7 +288,7 @@ const ETFProDuchod: React.FC = () => {
                   <li>• Ideální pro důchod</li>
                 </ul>
                 <div className="mt-4 text-xs text-blue-600 font-medium">
-                  Doporučeno: VHYL, IUSN, WDIV
+                  Doporučeno: <ETFTickerList tickers={['VHYL', 'IUSN', 'WDIV']} />
                 </div>
               </div>
             </div>
