@@ -336,7 +336,7 @@ const NejlevnejsiETFFondy: React.FC = () => {
                   <li>• Investujte pravidelně (DCA)</li>
                   <li>• Minimalizujte počet transakcí</li>
                   <li>• Používejte brokery s nízkými poplatky</li>
-                  <li>• Držte dlouhodobě (>3 roky)</li>
+                  <li>• Držte dlouhodobě (&gt;3 roky)</li>
                 </ul>
               </div>
               <div>

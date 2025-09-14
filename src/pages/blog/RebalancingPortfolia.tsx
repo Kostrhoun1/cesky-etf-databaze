@@ -242,8 +242,8 @@ const RebalancingPortfolia: React.FC = () => {
                 <h3 className="font-semibold mb-4">Daňové dopady v ČR</h3>
                 <ul className="space-y-2 text-sm">
                   <li>• Prodej = daňová událost</li>
-                  <li>• Test časový: držba >3 roky</li>
-                  <li>• Test částkový: prodej <100k Kč/rok</li>
+                  <li>• Test časový: držba &gt;3 roky</li>
+                  <li>• Test částkový: prodej &lt;100k Kč/rok</li>
                   <li>• Daň 15% z rozdílu mezi prodejem a nákupem</li>
                 </ul>
               </div>

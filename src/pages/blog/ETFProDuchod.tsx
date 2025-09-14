@@ -337,8 +337,8 @@ const ETFProDuchod: React.FC = () => {
                 <h3 className="font-semibold mb-4">Fáze spoření</h3>
                 <ul className="space-y-2 text-sm">
                   <li>• Akumulační ETF = žádná daň z dividend</li>
-                  <li>• Držba >3 roky = osvobození</li>
-                  <li>• Prodej <100k Kč/rok = osvobození</li>
+                  <li>• Držba &gt;3 roky = osvobození</li>
+                  <li>• Prodej &lt;100k Kč/rok = osvobození</li>
                 </ul>
               </div>
               <div>
