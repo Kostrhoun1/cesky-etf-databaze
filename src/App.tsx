@@ -36,6 +36,10 @@ import NejlepsiETFNaEvropskeAkcie from "./pages/blog/NejlepsiETFNaEvropskeAkcie"
 import AllWeatherPortfolio from "./pages/blog/AllWeatherPortfolio";
 import JakZacitInvestovatDoETF from "./pages/blog/JakZacitInvestovatDoETF";
 import ETFVsAktivniFondy from "./pages/blog/ETFVsAktivniFondy";
+import RebalancingPortfolia from "./pages/blog/RebalancingPortfolia";
+import ETFProDuchod from "./pages/blog/ETFProDuchod";
+import NejlevnejsiETFFondy from "./pages/blog/NejlevnejsiETFFondy";
+import ESGUdrzitelneETF from "./pages/blog/ESGUdrzitelneETF";
 import NewsletterUnsubscribe from "./pages/NewsletterUnsubscribe";
 import NewsletterAdminPage from "./pages/NewsletterAdminPage";
 import PublicETFAdminPage from "./pages/PublicETFAdminPage";
@@ -85,6 +89,10 @@ function App() {
             <Route path="/tipy/all-weather-portfolio" element={<AllWeatherPortfolio />} />
             <Route path="/tipy/jak-zacit-investovat-do-etf" element={<JakZacitInvestovatDoETF />} />
             <Route path="/tipy/etf-vs-aktivni-fondy" element={<ETFVsAktivniFondy />} />
+            <Route path="/tipy/rebalancing-portfolia" element={<RebalancingPortfolia />} />
+            <Route path="/tipy/etf-pro-duchod" element={<ETFProDuchod />} />
+            <Route path="/tipy/nejlevnejsi-etf-fondy" element={<NejlevnejsiETFFondy />} />
+            <Route path="/tipy/esg-udrzitelne-etf" element={<ESGUdrzitelneETF />} />
             <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
             <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
             <Route path="/database-management-secure-2024" element={<PublicETFAdminPage />} />
