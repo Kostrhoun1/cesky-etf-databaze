@@ -108,25 +108,18 @@ export const useETFFetch = () => {
             fund_provider,
             category,
             ter_numeric,
-            return_1y,
-            return_3y,
-            return_5y,
-            return_ytd,
             fund_size_numeric,
-            degiro_free,
             primary_ticker,
             distribution_policy,
             index_name,
             fund_currency,
             replication,
             region,
-            current_dividend_yield_numeric,
             exchange_1_ticker,
             exchange_2_ticker,
             exchange_3_ticker,
             exchange_4_ticker,
-            exchange_5_ticker,
-            updated_at
+            exchange_5_ticker
           `)
           .order('fund_size_numeric', { ascending: false })
           .limit(limit);

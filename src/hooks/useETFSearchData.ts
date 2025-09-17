@@ -3,39 +3,83 @@ import { useState, useEffect } from 'react';
 import { useETFData } from './useETFData';
 import { ETFListItem } from '@/types/etf';
 
+// Helper function to sort categories with "Ostatní" at the end
+const sortCategories = (categories: string[]): string[] => {
+  return categories.sort((a, b) => {
+    if (a === 'Ostatní') return 1;  // Move "Ostatní" to end
+    if (b === 'Ostatní') return -1; // Move "Ostatní" to end
+    return a.localeCompare(b); // Regular alphabetical sort for others
+  });
+};
+
 export const useETFSearchData = () => {
   const [etfs, setETFs] = useState<ETFListItem[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [maxTerFromData, setMaxTerFromData] = useState<number>(2);
-  const { fetchETFs, isLoading, lastUpdated } = useETFData();
+  const [totalETFCount, setTotalETFCount] = useState<number>(0);
+  const [isLoadingComplete, setIsLoadingComplete] = useState<boolean>(false);
+  const { fetchETFs, isLoading, lastUpdated, getETFCount } = useETFData();
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const data = await fetchETFs();
-        setETFs(data);
+        console.log('🚀 Starting two-phase ETF loading...');
         
-        // Extract unique categories
-        const uniqueCategories = Array.from(new Set(data.map(etf => etf.category).filter(Boolean)));
-        setCategories(uniqueCategories);
+        // FÁZE 1: Rychle načti top 100 největších ETF pro okamžité zobrazení
+        console.log('📊 Phase 1: Loading top 100 ETFs...');
+        const topETFs = await fetchETFs(100);
+        setETFs(topETFs);
         
-        // Calculate max TER from data
-        const terValues = data.map(etf => etf.ter_numeric).filter(ter => ter && ter > 0);
-        const maxTer = Math.max(...terValues);
-        setMaxTerFromData(Math.ceil(maxTer * 100) / 100); // Round up to 2 decimal places
+        // Rychle spočítej celkový počet ETF pro zobrazení
+        const totalCount = await getETFCount();
+        setTotalETFCount(totalCount);
+        
+        // Extract categories z top ETF (alespoň něco)
+        const initialCategories = Array.from(new Set(topETFs.map(etf => etf.category).filter(Boolean)));
+        setCategories(sortCategories(initialCategories));
+        
+        // Calculate max TER z top ETF
+        const initialTerValues = topETFs.map(etf => etf.ter_numeric).filter(ter => ter && ter > 0);
+        if (initialTerValues.length > 0) {
+          const maxTer = Math.max(...initialTerValues);
+          setMaxTerFromData(Math.ceil(maxTer * 100) / 100);
+        }
+        
+        console.log(`✅ Phase 1 complete: ${topETFs.length} ETFs loaded, total in DB: ${totalCount}`);
+        
+        // FÁZE 2: V pozadí načti všechny ETF pro kompletní filtrování
+        console.log('🔄 Phase 2: Loading all ETFs in background...');
+        const allETFs = await fetchETFs(); // bez limitu = všechny
+        setETFs(allETFs);
+        setIsLoadingComplete(true);
+        
+        // Aktualizuj kategorie a max TER ze všech dat
+        const allCategories = Array.from(new Set(allETFs.map(etf => etf.category).filter(Boolean)));
+        setCategories(sortCategories(allCategories));
+        
+        const allTerValues = allETFs.map(etf => etf.ter_numeric).filter(ter => ter && ter > 0);
+        if (allTerValues.length > 0) {
+          const maxTer = Math.max(...allTerValues);
+          setMaxTerFromData(Math.ceil(maxTer * 100) / 100);
+        }
+        
+        console.log(`🎉 Phase 2 complete: ${allETFs.length} ETFs total loaded`);
+        
       } catch (error) {
         console.error('Error loading ETF data:', error);
       }
     };
 
     loadData();
-  }, [fetchETFs]);
+  }, [fetchETFs, getETFCount]);
 
   return {
     etfs,
     categories,
     maxTerFromData,
+    totalETFCount, // Pro zobrazení celkového počtu
     isLoading,
+    isLoadingComplete, // True když jsou načtená všechna data
     lastUpdated
   };
 };

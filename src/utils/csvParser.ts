@@ -1,5 +1,86 @@
 
 import { ETF } from '@/types/etf';
+import { ETF_ISIN_TO_TICKER } from './etfTickerMapping';
+
+// Function to map categories based on ETF properties
+const mapETFCategory = (etf: any): string => {
+  const name = (etf.name || '').toLowerCase();
+  const investmentFocus = (etf.investment_focus || '').toLowerCase();
+  const indexName = (etf.index_name || '').toLowerCase();
+  const description = (etf.description_en || '').toLowerCase();
+  
+  // Real Estate / REIT ETFs
+  if (
+    name.includes('real estate') || 
+    name.includes('reit') || 
+    name.includes('property') || 
+    name.includes('immobil') ||
+    investmentFocus.includes('real estate') ||
+    indexName.includes('real estate') ||
+    indexName.includes('reit') ||
+    indexName.includes('property') ||
+    description.includes('real estate') ||
+    description.includes('reit') ||
+    description.includes('property')
+  ) {
+    return 'Nemovitosti';
+  }
+  
+  // Bond ETFs
+  if (
+    name.includes('bond') || 
+    name.includes('govt') || 
+    name.includes('government') ||
+    name.includes('treasury') ||
+    name.includes('corporate bond') ||
+    investmentFocus.includes('bond') ||
+    indexName.includes('bond') ||
+    indexName.includes('government') ||
+    description.includes('bond')
+  ) {
+    return 'Dluhopisy';
+  }
+  
+  // Commodity ETFs
+  if (
+    name.includes('gold') || 
+    name.includes('silver') || 
+    name.includes('commodity') ||
+    name.includes('energy') ||
+    name.includes('oil') ||
+    name.includes('gas') ||
+    investmentFocus.includes('commodities') ||
+    indexName.includes('commodity') ||
+    description.includes('commodity')
+  ) {
+    return 'Komodity';
+  }
+  
+  // Crypto ETFs
+  if (
+    name.includes('bitcoin') || 
+    name.includes('crypto') || 
+    name.includes('blockchain') ||
+    investmentFocus.includes('crypto') ||
+    description.includes('bitcoin') ||
+    description.includes('crypto')
+  ) {
+    return 'Krypto';
+  }
+  
+  // Default: if it contains "equity" or stock-related terms, it's stocks
+  if (
+    investmentFocus.includes('equity') ||
+    description.includes('equity') ||
+    description.includes('stocks') ||
+    description.includes('shares')
+  ) {
+    return 'Akcie';
+  }
+  
+  // Fallback to original category or "Ostatní"
+  return etf.category || 'Ostatní';
+};
 
 export const parseCSV = (csvContent: string): ETF[] => {
   const lines = csvContent.trim().split('\n');
@@ -103,6 +184,15 @@ export const parseCSV = (csvContent: string): ETF[] => {
         region: etf.region,
         name: etf.name
       });
+    }
+    
+    // Apply smart categorization
+    etf.category = mapETFCategory(etf);
+    
+    // Fix known ticker issues
+    if (etf.isin === 'IE00B5BMR087' && etf.primary_ticker === 'SXR8') {
+      // This is iShares Core S&P 500 - should be CSPX
+      etf.primary_ticker = 'CSPX';
     }
     
     etfs.push(etf as ETF);

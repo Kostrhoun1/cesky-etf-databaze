@@ -5,14 +5,16 @@ export const ETF_TICKER_TO_ISIN: Record<string, string> = {
   "IWDA": "IE00B4L5Y983", // iShares Core MSCI World
   "VEVE": "IE00BK5BQV03", // Vanguard FTSE Developed World
   
-  // US ETFs
-  "CSPX": "IE00B5BMR087", // iShares Core S&P 500
+  // US ETFs  
+  "CSPX": "IE00B5BMR087", // iShares Core S&P 500 UCITS ETF USD (Acc)
+  "SXR8": "IE00B5BMR087", // Alternative ticker for iShares Core S&P 500
   "VUAA": "IE00B3XXRP09", // Vanguard S&P 500
-  "SWDA": "IE00BFY0GT14", // SPDR S&P 500
+  "SWDA": "IE00BFY0GT14", // SPDR S&P 500 (Acc)
+  "SPY5": "IE00B6YX5C33", // SPDR S&P 500 (Dist)
   
   // Europe ETFs
   "SX5E": "IE0008471009", // iShares Core EURO STOXX 50
-  "SXR8": "IE00B4L5YX21", // iShares Core EURO STOXX 50
+  "CSX1": "IE00B4L5YX21", // iShares Core EURO STOXX 50
   "EUNL": "IE00B4L5Y983", // iShares Core MSCI Europe
   "VMID": "IE00BKX55T58", // Vanguard FTSE Europe
   
@@ -44,4 +46,15 @@ export const ETF_TICKER_TO_ISIN: Record<string, string> = {
 // Helper function to get ISIN for a ticker
 export const getETFIsin = (ticker: string): string | undefined => {
   return ETF_TICKER_TO_ISIN[ticker.toUpperCase()];
+};
+
+// Reverse mapping: ISIN to ticker
+export const ETF_ISIN_TO_TICKER: Record<string, string> = {};
+Object.entries(ETF_TICKER_TO_ISIN).forEach(([ticker, isin]) => {
+  ETF_ISIN_TO_TICKER[isin] = ticker;
+});
+
+// Helper function to get ticker for an ISIN
+export const getETFTicker = (isin: string): string | undefined => {
+  return ETF_ISIN_TO_TICKER[isin];
 };

@@ -10,6 +10,7 @@ import { useETFData } from '@/hooks/useETFData';
 import { ETF } from '@/types/etf';
 import { formatPercentage } from '@/utils/csvParser';
 import { supabase } from '@/integrations/supabase/client';
+import { getETFTicker } from '@/utils/etfTickerMapping';
 import { ArrowLeft } from 'lucide-react';
 
 const ETFDetail: React.FC = () => {
@@ -174,6 +175,9 @@ const ETFDetail: React.FC = () => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{etf.name}</h1>
               <p className="text-lg text-gray-600 mb-4">
+                {(etf.primary_ticker || etf.exchange_1_ticker || getETFTicker(etf.isin)) && 
+                  `${etf.primary_ticker || etf.exchange_1_ticker || getETFTicker(etf.isin)} • `
+                }
                 {etf.isin} • {etf.fund_provider}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -545,22 +549,15 @@ const ETFDetail: React.FC = () => {
         </div>
 
         {/* Description */}
-        {etf.description_en && (
+        {(etf.description_cs || etf.description_en) && (
           <Card className="mt-8">
             <CardHeader>
               <CardTitle>Popis fondu</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-700 leading-relaxed">{etf.description_en}</p>
-              {etf.url && (
-                <div className="mt-4">
-                  <Button asChild variant="outline">
-                    <a href={etf.url} target="_blank" rel="noopener noreferrer">
-                      Oficiální stránka fondu
-                    </a>
-                  </Button>
-                </div>
-              )}
+              <p className="text-gray-700 leading-relaxed">
+                {etf.description_cs || etf.description_en}
+              </p>
             </CardContent>
           </Card>
         )}

@@ -18,7 +18,7 @@ interface ETFComparisonContainerProps {
 const ETFComparisonContainer: React.FC<ETFComparisonContainerProps> = ({
   onShowDetailedComparison,
 }) => {
-  const { etfs, categories, maxTerFromData, isLoading, lastUpdated } = useETFSearchData();
+  const { etfs, categories, maxTerFromData, totalETFCount, isLoading, isLoadingComplete, lastUpdated } = useETFSearchData();
   const { selectedETFs, addETFToComparison, removeETFFromComparison, clearComparison, isETFSelected, canAddMore } = useETFComparison();
 
   const {

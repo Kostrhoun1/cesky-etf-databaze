@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 
 const ETFSearchSection: React.FC = () => {
-  const { etfs, categories, isLoading } = useETFSearchData();
+  const { etfs, categories, totalETFCount, isLoading, isLoadingComplete } = useETFSearchData();
   const {
     searchTerm,
     paginatedETFs,
@@ -67,7 +67,7 @@ const ETFSearchSection: React.FC = () => {
             Najděte perfektní ETF pro vaše portfolio
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-4">
-            Prohledejte přes {etfs.length.toLocaleString()} ETF fondů
+            Prohledejte přes {totalETFCount.toLocaleString()} ETF fondů
           </p>
         </div>
 

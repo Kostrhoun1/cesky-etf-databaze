@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
-import { useETFData } from '@/hooks/useETFData';
+import { useETFSearchData } from '@/hooks/useETFSearchData';
 import HeroSection from '@/components/home/HeroSection';
 import USPSection from '@/components/home/USPSection';
 import ETFSearchSection from '@/components/home/ETFSearchSection';
@@ -13,21 +13,8 @@ import FAQSection from '@/components/SEO/FAQSection';
 import SocialSharing from '@/components/SocialSharing';
 
 const HomePage: React.FC = () => {
-  const [totalCount, setTotalCount] = useState(0);
   const [showQuickStart, setShowQuickStart] = useState(false);
-  const { getETFCount, lastUpdated } = useETFData();
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const count = await getETFCount();
-        setTotalCount(count);
-      } catch (error) {
-        console.error('HomePage: Error loading data:', error);
-      }
-    };
-    loadData();
-  }, [getETFCount]);
+  const { totalETFCount, lastUpdated } = useETFSearchData();
 
   const websiteSchema = {
     "@context": "https://schema.org",
@@ -63,7 +50,7 @@ const HomePage: React.FC = () => {
       />
       
       {/* HERO sekce - s integrovaným Portfolio CTA */}
-      <HeroSection totalCount={totalCount} onPortfolioWizardOpen={() => setShowQuickStart(true)} />
+      <HeroSection totalCount={totalETFCount} onPortfolioWizardOpen={() => setShowQuickStart(true)} />
 
       {/* USP sekce - kompaktní */}
       <USPSection />
@@ -75,7 +62,7 @@ const HomePage: React.FC = () => {
       <BrokerComparisonSection />
 
       {/* CTA sekce */}
-      <CTASection totalCount={totalCount} />
+      <CTASection totalCount={totalETFCount} />
 
       {/* FAQ sekce */}
       <FAQSection 

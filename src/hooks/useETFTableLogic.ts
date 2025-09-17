@@ -47,9 +47,16 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     dividendYieldRange: [0, 10],
   });
 
-  const categories = useMemo(() => 
-    [...new Set(etfs.map(etf => etf.category).filter(Boolean))].sort(),
-  [etfs]);
+  const categories = useMemo(() => {
+    const uniqueCategories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
+    
+    // Custom sort: "Ostatní" should be at the end
+    return uniqueCategories.sort((a, b) => {
+      if (a === 'Ostatní') return 1;  // Move "Ostatní" to end
+      if (b === 'Ostatní') return -1; // Move "Ostatní" to end
+      return a.localeCompare(b); // Regular alphabetical sort for others
+    });
+  }, [etfs]);
 
   const activeCategory = selectedCategory ?? (categories.includes('Akciové') ? 'Akciové' : categories[0] ?? '');
 
