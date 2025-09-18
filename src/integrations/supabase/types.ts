@@ -159,6 +159,7 @@ export type Database = {
           index_name: string | null
           information_ratio: number | null
           investment_focus: string | null
+          is_leveraged: boolean | null
           isin: string
           last_price_update: string | null
           legal_structure: string | null
@@ -298,6 +299,7 @@ export type Database = {
           index_name?: string | null
           information_ratio?: number | null
           investment_focus?: string | null
+          is_leveraged?: boolean | null
           isin: string
           last_price_update?: string | null
           legal_structure?: string | null
@@ -437,6 +439,7 @@ export type Database = {
           index_name?: string | null
           information_ratio?: number | null
           investment_focus?: string | null
+          is_leveraged?: boolean | null
           isin?: string
           last_price_update?: string | null
           legal_structure?: string | null
