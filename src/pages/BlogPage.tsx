@@ -30,7 +30,7 @@ const ARTICLE_IMAGES: Record<string, string> = {
   "rebalancing-portfolia": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=600&fit=crop",
   "etf-pro-duchod": "https://images.unsplash.com/photo-1607863680198-23d4b2565df0?w=800&h=600&fit=crop",
   "nejlevnejsi-etf-fondy": "https://images.unsplash.com/photo-1634128221889-82ed6efebfc3?w=800&h=600&fit=crop",
-  "esg-udrzitelne-etf": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=600&fit=crop",
+  "esg-udrzitelne-etf": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&h=600&fit=crop",
 };
 
 // Optimalizované alt texty pro SEO

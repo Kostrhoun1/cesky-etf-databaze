@@ -8,10 +8,13 @@ interface Props {
   title: string;
   perex: string;
   seoDescription?: string;
+  readTime?: string;
+  difficulty?: string;
+  category?: string;
   children?: React.ReactNode;
 }
 
-const BlogArticleLayout: React.FC<Props> = ({ title, perex, children }) => (
+const BlogArticleLayout: React.FC<Props> = ({ title, perex, seoDescription, readTime, difficulty, category, children }) => (
   <Layout>
     <div className="max-w-3xl mx-auto px-4 py-8">
       <nav className="mb-8">

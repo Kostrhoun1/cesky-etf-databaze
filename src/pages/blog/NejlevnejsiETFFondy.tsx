@@ -1,411 +1,808 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { DollarSign, TrendingDown, Calculator, Award, AlertCircle } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DollarSign, TrendingDown, Calculator, Award, AlertCircle, BarChart3, Zap, Target, Crown, Star, Sparkles, TrendingUp, Eye, Filter } from 'lucide-react';
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
 import ETFTicker from '@/components/ETFTicker';
-import { getETFIsin } from '@/utils/etfTickerMapping';
+import { useETFSearchData } from '@/hooks/useETFSearchData';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import BlogArticleLayout from "./_BlogArticleLayout";
 
 const NejlevnejsiETFFondy: React.FC = () => {
-  const cheapestETFs = [
-    {
-      name: "iShares Core S&P 500 UCITS ETF",
-      ticker: "CSPX",
-      isin: "IE00B5BMR087",
-      ter: "0.07%",
-      size: "74.8B €",
-      tracking: "MSCI World",
-      description: "Nejlevnější způsob investice do amerického akciového trhu",
-      savingsOn100k: "120€/rok vs aktivní fond (1.3%)",
-      category: "USA akcie"
-    },
-    {
-      name: "Vanguard FTSE Developed World UCITS ETF",
-      ticker: "VEVE",
-      isin: "IE00BK5BQV03",
-      ter: "0.12%",
-      size: "8.2B €",
-      tracking: "FTSE Developed",
-      description: "Nejlevnější globální ETF od Vanguard",
-      savingsOn100k: "110€/rok vs aktivní fond",
-      category: "Globální akcie"
-    },
-    {
-      name: "iShares Core MSCI World UCITS ETF",
-      ticker: "IWDA",
-      isin: "IE00B4L5Y983",
-      ter: "0.20%",
-      size: "63.2B €",
-      tracking: "MSCI World",
-      description: "Nejpopulárnější globální ETF s nízkými náklady",
-      savingsOn100k: "100€/rok vs aktivní fond",
-      category: "Globální akcie"
-    },
-    {
-      name: "Xtrackers MSCI World UCITS ETF",
-      ticker: "XWKS",
-      isin: "IE00BJ0KDQ92",
-      ter: "0.19%",
-      size: "4.1B €",
-      tracking: "MSCI World",
-      description: "Konkurenční alternativa s velmi nízkými náklady",
-      savingsOn100k: "101€/rok vs aktivní fond",
-      category: "Globální akcie"
-    },
-    {
-      name: "iShares Core EURO STOXX 50 UCITS ETF",
-      ticker: "SXR8",
-      isin: "IE00B4L5YX21",
-      ter: "0.10%",
-      size: "7.8B €",
-      tracking: "EURO STOXX 50",
-      description: "Nejlevnější ETF na evropské blue chips",
-      savingsOn100k: "115€/rok vs aktivní fond",
-      category: "Evropa"
-    },
-    {
-      name: "Vanguard S&P 500 UCITS ETF",
-      ticker: "VUAA",
-      isin: "IE00B3XXRP09",
-      ter: "0.07%",
-      size: "38.5B €",
-      tracking: "S&P 500",
-      description: "Druhá nejlevnější volba pro S&P 500",
-      savingsOn100k: "120€/rok vs aktivní fond",
-      category: "USA akcie"
-    }
-  ];
+  const { etfs, isLoading, isLoadingComplete } = useETFSearchData();
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [investmentAmount, setInvestmentAmount] = useState<number>(100000);
+  const [investmentYears, setInvestmentYears] = useState<number>(20);
+  const [monthlyContribution, setMonthlyContribution] = useState<number>(500);
+  const [annualReturn, setAnnualReturn] = useState<number>(7);
 
-  const costComparison = [
-    {
-      investment: "50.000 €",
-      lowCostETF: "70€ ročně (0.14% TER)",
-      activeFund: "650€ ročně (1.3% TER)",
-      savings: "580€ ročně",
-      savingsOver20Years: "17.400€"
-    },
-    {
-      investment: "100.000 €",
-      lowCostETF: "140€ ročně (0.14% TER)",
-      activeFund: "1.300€ ročně (1.3% TER)",
-      savings: "1.160€ ročně",
-      savingsOver20Years: "34.800€"
-    },
-    {
-      investment: "500.000 €",
-      lowCostETF: "700€ ročně (0.14% TER)",
-      activeFund: "6.500€ ročně (1.3% TER)",
-      savings: "5.800€ ročně",
-      savingsOver20Years: "174.000€"
-    }
-  ];
-
-  const hiddenCosts = [
-    {
-      type: "Tracking Error",
-      description: "Rozdíl mezi výnosem ETF a indexu",
-      typical: "0.05-0.20% ročně",
-      howToCheck: "Porovnejte skutečný výnos s benchmarkem"
-    },
-    {
-      type: "Bid-Ask Spread",
-      description: "Rozdíl mezi nákupní a prodejní cenou",
-      typical: "0.01-0.10%",
-      howToCheck: "Sledujte spread u brokera před nákupem"
-    },
-    {
-      type: "Premium/Discount",
-      description: "ETF může obchodovat nad/pod NAV",
-      typical: "±0.05%",
-      howToCheck: "Porovnejte tržní cenu s NAV"
-    },
-    {
-      type: "Měnové hedging",
-      description: "Náklady na zajištění měnového rizika",
-      typical: "0.20-0.50% extra",
-      howToCheck: "Hedged ETF mají vyšší TER"
-    }
-  ];
-
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Nejlevnější ETF fondy - Fondy s nejnižšími poplatky 2025",
-    "description": "Fondy s nejnižšími poplatky TER na trhu. Analýza nákladů, skrytých poplatků a jejich vliv na dlouhodobé výnosy. Tipy jak minimalizovat náklady investování.",
-    "author": {
-      "@type": "Organization",
-      "name": "ETF průvodce.cz"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "ETF průvodce.cz",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://etfpruvodce.cz/og-image.jpg"
+  const formatCurrency = (amount: number, currency: 'EUR' | 'CZK' = 'EUR') => {
+    if (currency === 'CZK') {
+      // Převod EUR na CZK (kurzem cca 25)
+      const czk = amount * 25;
+      if (czk >= 1000000000) {
+        return `${(czk / 1000000000).toFixed(1)} mld Kč`;
+      } else if (czk >= 1000000) {
+        return `${(czk / 1000000).toFixed(1)} mil Kč`;
+      } else if (czk >= 1000) {
+        return `${(czk / 1000).toFixed(0)} tis Kč`;
       }
-    },
-    "datePublished": "2025-01-01",
-    "dateModified": "2025-01-01",
-    "mainEntityOfPage": "https://etfpruvodce.cz/tipy/nejlevnejsi-etf-fondy",
-    "image": "https://etfpruvodce.cz/og-low-cost-etf.jpg",
-    "articleSection": "Optimalizace",
-    "keywords": "nejlevnější ETF, nízké poplatky TER, náklady investování, levné ETF fondy, optimalizace nákladů"
+      return `${Math.round(czk).toLocaleString()} Kč`;
+    }
+    
+    if (amount >= 1000000000) {
+      return `${(amount / 1000000000).toFixed(1)}B €`;
+    } else if (amount >= 1000000) {
+      return `${(amount / 1000000).toFixed(1)}M €`;
+    }
+    return `${amount.toLocaleString()} €`;
+  };
+
+  // Automaticky získané nejlevnější ETF z databáze
+  const cheapestETFs = useMemo(() => {
+    console.log('🔍 Processing ETFs:', etfs?.length || 0);
+    
+    if (!etfs || etfs.length === 0) {
+      console.log('❌ No ETFs available');
+      return [];
+    }
+    
+    // Debug: Podívej se na strukturu prvního ETF
+    console.log('🔍 Sample ETF structure:', etfs[0]);
+    
+    // Použít mírnější kritéria - pouze TER (TER jsou v databázi jako 0.03 = 3%)
+    const validETFs = etfs.filter(etf => {
+      const hasValidTER = etf.ter_numeric && etf.ter_numeric > 0 && etf.ter_numeric < 2;  // pod 2.0 = 200%
+      
+      // Debug log pro první 3 ETFs
+      if (etfs.indexOf(etf) < 3) {
+        console.log(`ETF ${etf.ticker || etf.name}: TER=${etf.ter_numeric}, Size=${etf.fund_size_numeric}, Valid TER=${hasValidTER}`);
+      }
+      
+      return hasValidTER;
+    });
+
+    console.log('✅ Valid ETFs found:', validETFs.length);
+
+    // Seřadit podle TER a vzít top 30
+    const sortedByTER = validETFs
+      .sort((a, b) => a.ter_numeric - b.ter_numeric)
+      .slice(0, 30);
+
+    console.log('📊 Top 30 cheapest ETFs:', sortedByTER.slice(0, 5).map(etf => ({ 
+      ticker: etf.ticker, 
+      ter: etf.ter_numeric, 
+      category: etf.category 
+    })));
+
+    // Použít existující kategorie z dat
+    const categorized = sortedByTER.map(etf => {
+      return {
+        ...etf,
+        ter_percent: etf.ter_numeric.toFixed(2) + "%",  // 0.03 v DB = 0.03%
+        fund_size_formatted: formatCurrency(etf.fund_size_numeric || 0),
+        annual_cost_per_100k: Math.round(etf.ter_numeric * 100000)
+      };
+    });
+
+    return categorized;
+  }, [etfs]);
+
+  // Filtrace podle kategorie
+  const filteredETFs = useMemo(() => {
+    if (selectedCategory === "all") return cheapestETFs;
+    return cheapestETFs.filter(etf => etf.category === selectedCategory);
+  }, [cheapestETFs, selectedCategory]);
+
+  // Získání kategorií pro filter - použít z hooku
+  const { categories: allCategories } = useETFSearchData();
+  const categories = useMemo(() => {
+    // Filtrovat pouze kategorie, které jsou v cheapestETFs
+    const availableCategories = [...new Set(cheapestETFs.map(etf => etf.category).filter(Boolean))];
+    console.log('🏷️ Available categories in cheapest ETFs:', availableCategories);
+    return availableCategories.sort();
+  }, [cheapestETFs]);
+
+  // Graf dat pro srovnání nákladů
+  const costComparisonData = useMemo(() => {
+    const monthlyReturn = Math.pow(1 + annualReturn / 100, 1/12) - 1;
+    const months = investmentYears * 12;
+    
+    const scenarios = [
+      { name: "0.05%", fullName: "Ultra nízké TER (0.05%)", ter: 0.0005, color: "#10B981" },
+      { name: "0.20%", fullName: "Nízké TER (0.20%)", ter: 0.002, color: "#3B82F6" },
+      { name: "0.50%", fullName: "Střední TER (0.50%)", ter: 0.005, color: "#F59E0B" },
+      { name: "1.00%", fullName: "Vysoké TER (1.00%)", ter: 0.01, color: "#EF4444" },
+      { name: "1.50%", fullName: "Aktivní fond (1.50%)", ter: 0.015, color: "#DC2626" }
+    ];
+
+    return scenarios.map(scenario => {
+      let totalValue = investmentAmount;
+      let totalInvested = investmentAmount;
+      let totalFees = 0;
+
+      for (let month = 1; month <= months; month++) {
+        totalValue += monthlyContribution;
+        totalInvested += monthlyContribution;
+        
+        // Růst
+        totalValue *= (1 + monthlyReturn);
+        
+        // TER poplatek
+        const monthlyFee = totalValue * (scenario.ter / 12);
+        totalValue -= monthlyFee;
+        totalFees += monthlyFee;
+      }
+
+      return {
+        ...scenario,
+        finalValue: Math.round(totalValue),
+        totalFees: Math.round(totalFees),
+        totalInvested: Math.round(totalInvested),
+        netGain: Math.round(totalValue - totalInvested)
+      };
+    });
+  }, [investmentAmount, investmentYears, monthlyContribution, annualReturn]);
+
+  // Data pro graf TER distribuce
+  const terDistributionData = useMemo(() => {
+    console.log('🔍 TER Distribution - cheapestETFs:', cheapestETFs.length);
+    if (cheapestETFs.length === 0) return [];
+    
+    const ranges = [
+      { range: "0.00-0.10%", min: 0, max: 0.1, count: 0, color: "#10B981" },       // 0-0.1 v DB = 0-0.10%
+      { range: "0.10-0.20%", min: 0.1, max: 0.2, count: 0, color: "#3B82F6" },     // 0.1-0.2 v DB = 0.10-0.20%
+      { range: "0.20-0.30%", min: 0.2, max: 0.3, count: 0, color: "#6366F1" },     // 0.2-0.3 v DB = 0.20-0.30%
+      { range: "0.30-0.50%", min: 0.3, max: 0.5, count: 0, color: "#F59E0B" },     // 0.3-0.5 v DB = 0.30-0.50%
+      { range: "0.50%+", min: 0.5, max: 10, count: 0, color: "#EF4444" }           // 0.5+ v DB = 0.50%+
+    ];
+
+    cheapestETFs.forEach(etf => {
+      const ter = etf.ter_numeric;
+      console.log(`TER for ${etf.ticker}: ${ter}`);
+      const range = ranges.find(r => ter >= r.min && ter < r.max);
+      if (range) {
+        range.count++;
+        console.log(`Added to range ${range.range}, new count: ${range.count}`);
+      } else {
+        console.log(`No range found for TER: ${ter}`);
+      }
+    });
+
+    console.log('📊 Final ranges:', ranges);
+    const filteredRanges = ranges.filter(r => r.count > 0);
+    console.log('📊 Filtered ranges (with data):', filteredRanges);
+    return filteredRanges;
+  }, [cheapestETFs]);
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-white p-4 border rounded-lg shadow-lg">
+          <p className="font-semibold text-lg mb-2">{data.fullName}</p>
+          <div className="space-y-1">
+            <p className="text-sm text-gray-600">
+              Konečná hodnota: <span className="font-semibold text-green-600">{formatCurrency(data.finalValue, 'CZK')}</span>
+            </p>
+            <p className="text-sm text-gray-600">
+              Celkové poplatky: <span className="font-semibold text-red-600">{formatCurrency(data.totalFees, 'CZK')}</span>
+            </p>
+            <p className="text-sm text-gray-600">
+              Čistý zisk: <span className="font-semibold text-blue-600">{formatCurrency(data.netGain, 'CZK')}</span>
+            </p>
+          </div>
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
-    <Layout>
-      <SEOHead
-        title="Nejlevnější ETF fondy - Fondy s nejnižšími poplatky TER 2025 | ETF průvodce.cz"
-        description="Fondy s nejnižšími poplatky TER na trhu. Analýza nákladů, skrytých poplatků a jejich vliv na dlouhodobé výnosy. Tipy jak minimalizovat náklady investování."
-        canonical="https://etfpruvodce.cz/tipy/nejlevnejsi-etf-fondy"
-        keywords="nejlevnější ETF, nízké poplatky TER, náklady investování, levné ETF fondy, optimalizace nákladů, low cost ETF"
-        ogImage="https://etfpruvodce.cz/og-low-cost-etf.jpg"
-        schema={articleSchema}
-      />
-
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <nav className="mb-8">
-          <Link to="/tipy" className="text-violet-600 font-semibold hover:underline">
-            ← Zpět na Tipy pro investory
-          </Link>
-        </nav>
-
-        {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-2 mb-4">
-            <Badge className="bg-teal-100 text-teal-800">Optimalizace</Badge>
-            <Badge className="bg-green-100 text-green-800">Začátečník</Badge>
-            <span className="text-gray-500 text-sm">8 min čtení</span>
+    <BlogArticleLayout
+      title="Nejlevnější ETF fondy 2025 💰 - Automatické srovnání TER"
+      perex="★ Interaktivní analýza nejlevnějších ETF fondů ★ Živé data z naší databáze 3,600+ ETF. Kalkulačka dopadu poplatků, grafy TER distribuce a automatické doporučení podle kategorie."
+      seoDescription="Nejlevnější ETF fondy 2025: Interaktivní srovnání TER poplatků z databáze 3,600+ ETF. Kalkulačka nákladů, grafy, automatické doporučení. Ultra nízké TER od 0.03%."
+      readTime="12 min"
+      difficulty="Střední"
+      category="Optimalizace"
+    >
+      {/* Hero sekce s hlavními benefity */}
+      <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-green-600 rounded-2xl p-8 mb-12 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-black/20 rounded-2xl"></div>
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-4">
+            <Sparkles className="w-8 h-8 text-yellow-300" />
+            <h1 className="text-3xl font-bold">Najděte nejlevnější ETF za pár sekund</h1>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">
-            Nejlevnější ETF fondy
-          </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            Fondy s nejnižšími poplatky TER na trhu. Analýza nákladů, skrytých poplatků a jejich vliv na dlouhodobé výnosy. Tipy jak minimalizovat náklady investování.
+          <p className="text-xl text-blue-100 mb-6">
+            Živá data z 3,600+ ETF. Ušetřete tisíce korun ročně díky správné volbě TER poplatků.
           </p>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Eye className="w-5 h-5 text-yellow-300" />
+                <span className="font-semibold">Živé srovnání</span>
+              </div>
+              <p className="text-sm text-blue-100">Aktuální data přímo z databáze</p>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Calculator className="w-5 h-5 text-yellow-300" />
+                <span className="font-semibold">Kalkulačka úspor</span>
+              </div>
+              <p className="text-sm text-blue-100">Spočítejte si dopad TER na portfolio</p>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Filter className="w-5 h-5 text-yellow-300" />
+                <span className="font-semibold">Smart filtry</span>
+              </div>
+              <p className="text-sm text-blue-100">Najděte ETF podle regionu a stylu</p>
+            </div>
+          </div>
         </div>
-
-        {/* Proč jsou náklady důležité */}
-        <Card className="mb-8">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <DollarSign className="w-8 h-8 text-violet-600" />
-              <h2 className="text-2xl font-bold">Proč se zaměřit na náklady?</h2>
-            </div>
-            <div className="prose max-w-none">
-              <p className="text-lg mb-6">
-                Poplatky jsou jediná jistá věc u investování. Zatímco výnosy nelze garantovat, náklady si fondy účtují každý rok bez ohledu na výkonnost. I zdánlivě malý rozdíl v poplatcích má obrovský dopad na dlouhodobé výnosy.
-              </p>
-              <div className="bg-red-50 border-l-4 border-red-500 p-6 mb-6">
-                <h3 className="font-semibold mb-2 text-red-900">Dopad poplatků na 20 let</h3>
-                <p className="text-red-800 text-sm">
-                  Investice 100.000€, roční výnos 7%:<br/>
-                  • ETF s TER 0.1%: <strong>367.629€</strong><br/>
-                  • Aktivní fond s TER 1.5%: <strong>320.714€</strong><br/>
-                  • Rozdíl: <strong>46.915€</strong> méně kvůli vyšším poplatkům!
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Nejlevnější ETF */}
-        <Card className="mb-8">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <Award className="w-8 h-8 text-violet-600" />
-              <h2 className="text-2xl font-bold">TOP nejlevnější ETF fondy 2025</h2>
-            </div>
-            <div className="space-y-4">
-              {cheapestETFs.map((etf, index) => (
-                <div key={index} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold text-lg">
-                          <ETFTicker ticker={etf.ticker} isin={etf.isin} size="lg" />
-                        </h3>
-                        <Badge variant="outline" className="text-xs">{etf.category}</Badge>
-                        <Badge variant="secondary" className="text-xs font-bold text-green-700 bg-green-100">
-                          TER {etf.ter}
-                        </Badge>
-                      </div>
-                      <p className="text-gray-600 text-sm mb-2">{etf.name}</p>
-                      <p className="text-gray-500 text-sm">{etf.description}</p>
-                    </div>
-                    <div className="text-right mt-4 lg:mt-0 lg:ml-4">
-                      <div className="text-sm text-gray-500">Velikost fondu</div>
-                      <div className="font-semibold">{etf.size}</div>
-                      <div className="text-xs text-green-600 mt-1">
-                        Úspora: {etf.savingsOn100k}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-xs text-gray-400">ISIN: {etf.isin}</div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Srovnání nákladů */}
-        <Card className="mb-8">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <Calculator className="w-8 h-8 text-violet-600" />
-              <h2 className="text-2xl font-bold">Dopad nákladů na různé investice</h2>
-            </div>
-            <div className="space-y-4">
-              {costComparison.map((comparison, index) => (
-                <div key={index} className="border rounded-lg p-6">
-                  <div className="grid md:grid-cols-4 gap-4 text-center">
-                    <div>
-                      <div className="font-semibold text-lg text-violet-600 mb-1">
-                        {comparison.investment}
-                      </div>
-                      <div className="text-xs text-gray-500">Investice</div>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-green-600 mb-1">
-                        {comparison.lowCostETF}
-                      </div>
-                      <div className="text-xs text-gray-500">Levný ETF</div>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-red-600 mb-1">
-                        {comparison.activeFund}
-                      </div>
-                      <div className="text-xs text-gray-500">Aktivní fond</div>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-blue-600 mb-1">
-                        {comparison.savingsOver20Years}
-                      </div>
-                      <div className="text-xs text-gray-500">Úspora za 20 let</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">💡 Klíčové pozorování</h4>
-              <p className="text-blue-700 text-sm">
-                Každé procento poplatku navíc vás stojí zhruba 20% výsledné investice za 20 let při 7% ročním výnosu.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Skryté náklady */}
-        <Card className="mb-8">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <AlertCircle className="w-8 h-8 text-violet-600" />
-              <h2 className="text-2xl font-bold">Skryté náklady ETF</h2>
-            </div>
-            <div className="space-y-4">
-              {hiddenCosts.map((cost, index) => (
-                <div key={index} className="border rounded-lg p-6">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
-                    <h3 className="font-semibold text-lg">{cost.type}</h3>
-                    <Badge variant="outline">{cost.typical}</Badge>
-                  </div>
-                  <p className="text-gray-600 mb-3">{cost.description}</p>
-                  <div className="bg-gray-50 p-3 rounded text-sm">
-                    <strong>Jak kontrolovat:</strong> {cost.howToCheck}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Tipy pro minimalizaci nákladů */}
-        <Card className="mb-8">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <TrendingDown className="w-8 h-8 text-violet-600" />
-              <h2 className="text-2xl font-bold">Jak minimalizovat náklady</h2>
-            </div>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-semibold mb-4 text-green-700">Co dělat ✅</h3>
-                <ul className="space-y-2 text-sm">
-                  <li>• Vybírejte ETF s TER pod 0.25%</li>
-                  <li>• Preferujte větší fondy (likvidnější)</li>
-                  <li>• Investujte pravidelně (DCA)</li>
-                  <li>• Minimalizujte počet transakcí</li>
-                  <li>• Používejte brokery s nízkými poplatky</li>
-                  <li>• Držte dlouhodobě (&gt;3 roky)</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-4 text-red-700">Čemu se vyhnout ❌</h3>
-                <ul className="space-y-2 text-sm">
-                  <li>• Aktivně řízené ETF (vyšší TER)</li>
-                  <li>• Časté rebalancování</li>
-                  <li>• Malé, nové fondy</li>
-                  <li>• Hedged ETF (bez nutnosti)</li>
-                  <li>• Brokeři s vysokými poplatky</li>
-                  <li>• Spekulativní trading</li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Doporučení podle kategorie */}
-        <Card className="mb-8">
-          <CardContent className="p-8">
-            <h2 className="text-2xl font-bold mb-6">Nejlevnější volby podle kategorie</h2>
-            <div className="space-y-4">
-              <div className="border rounded-lg p-4">
-                <h3 className="font-semibold mb-2">🌍 Globální akcie</h3>
-                <p className="text-sm">VEVE (0.12%), IWDA (0.20%), VWCE (0.22%)</p>
-              </div>
-              <div className="border rounded-lg p-4">
-                <h3 className="font-semibold mb-2">🇺🇸 USA akcie</h3>
-                <p className="text-sm">CSPX (0.07%), VUAA (0.07%), SWDA (0.20%)</p>
-              </div>
-              <div className="border rounded-lg p-4">
-                <h3 className="font-semibold mb-2">🇪🇺 Evropa</h3>
-                <p className="text-sm">SXR8 (0.10%), XESX (0.12%), VMID (0.12%)</p>
-              </div>
-              <div className="border rounded-lg p-4">
-                <h3 className="font-semibold mb-2">🏛️ Dluhopisy</h3>
-                <p className="text-sm">AGGG (0.10%), IEAG (0.12%), XGLE (0.15%)</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* CTA sekce */}
-        <Card className="mb-8 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
-          <CardContent className="p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Spočítejte si dopad poplatků</h2>
-            <p className="text-gray-600 mb-6">
-              Použijte naši kalkulačku k výpočtu dopadu různých poplatků na vaše dlouhodobé výnosy.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild className="bg-violet-600 hover:bg-violet-700">
-                <Link to="/kalkulacky/kalkulacka-poplatku-etf">
-                  Kalkulačka poplatků
-                </Link>
-              </Button>
-              <Button asChild variant="outline" className="border-violet-200 text-violet-700 hover:bg-violet-50">
-                <Link to="/srovnani-etf">
-                  Srovnat ETF fondy
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
       </div>
-    </Layout>
+      {/* Klíčové metriky */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <TrendingUp className="w-6 h-6 text-blue-600" />
+          Klíčové metriky trhu
+        </h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
+            <Star className="w-8 h-8 mb-4 text-yellow-300" />
+            <div className="text-3xl font-bold mb-1">
+              {cheapestETFs[0]?.ter_percent || "0.03%"}
+            </div>
+            <div className="text-emerald-100 text-sm font-medium">Nejnižší TER</div>
+            <div className="text-emerald-200 text-xs mt-2">
+              {cheapestETFs[0]?.ticker || "Načítá..."}
+            </div>
+          </div>
+
+          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
+            <BarChart3 className="w-8 h-8 mb-4 text-blue-200" />
+            <div className="text-3xl font-bold mb-1">
+              3,600+
+            </div>
+            <div className="text-blue-100 text-sm font-medium">ETF v databázi</div>
+            <div className="text-blue-200 text-xs mt-2">
+              Neustále aktualizováno
+            </div>
+          </div>
+
+          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
+            <Target className="w-8 h-8 mb-4 text-purple-200" />
+            <div className="text-3xl font-bold mb-1">
+              {cheapestETFs.filter(etf => etf.ter_numeric <= 0.2).length}
+            </div>
+            <div className="text-purple-100 text-sm font-medium">Fondů pod 0.2%</div>
+            <div className="text-purple-200 text-xs mt-2">
+              Ultra levné TER
+            </div>
+          </div>
+
+          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-500 to-red-500 p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
+            <Zap className="w-8 h-8 mb-4 text-orange-200" />
+            <div className="text-3xl font-bold mb-1">
+              {cheapestETFs[0] ? Math.round((1.5 - cheapestETFs[0].ter_numeric) * 25000).toLocaleString() : '36,000'}
+            </div>
+            <div className="text-orange-100 text-sm font-medium">Kč ročně</div>
+            <div className="text-orange-200 text-xs mt-2">
+              úspora vs aktivní fond
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Kompaktní kalkulačka */}
+      <div className="mb-12">
+        <Card>
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+            <CardTitle className="text-xl font-bold flex items-center gap-2">
+              <Calculator className="w-5 h-5 text-blue-600" />
+              Kalkulačka dopadu TER poplatků
+            </CardTitle>
+            <p className="text-sm text-gray-600 mt-2">
+              Změňte parametry a uvidíte dopad různých TER na portfolio za {investmentYears} let
+            </p>
+          </CardHeader>
+          <CardContent className="p-6">
+          
+            {/* Kompaktní ovládací panel */}
+            <div className="bg-slate-50 rounded-lg p-4 mb-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-gray-600">Počáteční</span>
+                    <span className="font-semibold text-blue-600">{formatCurrency(investmentAmount, 'CZK')}</span>
+                  </div>
+                  <Slider
+                    min={10000}
+                    max={1000000}
+                    step={10000}
+                    value={[investmentAmount]}
+                    onValueChange={(value) => setInvestmentAmount(value[0])}
+                    className="h-2"
+                  />
+                </div>
+                
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-gray-600">Měsíčně</span>
+                    <span className="font-semibold text-blue-600">{formatCurrency(monthlyContribution, 'CZK')}</span>
+                  </div>
+                  <Slider
+                    min={0}
+                    max={10000}
+                    step={500}
+                    value={[monthlyContribution]}
+                    onValueChange={(value) => setMonthlyContribution(value[0])}
+                    className="h-2"
+                  />
+                </div>
+                
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-gray-600">Doba</span>
+                    <span className="font-semibold text-blue-600">{investmentYears} let</span>
+                  </div>
+                  <Slider
+                    min={5}
+                    max={40}
+                    step={1}
+                    value={[investmentYears]}
+                    onValueChange={(value) => setInvestmentYears(value[0])}
+                    className="h-2"
+                  />
+                </div>
+                
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-gray-600">Výnos</span>
+                    <span className="font-semibold text-blue-600">{annualReturn}%</span>
+                  </div>
+                  <Slider
+                    min={3}
+                    max={12}
+                    step={0.5}
+                    value={[annualReturn]}
+                    onValueChange={(value) => setAnnualReturn(value[0])}
+                    className="h-2"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Kompaktní výsledky */}
+            <div className="space-y-3">
+              {costComparisonData.map((scenario, index) => (
+                <div key={index} className={`p-3 rounded-lg border transition-all hover:shadow-sm ${
+                  index === 0 
+                    ? 'bg-green-50 border-green-200' 
+                    : 'bg-gray-50 border-gray-200'
+                }`}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className={`w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold ${
+                          index === 0 ? 'ring-2 ring-green-300' : ''
+                        }`}
+                        style={{ backgroundColor: scenario.color }}
+                      >
+                        {index === 0 ? '👑' : index + 1}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900 text-sm">{scenario.fullName}</div>
+                        <div className="text-xs text-gray-600">
+                          {formatCurrency(scenario.totalFees, 'CZK')} poplatky
+                          {index > 0 && (
+                            <span className="text-red-600 ml-2">
+                              (+{formatCurrency(scenario.totalFees - costComparisonData[0].totalFees, 'CZK')})
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="text-right">
+                      <div className={`text-lg font-bold ${
+                        index === 0 ? 'text-green-600' : 'text-gray-900'
+                      }`}>
+                        {formatCurrency(scenario.finalValue, 'CZK')}
+                      </div>
+                      {index > 0 && (
+                        <div className="text-xs text-red-600">
+                          -{formatCurrency(costComparisonData[0].finalValue - scenario.finalValue, 'CZK')}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            {/* Shrnutí výsledků */}
+            <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+            <h4 className="font-bold text-blue-900 mb-3 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-blue-600" />
+              Klíčové pozorování
+            </h4>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div className="bg-white/60 rounded-lg p-4">
+                <div className="font-semibold text-blue-900 mb-2">💰 Celková úspora</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {formatCurrency(costComparisonData[4]?.totalFees - costComparisonData[0]?.totalFees, 'CZK')}
+                </div>
+                <div className="text-blue-700">za {investmentYears} let (nejlevnější vs aktivní fond)</div>
+              </div>
+              <div className="bg-white/60 rounded-lg p-4">
+                <div className="font-semibold text-blue-900 mb-2">📈 Dopad na výnos</div>
+                <div className="text-2xl font-bold text-orange-600">
+                  {((costComparisonData[0]?.finalValue - costComparisonData[4]?.finalValue) / costComparisonData[4]?.finalValue * 100).toFixed(1)}%
+                </div>
+                <div className="text-blue-700">více peněz s levným ETF</div>
+              </div>
+            </div>
+          </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Živé srovnání nejlevnějších ETF */}
+      <Card className="mb-12">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <Award className="w-6 h-6 text-gold-600" />
+            🏆 Nejlevnější ETF fondy (živá data)
+          </CardTitle>
+          <div className="flex flex-wrap gap-2 mt-4">
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger className="w-64">
+                <SelectValue placeholder="Vyberte kategorii" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Všechny kategorie</SelectItem>
+                {categories.map(cat => (
+                  <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Badge variant="outline" className="text-green-600">
+              {filteredETFs.length} ETF nalezeno
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {isLoading && etfs.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Načítám nejlevnější ETF fondy...</p>
+            </div>
+          ) : filteredETFs.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-600">Žádné ETF fondy nenalezeny pro vybranou kategorii.</p>
+            </div>
+          ) : (
+            <div className="grid gap-4">
+              {filteredETFs.slice(0, 10).map((etf, index) => (
+              <Card key={etf.isin} className={`relative overflow-hidden transition-all hover:shadow-md ${index === 0 ? 'ring-2 ring-gold-400 bg-gradient-to-r from-yellow-50 to-amber-50' : ''}`}>
+                {index === 0 && (
+                  <div className="absolute top-0 right-0 bg-gradient-to-r from-yellow-400 to-amber-500 text-white px-3 py-1 text-xs font-bold">
+                    #1 NEJLEVNĚJŠÍ
+                  </div>
+                )}
+                <CardContent className="p-6">
+                  <div className="grid md:grid-cols-6 gap-4 items-center">
+                    <div className="md:col-span-2">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg font-bold text-gray-600">#{index + 1}</span>
+                        <ETFTicker ticker={etf.ticker} isin={etf.isin} size="lg" />
+                        <Badge variant="outline" className="text-xs">{etf.category}</Badge>
+                      </div>
+                      <h3 className="font-medium text-sm text-gray-700 line-clamp-2">
+                        {etf.name}
+                      </h3>
+                    </div>
+
+                    <div className="text-center">
+                      <div className={`text-xl font-bold ${index === 0 ? 'text-green-600' : 'text-gray-900'}`}>
+                        {etf.ter_percent}
+                      </div>
+                      <div className="text-xs text-gray-500">TER</div>
+                    </div>
+
+                    <div className="text-center">
+                      <div className="font-semibold text-gray-900">
+                        {etf.fund_size_formatted}
+                      </div>
+                      <div className="text-xs text-gray-500">Velikost fondu (EUR)</div>
+                    </div>
+
+                    <div className="text-center">
+                      <div className="font-semibold text-green-600">
+                        {Math.round(etf.ter_numeric * 25000).toLocaleString()} Kč
+                      </div>
+                      <div className="text-xs text-gray-500">Roční náklad/2,5 mil Kč</div>
+                    </div>
+
+                    <div className="text-center">
+                      <Link to={`/etf/${etf.isin}`}>
+                        <Button size="sm" variant={index === 0 ? "default" : "outline"}>
+                          Detail
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Grafy a analýzy */}
+      <div className="grid md:grid-cols-2 gap-8 mb-12">
+        {/* Kde koupit nejlevnější ETF */}
+        <Card>
+          <CardHeader>
+            <CardTitle>🏦 Kde koupit nejlevnější ETF</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="font-semibold text-green-900">DEGIRO</span>
+                  <Badge className="bg-green-100 text-green-800">DOPORUČENO</Badge>
+                </div>
+                <p className="text-sm text-green-700 mb-2">
+                  Nejlevnější brokerage pro ETF. Stovky ETF zdarma.
+                </p>
+                <div className="text-xs text-green-600">
+                  📊 Core Selection: 0 € • Ostatní ETF: 2 € + 0.03%
+                </div>
+              </div>
+
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="font-semibold text-blue-900">XTB</span>
+                  <Badge variant="outline" className="border-blue-300 text-blue-700">ALTERNATIVA</Badge>
+                </div>
+                <p className="text-sm text-blue-700 mb-2">
+                  ETF do 100k € měsíčně zdarma. Český zákaznický servis.
+                </p>
+                <div className="text-xs text-blue-600">
+                  📊 ETF zdarma do 100k € • Nad limit: 0.2% (min 10 €)
+                </div>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
+                  <span className="font-semibold text-gray-900">Interactive Brokers</span>
+                  <Badge variant="outline" className="border-gray-300 text-gray-700">PRO</Badge>
+                </div>
+                <p className="text-sm text-gray-700 mb-2">
+                  Pro pokročilé investory. Nejširší výběr ETF.
+                </p>
+                <div className="text-xs text-gray-600">
+                  📊 0.05% (min 1 USD) • Měsíční minimum: 10 USD
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Úspory oproti aktivním fondům */}
+        <Card>
+          <CardHeader>
+            <CardTitle>💰 Úspory oproti aktivním fondům</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[50000, 100000, 250000, 500000].map(amount => {
+                const lowCostTER = 0.0015; // 0.15%
+                const activeFundTER = 0.015; // 1.5%
+                const annualSaving = amount * (activeFundTER - lowCostTER);
+                const savingOver20Years = annualSaving * 20;
+                
+                return (
+                  <div key={amount} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <div>
+                      <div className="font-semibold">{formatCurrency(amount, 'CZK')} investice</div>
+                      <div className="text-sm text-gray-600">Ročně: {formatCurrency(annualSaving, 'CZK')}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-green-600">
+                        {formatCurrency(savingOver20Years, 'CZK')}
+                      </div>
+                      <div className="text-xs text-gray-500">za 20 let</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Doporučení podle kategorií */}
+      <Card className="mb-12">
+        <CardHeader>
+          <CardTitle>🎯 Nejlepší volby podle kategorie</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="global" className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="global">Globální</TabsTrigger>
+              <TabsTrigger value="usa">USA</TabsTrigger>
+              <TabsTrigger value="europe">Evropa</TabsTrigger>
+              <TabsTrigger value="emerging">Emerging</TabsTrigger>
+            </TabsList>
+            
+            {["global", "usa", "europe", "emerging"].map(tabValue => {
+              console.log(`🔍 Processing tab: ${tabValue}`);
+              console.log('🏷️ All available categories:', categories);
+              console.log('🏷️ First 10 cheapest ETFs categories:', cheapestETFs.slice(0, 10).map(etf => `${etf.ticker}: "${etf.category}"`));
+              
+              const categoryETFs = cheapestETFs
+                .filter(etf => {
+                  const etfName = etf.name?.toLowerCase() || "";
+                  const etfCategory = etf.category?.toLowerCase() || "";
+                  
+                  let match = false;
+                  if (tabValue === "global") {
+                    match = etfName.includes("world") || 
+                           etfName.includes("global") || 
+                           etfName.includes("msci world") ||
+                           etfName.includes("developed") ||
+                           etfName.includes("all cap") ||
+                           etfName.includes("acwi") ||
+                           etfName.includes("prime global") ||
+                           etfCategory.includes("ostatní");  // "Prime Global" je v kategorii Ostatní
+                  } else if (tabValue === "usa") {
+                    match = etfName.includes("s&p") || 
+                           etfName.includes("usa") || 
+                           etfName.includes("america") ||
+                           etfName.includes("us ") ||
+                           etfName.includes("nasdaq") ||
+                           etfName.includes("russell") ||
+                           etfName.includes("united states") ||
+                           etfName.includes("us equity") ||
+                           etfName.includes("betabuilders us") ||
+                           etfName.includes("core s&p") ||
+                           etfName.includes("msci usa");
+                  } else if (tabValue === "europe") {
+                    match = etfName.includes("europe") || 
+                           etfName.includes("euro") ||
+                           etfName.includes("stoxx") ||
+                           etfName.includes("european") ||
+                           etfName.includes("uk equity") ||
+                           etfName.includes("msci europe");
+                  } else if (tabValue === "emerging") {
+                    match = etfName.includes("emerging") || 
+                           etfName.includes("em ") ||
+                           etfName.includes("developing") ||
+                           etfName.includes("frontier") ||
+                           etfName.includes("msci emerging");
+                  }
+                  
+                  return match;
+                })
+                .slice(0, 3);
+              
+              console.log(`📊 Found ${categoryETFs.length} ETFs for tab ${tabValue}:`, categoryETFs.map(etf => `${etf.ticker} (${etf.category})`));
+
+              return (
+                <TabsContent key={tabValue} value={tabValue} className="mt-6">
+                  <div className="grid gap-4">
+                    {categoryETFs.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500">
+                        <p>Žádné ETF v této kategorii nebyly nalezeny v top 30 nejlevnějších.</p>
+                        <p className="text-sm mt-2">Zkuste kategorie s větším počtem ETF.</p>
+                      </div>
+                    ) : (
+                      categoryETFs.map((etf, index) => (
+                        <div key={etf.isin} className="flex items-center justify-between p-4 border rounded-lg">
+                          <div className="flex items-center gap-4">
+                            <Badge variant="outline">#{index + 1}</Badge>
+                            <div>
+                              <div className="font-semibold">
+                                <ETFTicker ticker={etf.ticker} isin={etf.isin} />
+                              </div>
+                              <div className="text-sm text-gray-600 line-clamp-1">
+                                {etf.name}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold text-green-600">{etf.ter_percent}</div>
+                            <div className="text-xs text-gray-500">{etf.fund_size_formatted}</div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </TabsContent>
+              );
+            })}
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      {/* Praktické tipy */}
+      <Card className="mb-12 bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200">
+        <CardHeader>
+          <CardTitle className="text-violet-900">💡 Praktické tipy pro minimalizaci nákladů</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-semibold text-green-700 mb-3">✅ Doporučujeme</h4>
+              <ul className="space-y-2 text-sm">
+                <li>• <strong>TER pod 0.25%</strong> pro broad market ETF</li>
+                <li>• <strong>Velikost fondu 500M€+</strong> pro lepší likviditu</li>
+                <li>• <strong>Pravidelné investování</strong> místo timing trhu</li>
+                <li>• <strong>Akumulační ETF</strong> jsou daňově výhodnější</li>
+                <li>• <strong>Core-Satellite přístup</strong> s 80% v levných core ETF</li>
+                <li>• <strong>Dlouhodobé držení</strong> (10+ let)</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-red-700 mb-3">❌ Vyhýbejte se</h4>
+              <ul className="space-y-2 text-sm">
+                <li>• <strong>Aktivně řízené ETF</strong> s TER 0.75%+</li>
+                <li>• <strong>Malé fondy</strong> pod 100M€</li>
+                <li>• <strong>Časté rebalancování</strong> portfolia</li>
+                <li>• <strong>Tematické ETF</strong> s vysokými poplatky</li>
+                <li>• <strong>Hedged ETF</strong> bez skutečné potřeby</li>
+                <li>• <strong>Spekulativní trading</strong> místo investování</li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* CTA sekce */}
+      <Card className="bg-gradient-to-r from-blue-600 to-violet-600 text-white">
+        <CardContent className="p-8 text-center">
+          <h2 className="text-3xl font-bold mb-4">Začněte investovat s nejnižšími náklady</h2>
+          <p className="text-blue-100 mb-6 text-lg">
+            Použijte naše nástroje k nalezení nejlevnějších ETF a optimalizaci vašeho portfolia
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
+              <Link to="/srovnani-etf">
+                <BarChart3 className="w-5 h-5 mr-2" />
+                Porovnat všechny ETF
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+              <Link to="/etf-poplatky-srovnani">
+                <Calculator className="w-5 h-5 mr-2" />
+                Kalkulačka poplatků
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </BlogArticleLayout>
   );
 };
 
