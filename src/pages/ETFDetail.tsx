@@ -12,6 +12,8 @@ import { formatPercentage } from '@/utils/csvParser';
 import { supabase } from '@/integrations/supabase/client';
 import { getETFTicker } from '@/utils/etfTickerMapping';
 import { ArrowLeft } from 'lucide-react';
+import ETFRating from '@/components/ETFRating';
+import Breadcrumb from '@/components/Breadcrumb';
 
 const ETFDetail: React.FC = () => {
   const { isin } = useParams<{ isin: string }>();
@@ -23,8 +25,12 @@ const ETFDetail: React.FC = () => {
 
   useEffect(() => {
     const fetchETFDetail = async () => {
-      if (!isin) return;
+      if (!isin) {
+        console.log('❌ No ISIN provided');
+        return;
+      }
       
+      console.log('🔍 Fetching ETF detail for ISIN:', isin);
       setIsLoading(true);
       try {
         const { data, error } = await supabase
@@ -34,21 +40,113 @@ const ETFDetail: React.FC = () => {
           .single();
 
         if (error) {
-          console.error('Error fetching ETF detail:', error);
+          console.error('❌ Error fetching ETF detail:', error);
           return;
         }
 
+        if (data) {
+          console.log('✅ ETF data loaded:', data.name, 'Rating:', data.rating);
+        }
         setEtf(data);
         
         // Update page title and description for SEO
         if (data) {
-          document.title = `${data.name} (${data.isin}) - ETF průvodce.cz`;
-          document.querySelector('meta[name="description"]')?.setAttribute('content', 
-            `Detailní informace o ETF fondu ${data.name}. TER ${formatPercentage(data.ter_numeric)}, výkonnost, složení a vše o ${data.fund_provider} fondu.`
+          const title = `${data.name} (${data.isin}) - Analýza ETF fondu | ETF průvodce.cz`;
+          const description = `Kompletní analýza ETF ${data.name} od ${data.fund_provider}. TER ${formatPercentage(data.ter_numeric)}, ${data.return_1y ? 'roční výnos ' + formatPercentage(data.return_1y) : 'výkonnostní data'}, složení portfolia a detailní informace o fondu.`;
+          
+          document.title = title;
+          document.querySelector('meta[name="description"]')?.setAttribute('content', description);
+          
+          // Update Open Graph tags for social sharing
+          document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
+          document.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
+          document.querySelector('meta[property="og:url"]')?.setAttribute('content', `https://etfpruvodce.cz/etf/${data.isin}`);
+          
+          // Update Twitter Card tags
+          document.querySelector('meta[property="twitter:title"]')?.setAttribute('content', title);
+          document.querySelector('meta[property="twitter:description"]')?.setAttribute('content', description);
+          document.querySelector('meta[property="twitter:url"]')?.setAttribute('content', `https://etfpruvodce.cz/etf/${data.isin}`);
+          
+          // Update canonical URL
+          let canonicalLink = document.querySelector('link[rel="canonical"]');
+          if (canonicalLink) {
+            canonicalLink.setAttribute('href', `https://etfpruvodce.cz/etf/${data.isin}`);
+          } else {
+            canonicalLink = document.createElement('link');
+            canonicalLink.setAttribute('rel', 'canonical');
+            canonicalLink.setAttribute('href', `https://etfpruvodce.cz/etf/${data.isin}`);
+            document.head.appendChild(canonicalLink);
+          }
+          
+          // Add structured data for ETF investment product
+          const structuredData = {
+            "@context": "https://schema.org",
+            "@type": ["FinancialProduct", "InvestmentFund"],
+            "name": data.name,
+            "identifier": {
+              "@type": "PropertyValue",
+              "propertyID": "ISIN",
+              "value": data.isin
+            },
+            "description": data.description_cs || data.description_en || `ETF fond ${data.name} od poskytovatele ${data.fund_provider}`,
+            "provider": {
+              "@type": "Organization",
+              "name": data.fund_provider
+            },
+            "url": `https://etfpruvodce.cz/etf/${data.isin}`,
+            "category": data.category,
+            "currency": data.fund_currency,
+            "feesAndCommissionsSpecification": {
+              "@type": "UnitPriceSpecification",
+              "price": data.ter_numeric,
+              "priceCurrency": "percent",
+              "unitText": "TER (Total Expense Ratio)"
+            },
+            "yields": data.current_dividend_yield_numeric ? {
+              "@type": "MonetaryAmount",
+              "value": data.current_dividend_yield_numeric,
+              "currency": "percent"
+            } : undefined,
+            "fundSize": data.fund_size,
+            "inceptionDate": data.inception_date,
+            "trackingError": data.tracking_error,
+            "distributionPolicy": data.distribution_policy,
+            "domicile": data.fund_domicile,
+            "aggregateRating": data.rating ? {
+              "@type": "AggregateRating",
+              "ratingValue": data.rating,
+              "bestRating": 5,
+              "worstRating": 1
+            } : undefined,
+            "offers": {
+              "@type": "Offer",
+              "availability": "https://schema.org/InStock",
+              "priceCurrency": data.fund_currency
+            }
+          };
+
+          // Remove undefined fields
+          Object.keys(structuredData).forEach(key => 
+            structuredData[key as keyof typeof structuredData] === undefined && 
+            delete structuredData[key as keyof typeof structuredData]
           );
+          
+          // Remove existing ETF structured data if present
+          const existingStructuredData = document.querySelector('script[type="application/ld+json"][data-etf-structured-data]');
+          if (existingStructuredData) {
+            existingStructuredData.remove();
+          }
+          
+          // Add new structured data
+          const structuredDataScript = document.createElement('script');
+          structuredDataScript.type = 'application/ld+json';
+          structuredDataScript.setAttribute('data-etf-structured-data', 'true');
+          structuredDataScript.textContent = JSON.stringify(structuredData);
+          document.head.appendChild(structuredDataScript);
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error('💥 Error in fetchETFDetail:', error);
+        setEtf(null);
       } finally {
         setIsLoading(false);
       }
@@ -102,6 +200,9 @@ const ETFDetail: React.FC = () => {
     return sectors;
   };
 
+
+  console.log('🔄 Rendering ETFDetail - isLoading:', isLoading, 'etf:', etf?.name, 'rating:', etf?.rating);
+
   if (isLoading) {
     return (
       <Layout>
@@ -136,10 +237,24 @@ const ETFDetail: React.FC = () => {
   const topHoldings = getTopHoldings();
   const topCountries = getTopCountries();
   const topSectors = getTopSectors();
+  
+  const breadcrumbItems = [
+    {
+      label: 'Srovnání ETF',
+      href: '/srovnani-etf'
+    },
+    {
+      label: etf.name,
+      current: true
+    }
+  ];
 
   return (
     <Layout>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Breadcrumb Navigation */}
+        <Breadcrumb items={breadcrumbItems} />
+        
         {/* Header */}
         <div className="mb-8">
           {fromPortfolio ? (
@@ -180,10 +295,18 @@ const ETFDetail: React.FC = () => {
                 }
                 {etf.isin} • {etf.fund_provider}
               </p>
+              <div className="mb-4">
+                <ETFRating etf={etf} showDescription showBreakdown size="lg" />
+              </div>
               <div className="flex flex-wrap gap-2">
                 {etf.degiro_free && (
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                     DEGIRO Free
+                  </Badge>
+                )}
+                {etf.category === 'Páková ETF' && (
+                  <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 font-semibold">
+                    PÁKOVÁ ETF
                   </Badge>
                 )}
                 <Badge variant="outline">{etf.category}</Badge>
@@ -306,12 +429,6 @@ const ETFDetail: React.FC = () => {
                   <span className="text-gray-600">Způsob výplaty:</span>
                   <span className="font-medium">{etf.distribution_policy || '-'}</span>
                 </div>
-                {etf.dividend_extraction_method && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Metoda získání dividend:</span>
-                    <span className="font-medium text-sm">{etf.dividend_extraction_method}</span>
-                  </div>
-                )}
               </div>
             </CardContent>
           </Card>

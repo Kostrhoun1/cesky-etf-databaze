@@ -59,6 +59,8 @@ export const useETFFetch = () => {
               exchange_3_ticker,
               exchange_4_ticker,
               exchange_5_ticker,
+              rating,
+              rating_score,
               updated_at
             `)
             .order('fund_size_numeric', { ascending: false })
@@ -119,7 +121,9 @@ export const useETFFetch = () => {
             exchange_2_ticker,
             exchange_3_ticker,
             exchange_4_ticker,
-            exchange_5_ticker
+            exchange_5_ticker,
+            rating,
+            rating_score
           `)
           .order('fund_size_numeric', { ascending: false })
           .limit(limit);

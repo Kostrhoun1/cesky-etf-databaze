@@ -5,6 +5,7 @@ export interface InvestorProfile {
   riskTolerance: 'conservative' | 'moderate' | 'aggressive';
   timeHorizon: 'short' | 'medium' | 'long'; // <5, 5-15, 15+ years
   monthlyAmount: number;
+  initialAmount?: number; // Jednorazová vstupní investice
   experience: 'beginner' | 'intermediate' | 'advanced';
   goals: ('retirement' | 'house' | 'general_wealth' | 'education')[];
 }
@@ -40,331 +41,293 @@ export interface PortfolioRecommendation {
     cons: string[];
     suitableFor: string[];
   };
+  strategyId?: string;
+  detailUrl?: string;
 }
 
 export class PortfolioRecommendationEngine {
   
-  // Predefined portfolio models (inspired by Portu/Vanguard/etc)
+  // 5 core portfolio strategies (matching PortfolioStrategies component)
   private portfolioModels = {
-    conservative: {
-      name: "Konzervativní portfolio",
-      description: "Stabilní růst s nižším rizikem, vhodné pro kratší horizont nebo konzervativní investory",
-      allocation: { stocks: 30, bonds: 60, commodities: 5, reits: 5 },
+    permanent: {
+      name: "Permanentní Portfolio",
+      description: "Klasická 25/25/25/25 strategie navržená pro dlouhodobou stabilitu a ochranu kapitálu",
+      strategyId: "permanent",
       riskLevel: 3,
       expectedReturn: "4-6% ročně",
-      volatility: "Nízká (5-10%)",
-      rebalanceFrequency: "Čtvrtletně"
+      allocations: [
+        { asset: 'Akcie (růst)', percentage: 25, isin: 'IE00BK5BQT80', etfName: 'Vanguard FTSE All-World' },
+        { asset: 'Dlouhodobé dluhopisy (deflace)', percentage: 25, isin: 'IE00B3DKXQ41', etfName: 'iShares Core Global Aggregate Bond' },
+        { asset: 'Komodity (inflace)', percentage: 25, isin: 'IE00BDFL4P12', etfName: 'iShares Diversified Commodity Swap' },
+        { asset: 'Zlato (krize)', percentage: 25, isin: 'IE00B4ND3602', etfName: 'iShares Physical Gold ETC' },
+      ],
+      detailUrl: '/portfolio-strategie/permanentni-portfolio'
     },
     
-    moderate: {
-      name: "Vyvážené portfolio", 
-      description: "Optimální poměr rizika a výnosu pro dlouhodobé investování",
-      allocation: { stocks: 60, bonds: 30, commodities: 5, reits: 5 },
-      riskLevel: 5,
-      expectedReturn: "6-8% ročně",
-      volatility: "Střední (10-15%)",
-      rebalanceFrequency: "Pololetně"
-    },
-    
-    growth: {
-      name: "Růstové portfolio",
-      description: "Zaměřeno na maximální dlouhodobý růst, vyšší volatilita",
-      allocation: { stocks: 80, bonds: 10, commodities: 5, reits: 5 },
-      riskLevel: 7,
-      expectedReturn: "8-10% ročně", 
-      volatility: "Střední až vysoká (15-20%)",
-      rebalanceFrequency: "Ročně"
-    },
-    
-    aggressive: {
-      name: "Agresivní portfolio",
-      description: "Maximální růstový potenciál pro dlouhodobé investory s vysokou tolerancí rizika",
-      allocation: { stocks: 90, bonds: 0, commodities: 5, reits: 5 },
-      riskLevel: 9,
-      expectedReturn: "10-12% ročně",
-      volatility: "Vysoká (20%+)",
-      rebalanceFrequency: "Ročně"
-    },
-
-    lifecycle_20s: {
-      name: "Portfolio pro 20-30 let",
-      description: "Agresivní růst pro mladé investory s dlouhým horizontem",
-      allocation: { stocks: 90, bonds: 5, commodities: 3, reits: 2 },
-      riskLevel: 8,
-      expectedReturn: "9-11% ročně",
-      volatility: "Vysoká (18-25%)",
-      rebalanceFrequency: "Ročně"
-    },
-
-    lifecycle_40s: {
-      name: "Portfolio pro 40-50 let", 
-      description: "Vyvážený přístup s postupným snižováním rizika",
-      allocation: { stocks: 70, bonds: 20, commodities: 5, reits: 5 },
+    nobel: {
+      name: "Nobel Portfolio",
+      description: "Vědecky podložená strategie založená na výzkumech laureátů Nobelovy ceny za ekonomii",
+      strategyId: "nobel",
       riskLevel: 6,
-      expectedReturn: "7-9% ročně",
-      volatility: "Střední (12-18%)",
-      rebalanceFrequency: "Pololetně"
+      expectedReturn: "6-9% ročně",
+      allocations: [
+        { asset: 'Světové akcie', percentage: 60, isin: 'IE00BK5BQT80', etfName: 'Vanguard FTSE All-World' },
+        { asset: 'Dluhopisy', percentage: 20, isin: 'IE00B3DKXQ41', etfName: 'iShares Core Global Aggregate Bond' },
+        { asset: 'Small Cap akcie', percentage: 10, isin: 'IE00BF4RFH31', etfName: 'iShares MSCI World Small Cap' },
+        { asset: 'Emerging Markets', percentage: 10, isin: 'IE00B4L5YC18', etfName: 'iShares Core MSCI Emerging Markets' },
+      ],
+      detailUrl: '/portfolio-strategie/nobel-portfolio'
     },
-
-    lifecycle_50s: {
-      name: "Portfolio pro 50+ let",
-      description: "Konzervativní přístup s ochranou kapitálu před důchodem",
-      allocation: { stocks: 50, bonds: 40, commodities: 5, reits: 5 },
+    
+    threefund: {
+      name: "Bogleheads Three-Fund Portfolio",
+      description: "Jednoduchá a efektivní 3-fondová strategie pro dlouhodobé pasivní investování",
+      strategyId: "threefund",
+      riskLevel: 5,
+      expectedReturn: "5-8% ročně",
+      allocations: [
+        { asset: 'Světové akcie', percentage: 70, isin: 'IE00BK5BQT80', etfName: 'Vanguard FTSE All-World' },
+        { asset: 'Dluhopisy', percentage: 20, isin: 'IE00B3DKXQ41', etfName: 'iShares Core Global Aggregate Bond' },
+        { asset: 'Emerging Markets', percentage: 10, isin: 'IE00B4L5YC18', etfName: 'iShares Core MSCI Emerging Markets' },
+      ],
+      detailUrl: '/portfolio-strategie/bogleheads-three-fund'
+    },
+    
+    stock: {
+      name: "Akciové Portfolio",
+      description: "Maximálně agresivní strategie pro dlouhodobé investory s vysokou tolerancí rizika",
+      strategyId: "stock",
+      riskLevel: 9,
+      expectedReturn: "7-10% ročně",
+      allocations: [
+        { asset: 'Světové akcie', percentage: 80, isin: 'IE00BK5BQT80', etfName: 'Vanguard FTSE All-World' },
+        { asset: 'Emerging Markets', percentage: 20, isin: 'IE00B4L5YC18', etfName: 'iShares Core MSCI Emerging Markets' },
+      ],
+      detailUrl: '/portfolio-strategie/akciove-portfolio'
+    },
+    
+    allweather: {
+      name: "Ray Dalio All-Weather Portfolio",
+      description: "Stabilní strategie navržená pro všechna ekonomická období a tržní podmínky",
+      strategyId: "allweather",
       riskLevel: 4,
-      expectedReturn: "5-7% ročně",
-      volatility: "Nízká až střední (8-15%)",
-      rebalanceFrequency: "Čtvrtletně"
+      expectedReturn: "5-8% ročně",
+      allocations: [
+        { asset: 'Dlouhodobé dluhopisy', percentage: 40, isin: 'IE00B4WXJJ64', etfName: 'iShares Core Global Government Bond' },
+        { asset: 'Akcie', percentage: 30, isin: 'IE00BK5BQT80', etfName: 'Vanguard FTSE All-World' },
+        { asset: 'Střednědobé dluhopisy', percentage: 15, isin: 'IE00B3DKXQ41', etfName: 'iShares Core Global Aggregate Bond' },
+        { asset: 'Komodity', percentage: 7.5, isin: 'IE00BDFL4P12', etfName: 'iShares Diversified Commodity Swap' },
+        { asset: 'TIPS (inflační dluhopisy)', percentage: 7.5, isin: 'IE00B6YX5D40', etfName: 'iShares Global Inflation Linked Government Bond' },
+      ],
+      detailUrl: '/portfolio-strategie/ray-dalio-all-weather'
     }
   };
 
-  // Core ETF building blocks (best-in-class for each category)
-  private coreETFs = {
-    stocks: {
-      world: { isin: 'IE00B4L5Y983', name: 'Vanguard FTSE All-World', ter: 0.22, reason: 'Globální diverzifikace' },
-      sp500: { isin: 'IE00B5BMR087', name: 'iShares Core S&P 500', ter: 0.07, reason: 'Americký trh, nízké poplatky' },
-      europe: { isin: 'IE00B4K48X80', name: 'iShares Core MSCI Europe', ter: 0.12, reason: 'Evropské akcie' },
-      emerging: { isin: 'IE00BKM4GZ66', name: 'iShares Core MSCI EM', ter: 0.18, reason: 'Rozvíjející se trhy' }
-    },
-    bonds: {
-      government: { isin: 'IE00B4WXJJ64', name: 'iShares Core Global Aggregate Bond', ter: 0.10, reason: 'Světové vládní dluhopisy' },
-      corporate: { isin: 'IE00BF1FWR40', name: 'iShares Core Global Corporate Bond', ter: 0.10, reason: 'Korporátní dluhopisy' },
-      eu_government: { isin: 'IE00B3VTML14', name: 'iShares Core EURO Government Bond', ter: 0.09, reason: 'Evropské státní dluhopisy' }
-    },
-    commodities: {
-      gold: { isin: 'IE00B4ND3602', name: 'iShares Physical Gold', ter: 0.12, reason: 'Ochrana proti inflaci' },
-      broad: { isin: 'IE00B6R52036', name: 'iShares GSCI Commodity', ter: 0.55, reason: 'Široké komodity' }
-    },
-    reits: {
-      global: { isin: 'IE00B1FZS467', name: 'iShares Global Property Securities', ter: 0.24, reason: 'Globální nemovitosti' },
-      europe: { isin: 'IE00B1TXHL60', name: 'iShares European Property Yield', ter: 0.40, reason: 'Evropské REITs' }
-    }
-  };
 
   async getPortfolioRecommendation(profile: InvestorProfile): Promise<PortfolioRecommendation> {
-    // 1. Determine portfolio type based on profile
-    const portfolioType = this.determinePortfolioType(profile);
-    const baseModel = this.portfolioModels[portfolioType];
+    // 1. Determine which of the 5 strategies to recommend
+    const strategyKey = this.determineStrategy(profile);
+    const strategy = this.portfolioModels[strategyKey];
     
-    // 2. Adjust allocation based on specific profile
-    const adjustedAllocation = this.adjustAllocationForProfile(baseModel.allocation, profile);
+    // 2. Convert strategy allocations to ETF recommendations
+    const etfRecommendations = strategy.allocations.map(allocation => ({
+      isin: allocation.isin,
+      name: allocation.etfName,
+      category: this.getCategoryFromAsset(allocation.asset),
+      allocation: allocation.percentage,
+      reason: allocation.asset
+    }));
     
-    // 3. Select specific ETFs for each category
-    const selectedETFs = await this.selectETFsForAllocation(adjustedAllocation, profile);
-    
-    // 4. Generate explanation
-    const explanation = this.generateExplanation(portfolioType, profile);
+    // 3. Generate explanation for the recommended strategy
+    const explanation = this.generateExplanation(strategyKey, profile);
+
+    // 4. Calculate allocation summary for backwards compatibility
+    const allocationSummary = this.calculateAllocationSummary(strategy.allocations);
 
     return {
-      name: baseModel.name,
-      description: baseModel.description,
-      allocation: adjustedAllocation,
-      etfs: selectedETFs,
-      expectedReturn: baseModel.expectedReturn,
-      volatility: baseModel.volatility,
-      riskLevel: baseModel.riskLevel,
-      rebalanceFrequency: baseModel.rebalanceFrequency,
-      explanation
+      name: strategy.name,
+      description: strategy.description,
+      allocation: allocationSummary,
+      etfs: etfRecommendations,
+      expectedReturn: strategy.expectedReturn,
+      volatility: "Střední", // Default for compatibility
+      riskLevel: strategy.riskLevel,
+      rebalanceFrequency: "Podle strategie", // Default for compatibility
+      explanation,
+      strategyId: strategy.strategyId,
+      detailUrl: strategy.detailUrl
     };
   }
 
-  private determinePortfolioType(profile: InvestorProfile): keyof typeof this.portfolioModels {
-    // Age-based lifecycle approach (like target-date funds)
-    if (profile.age <= 30) {
-      return profile.riskTolerance === 'conservative' ? 'moderate' : 'lifecycle_20s';
+  private determineStrategy(profile: InvestorProfile): keyof typeof this.portfolioModels {
+    // Strategy recommendation logic based on user profile
+    
+    // Very aggressive young investors -> 100% Stock Portfolio
+    if (profile.age <= 35 && profile.riskTolerance === 'aggressive' && profile.timeHorizon === 'long') {
+      return 'stock';
     }
     
-    if (profile.age <= 40) {
-      return profile.riskTolerance === 'conservative' ? 'conservative' : 
-             profile.riskTolerance === 'aggressive' ? 'growth' : 'moderate';
+    // Conservative or older investors -> Permanent Portfolio or All-Weather
+    if (profile.riskTolerance === 'conservative' || profile.age >= 50) {
+      // Prefer All-Weather for slightly higher risk tolerance, Permanent for ultra-conservative
+      return profile.age >= 55 || profile.timeHorizon === 'short' ? 'permanent' : 'allweather';
     }
     
-    if (profile.age <= 50) {
-      return profile.riskTolerance === 'aggressive' ? 'moderate' : 'lifecycle_40s';
+    // Academic-minded or experienced investors -> Nobel Portfolio
+    if (profile.experience === 'advanced' || 
+        (profile.goals.includes('general_wealth') && profile.riskTolerance === 'moderate')) {
+      return 'nobel';
     }
     
-    // 50+ years
-    return profile.riskTolerance === 'aggressive' ? 'moderate' : 'lifecycle_50s';
+    // Simple preference or beginners -> Bogleheads Three-Fund
+    if (profile.experience === 'beginner' || 
+        (profile.riskTolerance === 'moderate' && profile.timeHorizon === 'medium')) {
+      return 'threefund';
+    }
+    
+    // Default fallback based on age and risk tolerance
+    if (profile.age <= 40 && profile.riskTolerance === 'aggressive') {
+      return 'stock';
+    } else if (profile.age >= 45) {
+      return 'allweather';
+    } else {
+      return 'threefund'; // Most balanced default choice
+    }
   }
 
-  private adjustAllocationForProfile(baseAllocation: PortfolioAllocation, profile: InvestorProfile): PortfolioAllocation {
-    let adjusted = { ...baseAllocation };
-    
-    // Adjust based on time horizon
-    if (profile.timeHorizon === 'long' && profile.age < 40) {
-      // Více akcií pro dlouhý horizont a mladý věk
-      adjusted.stocks = Math.min(95, adjusted.stocks + 10);
-      adjusted.bonds = Math.max(0, adjusted.bonds - 10);
+  private getCategoryFromAsset(asset: string): 'stocks' | 'bonds' | 'commodities' | 'reits' {
+    const assetLower = asset.toLowerCase();
+    if (assetLower.includes('akcie') || assetLower.includes('stock') || assetLower.includes('equity')) {
+      return 'stocks';
+    } else if (assetLower.includes('dluhopis') || assetLower.includes('bond')) {
+      return 'bonds';
+    } else if (assetLower.includes('komodit') || assetLower.includes('zlato') || assetLower.includes('gold') || assetLower.includes('commodity')) {
+      return 'commodities';
+    } else if (assetLower.includes('nemovit') || assetLower.includes('reit')) {
+      return 'reits';
     }
-    
-    if (profile.timeHorizon === 'short') {
-      // Více dluhopisů pro krátký horizont
-      adjusted.stocks = Math.max(20, adjusted.stocks - 15);
-      adjusted.bonds = Math.min(70, adjusted.bonds + 15);
-    }
-    
-    // Adjust based on goals
-    if (profile.goals.includes('house') && profile.timeHorizon === 'short') {
-      // Konzervativnější pro koupi domu
-      adjusted.stocks = Math.max(20, adjusted.stocks - 20);
-      adjusted.bonds = Math.min(75, adjusted.bonds + 20);
-    }
-    
-    if (profile.goals.includes('retirement') && profile.age > 45) {
-      // Více dluhopisů při blížícím se důchodu
-      adjusted.stocks = Math.max(30, adjusted.stocks - 10);
-      adjusted.bonds = Math.min(60, adjusted.bonds + 10);
-    }
-
-    // Ensure allocations sum to 100%
-    const total = adjusted.stocks + adjusted.bonds + adjusted.commodities + adjusted.reits;
-    if (total !== 100) {
-      const factor = 100 / total;
-      adjusted.stocks = Math.round(adjusted.stocks * factor);
-      adjusted.bonds = Math.round(adjusted.bonds * factor);
-      adjusted.commodities = Math.round(adjusted.commodities * factor);
-      adjusted.reits = 100 - adjusted.stocks - adjusted.bonds - adjusted.commodities;
-    }
-    
-    return adjusted;
+    return 'stocks'; // Default fallback
   }
 
-  private async selectETFsForAllocation(allocation: PortfolioAllocation, profile: InvestorProfile): Promise<ETFRecommendation[]> {
-    const recommendations: ETFRecommendation[] = [];
+  private calculateAllocationSummary(allocations: any[]): PortfolioAllocation {
+    const summary: PortfolioAllocation = { stocks: 0, bonds: 0, commodities: 0, reits: 0 };
     
-    // Stocks allocation
-    if (allocation.stocks > 0) {
-      if (allocation.stocks >= 70) {
-        // High stock allocation - split between world and regional
-        recommendations.push({
-          ...this.coreETFs.stocks.world,
-          category: 'stocks',
-          allocation: Math.round(allocation.stocks * 0.7),
-          reason: 'Základ portfolia - široká globální diverzifikace'
-        });
-        
-        recommendations.push({
-          ...this.coreETFs.stocks.sp500,
-          category: 'stocks', 
-          allocation: Math.round(allocation.stocks * 0.3),
-          reason: 'Americký trh - historicky nejlepší výkonnost'
-        });
-      } else {
-        // Lower stock allocation - just world ETF
-        recommendations.push({
-          ...this.coreETFs.stocks.world,
-          category: 'stocks',
-          allocation: allocation.stocks,
-          reason: 'Globální akciová expozice s nižším rizikem'
-        });
-      }
+    for (const allocation of allocations) {
+      const category = this.getCategoryFromAsset(allocation.asset);
+      summary[category] += allocation.percentage;
     }
     
-    // Bonds allocation
-    if (allocation.bonds > 0) {
-      if (profile.age > 45 || profile.riskTolerance === 'conservative') {
-        recommendations.push({
-          ...this.coreETFs.bonds.government,
-          category: 'bonds',
-          allocation: allocation.bonds,
-          reason: 'Stabilní vládní dluhopisy pro ochranu kapitálu'
-        });
-      } else {
-        recommendations.push({
-          ...this.coreETFs.bonds.corporate,
-          category: 'bonds',
-          allocation: allocation.bonds,
-          reason: 'Korporátní dluhopisy s vyšším výnosem'
-        });
-      }
-    }
-    
-    // Commodities allocation
-    if (allocation.commodities > 0) {
-      recommendations.push({
-        ...this.coreETFs.commodities.gold,
-        category: 'commodities',
-        allocation: allocation.commodities,
-        reason: 'Zlatý standard ochrany proti inflaci'
-      });
-    }
-    
-    // REITs allocation
-    if (allocation.reits > 0) {
-      recommendations.push({
-        ...this.coreETFs.reits.global,
-        category: 'reits',
-        allocation: allocation.reits,
-        reason: 'Nemovitostní diverzifikace s pravidelným příjmem'
-      });
-    }
-    
-    return recommendations;
+    return summary;
   }
 
-  private generateExplanation(portfolioType: string, profile: InvestorProfile) {
+
+  private generateExplanation(strategyType: string, profile: InvestorProfile) {
     const explanations = {
-      lifecycle_20s: {
-        strategy: "Maximální růstový potenciál pro mladé investory s dlouhým investičním horizontem 30+ let",
+      permanent: {
+        strategy: "Rovnoměrné 25% rozdělení mezi všechny ekonomické scénáře zajišťuje stabilní výkonnost bez ohledu na tržní podmínky",
         pros: [
-          "Nejvyšší očekávaný dlouhodobý výnos",
-          "Čas na překonání krátkodobých výkyvů",
-          "Compound interest efekt při dlouhém horizontu"
+          "Maximální jednoduchost implementace",
+          "Ochrana proti všem ekonomickým scénářům",
+          "Velmi nízká volatilita a stabilní výkonnost",
+          "Historicky ověřená strategie (50+ let)"
         ],
         cons: [
-          "Vysoká volatilita v krátkodobém horizontu", 
-          "Může klesat o 20-30% v krizích",
-          "Psychicky náročné při poklesech"
+          "Nižší výnosy během bull trhů",
+          "Vysoké náklady na komodity a zlato",
+          "Může významně zaostávat za akciovými portfolii"
         ],
         suitableFor: [
-          "Investoři ve věku 20-35 let",
-          "Dlouhodobý horizont 20+ let", 
-          "Vysoká tolerance rizika",
-          "Pravidelný příjem a stabilní situace"
+          "Velmi konzervativní investoři",
+          "Investoři blížící se nebo v důchodu",
+          "Lidé hledající \"fire-and-forget\" řešení"
         ]
       },
       
-      moderate: {
-        strategy: "Vyvážený přístup kombinující růst s ochranou kapitálu",
+      nobel: {
+        strategy: "Vědecky podložený přístup využívající faktory hodnoty, velikosti a mezinárodní diverzifikaci podle akademického výzkumu",
         pros: [
+          "Založeno na Nobelových výzkumech",
+          "Využívá faktory hodnoty a velikosti",
           "Optimální poměr rizika a výnosu",
-          "Nižší volatilita než čistě akciové portfolio",
-          "Vhodné pro většinu investorů"
+          "Mezinárodní diverzifikace"
         ],
         cons: [
-          "Nižší výnos než agresivní portfolia",
-          "Stále podléhá tržním výkyvům",
-          "Dluhopisová složka může trpět při inflaci"
+          "Složitější než základní strategie",
+          "Vyšší náklady kvůli 4 fondům",
+          "Small Cap složka volatilnější"
         ],
         suitableFor: [
-          "Investoři ve věku 30-50 let",
-          "Střední tolerance rizika",
-          "Horizont 10-20 let",
-          "Hledající stabilní růst"
+          "Vzdělané investory",
+          "Investory s delším horizontem (10+ let)",
+          "Ty, kteří chtějí využít akademické poznatky"
         ]
       },
       
-      lifecycle_50s: {
-        strategy: "Konzervativní přístup s ochranou kapitálu před důchodem",
+      threefund: {
+        strategy: "Jednoduchá a efektivní diverzifikace podle filosofie Johna Boglea - zakladatele Vanguard",
         pros: [
-          "Nižší volatilita a stabilnější výnosy",
-          "Ochrana před velkými poklesy",
-          "Pravidelný příjem z dluhopisů"
+          "Maximální jednoduchost s jen 3 fondy",
+          "Nízké náklady a snadná správa",
+          "Ověřená dlouhodobá performance",
+          "Ideální pro začátečníky"
         ],
         cons: [
-          "Nižší dlouhodobý růstový potenciál",
-          "Riziko nedostačujícího růstu proti inflaci",
-          "Citlivost dluhopisů na úrokové sazby"
+          "Méně sofistikovaná než pokročilé strategie",
+          "Neobsahuje komodity nebo REITs",
+          "Závislost pouze na akciích a dluhopisech"
         ],
         suitableFor: [
-          "Investoři 50+ let",
-          "Blížící se důchod (do 15 let)",
-          "Konzervativní přístup k riziku",
-          "Potřeba ochrany nashromážděného kapitálu"
+          "Začínající investoři",
+          "Příznivci jednoduchosti",
+          "Dlouhodobí pasivní investoři"
+        ]
+      },
+      
+      stock: {
+        strategy: "100% akciová alokace pro maximální dlouhodobý růst s důrazem na globální diverzifikaci",
+        pros: [
+          "Nejvyšší dlouhodobý růstový potenciál",
+          "Historicky nejlepší výnosy",
+          "Jednoduchost s jen 2 fondy",
+          "Ideální pro mladé investory"
+        ],
+        cons: [
+          "Nejvyšší volatilita a riziko",
+          "Může klesat o 30-50% v krizích",
+          "Psychicky náročné při poklesech",
+          "Žádná ochrana kapitálu"
+        ],
+        suitableFor: [
+          "Mladí agresivní investoři",
+          "Horizont 20+ let",
+          "Vysoká tolerance rizika",
+          "Maximální růst bez ochrany"
+        ]
+      },
+      
+      allweather: {
+        strategy: "Risk-parity přístup navržený pro stabilní výkonnost ve všech ekonomických podmínkách podle Ray Dalia",
+        pros: [
+          "Stabilní výkonnost ve všech tržních podmínkách",
+          "Ochrana proti inflaci prostřednictvím TIPS",
+          "Nízká korelace mezi třídami aktiv",
+          "Vědecký risk-parity přístup"
+        ],
+        cons: [
+          "Nižší výnos v bull trzích",
+          "Složitější rebalancování",
+          "Vyšší náklady kvůli komoditám",
+          "Citlivost na úrokové sazby"
+        ],
+        suitableFor: [
+          "Konzervativní investoři",
+          "Investoři očekávající nejistotu",
+          "Diverzifikace od tradičních portfolií"
         ]
       }
     };
     
-    return explanations[portfolioType as keyof typeof explanations] || explanations.moderate;
+    return explanations[strategyType as keyof typeof explanations] || explanations.threefund;
   }
 
   // Get available portfolio options for comparison

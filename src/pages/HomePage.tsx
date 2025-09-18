@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { useETFSearchData } from '@/hooks/useETFSearchData';
 import HeroSection from '@/components/home/HeroSection';
@@ -11,9 +12,9 @@ import GlobalSEO from '@/components/SEO/GlobalSEO';
 import InternalLinking from '@/components/SEO/InternalLinking';
 import FAQSection from '@/components/SEO/FAQSection';
 import SocialSharing from '@/components/SocialSharing';
+import PortfolioStrategiesTeaser from '@/components/home/PortfolioStrategiesTeaser';
 
 const HomePage: React.FC = () => {
-  const [showQuickStart, setShowQuickStart] = useState(false);
   const { totalETFCount, lastUpdated } = useETFSearchData();
 
   const websiteSchema = {
@@ -50,7 +51,7 @@ const HomePage: React.FC = () => {
       />
       
       {/* HERO sekce - s integrovaným Portfolio CTA */}
-      <HeroSection totalCount={totalETFCount} onPortfolioWizardOpen={() => setShowQuickStart(true)} />
+      <HeroSection totalCount={totalETFCount} />
 
       {/* USP sekce - kompaktní */}
       <USPSection />
@@ -96,13 +97,39 @@ const HomePage: React.FC = () => {
         className="mt-16 bg-gray-50"
       />
 
+      {/* Portfolio Strategies Teaser */}
+      <PortfolioStrategiesTeaser />
+
+      {/* ETF Guide CTA */}
+      <div className="mt-16 bg-gradient-to-br from-violet-600 to-blue-600 rounded-2xl p-8 text-white relative overflow-hidden">
+        <div className="relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-4">📚 Stáhněte si náš komplexní průvodce investováním</h2>
+            <p className="text-xl text-blue-100 mb-6">
+              25+ stránek praktických rad o investování do ETF fondů • 5 ověřených portfolio strategií • Pro české investory
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link 
+                to="/navod-pro-zacatecniky"
+                className="bg-white text-violet-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors inline-flex items-center gap-2"
+              >
+                🔍 Zobrazit průvodce
+              </Link>
+              <span className="text-blue-200 text-sm">Zdarma • PDF ke stažení • Aktualizováno pro 2025</span>
+            </div>
+          </div>
+        </div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full opacity-20 -mr-32 -mt-32"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-violet-500 rounded-full opacity-20 -ml-24 -mb-24"></div>
+      </div>
+
       {/* Related Content Links */}
       <InternalLinking 
         relatedLinks={[
           { title: "Srovnání ETF fondů", href: "/srovnani-etf", description: "Porovnejte více než 3500 ETF fondů" },
-          { title: "Návod pro začátečníky", href: "/navod-pro-zacatecniky", description: "Jak začít investovat do ETF" },
-          { title: "Nejlepší brokeři 2025", href: "/srovnani-brokeru", description: "Kde koupit ETF fondy" },
-          { title: "Investiční nástroje", href: "/nastroje", description: "Bezplatné kalkulačky a nástroje" },
+          { title: "Portfolio Strategie", href: "/portfolio-strategie", description: "5 ověřených investičních strategií" },
+          { title: "Kde koupit ETF", href: "/kde-koupit-etf", description: "Nejlepší brokeři pro české investory" },
+          { title: "Investiční kalkulačky", href: "/kalkulacky", description: "Bezplatné kalkulačky a nástroje" },
           { title: "Nejlepší ETF 2025", href: "/tipy/nejlepsi-etf-2025", description: "Doporučené ETF fondy pro rok 2025" }
         ]}
         title="Další užitečné stránky"
@@ -118,6 +145,7 @@ const HomePage: React.FC = () => {
         shareText="Pomozte ostatním s investováním - sdílejte tento užitečný průvodce ETF fondy"
         className="mt-8"
       />
+
     </Layout>
   );
 };
