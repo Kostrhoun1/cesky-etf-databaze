@@ -222,7 +222,12 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
   };
 
   const handleAdvancedFilterChange = (key: keyof AdvancedFiltersState, value: AdvancedFilterValue) => {
-    setAdvancedFilters(prevFilters => ({...prevFilters, [key]: value}));
+    console.log(`🔄 Filter change: ${key} = ${value}`);
+    setAdvancedFilters(prevFilters => {
+      const newFilters = {...prevFilters, [key]: value};
+      console.log('🔄 New filters:', newFilters);
+      return newFilters;
+    });
     setCurrentPage(1);
   };
 

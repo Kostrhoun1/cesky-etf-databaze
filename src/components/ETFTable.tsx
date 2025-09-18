@@ -3,7 +3,6 @@ import React, { useState, useMemo, memo } from 'react';
 import { ETFListItem } from '@/types/etf';
 import ETFTableFilters from './ETFTableFilters';
 import ETFTablePagination from './ETFTablePagination';
-import { useETFTableLogic } from '@/hooks/useETFTableLogic';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -26,21 +25,78 @@ const ETFTable: React.FC<ETFTableProps> = ({
 }) => {
   const [loadingETF, setLoadingETF] = useState<string | null>(null);
 
-  const {
-    currentPage,
-    setCurrentPage,
-    itemsPerPage,
-    handleSearch,
-    sortBy,
-    sortOrder,
-    handleSort,
-    searchTerm,
-    minRating,
-    handleMinRatingChange,
-    filteredETFs,
-    totalPages,
-    paginatedETFs,
-  } = useETFTableLogic(etfs);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState<string>('ter_numeric');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [searchTerm, setSearchTerm] = useState('');
+  const itemsPerPage = 50;
+
+  // Sort and paginate the already filtered ETFs
+  const sortedETFs = useMemo(() => {
+    return etfs
+      .filter(etf => {
+        const searchLower = searchTerm.toLowerCase();
+        return etf.name.toLowerCase().includes(searchLower) ||
+               etf.isin.toLowerCase().includes(searchLower) ||
+               etf.fund_provider.toLowerCase().includes(searchLower);
+      })
+      .sort((a, b) => {
+        let aValue: any = a[sortBy as keyof ETFListItem];
+        let bValue: any = b[sortBy as keyof ETFListItem];
+        
+        if (sortBy === 'ter_numeric') {
+          const aTer = aValue || 0;
+          const bTer = bValue || 0;
+          
+          if (aTer === 0 && bTer !== 0) {
+            return sortOrder === 'asc' ? 1 : -1;
+          }
+          if (bTer === 0 && aTer !== 0) {
+            return sortOrder === 'asc' ? -1 : 1;
+          }
+          if (aTer === 0 && bTer === 0) {
+            return 0;
+          }
+          
+          if (sortOrder === 'asc') {
+            return aTer - bTer;
+          } else {
+            return bTer - aTer;
+          }
+        }
+        
+        if (typeof aValue === 'string') {
+          aValue = aValue.toLowerCase();
+          bValue = bValue.toLowerCase();
+        }
+        
+        if (sortOrder === 'asc') {
+          return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+        } else {
+          return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+        }
+      });
+  }, [etfs, searchTerm, sortBy, sortOrder]);
+
+  const totalPages = Math.ceil(sortedETFs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedETFs = sortedETFs.slice(startIndex, endIndex);
+
+  const handleSort = (field: string) => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(field);
+      setSortOrder('asc');
+    }
+    setCurrentPage(1);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
 
   const handleSelectETF = async (etf: ETFListItem) => {
     if (!onSelectETF) return;
