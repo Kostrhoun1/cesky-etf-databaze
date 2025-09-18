@@ -16,6 +16,7 @@ interface FilteredETFListProps {
     fundProviderKeywords?: string[]; // Hledání podle správce
     hasDividendYield?: boolean; // Filtr pro dividendové ETF (current_dividend_yield_numeric > 0)
     minDividendYield?: number; // Minimální dividendový výnos
+    minFundSize?: number; // Minimální velikost fondu v milionech EUR
   };
   showDividendYield?: boolean; // Nový prop pro zobrazení dividendového sloupce
 }
@@ -102,6 +103,11 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter, showDividendY
           query = query.gte('current_dividend_yield_numeric', filter.minDividendYield);
         }
         
+        if (filter.minFundSize) {
+          console.log(`SQL filtering by minimum fund size: ${filter.minFundSize}M EUR`);
+          query = query.gte('fund_size_numeric', filter.minFundSize);
+        }
+        
         // Sortování v SQL
         if (filter.sortBy) {
           const ascending = filter.sortOrder === 'asc';
@@ -149,7 +155,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter, showDividendY
     };
 
     loadData();
-  }, [filter.sortBy, filter.sortOrder, filter.top, filter.category, filter.indexNameKeywords, filter.regionKeywords, filter.nameKeywords, filter.fundProviderKeywords, filter.hasDividendYield, filter.minDividendYield]);
+  }, [filter.sortBy, filter.sortOrder, filter.top, filter.category, filter.indexNameKeywords, filter.regionKeywords, filter.nameKeywords, filter.fundProviderKeywords, filter.hasDividendYield, filter.minDividendYield, filter.minFundSize]);
 
   if (isLoading) {
     return (

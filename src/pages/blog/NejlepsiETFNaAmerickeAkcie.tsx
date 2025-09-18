@@ -101,12 +101,13 @@ const RECOMMENDED_US_ETFS_TEMPLATE = [
   }
 ];
 
-// Filtr pro americké ETF
+// Filtr pro americké ETF - největší fondy podle velikosti
 const US_ETF_TABLE_FILTER = {
   top: 12,
-  sortBy: "return_5y" as const,
+  sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
   regionKeywords: ["US"],
+  minFundSize: 100, // Vyloučí ETF s velikostí fondu pod 100M EUR
 };
 
 const NejlepsiETFNaAmerickeAkcie: React.FC = () => {
@@ -395,7 +396,7 @@ const NejlepsiETFNaAmerickeAkcie: React.FC = () => {
       {/* Další ETF tabulka */}
       <h2 className="text-3xl font-bold mb-4 text-gray-900">Další americké ETF fondy</h2>
       <p className="mb-6 text-gray-700">
-        V tabulce najdete další kvalitní ETF na americký akciový trh seřazené podle výnosu za posledních 5 let.
+        V tabulce najdete největší ETF fondy zaměřené na americký akciový trh seřazené podle velikosti spravovaných aktiv.
       </p>
       <FilteredETFList filter={US_ETF_TABLE_FILTER} />
 
