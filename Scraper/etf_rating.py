@@ -17,51 +17,69 @@ def get_years_since_inception(inception_date_str: Optional[str]) -> float:
         return 0.0
     
     try:
-        inception = datetime.strptime(inception_date_str, '%Y-%m-%d')
-        now = datetime.now()
-        return (now - inception).days / 365.25
+        # Try multiple date formats that JustETF might use
+        date_formats = [
+            '%Y-%m-%d',              # 2010-05-19
+            '%d %B %Y',              # 19 May 2010
+            '%d %b %Y',              # 19 May 2010 (short month)
+            '%B %d, %Y',             # May 19, 2010
+            '%b %d, %Y',             # May 19, 2010 (short month)
+            '%d/%m/%Y',              # 19/05/2010
+            '%m/%d/%Y',              # 05/19/2010
+        ]
+        
+        for date_format in date_formats:
+            try:
+                inception = datetime.strptime(inception_date_str, date_format)
+                now = datetime.now()
+                return (now - inception).days / 365.25
+            except ValueError:
+                continue
+        
+        # If none of the formats work, return 0
+        return 0.0
     except:
         return 0.0
 
 def score_ter(ter: float) -> int:
-    """Score TER (0-25 points): Lower TER is better
+    """Score TER (0-30 points): Lower TER is better - most important factor
     Input: TER as percentage (0.07 for 0.07%, not 0.0007)
     """
     if ter <= 0.05:  # <= 0.05%
-        return 25
+        return 30      # Excellent
     elif ter <= 0.10:  # <= 0.10%
-        return 22
+        return 26      # Very Good
     elif ter <= 0.15:  # <= 0.15%
-        return 19
+        return 22      # Good
     elif ter <= 0.25:  # <= 0.25%
-        return 15
+        return 17      # Above Average
     elif ter <= 0.50:  # <= 0.50%
-        return 10
+        return 12      # Average
     elif ter <= 0.75:  # <= 0.75%
-        return 5
+        return 6       # Below Average
     else:  # > 0.75%
-        return 1
+        return 1       # Poor
 
 def score_fund_size(size_in_million: float) -> int:
-    """Score Fund Size (0-20 points): Larger funds are more stable
+    """Score Fund Size (0-25 points): Larger funds are more stable - expanded for 100-point scale
     Input: size in millions EUR (as stored in database)
     """
     size_in_billion = size_in_million / 1000.0  # Convert to billions
     
     if size_in_billion >= 50:
-        return 20    # >= 50B = Excellent
+        return 25    # >= 50B = Excellent
     elif size_in_billion >= 20:
-        return 18    # >= 20B = Very Good
+        return 22    # >= 20B = Very Good
     elif size_in_billion >= 10:
-        return 16    # >= 10B = Good
+        return 19    # >= 10B = Good
     elif size_in_billion >= 5:
-        return 14    # >= 5B = Above Average
+        return 16    # >= 5B = Above Average
     elif size_in_billion >= 1:
-        return 12    # >= 1B = Average
+        return 13    # >= 1B = Average
     elif size_in_billion >= 0.5:
-        return 8     # >= 500M = Below Average
+        return 10    # >= 500M = Below Average
     elif size_in_billion >= 0.1:
-        return 4     # >= 100M = Poor
+        return 5     # >= 100M = Poor
     else:
         return 1     # < 100M = Very Poor
 
@@ -74,7 +92,7 @@ def score_track_record(years: float) -> int:
     elif years >= 7:
         return 11    # >= 7 years = Good
     elif years >= 5:
-        return 9     # >= 5 years = Above Average
+        return 8     # >= 5 years = Above Average
     elif years >= 3:
         return 6     # >= 3 years = Average
     elif years >= 1:
@@ -83,20 +101,20 @@ def score_track_record(years: float) -> int:
         return 1     # < 1 year = Poor
 
 def score_provider(provider: str) -> int:
-    """Score Fund Provider (0-15 points): Top providers get bonus"""
+    """Score Fund Provider (0-10 points): Top providers get bonus"""
     if not provider:
-        return 8
+        return 5
     
     provider_lower = provider.lower()
     
     for top_provider in TOP_PROVIDERS:
         if top_provider.lower() in provider_lower:
-            return 15  # Top provider bonus
+            return 10  # Top provider bonus
     
-    return 8  # Standard provider
+    return 5  # Standard provider
 
 def score_performance(etf_data: Dict[str, Any]) -> int:
-    """Score Performance (0-15 points): Risk-adjusted returns and consistency"""
+    """Score Performance (0-20 points): Risk-adjusted returns and consistency - expanded for 100-point scale"""
     return_3y = etf_data.get('return_3y', 0) or 0
     return_per_risk_3y = etf_data.get('return_per_risk_3y', 0) or 0
     
@@ -106,45 +124,34 @@ def score_performance(etf_data: Dict[str, Any]) -> int:
     return_3y_pct = return_3y * 100 if return_3y and return_3y < 1 else return_3y
     
     if return_3y_pct > 15:
-        score += 4      # > 15% = Excellent
+        score += 9      # > 15% = Excellent
     elif return_3y_pct > 10:
-        score += 3      # > 10% = Very Good
+        score += 7      # > 10% = Very Good
     elif return_3y_pct > 7:
-        score += 2      # > 7% = Good
+        score += 5      # > 7% = Good
     elif return_3y_pct > 5:
-        score += 1      # > 5% = Average
+        score += 3      # > 5% = Average
+    elif return_3y_pct > 0:
+        score += 1      # > 0% = Positive
     
-    # Bonus for good risk-adjusted returns
+    # Bonus for good risk-adjusted returns - but only if data exists
+    # Since 99.9% of ETFs have no return_per_risk_3y data, we give smaller bonus
     if return_per_risk_3y > 0.5:
-        score += 3
+        score += 3      # Excellent risk-adjusted return
     elif return_per_risk_3y > 0.3:
-        score += 2
+        score += 2      # Good risk-adjusted return
     elif return_per_risk_3y > 0.1:
-        score += 1
+        score += 1      # Average risk-adjusted return
     
-    return min(score, 15)
+    return min(score, 20)
 
-def score_tracking(tracking_error: Optional[float]) -> int:
-    """Score Tracking Quality (0-10 points): Lower tracking error is better"""
-    if not tracking_error or tracking_error <= 0:
-        return 10  # Perfect or no data
-    elif tracking_error <= 0.001:  # <= 0.1%
-        return 10
-    elif tracking_error <= 0.002:  # <= 0.2%
-        return 8
-    elif tracking_error <= 0.005:  # <= 0.5%
-        return 6
-    elif tracking_error <= 0.010:  # <= 1.0%
-        return 4
-    elif tracking_error <= 0.020:  # <= 2.0%
-        return 2
-    else:  # > 2.0%
-        return 1
+# REMOVED: score_tracking - tracking error not available for most ETFs on JustETF
 
 def calculate_etf_rating(etf_data: Dict[str, Any]) -> Dict[str, Any]:
     """
     Calculate comprehensive ETF rating based on database data
     Returns dict with rating (1-5), score (0-100), and breakdown
+    Rating is only awarded to ETFs with minimum 3 years of track record
     """
     
     # Extract data with safe defaults
@@ -156,31 +163,41 @@ def calculate_etf_rating(etf_data: Dict[str, Any]) -> Dict[str, Any]:
     
     years = get_years_since_inception(inception_date)
     
+    # Minimum age requirement: 3 years for rating
+    if years < 3.0:
+        return {
+            'rating': None,
+            'rating_score': None,
+            'rating_breakdown': None,
+            'rating_note': f'Fond je příliš mladý ({years:.1f} let). Rating je dostupný po 3 letech existence.'
+        }
+    
     # Calculate individual scores
     ter_score = score_ter(ter)
     size_score = score_fund_size(fund_size_numeric)
     track_record_score = score_track_record(years)
     provider_score = score_provider(provider)
     performance_score = score_performance(etf_data)
-    tracking_score = score_tracking(tracking_error)
+    # tracking_score removed - data not available for most ETFs
     
-    # Total score (max 100)
+    # Total score (exactly 100) - TER:30 + Size:25 + Track Record:15 + Provider:10 + Performance:20 = 100
     total_score = (
         ter_score + size_score + track_record_score + 
-        provider_score + performance_score + tracking_score
+        provider_score + performance_score
     )
     
-    # Convert score to star rating
-    if total_score >= 85:
-        rating = 5      # 85+ = 5 stars (Excellent)
-    elif total_score >= 70:
-        rating = 4      # 70-84 = 4 stars (Very Good)
-    elif total_score >= 55:
-        rating = 3      # 55-69 = 3 stars (Good)
-    elif total_score >= 40:
-        rating = 2      # 40-54 = 2 stars (Average)
+    # Convert score to star rating - will be adjusted based on actual distribution
+    # Maximum score: 100 points (TER:30 + Size:25 + Track:15 + Provider:10 + Performance:20)
+    if total_score >= 75:
+        rating = 5      # 75+ = 5 stars (Excellent) - was 85+
+    elif total_score >= 65:
+        rating = 4      # 65-74 = 4 stars (Very Good) - was 70-84
+    elif total_score >= 50:
+        rating = 3      # 50-64 = 3 stars (Good) - was 55-69
+    elif total_score >= 35:
+        rating = 2      # 35-49 = 2 stars (Average) - was 40-54
     else:
-        rating = 1      # < 40 = 1 star (Poor)
+        rating = 1      # < 35 = 1 star (Poor) - was < 40
     
     return {
         'rating': rating,
@@ -190,9 +207,15 @@ def calculate_etf_rating(etf_data: Dict[str, Any]) -> Dict[str, Any]:
             'fund_size': size_score,
             'track_record': track_record_score,
             'provider': provider_score,
-            'performance': performance_score,
-            'tracking': tracking_score
-        }
+            'performance': performance_score
+            # tracking removed - not available for most ETFs
+        },
+        # Individual components for database storage
+        'rating_ter_score': ter_score,
+        'rating_size_score': size_score, 
+        'rating_track_record_score': track_record_score,
+        'rating_provider_score': provider_score,
+        'rating_performance_score': performance_score
     }
 
 def get_rating_category(rating: int) -> str:

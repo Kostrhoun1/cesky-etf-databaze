@@ -422,12 +422,23 @@ class ETFDataComplete:
             rating_result = calculate_etf_rating(base_dict)
             base_dict['rating'] = rating_result['rating']
             base_dict['rating_score'] = rating_result['rating_score']
+            # Store individual rating components for database
+            base_dict['rating_ter_score'] = rating_result.get('rating_ter_score')
+            base_dict['rating_size_score'] = rating_result.get('rating_size_score')
+            base_dict['rating_track_record_score'] = rating_result.get('rating_track_record_score')
+            base_dict['rating_provider_score'] = rating_result.get('rating_provider_score')
+            base_dict['rating_performance_score'] = rating_result.get('rating_performance_score')
             # Optionally store breakdown as JSON
             # base_dict['rating_breakdown'] = json.dumps(rating_result['rating_breakdown'])
         except Exception as e:
             safe_log("warning", f"Rating calculation failed for {self.isin}: {e}")
             base_dict['rating'] = None
             base_dict['rating_score'] = None
+            base_dict['rating_ter_score'] = None
+            base_dict['rating_size_score'] = None
+            base_dict['rating_track_record_score'] = None
+            base_dict['rating_provider_score'] = None
+            base_dict['rating_performance_score'] = None
         
         return base_dict
     
@@ -440,6 +451,7 @@ class ETFDataComplete:
 class CompleteProductionScraper:
     def __init__(self, batch_size: int = 50):
         self.batch_size = batch_size
+        self.current_etf_index = 0  # For reduced logging
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -684,6 +696,9 @@ class CompleteProductionScraper:
         etf_list = []
         
         for i, isin in enumerate(batch_isins, 1):
+            # Set current index for reduced logging
+            self.current_etf_index = i
+            
             # Zkontroluj, zda už existuje
             if resume and 'existing_data' in locals() and isin in existing_data:
                 existing_etf = existing_data[isin]
@@ -692,7 +707,11 @@ class CompleteProductionScraper:
                     safe_log("debug", f"SKIP: Přeskočen {isin} (už hotový)")
                     continue
             
-            safe_log("info", f"[{batch_id}:{i}/{len(batch_isins)}] {isin}")
+            # Show progress every 10 ETFs or for first/last ETF in batch
+            if i == 1 or i % 10 == 0 or i == len(batch_isins):
+                safe_log("info", f"[Batch {batch_id}] Processing {i}/{len(batch_isins)} ETFs... Current: {isin}")
+            elif i <= 3:  # Show first 3 for initial confirmation
+                safe_log("info", f"[{batch_id}:{i}/{len(batch_isins)}] {isin}")
             
             etf = self.scrape_etf_complete_with_retry(isin)
             etf_list.append(etf)
@@ -991,11 +1010,44 @@ class CompleteProductionScraper:
         
         full_text = soup.get_text()
         
-        # Current dividend yield patterns
+        # Enhanced current dividend yield patterns
         yield_patterns = [
             r'Current\s+dividend\s+yield[:\s]*(\d+[.,]\d+)%',
             r'Dividend\s+yield[:\s]*(\d+[.,]\d+)%',
-            r'Yield[:\s]*(\d+[.,]\d+)%'
+            r'Yield[:\s]*(\d+[.,]\d+)%',
+            # Table patterns
+            r'<td[^>]*>\s*Current\s+dividend\s+yield\s*</td>\s*<td[^>]*>\s*(\d+[.,]\d+)%\s*</td>',
+            r'>Current dividend yield</td>\s*<td[^>]*>(\d+[.,]\d+)%',
+            r'vallabel[^>]*>Current dividend yield[^<]*</td>\s*<td[^>]*>(\d+[.,]\d+)%',
+            r'<td[^>]*>\s*Dividend\s+yield\s*</td>\s*<td[^>]*>\s*(\d+[.,]\d+)%\s*</td>',
+            r'>Dividend yield</td>\s*<td[^>]*>(\d+[.,]\d+)%',
+            # Distribution yield patterns
+            r'Distribution\s+yield[:\s]*(\d+[.,]\d+)%',
+            r'<td[^>]*>\s*Distribution\s+yield\s*</td>\s*<td[^>]*>\s*(\d+[.,]\d+)%\s*</td>',
+            r'>Distribution yield</td>\s*<td[^>]*>(\d+[.,]\d+)%',
+            # 12 month yield patterns
+            r'12\s*-?\s*month\s+yield[:\s]*(\d+[.,]\d+)%',
+            r'12M\s+yield[:\s]*(\d+[.,]\d+)%',
+            r'TTM\s+yield[:\s]*(\d+[.,]\d+)%',
+            # German patterns
+            r'Dividendenrendite[:\s]*(\d+[.,]\d+)%',
+            r'Ausschüttungsrendite[:\s]*(\d+[.,]\d+)%',
+            # Alternative yield formats
+            r'Annual\s+yield[:\s]*(\d+[.,]\d+)%',
+            r'Trailing\s+yield[:\s]*(\d+[.,]\d+)%',
+            # Additional robust patterns
+            r'Income\s+yield[:\s]*(\d+[.,]\d+)%',
+            r'Trailing\s+12\s*-?\s*month\s+yield[:\s]*(\d+[.,]\d+)%',
+            r'SEC\s+yield[:\s]*(\d+[.,]\d+)%',
+            r'30\s*-?\s*day\s+yield[:\s]*(\d+[.,]\d+)%',
+            # More flexible patterns
+            r'Yield\s*\([^)]*\)[:\s]*(\d+[.,]\d+)%',
+            r'Current\s+yield[:\s]*(\d+[.,]\d+)%',
+            # Pattern with optional colon and whitespace variations
+            r'(?:Current\s+)?(?:Dividend\s+|Distribution\s+)?[Yy]ield\s*:?\s*(\d+[.,]\d+)\s*%',
+            # French patterns
+            r'Rendement[:\s]*(\d+[.,]\d+)%',
+            r'Taux\s+de\s+distribution[:\s]*(\d+[.,]\d+)%'
         ]
         
         for pattern in yield_patterns:
@@ -1007,11 +1059,37 @@ class CompleteProductionScraper:
                 dividend_data['extraction_method'] = 'method2_regex'
                 break
         
-        # Dividends 12 months patterns
+        # Enhanced dividends 12 months patterns
         div_12m_patterns = [
             r'Dividends?\s*\(last\s+12\s+months?\)[:\s]*([A-Z]{3})\s*([\d,\.]+)',
             r'Dividends?\s*\(last\s+12\s+months?\)[:\s]*([\d,\.]+)\s*([A-Z]{3})',
             r'Last\s+12\s+months?[:\s]*([A-Z]{3})\s*([\d,\.]+)',
+            r'Last\s+12\s+months?[:\s]*([\d,\.]+)\s*([A-Z]{3})',
+            # Table patterns
+            r'<td[^>]*>\s*Dividends\s*\(last\s+12\s+months?\)\s*</td>\s*<td[^>]*>\s*([A-Z]{3})\s*([\d,\.]+)\s*</td>',
+            r'<td[^>]*>\s*Dividends\s*\(last\s+12\s+months?\)\s*</td>\s*<td[^>]*>\s*([\d,\.]+)\s*([A-Z]{3})\s*</td>',
+            r'>Dividends \(last 12 months\)</td>\s*<td[^>]*>([A-Z]{3})\s*([\d,\.]+)',
+            r'>Dividends \(last 12 months\)</td>\s*<td[^>]*>([\d,\.]+)\s*([A-Z]{3})',
+            r'vallabel[^>]*>Dividends \(last 12 months\)[^<]*</td>\s*<td[^>]*>([A-Z]{3})\s*([\d,\.]+)',
+            r'vallabel[^>]*>Dividends \(last 12 months\)[^<]*</td>\s*<td[^>]*>([\d,\.]+)\s*([A-Z]{3})',
+            # Distribution patterns
+            r'Distributions?\s*\(last\s+12\s+months?\)[:\s]*([A-Z]{3})\s*([\d,\.]+)',
+            r'Distributions?\s*\(last\s+12\s+months?\)[:\s]*([\d,\.]+)\s*([A-Z]{3})',
+            r'<td[^>]*>\s*Distributions\s*\(last\s+12\s+months?\)\s*</td>\s*<td[^>]*>\s*([A-Z]{3})\s*([\d,\.]+)\s*</td>',
+            r'<td[^>]*>\s*Distributions\s*\(last\s+12\s+months?\)\s*</td>\s*<td[^>]*>\s*([\d,\.]+)\s*([A-Z]{3})\s*</td>',
+            # TTM (Trailing Twelve Months) patterns
+            r'TTM\s+dividends?[:\s]*([A-Z]{3})\s*([\d,\.]+)',
+            r'TTM\s+dividends?[:\s]*([\d,\.]+)\s*([A-Z]{3})',
+            r'12M\s+dividends?[:\s]*([A-Z]{3})\s*([\d,\.]+)',
+            r'12M\s+dividends?[:\s]*([\d,\.]+)\s*([A-Z]{3})',
+            # Annual dividend patterns
+            r'Annual\s+dividends?[:\s]*([A-Z]{3})\s*([\d,\.]+)',
+            r'Annual\s+dividends?[:\s]*([\d,\.]+)\s*([A-Z]{3})',
+            # German patterns
+            r'Dividenden\s*\(letzte\s+12\s+Monate\)[:\s]*([A-Z]{3})\s*([\d,\.]+)',
+            r'Dividenden\s*\(letzte\s+12\s+Monate\)[:\s]*([\d,\.]+)\s*([A-Z]{3})',
+            r'Ausschüttungen\s*\(letzte\s+12\s+Monate\)[:\s]*([A-Z]{3})\s*([\d,\.]+)',
+            r'Ausschüttungen\s*\(letzte\s+12\s+Monate\)[:\s]*([\d,\.]+)\s*([A-Z]{3})'
         ]
         
         for pattern in div_12m_patterns:
@@ -1065,12 +1143,22 @@ class CompleteProductionScraper:
         name_lower = (etf.name or '').lower()
         index_lower = (etf.index_name or '').lower()
         
-        # 1. SPECIFICKÉ INDEXY A NÁZVY
-        specific_patterns = {
-            'US': [
-                's&p 500', 'nasdaq', 'russell', 'dow jones', 'us ', ' us', 'united states',
-                'america', 'american', 'usa', 'nyse', 'wilshire', 'us equity', 'us stocks'
-            ],
+        # 1. SPECIFICKÉ INDEXY A NÁZVY - OPRAVENÁ LOGIKA
+        # Nejprve kontroluj specifické US indexy a názvy - OPRAVA pro false positives
+        us_patterns = [
+            's&p 500', 'nasdaq', 'russell', 'dow jones', 'united states',
+            'america', 'american', 'usa', 'nyse', 'wilshire', 'us equity', 'us stocks',
+            'msci usa', 'ftse usa', ' us ', ' us stock', ' us bond', ' us real'
+        ]
+        
+        # Kontrola US patterns PRVNÍ - má prioritu
+        for pattern in us_patterns:
+            if pattern in name_lower or pattern in index_lower:
+                etf.region = 'US'
+                return
+        
+        # Poté kontroluj ostatní regiony
+        other_patterns = {
             'Evropa': [
                 'europe', 'european', 'stoxx', 'euro ', 'ftse europe', 'msci europe',
                 'eurozone', 'emu', 'european monetary', 'euro stoxx', 'ftse 100',
@@ -1095,7 +1183,8 @@ class CompleteProductionScraper:
                 'all-world', 'worldwide', 'msci world', 'ftse all-world'
             ],
             'Asie': [
-                'asia', 'asian', 'asia pacific', 'apac', 'far east', 'asia ex japan',
+                'asia pacific ex japan', 'asia ex japan', 'apac ex japan',  # Specificke patterns prvni
+                'asia', 'asian', 'asia pacific', 'apac', 'far east',
                 'korea', 'taiwan', 'singapore', 'thailand', 'malaysia', 'india'
             ],
             'Pacifik': [
@@ -1103,8 +1192,8 @@ class CompleteProductionScraper:
             ]
         }
         
-        # Zkontroluj specifické patterns
-        for region, patterns in specific_patterns.items():
+        # Zkontroluj ostatní patterns
+        for region, patterns in other_patterns.items():
             if any(pattern in name_lower for pattern in patterns) or \
                any(pattern in index_lower for pattern in patterns):
                 etf.region = region
@@ -1153,13 +1242,15 @@ class CompleteProductionScraper:
         exchange_elements = soup.find_all(['section', 'div', 'table'], 
                                         string=re.compile(r'Stock\s+exchange', re.I))
         
-        safe_log("info", f"EXCHANGE: Found {len(exchange_elements)} elements with 'Stock exchange' text")
+        if self.current_etf_index <= 3:
+            safe_log("info", f"EXCHANGE: Found {len(exchange_elements)} elements with 'Stock exchange' text")
         
         # Pokus 2: Hledej jen "exchange" 
         if not exchange_elements:
             exchange_elements = soup.find_all(['section', 'div', 'table'], 
                                             string=re.compile(r'exchange', re.I))
-            safe_log("info", f"EXCHANGE: Found {len(exchange_elements)} elements with 'exchange' text")
+            if self.current_etf_index <= 3:
+                safe_log("info", f"EXCHANGE: Found {len(exchange_elements)} elements with 'exchange' text")
         
         # Pokus 3: Hledej tabulky s typickými exchange headers
         if not exchange_elements:
@@ -1173,26 +1264,31 @@ class CompleteProductionScraper:
                 
                 if has_exchange and has_ticker and has_currency:
                     exchange_elements = [table]
-                    safe_log("info", f"EXCHANGE: Found exchange table with listing+ticker+currency keywords")
+                    if self.current_etf_index <= 3:
+                        safe_log("info", f"EXCHANGE: Found exchange table with listing+ticker+currency keywords")
                     break
                 elif has_ticker and has_currency and ('xetra' in text or 'london' in text):
                     # Fallback - pokud najde ticker+currency+známou burzu
                     exchange_elements = [table]
-                    safe_log("info", f"EXCHANGE: Found exchange table with ticker+currency+exchange names")
+                    if self.current_etf_index <= 3:
+                        safe_log("info", f"EXCHANGE: Found exchange table with ticker+currency+exchange names")
                     break
         
         for element in exchange_elements:
             parent = element.find_parent(['section', 'div', 'article'])
             if parent:
                 exchange_section = parent
-                safe_log("info", f"EXCHANGE: Found parent section for stock exchange")
+                if self.current_etf_index <= 3:
+                    safe_log("info", f"EXCHANGE: Found parent section for stock exchange")
                 break
         
         if exchange_section:
-            safe_log("info", f"EXCHANGE: Found exchange section, calling _parse_exchange_table")
+            if self.current_etf_index <= 3:
+                safe_log("info", f"EXCHANGE: Found exchange section, calling _parse_exchange_table")
             self._parse_exchange_table(exchange_section, etf)
         else:
-            safe_log("info", f"EXCHANGE: No exchange section found, calling _extract_exchange_from_text")
+            if self.current_etf_index <= 3:
+                safe_log("info", f"EXCHANGE: No exchange section found, calling _extract_exchange_from_text")
             self._extract_exchange_from_text(soup, etf)
         
         # Metoda 2: Nastav primary ticker z nejlepšího table kandidáta
@@ -1214,17 +1310,20 @@ class CompleteProductionScraper:
         table = section if section.name == 'table' else section.find('table')
         
         if not table:
-            safe_log("debug", f"EXCHANGE: No table found in section")
+            if self.current_etf_index <= 3:
+                safe_log("debug", f"EXCHANGE: No table found in section")
             return
         
         rows = table.find_all('tr')
         if not rows:
-            safe_log("debug", f"EXCHANGE: No rows found in table")
+            if self.current_etf_index <= 3:
+                safe_log("debug", f"EXCHANGE: No rows found in table")
             return
         
         header_row = rows[0]
         headers = [th.get_text().strip().lower() for th in header_row.find_all(['th', 'td'])]
-        safe_log("info", f"EXCHANGE: Headers found: {headers}")
+        if self.current_etf_index <= 3:
+            safe_log("info", f"EXCHANGE: Headers found: {headers}")
         
         col_mapping = {}
         for i, header in enumerate(headers):
@@ -1239,7 +1338,8 @@ class CompleteProductionScraper:
             elif 'reuters' in header:
                 col_mapping['reuters'] = i
         
-        safe_log("info", f"EXCHANGE: Column mapping: {col_mapping}")
+        if self.current_etf_index <= 3:
+            safe_log("info", f"EXCHANGE: Column mapping: {col_mapping}")
         
         # Parsuj data řádky
         for row_idx, row in enumerate(rows[1:], 1):
@@ -1247,7 +1347,8 @@ class CompleteProductionScraper:
             if len(cells) < 2:
                 continue
             
-            safe_log("info", f"EXCHANGE: Row {row_idx} cells: {[cell.get_text().strip() for cell in cells]}")
+            if self.current_etf_index <= 3:
+                safe_log("info", f"EXCHANGE: Row {row_idx} cells: {[cell.get_text().strip() for cell in cells]}")
             
             listing = ExchangeListing()
             
@@ -1259,7 +1360,8 @@ class CompleteProductionScraper:
             
             if 'ticker' in col_mapping and col_mapping['ticker'] < len(cells):
                 raw_ticker = cells[col_mapping['ticker']].get_text().strip()
-                safe_log("info", f"EXCHANGE: Raw ticker from cell {col_mapping['ticker']}: '{raw_ticker}'")
+                if self.current_etf_index <= 3:
+                    safe_log("info", f"EXCHANGE: Raw ticker from cell {col_mapping['ticker']}: '{raw_ticker}'")
                 listing.ticker = raw_ticker
             
             if 'bloomberg' in col_mapping and col_mapping['bloomberg'] < len(cells):
@@ -1272,13 +1374,16 @@ class CompleteProductionScraper:
                 if reuters_raw and reuters_raw != '--':
                     listing.reuters_code = reuters_raw
             
-            safe_log("debug", f"EXCHANGE: Created listing - Exchange: '{listing.exchange_name}', Ticker: '{listing.ticker}', Currency: '{listing.trade_currency}'")
+            if self.current_etf_index <= 3:
+                safe_log("debug", f"EXCHANGE: Created listing - Exchange: '{listing.exchange_name}', Ticker: '{listing.ticker}', Currency: '{listing.trade_currency}'")
             
             if listing.exchange_name and len(listing.exchange_name) > 1:
                 etf.add_exchange_listing(listing)
-                safe_log("debug", f"EXCHANGE: Added listing for {listing.exchange_name}")
+                if self.current_etf_index <= 3:
+                    safe_log("debug", f"EXCHANGE: Added listing for {listing.exchange_name}")
             else:
-                safe_log("debug", f"EXCHANGE: Skipped listing - invalid exchange name: '{listing.exchange_name}'")
+                if self.current_etf_index <= 3:
+                    safe_log("debug", f"EXCHANGE: Skipped listing - invalid exchange name: '{listing.exchange_name}'")
     
     def _extract_exchange_from_text(self, soup: BeautifulSoup, etf: ETFDataComplete):
         """Fallback extrakce exchange dat z textu"""
@@ -1703,29 +1808,218 @@ class CompleteProductionScraper:
         """Extrakce risk metrik"""
         text = soup.get_text()
         
-        tracking_error_patterns = [
-            r'Tracking\s+error[:\s]*(\d+[.,]\d+)%',
-            r'TE[:\s]*(\d+[.,]\d+)%',
-            r'Tracking\s+difference[:\s]*(\d+[.,]\d+)%',
-        ]
+        # Advanced risk metrics patterns
+        advanced_risk_patterns = {
+            'tracking_error': [
+                r'Tracking\s+error[:\s]*(\d+[.,]\d+)%',
+                r'TE[:\s]*(\d+[.,]\d+)%',
+                r'Tracking\s+difference[:\s]*(\d+[.,]\d+)%',
+                r'Annual\s+tracking\s+error[:\s]*(\d+[.,]\d+)%',
+                r'Tracking\s+error\s+\(annual\)[:\s]*(\d+[.,]\d+)%',
+                r'Tracking\s+error\s+p\.a\.[:\s]*(\d+[.,]\d+)%',
+                r'Tracking\s+error\s+\(per\s+annum\)[:\s]*(\d+[.,]\d+)%',
+                r'Annual\s+TE[:\s]*(\d+[.,]\d+)%',
+                # Enhanced patterns for table structure
+                r'<td[^>]*>\s*Tracking\s+error\s*</td>\s*<td[^>]*>\s*(\d+[.,]\d+)%\s*</td>',
+                r'>Tracking error</td>\s*<td[^>]*>(\d+[.,]\d+)%',
+                r'vallabel[^>]*>Tracking error[^<]*</td>\s*<td[^>]*>(\d+[.,]\d+)%',
+                # German patterns
+                r'Tracking\s*-?\s*Fehler[:\s]*(\d+[.,]\d+)%'
+            ],
+            'beta': [
+                r'Beta[:\s]*(\d+[.,]\d+)',
+                r'Beta\s+coefficient[:\s]*(\d+[.,]\d+)',
+                r'Beta\s+factor[:\s]*(\d+[.,]\d+)',
+                r'Market\s+beta[:\s]*(\d+[.,]\d+)',
+                r'β[:\s]*(\d+[.,]\d+)',
+                # Table patterns
+                r'<td[^>]*>\s*Beta\s*</td>\s*<td[^>]*>\s*(\d+[.,]\d+)\s*</td>',
+                r'>Beta</td>\s*<td[^>]*>(\d+[.,]\d+)',
+                r'vallabel[^>]*>Beta[^<]*</td>\s*<td[^>]*>(\d+[.,]\d+)',
+                # Additional variations
+                r'Beta\s+\(3\s+year\)[:\s]*(\d+[.,]\d+)',
+                r'Beta\s+3Y[:\s]*(\d+[.,]\d+)',
+                r'Beta\s+\(vs\.\s+benchmark\)[:\s]*(\d+[.,]\d+)'
+            ],
+            'correlation': [
+                r'Correlation[:\s]*(\d+[.,]\d+)',
+                r'Correlation\s+coefficient[:\s]*(\d+[.,]\d+)',
+                r'R-squared[:\s]*(\d+[.,]\d+)',
+                r'R²[:\s]*(\d+[.,]\d+)',
+                r'Correlation\s+to\s+benchmark[:\s]*(\d+[.,]\d+)',
+                r'Correlation\s+\(3\s+year\)[:\s]*(\d+[.,]\d+)',
+                # Table patterns
+                r'<td[^>]*>\s*Correlation\s*</td>\s*<td[^>]*>\s*(\d+[.,]\d+)\s*</td>',
+                r'>Correlation</td>\s*<td[^>]*>(\d+[.,]\d+)',
+                r'vallabel[^>]*>Correlation[^<]*</td>\s*<td[^>]*>(\d+[.,]\d+)',
+                # Additional variations
+                r'Correl\.[:\s]*(\d+[.,]\d+)',
+                r'Correlation\s+3Y[:\s]*(\d+[.,]\d+)',
+                # German patterns
+                r'Korrelation[:\s]*(\d+[.,]\d+)'
+            ],
+            'information_ratio': [
+                r'Information\s+ratio[:\s]*(-?\d+[.,]\d+)',
+                r'IR[:\s]*(-?\d+[.,]\d+)',
+                r'Info\s+ratio[:\s]*(-?\d+[.,]\d+)',
+                r'Information\s+coefficient[:\s]*(-?\d+[.,]\d+)',
+                r'Appraisal\s+ratio[:\s]*(-?\d+[.,]\d+)',
+                # Table patterns
+                r'<td[^>]*>\s*Information\s+ratio\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)\s*</td>',
+                r'>Information ratio</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'vallabel[^>]*>Information ratio[^<]*</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                # Additional variations
+                r'Information\s+ratio\s+\(3\s+year\)[:\s]*(-?\d+[.,]\d+)',
+                r'IR\s+3Y[:\s]*(-?\d+[.,]\d+)',
+                # German patterns
+                r'Informationsquotient[:\s]*(-?\d+[.,]\d+)'
+            ]
+        }
         
-        for pattern in tracking_error_patterns:
-            match = re.search(pattern, text, re.I)
-            if match:
-                try:
-                    value = float(match.group(1).replace(',', '.'))
-                    if 0.01 <= value <= 5.0:
-                        etf.tracking_error = value
-                        break
-                except ValueError:
-                    continue
+        # Extract advanced risk metrics
+        for metric, pattern_list in advanced_risk_patterns.items():
+            for pattern in pattern_list:
+                match = re.search(pattern, text, re.I | re.S)
+                if match:
+                    try:
+                        value = float(match.group(1).replace(',', '.'))
+                        
+                        # Apply sensible validation ranges for each metric
+                        if metric == 'tracking_error' and 0.01 <= value <= 5.0:
+                            etf.tracking_error = value
+                            break
+                        elif metric == 'beta' and 0.1 <= value <= 3.0:
+                            etf.beta = value
+                            break
+                        elif metric == 'correlation' and 0.5 <= value <= 1.0:
+                            etf.correlation = value
+                            break
+                        elif metric == 'information_ratio' and -2.0 <= value <= 2.0:
+                            etf.information_ratio = value
+                            break
+                    except ValueError:
+                        continue
         
         risk_patterns = {
-            'volatility_1y': [r'Volatility\s+1\s+year[:\s]*(\d+[.,]\d+)%'],
-            'volatility_3y': [r'Volatility\s+3\s+years?[:\s]*(\d+[.,]\d+)%'],
-            'volatility_5y': [r'Volatility\s+5\s+years?[:\s]*(\d+[.,]\d+)%'],
-            'max_drawdown_1y': [r'Maximum\s+drawdown\s+1\s+year[:\s]*(-?\d+[.,]\d+)%'],
-            'return_per_risk_1y': [r'Return\s+per\s+risk\s+1\s+year[:\s]*(\d+[.,]\d+)']
+            'volatility_1y': [
+                r'Volatility\s+1\s+year[:\s]*(\d+[.,]\d+)%',
+                r'>Volatility 1 year</td>\s*<td[^>]*>(\d+[.,]\d+)%',
+                r'vallabel[^>]*>Volatility 1 year[^<]*</td>\s*<td[^>]*>(\d+[.,]\d+)%'
+            ],
+            'volatility_3y': [
+                r'Volatility\s+3\s+years?[:\s]*(\d+[.,]\d+)%',
+                r'>Volatility 3 years?</td>\s*<td[^>]*>(\d+[.,]\d+)%',
+                r'vallabel[^>]*>Volatility 3 year[^<]*</td>\s*<td[^>]*>(\d+[.,]\d+)%'
+            ],
+            'volatility_5y': [
+                r'Volatility\s+5\s+years?[:\s]*(\d+[.,]\d+)%',
+                r'>Volatility 5 years?</td>\s*<td[^>]*>(\d+[.,]\d+)%',
+                r'vallabel[^>]*>Volatility 5 year[^<]*</td>\s*<td[^>]*>(\d+[.,]\d+)%'
+            ],
+            'max_drawdown_1y': [
+                r'Maximum\s+drawdown\s+1\s+year[:\s]*(-?\d+[.,]\d+)%',
+                r'>Maximum drawdown 1 year</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'vallabel[^>]*>Maximum drawdown 1 year[^<]*</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'Max\.\s*drawdown\s+1\s+year[:\s]*(-?\d+[.,]\d+)%',
+                r'>Max drawdown 1 year</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'>Maximum drawdown 1y</td>\s*<td[^>]*>(-?\d+[.,]\d+)%'
+            ],
+            'max_drawdown_3y': [
+                r'Maximum\s+drawdown\s+3\s+years?[:\s]*(-?\d+[.,]\d+)%',
+                r'>Maximum drawdown 3 years?</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'vallabel[^>]*>Maximum drawdown 3 year[^<]*</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'Max\.\s*drawdown\s+3\s+years?[:\s]*(-?\d+[.,]\d+)%',
+                r'>Max drawdown 3 years?</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'>Maximum drawdown 3y</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                # Enhanced patterns for table structure with possible whitespace/newlines
+                r'<td[^>]*>\s*Maximum\s+drawdown\s+3\s+years?\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)%\s*</td>',
+                r'<td[^>]*>\s*Max\s+drawdown\s+3\s+years?\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)%\s*</td>',
+                # Pattern for potential German text
+                r'Maximaler\s+Drawdown\s+3\s+Jahre[:\s]*(-?\d+[.,]\d+)%'
+            ],
+            'max_drawdown_5y': [
+                r'Maximum\s+drawdown\s+5\s+years?[:\s]*(-?\d+[.,]\d+)%',
+                r'>Maximum drawdown 5 years?</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'vallabel[^>]*>Maximum drawdown 5 year[^<]*</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'Max\.\s*drawdown\s+5\s+years?[:\s]*(-?\d+[.,]\d+)%',
+                r'>Max drawdown 5 years?</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'>Maximum drawdown 5y</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                # Enhanced patterns for table structure with possible whitespace/newlines
+                r'<td[^>]*>\s*Maximum\s+drawdown\s+5\s+years?\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)%\s*</td>',
+                r'<td[^>]*>\s*Max\s+drawdown\s+5\s+years?\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)%\s*</td>',
+                # Pattern for potential German text
+                r'Maximaler\s+Drawdown\s+5\s+Jahre[:\s]*(-?\d+[.,]\d+)%'
+            ],
+            'max_drawdown_inception': [
+                r'Maximum\s+drawdown\s+since\s+inception[:\s]*(-?\d+[.,]\d+)%',
+                r'Max\s+drawdown\s+inception[:\s]*(-?\d+[.,]\d+)%',
+                r'Maximum\s+drawdown\s+from\s+inception[:\s]*(-?\d+[.,]\d+)%',
+                r'Max\s+drawdown\s+since\s+launch[:\s]*(-?\d+[.,]\d+)%',
+                r'Maximum\s+drawdown\s+launch[:\s]*(-?\d+[.,]\d+)%',
+                # Enhanced patterns for table structures
+                r'>Maximum drawdown since inception</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'>Max drawdown inception</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'<td[^>]*>\s*Maximum\s+drawdown\s+since\s+inception\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)%\s*</td>',
+                r'<td[^>]*>\s*Max\s+drawdown\s+inception\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)%\s*</td>',
+                r'<td[^>]*>\s*Maximum\s+drawdown\s+from\s+launch\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)%\s*</td>',
+                # German patterns
+                r'Maximaler\s+Drawdown\s+seit\s+Auflage[:\s]*(-?\d+[.,]\d+)%',
+                r'Max\.\s*Drawdown\s+seit\s+Auflage[:\s]*(-?\d+[.,]\d+)%',
+                # Table patterns
+                r'>Maximum drawdown since inception</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'>Max drawdown inception</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                r'vallabel[^>]*>Maximum drawdown since inception[^<]*</td>\s*<td[^>]*>(-?\d+[.,]\d+)%',
+                # Enhanced patterns for table structure with whitespace/newlines
+                r'<td[^>]*>\s*Maximum\s+drawdown\s+since\s+inception\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)%\s*</td>',
+                r'<td[^>]*>\s*Max\s+drawdown\s+inception\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)%\s*</td>',
+                # German patterns
+                r'Maximaler\s+Drawdown\s+seit\s+Auflage[:\s]*(-?\d+[.,]\d+)%',
+                # Alternative inception terminology
+                r'Maximum\s+drawdown\s+since\s+start[:\s]*(-?\d+[.,]\d+)%',
+                r'Max\s+drawdown\s+total[:\s]*(-?\d+[.,]\d+)%'
+            ],
+            'return_per_risk_1y': [
+                r'Return\s+per\s+risk\s+1\s+year[:\s]*(-?\d+[.,]\d+)',
+                r'Return\s*per\s*risk\s*1\s*year[:\s]*(-?\d+[.,]\d+)',
+                r'>Return per risk 1 year</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'vallabel[^>]*>Return per risk 1 year[^<]*</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'Sharpe\s+ratio\s+1\s+year[:\s]*(-?\d+[.,]\d+)',
+                r'>Sharpe ratio 1 year</td>\s*<td[^>]*>(-?\d+[.,]\d+)'
+            ],
+            'return_per_risk_3y': [
+                r'Return\s+per\s+risk\s+3\s+years?[:\s]*(-?\d+[.,]\d+)',
+                r'Sharpe\s+ratio\s+3\s+years?[:\s]*(-?\d+[.,]\d+)',
+                r'Risk\s+adjusted\s+return\s+3\s+years?[:\s]*(-?\d+[.,]\d+)',
+                r'Return\/Risk\s+3\s+years?[:\s]*(-?\d+[.,]\d+)',
+                r'Return\s*per\s*risk\s*3\s*years?[:\s]*(-?\d+[.,]\d+)',
+                r'Return\s*per\s*risk\s*3\s*years?\s*</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'>Return per risk 3 years?</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'>Return per risk 3 year</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'vallabel[^>]*>Return per risk 3 year[^<]*</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                # Enhanced patterns for table structure with whitespace/newlines
+                r'<td[^>]*>\s*Return\s+per\s+risk\s+3\s+years?\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)\s*</td>',
+                r'<td[^>]*>\s*Sharpe\s+ratio\s+3\s+years?\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)\s*</td>',
+                # Additional patterns for different formats
+                r'>Sharpe ratio 3 years?</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'>Risk adj\. return 3 years?</td>\s*<td[^>]*>(-?\d+[.,]\d+)'
+            ],
+            'return_per_risk_5y': [
+                r'Return\s+per\s+risk\s+5\s+years?[:\s]*(-?\d+[.,]\d+)',
+                r'Sharpe\s+ratio\s+5\s+years?[:\s]*(-?\d+[.,]\d+)',
+                r'Risk\s+adjusted\s+return\s+5\s+years?[:\s]*(-?\d+[.,]\d+)',
+                r'Return\/Risk\s+5\s+years?[:\s]*(-?\d+[.,]\d+)',
+                r'Return\s*per\s*risk\s*5\s*years?[:\s]*(-?\d+[.,]\d+)',
+                r'Return\s*per\s*risk\s*5\s*years?\s*</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'>Return per risk 5 years?</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'>Return per risk 5 year</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'vallabel[^>]*>Return per risk 5 year[^<]*</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                # Enhanced patterns for table structure with whitespace/newlines
+                r'<td[^>]*>\s*Return\s+per\s+risk\s+5\s+years?\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)\s*</td>',
+                r'<td[^>]*>\s*Sharpe\s+ratio\s+5\s+years?\s*</td>\s*<td[^>]*>\s*(-?\d+[.,]\d+)\s*</td>',
+                # Additional patterns for different formats
+                r'>Sharpe ratio 5 years?</td>\s*<td[^>]*>(-?\d+[.,]\d+)',
+                r'>Risk adj\. return 5 years?</td>\s*<td[^>]*>(-?\d+[.,]\d+)'
+            ]
         }
         
         for metric, pattern_list in risk_patterns.items():
@@ -1861,9 +2155,25 @@ class CompleteProductionScraper:
         
         holdings = []
         
-        # Najdi holdings sekci
+        # Enhanced holdings section finding
         holdings_section = soup.find('section', id='holdings') or \
-                         soup.find('div', class_=re.compile('holdings', re.I))
+                         soup.find('div', class_=re.compile('holdings', re.I)) or \
+                         soup.find('section', id='composition') or \
+                         soup.find('div', class_=re.compile('composition', re.I)) or \
+                         soup.find('section', id='portfolio') or \
+                         soup.find('div', class_=re.compile('portfolio', re.I))
+        
+        # Alternative method: Find by heading text
+        if not holdings_section:
+            headings = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5'], 
+                                   string=re.compile(r'(Holdings|Composition|Portfolio|Top positions|Largest holdings)', re.I))
+            for heading in headings:
+                parent = heading.find_parent(['section', 'div', 'article'])
+                if parent:
+                    table = parent.find('table')
+                    if table:
+                        holdings_section = parent
+                        break
         
         if holdings_section:
             table = holdings_section.find('table')
@@ -1872,18 +2182,44 @@ class CompleteProductionScraper:
                 for row in rows[:10]:
                     cells = row.find_all('td')
                     if len(cells) >= 2:
-                        name = cells[0].get_text().strip()
-                        weight_text = cells[1].get_text()
-                        weight_match = re.search(r'(\d+[.,]\d+)%', weight_text)
+                        # Enhanced name extraction - clean up HTML artifacts
+                        name_cell = cells[0]
+                        name = name_cell.get_text().strip()
                         
-                        if weight_match and name:
-                            weight = float(weight_match.group(1).replace(',', '.'))
+                        # Clean up name - remove HTML line breaks and extra whitespace
+                        name = re.sub(r'\s+', ' ', name)
+                        name = name.replace('\n', ' ').replace('\r', ' ').strip()
+                        
+                        # Try multiple cells for weight - sometimes it's not in the second column
+                        weight = None
+                        for cell in cells[1:4]:  # Check up to 3 cells for weight
+                            weight_text = cell.get_text()
+                            weight_matches = [
+                                re.search(r'(\d+[.,]\d+)%', weight_text),
+                                re.search(r'(\d+[.,]\d+)\s*%', weight_text),
+                                re.search(r'(\d+[.,]\d+)', weight_text) if '%' in weight_text else None
+                            ]
                             
+                            for weight_match in weight_matches:
+                                if weight_match:
+                                    try:
+                                        weight = float(weight_match.group(1).replace(',', '.'))
+                                        break
+                                    except ValueError:
+                                        continue
+                            if weight is not None:
+                                break
+                        
+                        if weight is not None and name and len(name) > 1:
+                            # Enhanced validation for different ETF types
                             if etf.category == 'Dluhopisy':
-                                if self._is_bond_code(name) and 0.1 <= weight <= 50:
+                                if self._is_bond_code(name) and 0.05 <= weight <= 50:
                                     holdings.append((name, weight))
-                            else:
-                                if len(name) > 2 and not self._is_bond_code(name) and 0.1 <= weight <= 25:
+                            elif etf.category == 'Komodity':
+                                if 0.05 <= weight <= 100:  # Commodities can have high concentration
+                                    holdings.append((name, weight))
+                            else:  # Stocks and others
+                                if len(name) > 2 and not self._is_bond_code(name) and 0.05 <= weight <= 30:
                                     holdings.append((name, weight))
         
         # Fallback pro akciové ETF
@@ -2456,6 +2792,11 @@ class CompleteProductionScraper:
             # Rating fields (the key addition!)
             'rating': self.safe_integer(etf_dict.get('rating')),
             'rating_score': self.safe_integer(etf_dict.get('rating_score')),
+            'rating_ter_score': self.safe_integer(etf_dict.get('rating_ter_score')),
+            'rating_size_score': self.safe_integer(etf_dict.get('rating_size_score')),
+            'rating_track_record_score': self.safe_integer(etf_dict.get('rating_track_record_score')),
+            'rating_provider_score': self.safe_integer(etf_dict.get('rating_provider_score')),
+            'rating_performance_score': self.safe_integer(etf_dict.get('rating_performance_score')),
             # Holdings - použij to_dict() transformaci
             'holding_1_name': etf_dict.get('holding_1_name', ''),
             'holding_1_weight': etf_dict.get('holding_1_weight', 0) or 0,
