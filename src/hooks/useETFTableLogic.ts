@@ -113,7 +113,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
       })
       .filter(etf => {
         // Filter out leveraged ETFs if not included
-        if (!advancedFilters.includeLeveragedETFs && etf.category === 'Páková ETF') {
+        if (!advancedFilters.includeLeveragedETFs && etf.is_leveraged) {
           return false;
         }
         return true;

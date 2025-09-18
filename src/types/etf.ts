@@ -22,6 +22,7 @@ export interface ETF {
   investment_focus: string;
   sustainability: string;
   category: string;
+  is_leveraged: boolean;
   region: string;
   total_holdings: number;
   return_1y: number;
@@ -141,6 +142,7 @@ export interface ETFListItem {
   name: string;
   fund_provider: string;
   category: string;
+  is_leveraged: boolean;
   ter_numeric: number;
   return_1y: number;
   return_3y: number;

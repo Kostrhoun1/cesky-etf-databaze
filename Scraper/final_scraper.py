@@ -37,6 +37,7 @@ import argparse
 import csv
 import sys
 from dataclasses import dataclass
+from etf_rating import calculate_etf_rating
 
 # OPRAVA UNICODE - nastavení kodování pro Windows
 if sys.platform.startswith('win'):
@@ -211,6 +212,9 @@ class ETFDataComplete:
         # Category
         self.category = ""
         
+        # Leveraged ETF flag
+        self.is_leveraged = False
+        
         # Region
         self.region = ""
         
@@ -340,6 +344,7 @@ class ETFDataComplete:
             'investment_focus': self.investment_focus,
             'sustainability': self.sustainability,
             'category': self.category,
+            'is_leveraged': self.is_leveraged,
             'region': self.region,
             'total_holdings': self.total_holdings,
             'return_1y': self.return_1y,
@@ -412,7 +417,20 @@ class ETFDataComplete:
                 base_dict[f'exchange_{i+1}_reuters'] = ""
                 base_dict[f'exchange_{i+1}_market_maker'] = ""
         
+        # Calculate ETF rating based on the data
+        try:
+            rating_result = calculate_etf_rating(base_dict)
+            base_dict['rating'] = rating_result['rating']
+            base_dict['rating_score'] = rating_result['rating_score']
+            # Optionally store breakdown as JSON
+            # base_dict['rating_breakdown'] = json.dumps(rating_result['rating_breakdown'])
+        except Exception as e:
+            safe_log("warning", f"Rating calculation failed for {self.isin}: {e}")
+            base_dict['rating'] = None
+            base_dict['rating_score'] = None
+        
         return base_dict
+    
 
     def is_synthetic(self) -> bool:
         """Zkontroluje, zda je ETF syntetické"""
@@ -1572,6 +1590,21 @@ class CompleteProductionScraper:
         """Kategorizace ETF podle typu"""
         name_lower = (etf.name or '').lower()
         index_lower = (etf.index_name or '').lower()
+        description_lower = (etf.description_en or '').lower()
+        investment_focus_lower = (etf.investment_focus or '').lower()
+        
+        # 0. PÁKOVÁ ETF DETEKCE - NASTAVUJE FLAG, NEZASTAVUJE KATEGORIZACI
+        leveraged_keywords = [
+            'leveraged', '2x', '3x', 'ultra', 'leverage', 'daily 2x', 'daily 3x',
+            '2x leveraged', '3x leveraged', 'double', 'triple', 'geared'
+        ]
+        
+        if any(keyword in name_lower for keyword in leveraged_keywords) or \
+           any(keyword in index_lower for keyword in leveraged_keywords) or \
+           any(keyword in description_lower for keyword in leveraged_keywords) or \
+           any(keyword in investment_focus_lower for keyword in leveraged_keywords):
+            etf.is_leveraged = True
+            # POKRAČUJEME s další kategorizací místo return
         
         # 1. KRYPTO ETF
         crypto_keywords = [
@@ -2326,8 +2359,38 @@ class CompleteProductionScraper:
         
         return None
 
+    def safe_numeric(self, value):
+        """Convert empty strings to None for numeric fields with proper type handling"""
+        if value == "" or value is None:
+            return None
+        try:
+            if isinstance(value, (int, float)):
+                return value
+            if isinstance(value, str):
+                # Try to convert to float first, then int if it's a whole number
+                float_val = float(value)
+                if float_val.is_integer():
+                    return int(float_val)
+                return float_val
+            return None
+        except (ValueError, TypeError):
+            return None
+    
+    def safe_integer(self, value):
+        """Convert values to integers with proper type handling"""
+        if value == "" or value is None:
+            return None
+        try:
+            if isinstance(value, int):
+                return value
+            if isinstance(value, (float, str)):
+                return int(float(value))
+            return None
+        except (ValueError, TypeError):
+            return None
+
     def transform_etf_for_database(self, etf: ETFDataComplete) -> Dict:
-        """Transformuje ETF data do formátu pro databázi (stejná logika jako v useETFUpsert.ts)"""
+        """Transformuje ETF data do formátu pro databázi s optimalizovaným datovým typem"""
         # Použij built-in to_dict() metodu která správně transformuje exchange_listings
         etf_dict = etf.to_dict()
         
@@ -2338,9 +2401,9 @@ class CompleteProductionScraper:
             'description_en': etf.description_en,
             'description_cs': etf.description_cs,
             'ter': etf.ter,
-            'ter_numeric': etf.ter_numeric or 0,
+            'ter_numeric': self.safe_numeric(etf.ter_numeric),
             'fund_size': etf.fund_size,
-            'fund_size_numeric': etf.fund_size_numeric or 0,
+            'fund_size_numeric': self.safe_numeric(etf.fund_size_numeric),
             'fund_size_currency': etf.fund_size_currency,
             'fund_currency': etf.fund_currency,
             'fund_domicile': etf.fund_domicile,
@@ -2354,40 +2417,45 @@ class CompleteProductionScraper:
             'investment_focus': etf.investment_focus,
             'sustainability': etf.sustainability,
             'category': etf.category,
+            'is_leveraged': etf.is_leveraged,
             'region': etf.region,
-            'total_holdings': etf.total_holdings or 0,
-            'return_1y': etf.return_1y or 0,
-            'return_3y': etf.return_3y or 0,
-            'return_5y': etf.return_5y or 0,
-            'return_ytd': etf.return_ytd or 0,
-            'volatility_1y': etf.volatility_1y or 0,
-            'volatility_3y': etf.volatility_3y or 0,
-            'volatility_5y': etf.volatility_5y or 0,
-            'return_per_risk_1y': etf.return_per_risk_1y or 0,
-            'return_per_risk_3y': etf.return_per_risk_3y or 0,
-            'return_per_risk_5y': etf.return_per_risk_5y or 0,
-            'max_drawdown_1y': etf.max_drawdown_1y or 0,
-            'max_drawdown_3y': etf.max_drawdown_3y or 0,
-            'max_drawdown_5y': etf.max_drawdown_5y or 0,
-            'max_drawdown_inception': etf.max_drawdown_inception or 0,
-            'beta': etf.beta or 0,
-            'correlation': etf.correlation or 0,
-            'tracking_error': etf.tracking_error or 0,
-            'information_ratio': etf.information_ratio or 0,
+            'total_holdings': self.safe_integer(etf.total_holdings),
+            'return_1y': self.safe_numeric(etf.return_1y),
+            'return_3y': self.safe_numeric(etf.return_3y),
+            'return_5y': self.safe_numeric(etf.return_5y),
+            'return_ytd': self.safe_numeric(etf.return_ytd),
+            'volatility_1y': self.safe_numeric(etf.volatility_1y),
+            'volatility_3y': self.safe_numeric(etf.volatility_3y),
+            'volatility_5y': self.safe_numeric(etf.volatility_5y),
+            'return_per_risk_1y': self.safe_numeric(etf.return_per_risk_1y),
+            'return_per_risk_3y': self.safe_numeric(etf.return_per_risk_3y),
+            'return_per_risk_5y': self.safe_numeric(etf.return_per_risk_5y),
+            'max_drawdown_1y': self.safe_numeric(etf.max_drawdown_1y),
+            'max_drawdown_3y': self.safe_numeric(etf.max_drawdown_3y),
+            'max_drawdown_5y': self.safe_numeric(etf.max_drawdown_5y),
+            'max_drawdown_inception': self.safe_numeric(etf.max_drawdown_inception),
+            'beta': self.safe_numeric(etf.beta),
+            'correlation': self.safe_numeric(etf.correlation),
+            'tracking_error': self.safe_numeric(etf.tracking_error),
+            'information_ratio': self.safe_numeric(etf.information_ratio),
             'primary_exchange': etf_dict.get('exchange_1_name', etf.primary_exchange),
             'primary_ticker': etf_dict.get('exchange_1_ticker', etf.primary_ticker),
-            'total_exchanges': etf.total_exchanges or 0,
+            'total_exchanges': self.safe_integer(etf.total_exchanges),
             # Dividend fields
             'current_dividend_yield': etf.current_dividend_yield,
-            'current_dividend_yield_numeric': etf.current_dividend_yield_numeric or 0,
+            'current_dividend_yield_numeric': self.safe_numeric(etf.current_dividend_yield_numeric),
             'dividends_12m': etf.dividends_12m,
-            'dividends_12m_numeric': etf.dividends_12m_numeric or 0,
+            'dividends_12m_numeric': self.safe_numeric(etf.dividends_12m_numeric),
             'dividends_12m_currency': etf.dividends_12m_currency,
-            'dividend_extraction_method': etf.dividend_extraction_method,
+            
+            # Metadata
             'scraping_date': etf.scraping_date,
             'scraping_status': etf.scraping_status,
-            'retry_count': etf.retry_count or 0,
-            'degiro_free': etf.degiro_free or False,
+            'retry_count': self.safe_integer(etf.retry_count),
+            
+            # Rating fields (the key addition!)
+            'rating': self.safe_integer(etf_dict.get('rating')),
+            'rating_score': self.safe_integer(etf_dict.get('rating_score')),
             # Holdings - použij to_dict() transformaci
             'holding_1_name': etf_dict.get('holding_1_name', ''),
             'holding_1_weight': etf_dict.get('holding_1_weight', 0) or 0,
@@ -2464,34 +2532,241 @@ class CompleteProductionScraper:
             'exchange_5_market_maker': etf_dict.get('exchange_5_market_maker', ''),
         }
 
+    def transform_etf_for_database_no_rating(self, etf: ETFDataComplete):
+        """Transformuje ETF data pro databázi BEZ rating polí"""
+        etf_dict = etf.to_dict()
+        # Stejná logika jako transform_etf_for_database ale bez rating polí
+        return {
+            'isin': etf_dict.get('isin', ''),
+            'name': etf_dict.get('name', ''),
+            'url': etf_dict.get('url', ''),
+            'description_en': etf_dict.get('description_en', ''),
+            'description_cs': etf_dict.get('description_cs', ''),
+            'ter': etf_dict.get('ter', ''),
+            'ter_numeric': etf_dict.get('ter_numeric', 0) or 0,
+            'fund_size': etf_dict.get('fund_size', ''),
+            'fund_size_numeric': etf_dict.get('fund_size_numeric', 0) or 0,
+            'fund_size_currency': etf_dict.get('fund_size_currency', ''),
+            'fund_currency': etf_dict.get('fund_currency', ''),
+            'fund_domicile': etf_dict.get('fund_domicile', ''),
+            'fund_provider': etf_dict.get('fund_provider', ''),
+            'inception_date': etf_dict.get('inception_date', ''),
+            'distribution_policy': etf_dict.get('distribution_policy', ''),
+            'distribution_frequency': etf_dict.get('distribution_frequency', ''),
+            'replication': etf_dict.get('replication', ''),
+            'legal_structure': etf_dict.get('legal_structure', ''),
+            'index_name': etf_dict.get('index_name', ''),
+            'investment_focus': etf_dict.get('investment_focus', ''),
+            'sustainability': etf_dict.get('sustainability', ''),
+            'category': etf_dict.get('category', ''),
+            'is_leveraged': etf_dict.get('is_leveraged', False),
+            'region': etf_dict.get('region', ''),
+            'total_holdings': etf_dict.get('total_holdings', 0) or 0,
+            'return_1y': etf_dict.get('return_1y', 0) or 0,
+            'return_3y': etf_dict.get('return_3y', 0) or 0,
+            'return_5y': etf_dict.get('return_5y', 0) or 0,
+            'return_ytd': etf_dict.get('return_ytd', 0) or 0,
+            'volatility_1y': etf_dict.get('volatility_1y', 0) or 0,
+            'volatility_3y': etf_dict.get('volatility_3y', 0) or 0,
+            'volatility_5y': etf_dict.get('volatility_5y', 0) or 0,
+            'return_per_risk_1y': etf_dict.get('return_per_risk_1y', 0) or 0,
+            'return_per_risk_3y': etf_dict.get('return_per_risk_3y', 0) or 0,
+            'return_per_risk_5y': etf_dict.get('return_per_risk_5y', 0) or 0,
+            'max_drawdown_1y': etf_dict.get('max_drawdown_1y', 0) or 0,
+            'max_drawdown_3y': etf_dict.get('max_drawdown_3y', 0) or 0,
+            'max_drawdown_5y': etf_dict.get('max_drawdown_5y', 0) or 0,
+            'max_drawdown_inception': etf_dict.get('max_drawdown_inception', 0) or 0,
+            'beta': etf_dict.get('beta', 0) or 0,
+            'correlation': etf_dict.get('correlation', 0) or 0,
+            'tracking_error': etf_dict.get('tracking_error', 0) or 0,
+            'information_ratio': etf_dict.get('information_ratio', 0) or 0,
+            'primary_exchange': etf_dict.get('primary_exchange', ''),
+            'primary_ticker': etf_dict.get('primary_ticker', ''),
+            'total_exchanges': etf_dict.get('total_exchanges', 0) or 0,
+            'current_dividend_yield': etf_dict.get('current_dividend_yield', ''),
+            'current_dividend_yield_numeric': etf_dict.get('current_dividend_yield_numeric', 0) or 0,
+            'dividends_12m': etf_dict.get('dividends_12m', ''),
+            'dividends_12m_numeric': etf_dict.get('dividends_12m_numeric', 0) or 0,
+            'dividends_12m_currency': etf_dict.get('dividends_12m_currency', ''),
+            'dividend_extraction_method': etf_dict.get('dividend_extraction_method', ''),
+            'scraping_date': datetime.now().isoformat(),
+            'scraping_status': 'success',
+            'retry_count': 0,
+            'degiro_free': etf_dict.get('degiro_free', False),
+            # Holdings
+            'holding_1_name': etf_dict.get('holding_1_name', ''),
+            'holding_1_weight': etf_dict.get('holding_1_weight', 0) or 0,
+            'holding_2_name': etf_dict.get('holding_2_name', ''),
+            'holding_2_weight': etf_dict.get('holding_2_weight', 0) or 0,
+            'holding_3_name': etf_dict.get('holding_3_name', ''),
+            'holding_3_weight': etf_dict.get('holding_3_weight', 0) or 0,
+            'holding_4_name': etf_dict.get('holding_4_name', ''),
+            'holding_4_weight': etf_dict.get('holding_4_weight', 0) or 0,
+            'holding_5_name': etf_dict.get('holding_5_name', ''),
+            'holding_5_weight': etf_dict.get('holding_5_weight', 0) or 0,
+            'holding_6_name': etf_dict.get('holding_6_name', ''),
+            'holding_6_weight': etf_dict.get('holding_6_weight', 0) or 0,
+            'holding_7_name': etf_dict.get('holding_7_name', ''),
+            'holding_7_weight': etf_dict.get('holding_7_weight', 0) or 0,
+            'holding_8_name': etf_dict.get('holding_8_name', ''),
+            'holding_8_weight': etf_dict.get('holding_8_weight', 0) or 0,
+            'holding_9_name': etf_dict.get('holding_9_name', ''),
+            'holding_9_weight': etf_dict.get('holding_9_weight', 0) or 0,
+            'holding_10_name': etf_dict.get('holding_10_name', ''),
+            'holding_10_weight': etf_dict.get('holding_10_weight', 0) or 0,
+            # Countries  
+            'country_1_name': etf_dict.get('country_1_name', ''),
+            'country_1_weight': etf_dict.get('country_1_weight', 0) or 0,
+            'country_2_name': etf_dict.get('country_2_name', ''),
+            'country_2_weight': etf_dict.get('country_2_weight', 0) or 0,
+            'country_3_name': etf_dict.get('country_3_name', ''),
+            'country_3_weight': etf_dict.get('country_3_weight', 0) or 0,
+            'country_4_name': etf_dict.get('country_4_name', ''),
+            'country_4_weight': etf_dict.get('country_4_weight', 0) or 0,
+            'country_5_name': etf_dict.get('country_5_name', ''),
+            'country_5_weight': etf_dict.get('country_5_weight', 0) or 0,
+            # Sectors
+            'sector_1_name': etf_dict.get('sector_1_name', ''),
+            'sector_1_weight': etf_dict.get('sector_1_weight', 0) or 0,
+            'sector_2_name': etf_dict.get('sector_2_name', ''),
+            'sector_2_weight': etf_dict.get('sector_2_weight', 0) or 0,
+            'sector_3_name': etf_dict.get('sector_3_name', ''),
+            'sector_3_weight': etf_dict.get('sector_3_weight', 0) or 0,
+            'sector_4_name': etf_dict.get('sector_4_name', ''),
+            'sector_4_weight': etf_dict.get('sector_4_weight', 0) or 0,
+            'sector_5_name': etf_dict.get('sector_5_name', ''),
+            'sector_5_weight': etf_dict.get('sector_5_weight', 0) or 0,
+            # Exchanges
+            'exchange_1_name': etf_dict.get('exchange_1_name', ''),
+            'exchange_1_currency': etf_dict.get('exchange_1_currency', ''),
+            'exchange_1_ticker': etf_dict.get('exchange_1_ticker', ''),
+            'exchange_1_bloomberg': etf_dict.get('exchange_1_bloomberg', ''),
+            'exchange_1_reuters': etf_dict.get('exchange_1_reuters', ''),
+            'exchange_1_market_maker': etf_dict.get('exchange_1_market_maker', ''),
+            'exchange_2_name': etf_dict.get('exchange_2_name', ''),
+            'exchange_2_currency': etf_dict.get('exchange_2_currency', ''),
+            'exchange_2_ticker': etf_dict.get('exchange_2_ticker', ''),
+            'exchange_2_bloomberg': etf_dict.get('exchange_2_bloomberg', ''),
+            'exchange_2_reuters': etf_dict.get('exchange_2_reuters', ''),
+            'exchange_2_market_maker': etf_dict.get('exchange_2_market_maker', ''),
+            'exchange_3_name': etf_dict.get('exchange_3_name', ''),
+            'exchange_3_currency': etf_dict.get('exchange_3_currency', ''),
+            'exchange_3_ticker': etf_dict.get('exchange_3_ticker', ''),
+            'exchange_3_bloomberg': etf_dict.get('exchange_3_bloomberg', ''),
+            'exchange_3_reuters': etf_dict.get('exchange_3_reuters', ''),
+            'exchange_3_market_maker': etf_dict.get('exchange_3_market_maker', ''),
+            'exchange_4_name': etf_dict.get('exchange_4_name', ''),
+            'exchange_4_currency': etf_dict.get('exchange_4_currency', ''),
+            'exchange_4_ticker': etf_dict.get('exchange_4_ticker', ''),
+            'exchange_4_bloomberg': etf_dict.get('exchange_4_bloomberg', ''),
+            'exchange_4_reuters': etf_dict.get('exchange_4_reuters', ''),
+            'exchange_4_market_maker': etf_dict.get('exchange_4_market_maker', ''),
+            'exchange_5_name': etf_dict.get('exchange_5_name', ''),
+            'exchange_5_currency': etf_dict.get('exchange_5_currency', ''),
+            'exchange_5_ticker': etf_dict.get('exchange_5_ticker', ''),
+            'exchange_5_bloomberg': etf_dict.get('exchange_5_bloomberg', ''),
+            'exchange_5_reuters': etf_dict.get('exchange_5_reuters', ''),
+            'exchange_5_market_maker': etf_dict.get('exchange_5_market_maker', '')
+            # NO rating fields here intentionally
+        }
+
     def upload_etfs_to_database(self, etfs: List[ETFDataComplete]) -> bool:
-        """Nahraje ETF data do Supabase databáze pomocí upsert"""
+        """Nahraje ETF data do Supabase databáze pomocí optimalizovaného chunked uploadu"""
         if not self.supabase:
             safe_log("warning", "WARNING: Supabase klient není inicializovaný, přeskakuji nahrávání do DB")
             return False
             
-        try:
-            # Transformuj data pro databázi
-            transformed_etfs = [self.transform_etf_for_database(etf) for etf in etfs]
+        return self._upload_chunk_to_database(etfs, chunk_size=5)
+    
+    def _upload_chunk_to_database(self, etfs: List[ETFDataComplete], chunk_size: int = 5) -> bool:
+        """Upload ETFs to database in smaller chunks to avoid timeout"""
+        success_count = 0
+        total_etfs = len(etfs)
+        
+        safe_log("info", f"📤 Uploading {total_etfs} ETFs in chunks of {chunk_size}...")
+        
+        for i in range(0, total_etfs, chunk_size):
+            chunk = etfs[i:i + chunk_size]
+            chunk_num = (i // chunk_size) + 1
+            total_chunks = (total_etfs + chunk_size - 1) // chunk_size
             
-            safe_log("info", f"INFO: Nahrávám {len(transformed_etfs)} ETF fondů do databáze...")
-            
-            # Použij upsert pro insert nebo update podle ISIN
-            response = self.supabase.table('etf_funds').upsert(
-                transformed_etfs,
-                on_conflict='isin'
-            ).execute()
-            
-            if response.data:
-                safe_log("info", f"SUCCESS: ✅ Úspěšně nahráno {len(response.data)} ETF fondů do databáze")
-                return True
-            else:
-                safe_log("error", f"ERROR: Databáze nevrátila data o upsert operaci")
-                return False
+            try:
+                safe_log("info", f"📦 Chunk {chunk_num}/{total_chunks}: Uploading {len(chunk)} ETFs...")
                 
+                # Transform data for database
+                transformed_chunk = [self.transform_etf_for_database(etf) for etf in chunk]
+                
+                # Try upload with rating fields first
+                try:
+                    response = self.supabase.table('etf_funds').upsert(
+                        transformed_chunk,
+                        on_conflict='isin'
+                    ).execute()
+                    
+                    if response.data:
+                        success_count += len(chunk)
+                        safe_log("info", f"✅ Chunk {chunk_num}: Successfully uploaded {len(chunk)} ETFs with rating fields")
+                    else:
+                        safe_log("warning", f"⚠️ Chunk {chunk_num}: No data returned from upload")
+                        
+                except Exception as rating_error:
+                    safe_log("warning", f"⚠️ Chunk {chunk_num}: Rating fields failed: {rating_error}")
+                    safe_log("info", f"🔄 Chunk {chunk_num}: Retrying without rating fields...")
+                    
+                    # Remove rating fields and retry
+                    transformed_chunk_no_rating = []
+                    for etf_data in transformed_chunk:
+                        etf_copy = etf_data.copy()
+                        etf_copy.pop('rating', None)
+                        etf_copy.pop('rating_score', None)
+                        transformed_chunk_no_rating.append(etf_copy)
+                    
+                    response = self.supabase.table('etf_funds').upsert(
+                        transformed_chunk_no_rating,
+                        on_conflict='isin'
+                    ).execute()
+                    
+                    if response.data:
+                        success_count += len(chunk)
+                        safe_log("info", f"✅ Chunk {chunk_num}: Successfully uploaded {len(chunk)} ETFs without rating fields")
+                    else:
+                        safe_log("error", f"❌ Chunk {chunk_num}: Failed to upload even without rating fields")
+                
+                # Small delay between chunks to be respectful to the database
+                time.sleep(0.5)
+                
+            except Exception as e:
+                safe_log("error", f"❌ Chunk {chunk_num}: Failed to upload: {e}")
+                
+        safe_log("info", f"🎯 Upload complete: {success_count}/{total_etfs} ETFs uploaded successfully")
+        return success_count == total_etfs
+    
+    def _ensure_rating_columns_exist(self):
+        """Zajistí, že rating sloupce existují v databázi"""
+        try:
+            # Zkusíme jednoduchý test query s rating sloupci
+            test_response = self.supabase.table('etf_funds').select('isin, rating, rating_score').limit(1).execute()
+            # Pokud to prošlo, sloupce existují
+            safe_log("info", "INFO: Rating sloupce již existují v databázi")
         except Exception as e:
-            safe_log("error", f"ERROR: Chyba při nahrávání do databáze: {e}")
-            return False
+            # Pokud se to nepovedlo, sloupce pravděpodobně neexistují
+            safe_log("info", "INFO: Rating sloupce neexistují, zkouším je vytvořit...")
+            try:
+                # Pokusíme se vytvořit sloupce přes dummy update
+                # Vezmeme první existující ISIN a zkusíme ho aktualizovat s rating daty
+                existing = self.supabase.table('etf_funds').select('isin').limit(1).execute()
+                if existing.data:
+                    test_isin = existing.data[0]['isin']
+                    # Pokusíme se aktualizovat s rating daty - to automaticky vytvoří sloupce
+                    self.supabase.table('etf_funds').update({
+                        'rating': 0,
+                        'rating_score': 0
+                    }).eq('isin', test_isin).execute()
+                    safe_log("info", "SUCCESS: Rating sloupce byly automaticky vytvořeny")
+                else:
+                    safe_log("warning", "WARNING: Žádné existující záznamy pro vytvoření sloupců")
+            except Exception as e2:
+                safe_log("warning", f"WARNING: Nepodařilo se vytvořit rating sloupce: {e2}")
 
 
 def main():
