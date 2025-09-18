@@ -19,10 +19,10 @@ const ETFComparisonHeader: React.FC<ETFComparisonHeaderProps> = ({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
-            Srovnání ETF fondů
+            ETF srovnání - Nejlepší nástroj pro porovnání ETF fondů 2025
           </h1>
           <p className="text-gray-600 mt-2">
-            Vyberte až 3 fondy pro detailní analýzu
+            Porovnejte více než 3500 ETF fondů podle TER poplatků, výkonnosti a rizika. Vyberte až 3 fondy pro detailní analýzu.
           </p>
         </div>
         
