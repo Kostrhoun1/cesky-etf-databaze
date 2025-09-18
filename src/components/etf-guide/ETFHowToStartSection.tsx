@@ -57,7 +57,14 @@ const ETFHowToStartSection: React.FC = () => {
               <Card className="flex-1 bg-white border-0 shadow-lg hover:shadow-xl transition-all">
                 <CardContent className="p-6">
                   <h4 className="font-bold text-xl text-gray-900 mb-3">{step.title}</h4>
-                  <p className="text-gray-700 leading-relaxed">{step.description} Najděte ten pravý fond pomocí našeho <Link to="/srovnani-etf" className="text-violet-600 hover:underline font-medium">srovnávače</Link>.</p>
+                  <p className="text-gray-700 leading-relaxed">
+                    {step.description}
+                    {index === 2 && (
+                      <>
+                        {' '}Najděte ten pravý fond pomocí našeho <Link to="/srovnani-etf" className="text-violet-600 hover:underline font-medium">srovnávače</Link>.
+                      </>
+                    )}
+                  </p>
                 </CardContent>
               </Card>
             </li>

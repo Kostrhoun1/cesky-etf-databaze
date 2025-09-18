@@ -18,14 +18,14 @@ const Layout: React.FC<LayoutProps> = ({ children, lastUpdated }) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Upravené pořadí a přejmenování Blog → Tipy
+  // Zjednodušené hlavní menu - logické pořadí od základů k pokročilým nástrojům
   const navigation = [
-    { name: 'Domů', href: '/', current: location.pathname === '/' },
-    { name: 'Srovnání ETF', href: '/srovnani-etf', current: location.pathname === '/srovnani-etf' },
     { name: 'Co jsou ETF', href: '/co-jsou-etf', current: location.pathname === '/co-jsou-etf' },
     { name: 'Kde koupit ETF', href: '/kde-koupit-etf', current: location.pathname === '/kde-koupit-etf' },
-    { name: 'Tipy', href: '/tipy', current: location.pathname.startsWith('/tipy') },
+    { name: 'Srovnání ETF', href: '/srovnani-etf', current: location.pathname === '/srovnani-etf' },
+    { name: 'Portfolio', href: '/portfolio-strategie', current: location.pathname.startsWith('/portfolio-strategie') },
     { name: 'Kalkulačky', href: '/kalkulacky', current: location.pathname.startsWith('/kalkulacky') || location.pathname === '/nastroje' },
+    { name: 'Tipy', href: '/tipy', current: location.pathname.startsWith('/tipy') },
   ];
 
   return (
@@ -104,8 +104,8 @@ const Layout: React.FC<LayoutProps> = ({ children, lastUpdated }) => {
       {/* Footer */}
       <footer className="bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-            <div className="md:col-span-2 flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-2 flex flex-col gap-4">
               <div className="flex items-center">
                 <Logo size={200} />
               </div>
@@ -121,13 +121,20 @@ const Layout: React.FC<LayoutProps> = ({ children, lastUpdated }) => {
               </div>
             </div>
             <div>
-              <h4 className="text-md font-semibold text-slate-200 mb-4 uppercase tracking-wider">Sekce</h4>
+              <h4 className="text-md font-semibold text-slate-200 mb-4 uppercase tracking-wider">Nástroje</h4>
               <ul className="space-y-3 text-slate-400">
-                <li><Link to="/srovnani-etf" className="hover:text-white transition-colors">Srovnání ETF</Link></li>
+                <li><Link to="/srovnani-etf" className="hover:text-white transition-colors">🔍 Srovnání ETF</Link></li>
+                <li><Link to="/portfolio-strategie" className="hover:text-white transition-colors">📊 Portfolio Strategie</Link></li>
+                <li><Link to="/kalkulacky" className="hover:text-white transition-colors">🧮 Kalkulačky</Link></li>
+                <li><Link to="/navod-pro-zacatecniky" className="hover:text-white transition-colors">📄 Průvodce (PDF)</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-md font-semibold text-slate-200 mb-4 uppercase tracking-wider">Vzdělání</h4>
+              <ul className="space-y-3 text-slate-400">
                 <li><Link to="/co-jsou-etf" className="hover:text-white transition-colors">Co jsou ETF</Link></li>
                 <li><Link to="/kde-koupit-etf" className="hover:text-white transition-colors">Kde koupit ETF</Link></li>
-                <li><Link to="/tipy" className="hover:text-white transition-colors">Tipy</Link></li>
-                <li><Link to="/kalkulacky" className="hover:text-white transition-colors">Kalkulačky</Link></li>
+                <li><Link to="/tipy" className="hover:text-white transition-colors">Tipy a články</Link></li>
               </ul>
             </div>
             <div>

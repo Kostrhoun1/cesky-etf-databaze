@@ -132,7 +132,7 @@ const NejlepsiETFNaAmerickeAkcie: React.FC = () => {
     ));
   };
 
-  const coreETFs = RECOMMENDED_US_ETFS.filter(etf => etf.rating === 5);
+  const coreETFs = RECOMMENDED_US_ETFS.sort((a, b) => b.rating - a.rating).slice(0, 3);
   const specializedETFs = RECOMMENDED_US_ETFS.filter(etf => etf.rating < 5);
 
   return (
@@ -240,7 +240,7 @@ const NejlepsiETFNaAmerickeAkcie: React.FC = () => {
               
               <p className="text-gray-700 text-sm mb-4 line-clamp-3">{etf.reason}</p>
               
-              <Link to={`/etf/${etf.isin}`} className="block">
+              <Link to={`/etf/${etf.isin}`} className="block" target="_blank" rel="noopener noreferrer">
                 <Button className="w-full bg-blue-600 hover:bg-blue-700">
                   Detail fondu
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -276,7 +276,7 @@ const NejlepsiETFNaAmerickeAkcie: React.FC = () => {
                 </div>
                 
                 <div className="lg:ml-6">
-                  <Link to={`/etf/${etf.isin}`}>
+                  <Link to={`/etf/${etf.isin}`} target="_blank" rel="noopener noreferrer">
                     <Button className="bg-blue-600 hover:bg-blue-700">
                       Detail fondu
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -439,7 +439,7 @@ const NejlepsiETFNaAmerickeAkcie: React.FC = () => {
           </summary>
           <div className="mt-3 text-gray-700">
             Pro většinu investorů je nejlepší{' '}
-            <Link to="/etf/IE00B5BMR087" className="text-blue-600 underline hover:text-blue-800">
+            <Link to="/etf/IE00B5BMR087" className="text-blue-600 underline hover:text-blue-800" target="_blank" rel="noopener noreferrer">
               iShares Core S&P 500 (CSPX)
             </Link>
             , případně jeho ekvivalenty VUSA od Vanguard.

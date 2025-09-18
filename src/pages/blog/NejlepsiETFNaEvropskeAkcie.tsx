@@ -215,7 +215,7 @@ const NejlepsiETFNaEvropskeAkcie: React.FC = () => {
               
               <p className="text-gray-700 text-sm mb-4 line-clamp-3">{etf.reason}</p>
               
-              <Link to={`/etf/${etf.isin}`} className="block">
+              <Link to={`/etf/${etf.isin}`} className="block" target="_blank" rel="noopener noreferrer">
                 <Button className="w-full bg-blue-600 hover:bg-blue-700">
                   Detail fondu
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -251,7 +251,7 @@ const NejlepsiETFNaEvropskeAkcie: React.FC = () => {
                 </div>
                 
                 <div className="lg:ml-6">
-                  <Link to={`/etf/${etf.isin}`}>
+                  <Link to={`/etf/${etf.isin}`} target="_blank" rel="noopener noreferrer">
                     <Button className="bg-blue-600 hover:bg-blue-700">
                       Detail fondu
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -459,11 +459,11 @@ const NejlepsiETFNaEvropskeAkcie: React.FC = () => {
           </summary>
           <div className="mt-3 text-gray-700">
             {" "}
-            <Link to="/etf/LU0908500753" className="text-blue-600 underline hover:text-blue-800">
+            <Link to="/etf/LU0908500753" className="text-blue-600 underline hover:text-blue-800" target="_blank" rel="noopener noreferrer">
               Lyxor STOXX Europe 600 (0.07%)
             </Link>{" "}
             a{" "}
-            <Link to="/etf/IE00BKX55T58" className="text-blue-600 underline hover:text-blue-800">
+            <Link to="/etf/IE00BKX55T58" className="text-blue-600 underline hover:text-blue-800" target="_blank" rel="noopener noreferrer">
               Vanguard FTSE Developed Europe (0.10%)
             </Link>{" "}
             kombinují extrémně nízký TER s kvalitním pokrytím.

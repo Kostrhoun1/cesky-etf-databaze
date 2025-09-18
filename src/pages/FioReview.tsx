@@ -50,22 +50,74 @@ const FioReview = () => {
           </Link>
         </div>
 
-        {/* Hlavička */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Detailní Recenze Fio e-Broker
-          </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            Tradiční český broker s bankovním zázemím
-          </p>
-          <div className="flex justify-center items-center mt-6 gap-4">
-            <Badge variant="secondary" className="text-lg px-4 py-2">
-              <Star className="h-5 w-5 mr-2 fill-current text-yellow-500" />
-              3.9/5
-            </Badge>
-            <Badge className="bg-blue-600 text-lg px-4 py-2">
-              Česká banka
-            </Badge>
+        {/* Hero sekce s gradientem */}
+        <div className="bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-700 text-white rounded-3xl p-8 md:p-12 mb-12 relative overflow-hidden">
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="relative z-10 text-center">
+            <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <img 
+                src="/lovable-uploads/55aac89b-3834-421c-8689-34fb13fad2b1.png" 
+                alt="Fio e-Broker logo" 
+                className="w-8 h-8 mr-3 rounded-lg bg-white p-1"
+              />
+              <span className="font-medium">Fio e-Broker</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Detailní Recenze Fio e-Broker
+            </h1>
+            <p className="text-xl text-blue-100 leading-relaxed max-w-3xl mx-auto mb-8">
+              Tradiční český broker s bankovním zázemím a přístupem k americkým ETF
+            </p>
+            <div className="flex flex-wrap justify-center items-center gap-4">
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
+                <div className="flex items-center text-yellow-300 mb-2">
+                  <Star className="h-6 w-6 mr-2 fill-current" />
+                  <span className="text-2xl font-bold">3.9</span>
+                  <span className="text-lg ml-1">/5</span>
+                </div>
+                <div className="text-sm text-blue-100">Celkové hodnocení</div>
+              </div>
+              <div className="bg-blue-500/90 backdrop-blur-sm rounded-2xl px-6 py-4">
+                <div className="text-lg font-bold mb-1">Česká banka</div>
+                <div className="text-sm text-blue-100">Lokální podpora</div>
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
+                <div className="text-lg font-bold mb-1">15% daň</div>
+                <div className="text-sm text-blue-100">České dividendy</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Rychlý přehled s ikonami */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-100">
+            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mb-4">
+              <MapPin className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">Regulace</h3>
+            <p className="text-sm text-gray-600">ČNB (Česká národní banka)</p>
+          </div>
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
+            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center mb-4">
+              <Building className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">Pobočky</h3>
+            <p className="text-sm text-gray-600">90+ poboček v ČR</p>
+          </div>
+          <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl border border-purple-100">
+            <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center mb-4">
+              <Target className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">US ETF</h3>
+            <p className="text-sm text-gray-600">Přístup k americkým fondům</p>
+          </div>
+          <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-2xl border border-orange-100">
+            <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center mb-4">
+              <Award className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">Historie</h3>
+            <p className="text-sm text-gray-600">Od roku 1997</p>
           </div>
         </div>
 

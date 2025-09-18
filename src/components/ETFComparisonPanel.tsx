@@ -44,7 +44,12 @@ const ETFComparisonPanel: React.FC<ETFComparisonPanelProps> = ({
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-sm truncate">{etf.name}</div>
                 <div className="text-xs text-gray-500">{etf.isin}</div>
-                <div className="flex gap-1 mt-1">
+                <div className="flex gap-1 mt-1 flex-wrap">
+                  {etf.category === 'Páková ETF' && (
+                    <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-200 font-semibold">
+                      PÁKOVÁ
+                    </Badge>
+                  )}
                   <Badge variant="outline" className="text-xs">
                     TER: {formatPercentage(etf.ter_numeric)}
                   </Badge>

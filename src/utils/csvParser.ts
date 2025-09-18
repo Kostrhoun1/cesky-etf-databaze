@@ -9,6 +9,29 @@ const mapETFCategory = (etf: any): string => {
   const indexName = (etf.index_name || '').toLowerCase();
   const description = (etf.description_en || '').toLowerCase();
   
+  // Páková ETF - MUSÍ BÝT PRVNÍ!
+  if (
+    name.includes('leveraged') || 
+    name.includes('2x') || 
+    name.includes('3x') || 
+    name.includes('ultra') || 
+    name.includes('leverage') ||
+    name.includes('daily 2x') ||
+    name.includes('daily 3x') ||
+    name.includes('2x leveraged') ||
+    name.includes('3x leveraged') ||
+    description.includes('leveraged') || 
+    description.includes('2x') || 
+    description.includes('3x') ||
+    description.includes('leverage') ||
+    investmentFocus.includes('leveraged') ||
+    indexName.includes('2x') ||
+    indexName.includes('3x') ||
+    indexName.includes('leveraged')
+  ) {
+    return 'Páková ETF';
+  }
+  
   // Real Estate / REIT ETFs
   if (
     name.includes('real estate') || 

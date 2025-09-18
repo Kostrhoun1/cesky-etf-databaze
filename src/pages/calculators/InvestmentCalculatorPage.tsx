@@ -2,7 +2,6 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import InvestmentCalculator from '@/components/tools/InvestmentCalculator';
 import SEOHead from '@/components/SEO/SEOHead';
-import BreadcrumbNav from '@/components/SEO/BreadcrumbNav';
 import FAQSection from '@/components/SEO/FAQSection';
 import InternalLinking from '@/components/SEO/InternalLinking';
 import StructuredData from '@/components/SEO/StructuredData';
@@ -71,13 +70,6 @@ const InvestmentCalculatorPage: React.FC = () => {
       <StructuredData data={breadcrumbSchema} />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <BreadcrumbNav
-          items={[
-            { name: "Domů", href: "/" },
-            { name: "Kalkulačky", href: "/nastroje" },
-            { name: "Investiční kalkulačka" }
-          ]}
-        />
 
         {/* Hero sekce */}
         <div className="text-center mb-12">
@@ -204,9 +196,30 @@ const InvestmentCalculatorPage: React.FC = () => {
           className="mt-16"
         />
 
+        {/* ETF Investment Guide CTA */}
+        <div className="mt-16 bg-gradient-to-r from-green-600 to-teal-600 rounded-xl p-6 text-white">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold mb-3">💡 Chcete se dozvědět více o investování?</h3>
+            <p className="text-green-100 mb-4">
+              Stáhněte si náš komplexní průvodce s 5 ověřenými portfolio strategiami a praktickými radami pro začátečníky i pokročilé.
+            </p>
+            <Link 
+              to="/navod-pro-zacatecniky"
+              className="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors inline-block"
+            >
+              📚 Stáhnout průvodce zdarma
+            </Link>
+          </div>
+        </div>
+
         {/* Související nástroje */}
         <InternalLinking
           relatedLinks={[
+            {
+              title: "Průvodce investováním",
+              href: "/navod-pro-zacatecniky",
+              description: "Kompletní návod s 5 portfolio strategiemi"
+            },
             {
               title: "Srovnání ETF fondů",
               href: "/srovnani-etf",

@@ -95,15 +95,14 @@ const BONDS_ETF_FILTER = {
   top: 8,
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
-  regionKeywords: ["Rozvinuté země"],
-  nameKeywords: ["government", "bond"],
+  category: "Dluhopisy",
 };
 
 const COMMODITIES_ETF_FILTER = {
   top: 6,
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
-  nameKeywords: ["gold", "commodity", "zlato"],
+  nameKeywords: ["Gold", "Commodity", "Commodities", "Zlato", "Physical", "Energy"],
 };
 
 const GLOBAL_STOCKS_FILTER = {
@@ -271,7 +270,7 @@ const AllWeatherPortfolio: React.FC = () => {
                 </div>
                 
                 <div className="lg:ml-6 mt-4 lg:mt-0">
-                  <Link to={`/etf/${etf.isin}`}>
+                  <Link to={`/etf/${etf.isin}`} target="_blank" rel="noopener noreferrer">
                     <Button className="bg-slate-600 hover:bg-slate-700">
                       Detail fondu
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -492,7 +491,7 @@ const AllWeatherPortfolio: React.FC = () => {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
-            <Link to="/tipy/nejlepsi-etf-2025">
+            <Link to="/tipy/nejlepsi-etf-2025" target="_blank" rel="noopener noreferrer">
               <Button variant="outline" className="border-white text-white hover:bg-white hover:text-slate-600">
                 Nejlepší ETF 2025
               </Button>

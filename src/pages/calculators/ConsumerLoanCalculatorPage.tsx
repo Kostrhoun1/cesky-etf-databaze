@@ -2,7 +2,6 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import ConsumerLoanCalculator from '@/components/tools/ConsumerLoanCalculator';
 import SEOHead from '@/components/SEO/SEOHead';
-import BreadcrumbNav from '@/components/SEO/BreadcrumbNav';
 import FAQSection from '@/components/SEO/FAQSection';
 import InternalLinking from '@/components/SEO/InternalLinking';
 import StructuredData from '@/components/SEO/StructuredData';
@@ -71,14 +70,6 @@ const ConsumerLoanCalculatorPage: React.FC = () => {
       <StructuredData data={breadcrumbSchema} />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <BreadcrumbNav
-          items={[
-            { name: "Domů", href: "/" },
-            { name: "Kalkulačky", href: "/nastroje" },
-            { name: "Úvěrová kalkulačka" }
-          ]}
-        />
-
         {/* Hero sekce */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-medium mb-4">

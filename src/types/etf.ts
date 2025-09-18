@@ -130,6 +130,9 @@ export interface ETF {
   exchange_5_bloomberg: string;
   exchange_5_reuters: string;
   exchange_5_market_maker: string;
+  // Rating fields from database
+  rating?: number;
+  rating_score?: number;
 }
 
 // Simplified ETF type for list displays
@@ -152,10 +155,16 @@ export interface ETFListItem {
   replication: string;
   region: string;
   current_dividend_yield_numeric?: number;
+  // Pole potřebná pro konzistentní rating
+  inception_date?: string;
+  tracking_error?: number;
   // Přidání všech ticker polí pro rozšířené vyhledávání
   exchange_1_ticker?: string;
   exchange_2_ticker?: string;
   exchange_3_ticker?: string;
   exchange_4_ticker?: string;
   exchange_5_ticker?: string;
+  // Rating z databáze
+  rating?: number;
+  rating_score?: number;
 }

@@ -213,7 +213,7 @@ const NejlepsiETFNaNASDAQ: React.FC = () => {
               
               <p className="text-gray-700 text-sm mb-4 line-clamp-3">{etf.reason}</p>
               
-              <Link to={`/etf/${etf.isin}`} className="block">
+              <Link to={`/etf/${etf.isin}`} className="block" target="_blank" rel="noopener noreferrer">
                 <Button className="w-full bg-purple-600 hover:bg-purple-700">
                   Detail fondu
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -249,7 +249,7 @@ const NejlepsiETFNaNASDAQ: React.FC = () => {
                 </div>
                 
                 <div className="lg:ml-6">
-                  <Link to={`/etf/${etf.isin}`}>
+                  <Link to={`/etf/${etf.isin}`} target="_blank" rel="noopener noreferrer">
                     <Button className="bg-purple-600 hover:bg-purple-700">
                       Detail fondu
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -416,11 +416,11 @@ const NejlepsiETFNaNASDAQ: React.FC = () => {
           </summary>
           <div className="mt-3 text-gray-700">
             K nejlevnějším patří{' '}
-            <Link to="/etf/IE00BLRPRQ36" className="text-purple-600 underline hover:text-purple-800">
+            <Link to="/etf/IE00BLRPRQ36" className="text-purple-600 underline hover:text-purple-800" target="_blank" rel="noopener noreferrer">
               Xtrackers NASDAQ 100 (0.20%)
             </Link>{' '}
             a{' '}
-            <Link to="/etf/LU1681038243" className="text-purple-600 underline hover:text-purple-800">
+            <Link to="/etf/LU1681038243" className="text-purple-600 underline hover:text-purple-800" target="_blank" rel="noopener noreferrer">
               Amundi NASDAQ-100 (0.23%)
             </Link>.
           </div>

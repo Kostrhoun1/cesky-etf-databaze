@@ -1,5 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ETFListItem } from '@/types/etf';
+import { calculateETFRating } from '@/utils/etfRating';
+
+type AdvancedFilterValue = string | number | boolean | [number, number];
 
 export interface AdvancedFiltersState {
   distributionPolicy: string;
@@ -12,6 +15,8 @@ export interface AdvancedFiltersState {
   terRange: [number, number];
   fundSizeRangeValues: [number, number];
   dividendYieldRange: [number, number];
+  includeLeveragedETFs: boolean;
+  minRating: number;
 }
 
 export const useETFTableLogic = (etfs: ETFListItem[]) => {
@@ -20,6 +25,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
   const [sortBy, setSortBy] = useState<string>('ter_numeric');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
+  const [minRating, setMinRating] = useState(0);
   const itemsPerPage = 50;
 
   const ranges = useMemo(() => {
@@ -45,6 +51,8 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     terRange: [0, 1],
     fundSizeRangeValues: [0, 100000],
     dividendYieldRange: [0, 10],
+    includeLeveragedETFs: false,
+    minRating: 0,
   });
 
   const categories = useMemo(() => {
@@ -93,6 +101,23 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
         return basicFieldsMatch || tickerFieldsMatch;
       })
       .filter(etf => etf.category === activeCategory)
+      .filter(etf => {
+        // Rating filter - use database rating if available, fallback to calculated
+        if (advancedFilters.minRating > 0) {
+          const rating = etf.rating || calculateETFRating(etf).rating;
+          if (rating < advancedFilters.minRating) {
+            return false;
+          }
+        }
+        return true;
+      })
+      .filter(etf => {
+        // Filter out leveraged ETFs if not included
+        if (!advancedFilters.includeLeveragedETFs && etf.category === 'Páková ETF') {
+          return false;
+        }
+        return true;
+      })
       .filter(etf => {
         const { distributionPolicy, indexName, fundCurrency, maxTer, replicationMethod, fundSizeRange, region, terRange, fundSizeRangeValues, dividendYieldRange } = advancedFilters;
         const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
@@ -196,8 +221,13 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     setCurrentPage(1);
   };
 
-  const handleAdvancedFilterChange = (key: keyof AdvancedFiltersState, value: any) => {
+  const handleAdvancedFilterChange = (key: keyof AdvancedFiltersState, value: AdvancedFilterValue) => {
     setAdvancedFilters(prevFilters => ({...prevFilters, [key]: value}));
+    setCurrentPage(1);
+  };
+
+  const handleMinRatingChange = (value: number) => {
+    setMinRating(value);
     setCurrentPage(1);
   };
 
@@ -206,6 +236,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     sortBy,
     sortOrder,
     currentPage,
+    minRating,
     advancedFilters,
     paginatedETFs,
     filteredETFs,
@@ -220,6 +251,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     handleSearch,
     handleCategoryChange,
     setCurrentPage,
-    handleAdvancedFilterChange
+    handleAdvancedFilterChange,
+    handleMinRatingChange
   };
 };

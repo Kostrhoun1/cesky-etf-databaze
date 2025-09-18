@@ -5,7 +5,7 @@ interface BrokerSEOProps {
   year?: number;
 }
 
-export const generateBrokerSchema = (brokerName?: string) => {
+const generateBrokerSchema = (brokerName?: string) => {
   const currentYear = new Date().getFullYear();
   
   if (brokerName) {
@@ -88,7 +88,7 @@ export const generateBrokerSchema = (brokerName?: string) => {
   };
 };
 
-export const generateFAQSchema = () => {
+const generateFAQSchema = () => {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -137,7 +137,7 @@ export const generateFAQSchema = () => {
   };
 };
 
-export const generateBreadcrumbSchema = (brokerName?: string) => {
+const generateBreadcrumbSchema = (brokerName?: string) => {
   const items = [
     {
       "@type": "ListItem",
@@ -173,4 +173,5 @@ const BrokerSEO: React.FC<BrokerSEOProps> = ({ brokerName, year = new Date().get
   return null; // This component only provides utility functions
 };
 
+export { generateBrokerSchema, generateFAQSchema, generateBreadcrumbSchema };
 export default BrokerSEO;

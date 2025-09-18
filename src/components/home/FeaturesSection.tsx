@@ -16,7 +16,7 @@ const features = [
   {
     icon: BarChart,
     title: "Srovnání brokerů",
-    description: "Detailní srovnání 5 hlavních brokerů z pohledu českého investora. Přehled poplatků, platformy a vhodnosti pro ETF investování.",
+    description: "Detailní srovnání 6 hlavních brokerů z pohledu českého investora. Přehled poplatků, platformy a vhodnosti pro ETF investování.",
     link: "/kde-koupit-etf",
     cta: "Srovnat brokery"
   },

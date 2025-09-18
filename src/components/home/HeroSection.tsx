@@ -5,10 +5,9 @@ import { Button } from '@/components/ui/button';
 
 interface HeroSectionProps {
   totalCount: number;
-  onPortfolioWizardOpen: () => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ totalCount, onPortfolioWizardOpen }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ totalCount }) => {
   const displayCount = totalCount > 0 ? Math.floor(totalCount / 100) * 100 : 3500;
 
   return (
@@ -32,13 +31,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ totalCount, onPortfolioWizard
             <Button asChild size="lg" variant="outline" className="border-white/70 text-gray-900 bg-white hover:bg-gray-100 hover:text-gray-900 hover-scale">
               <Link to="/co-jsou-etf">Co jsou ETF?</Link>
             </Button>
-            <Button 
-              onClick={onPortfolioWizardOpen}
+            <Button asChild
               size="lg" 
               className="hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold"
             >
-              <span className="mr-2">📊</span>
-              Vytvořit portfolio
+              <Link to="/portfolio-strategie">
+                <span className="mr-2">📊</span>
+                Vytvořit portfolio
+              </Link>
             </Button>
           </div>
         </div>

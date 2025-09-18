@@ -64,22 +64,74 @@ const DEGIROReview = () => {
           </Link>
         </div>
 
-        {/* Hlavička */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Detailní Recenze Brokera DEGIRO
-          </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            Komplexní hodnocení z pohledu českého investora
-          </p>
-          <div className="flex justify-center items-center mt-6 gap-4">
-            <Badge variant="secondary" className="text-lg px-4 py-2">
-              <Star className="h-5 w-5 mr-2 fill-current text-yellow-500" />
-              4.5/5
-            </Badge>
-            <Badge className="bg-green-600 text-lg px-4 py-2">
-              Doporučeno
-            </Badge>
+        {/* Hero sekce s gradientem */}
+        <div className="bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 text-white rounded-3xl p-8 md:p-12 mb-12 relative overflow-hidden">
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="relative z-10 text-center">
+            <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <img 
+                src="/lovable-uploads/f9bacf3b-7b11-4c31-917d-e16803dc0887.png" 
+                alt="DEGIRO logo" 
+                className="w-8 h-8 mr-3 rounded-lg bg-white p-1"
+              />
+              <span className="font-medium">DEGIRO Broker</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Detailní Recenze DEGIRO
+            </h1>
+            <p className="text-xl text-orange-100 leading-relaxed max-w-3xl mx-auto mb-8">
+              Komplexní hodnocení evropského brokera s nízkými poplatky a širokou nabídkou ETF
+            </p>
+            <div className="flex flex-wrap justify-center items-center gap-4">
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
+                <div className="flex items-center text-yellow-300 mb-2">
+                  <Star className="h-6 w-6 mr-2 fill-current" />
+                  <span className="text-2xl font-bold">4.5</span>
+                  <span className="text-lg ml-1">/5</span>
+                </div>
+                <div className="text-sm text-orange-100">Celkové hodnocení</div>
+              </div>
+              <div className="bg-green-500/90 backdrop-blur-sm rounded-2xl px-6 py-4">
+                <div className="text-lg font-bold mb-1">Doporučeno</div>
+                <div className="text-sm text-green-100">Pro investory</div>
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
+                <div className="text-lg font-bold mb-1">3000+ ETF</div>
+                <div className="text-sm text-orange-100">Široká nabídka</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Rychlý přehled s ikonami */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-100">
+            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mb-4">
+              <CheckCircle className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">Regulace</h3>
+            <p className="text-sm text-gray-600">BaFin (DE), DNB/AFM (NL)</p>
+          </div>
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
+            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center mb-4">
+              <TrendingUp className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">ETF poplatky</h3>
+            <p className="text-sm text-gray-600">1-3 EUR za transakci</p>
+          </div>
+          <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl border border-purple-100">
+            <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center mb-4">
+              <AlertTriangle className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">Core Selection</h3>
+            <p className="text-sm text-gray-600">200+ ETF zdarma</p>
+          </div>
+          <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-2xl border border-orange-100">
+            <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center mb-4">
+              <Shield className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">Ochrana</h3>
+            <p className="text-sm text-gray-600">100 000 EUR (DE)</p>
           </div>
         </div>
 
@@ -180,9 +232,14 @@ const DEGIROReview = () => {
                   <TableCell className="text-sm">1 EUR komise + 1 EUR manipulační poplatek</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Vybrané ETF</TableCell>
-                  <TableCell>1 EUR</TableCell>
-                  <TableCell className="text-sm">Jednou měsíčně zdarma, další transakce zdarma nad 1000 EUR</TableCell>
+                  <TableCell className="font-medium">Core Selection ETF</TableCell>
+                  <TableCell className="text-green-600 font-bold">1 EUR</TableCell>
+                  <TableCell className="text-sm">200+ vybraných ETF, jedna transakce měsíčně zdarma</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">Ostatní ETF</TableCell>
+                  <TableCell>3 EUR</TableCell>
+                  <TableCell className="text-sm">ETF mimo Core Selection seznam</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell className="font-medium">Konverze CZK/EUR</TableCell>

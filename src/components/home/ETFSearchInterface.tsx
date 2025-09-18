@@ -1,6 +1,6 @@
 import React from 'react';
 import { ETFListItem } from '@/types/etf';
-import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
+import { AdvancedFiltersState, AdvancedFilterValue } from '@/hooks/useETFTableLogic';
 
 interface ETFSearchInterfaceProps {
   searchTerm: string;
@@ -17,7 +17,7 @@ interface ETFSearchInterfaceProps {
   activeCategory: string;
   handleSort: (field: string) => void;
   handleCategoryChange: (value: string) => void;
-  handleAdvancedFilterChange: (key: keyof AdvancedFiltersState, value: any) => void;
+  handleAdvancedFilterChange: (key: keyof AdvancedFiltersState, value: AdvancedFilterValue) => void;
   selectedETFs: ETFListItem[];
   onAddETF: (etf: ETFListItem) => void;
   onRemoveETF: (isin: string) => void;

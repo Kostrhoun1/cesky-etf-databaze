@@ -24,7 +24,7 @@ const ETFCTASection: React.FC = () => {
             <Link to="/srovnani-etf">Porovnat ETF fondy</Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="border-2 border-white/30 text-white hover:bg-white/10 hover:text-white font-bold px-8 py-4 text-lg transition-all hover:scale-105">
-            <Link to="/navod-pro-zacatecniky">Návod pro začátečníky</Link>
+            <Link to="/tipy/jak-zacit-investovat-do-etf">Jak začít investovat</Link>
           </Button>
         </div>
       </div>

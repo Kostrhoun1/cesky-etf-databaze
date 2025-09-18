@@ -5,7 +5,7 @@ export const brokers: Broker[] = [
     id: 'degiro',
     name: 'DEGIRO',
     logo: '/lovable-uploads/f9bacf3b-7b11-4c31-917d-e16803dc0887.png',
-    description: 'Populární broker s nízkými poplatky a širokou nabídkou ETF. Ideální pro cost-conscious investory.',
+    description: 'Populární evropský broker s nízkými poplatky a širokou nabídkou ETF. Ideální pro cost-conscious investory.',
     rating: 4.5,
     regulation: 'BaFin (DE), DNB/AFM (NL)',
     protection: '100 000 EUR (DE), 20 000 EUR (investice)',
@@ -104,7 +104,7 @@ export const brokers: Broker[] = [
     id: 'trading212',
     name: 'Trading 212',
     logo: '/lovable-uploads/25c6d816-7993-40c3-abe2-e21c45cc239d.png',
-    description: 'Zcela bezpoplatkový broker s moderní aplikací, frakčním investováním a AutoInvest funkcí.',
+    description: 'Zcela bezpoplatkový broker s moderní mobilní aplikací, frakčním investováním a AutoInvest funkcí.',
     rating: 4.2,
     regulation: 'FCA (UK), CySEC (EU), BaFin (DE)',
     protection: '85 000 £ (UK)',
@@ -165,17 +165,51 @@ export const brokers: Broker[] = [
       'Složitá platforma pro začátečníky',
       'Vyžaduje vyšší minimální vklad'
     ]
+  },
+  {
+    id: 'portu',
+    name: 'Portu',
+    logo: '/portu-logo.svg',
+    description: 'Český robo-advisor zaměřený na automatizované investování do ETF portfolií s aktivním managementem.',
+    rating: 4.1,
+    regulation: 'ČNB (CZ)',
+    protection: '100 000 EUR (CZ)',
+    etfFee: '0,85% ročně (all-in fee)',
+    managementFee: '0,85% ročně (zahrnuje vše)',
+    fxFee: 'Zahrnut v poplatku',
+    fractional: true,
+    czSupport: true,
+    czDividends: '15%',
+    minDeposit: '1 000 Kč',
+    platforms: ['Web', 'Android', 'iOS'],
+    markets: ['Globální ETF portfolia'],
+    etfCount: 'Předvybrané ETF portfolia',
+    languages: ['čeština'],
+    customerSupport: '9-17 (pracovní dny)',
+    specialFeatures: ['Robo-advisor', 'Automatické rebalancing', 'Předvybraná portfolia'],
+    pros: [
+      'Plně automatizované investování',
+      'Česká společnost s lokální podporou',
+      'Automatické rebalancing portfolia',
+      'Vhodné pro úplné začátečníky'
+    ],
+    cons: [
+      'Vyšší celkové náklady (0,85% ročně)',
+      'Omezený výběr investičních strategií',
+      'Nelze vybírat jednotlivé ETF',
+      'Vyšší minimální vklad'
+    ]
   }
 ];
 
 export const comparisonData: ComparisonRow[] = [
-  { feature: 'Regulace (hlavní)', degiro: 'BaFin (DE), DNB/AFM (NL)', xtb: 'CySEC (EU), ČNB (CZ)', fio: 'ČNB (CZ)', trading212: 'FCA (UK), CySEC (EU)', ibkr: 'CBI (IE), SEC (US)' },
-  { feature: 'Ochrana hotovosti', degiro: '100 000 EUR (DE)', xtb: '100 000 EUR (EU)', fio: '100 000 EUR (CZ)', trading212: '85 000 £ (UK)', ibkr: '100 000 EUR (IE)' },
-  { feature: 'Poplatek nákup ETF', degiro: '1 EUR (Core), 3 EUR (ostatní)', xtb: '0% (do 100k EUR/měs.)', fio: '0,29-0,35% (CZ)', trading212: '0% (bez limitu)', ibkr: '0 USD (US Lite)' },
-  { feature: 'Konverze měn', degiro: 'CZK/EUR zdarma, ostatní 0,25%', xtb: '0,5%', fio: 'Zdarma (dle kurzu banky)', trading212: '0,15%', ibkr: '0,2% (min. 2 EUR)' },
-  { feature: 'Frakční ETF', degiro: 'Ne', xtb: 'Ano', fio: 'Ne', trading212: 'Ano (od 1 EUR)', ibkr: 'Ano' },
-  { feature: 'Česká podpora', degiro: 'Částečně', xtb: 'Ano (24/5)', fio: 'Ano (8-18)', trading212: 'Ne (pouze AJ)', ibkr: 'Ne' },
-  { feature: 'Zdanění CZ dividend', degiro: '35% (vratka možná)', xtb: '35%', fio: '15%', trading212: 'Nevztahuje se', ibkr: '15%' },
-  { feature: 'AutoInvest/DCA', degiro: 'Ne', xtb: 'Investiční plány', fio: 'Ne', trading212: 'Pies & AutoInvest', ibkr: 'Omezené' },
-  { feature: 'Min. vklad', degiro: '0 EUR', xtb: '0 EUR', fio: '0 Kč', trading212: '1 EUR', ibkr: '0 USD' }
+  { feature: 'Regulace (hlavní)', degiro: 'BaFin (DE), DNB/AFM (NL)', xtb: 'CySEC (EU), ČNB (CZ)', fio: 'ČNB (CZ)', trading212: 'FCA (UK), CySEC (EU)', ibkr: 'CBI (IE), SEC (US)', portu: 'ČNB (CZ)' },
+  { feature: 'Ochrana hotovosti', degiro: '100 000 EUR (DE)', xtb: '100 000 EUR (EU)', fio: '100 000 EUR (CZ)', trading212: '85 000 £ (UK)', ibkr: '100 000 EUR (IE)', portu: '100 000 EUR (CZ)' },
+  { feature: 'Poplatek nákup ETF', degiro: '1 EUR (Core), 3 EUR (ostatní)', xtb: '0% (do 100k EUR/měs.)', fio: '0,29-0,35% (CZ)', trading212: '0% (bez limitu)', ibkr: '0 USD (US Lite)', portu: '0,85% ročně (all-in)' },
+  { feature: 'Konverze měn', degiro: 'CZK/EUR zdarma, ostatní 0,25%', xtb: '0,5%', fio: 'Zdarma (dle kurzu banky)', trading212: '0,15%', ibkr: '0,2% (min. 2 EUR)', portu: 'Zahrnut v poplatku' },
+  { feature: 'Frakční ETF', degiro: 'Ne', xtb: 'Ano', fio: 'Ne', trading212: 'Ano (od 1 EUR)', ibkr: 'Ano', portu: 'Ano (automaticky)' },
+  { feature: 'Česká podpora', degiro: 'Částečně', xtb: 'Ano (24/5)', fio: 'Ano (8-18)', trading212: 'Ne (pouze AJ)', ibkr: 'Ne', portu: 'Ano (9-17)' },
+  { feature: 'Zdanění CZ dividend', degiro: '35% (vratka možná)', xtb: '35%', fio: '15%', trading212: 'Nevztahuje se', ibkr: '15%', portu: '15%' },
+  { feature: 'AutoInvest/DCA', degiro: 'Ne', xtb: 'Investiční plány', fio: 'Ne', trading212: 'Pies & AutoInvest', ibkr: 'Omezené', portu: 'Plně automatické' },
+  { feature: 'Min. vklad', degiro: '0 EUR', xtb: '0 EUR', fio: '0 Kč', trading212: '1 EUR', ibkr: '0 USD', portu: '1 000 Kč' }
 ];

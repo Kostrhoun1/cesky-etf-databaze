@@ -83,14 +83,14 @@ const WhereToBuyETFs = () => {
             </h1>
             
             <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Kompletní srovnání nejlepších brokerů pro nákup ETF v České republice. 
-              Detailní recenze s aktuálními poplatky a zkušenostmi uživatelů.
+              Najděte ideálního brokera pro vaše investice do ETF. 
+              Srovnání poplatků, funkcí a recenze od skutečných uživatelů.
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12 animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="text-3xl mb-3">🏆</div>
-                <h3 className="font-semibold mb-2">Top 5 brokerů</h3>
+                <h3 className="font-semibold mb-2">Top 6 brokerů</h3>
                 <p className="text-sm text-blue-200">Ověření a doporučení investory</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
@@ -105,19 +105,31 @@ const WhereToBuyETFs = () => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <Button asChild size="lg" className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
-                <Link to="#porovnani">
+            <div className="text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <p className="text-blue-200 mb-6 text-lg">
+                👇 Posuňte se níže pro detailní srovnání všech brokerů
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg" 
+                  className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+                  onClick={() => {
+                    document.getElementById('porovnani')?.scrollIntoView({ 
+                      behavior: 'smooth',
+                      block: 'start'
+                    });
+                  }}
+                >
                   <Award className="w-5 h-5 mr-2" />
-                  Zobrazit srovnání
-                </Link>
-              </Button>
-              <Button asChild size="lg" className="bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/20 px-8 py-4 text-lg font-semibold">
-                <Link to="/navod-pro-zacatecniky">
-                  <ArrowRight className="w-5 h-5 mr-2" />
-                  Návod pro začátečníky
-                </Link>
-              </Button>
+                  Srovnání brokerů
+                </Button>
+                <Button asChild size="lg" className="bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/20 px-8 py-4 text-lg font-semibold">
+                  <Link to="/tipy/jak-zacit-investovat-do-etf">
+                    <ArrowRight className="w-5 h-5 mr-2" />
+                    Jak začít investovat
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -170,7 +182,9 @@ const WhereToBuyETFs = () => {
       </section>
 
       {/* Detailní srovnání brokerů */}
-      <DetailedBrokerComparison />
+      <div id="porovnani">
+        <DetailedBrokerComparison />
+      </div>
 
       {/* Tips Section */}
       <section className="py-20 bg-gradient-to-br from-indigo-50 to-blue-50">
@@ -231,16 +245,24 @@ const WhereToBuyETFs = () => {
           <div className="text-center">
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
-                <Link to="/navod-pro-zacatecniky">
+                <Link to="/tipy/jak-zacit-investovat-do-etf">
                   <ArrowRight className="w-5 h-5 mr-2" />
-                  Kompletní návod pro začátečníky
+                  Jak začít s ETF investicemi
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-semibold">
-                <Link to="/srovnani-brokeru">
-                  <Award className="w-5 h-5 mr-2" />
-                  Detailní srovnání brokerů {currentYear}
-                </Link>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-semibold"
+                onClick={() => {
+                  document.getElementById('porovnani')?.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }}
+              >
+                <Award className="w-5 h-5 mr-2" />
+                Srovnání brokerů výše
               </Button>
             </div>
           </div>

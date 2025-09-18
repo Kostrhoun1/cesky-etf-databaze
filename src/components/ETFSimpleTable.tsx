@@ -156,14 +156,14 @@ const ETFSimpleTable: React.FC<ETFSimpleTableProps> = ({
                         {isETFSelected && isETFSelected(etf.isin) ? (
                           <Checkbox
                             checked={true}
-                            onChange={() => handleSelectETF(etf)}
+                            onCheckedChange={() => handleSelectETF(etf)}
                             disabled={loadingETF === etf.isin}
                             aria-label="Odebrat z porovnání"
                           />
                         ) : (
                           <Checkbox
                             checked={false}
-                            onChange={() => handleSelectETF(etf)}
+                            onCheckedChange={() => handleSelectETF(etf)}
                             disabled={!canAddMore || loadingETF === etf.isin}
                             aria-label="Porovnat fond"
                           />
@@ -186,13 +186,18 @@ const ETFSimpleTable: React.FC<ETFSimpleTableProps> = ({
                       {etf.primary_ticker && (
                         <div className="text-xs text-blue-600">{etf.primary_ticker}</div>
                       )}
-                      {etf.degiro_free && (
-                        <div className="mt-1">
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {etf.degiro_free && (
                           <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
                             DEGIRO Free
                           </Badge>
-                        </div>
-                      )}
+                        )}
+                        {etf.category === 'Páková ETF' && (
+                          <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-200 font-semibold">
+                            PÁKOVÁ
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </TableCell>

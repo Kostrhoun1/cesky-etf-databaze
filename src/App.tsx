@@ -12,7 +12,6 @@ import XTBReview from "./pages/XTBReview";
 import InteractiveBrokersReview from "./pages/InteractiveBrokersReview";
 import FioReview from "./pages/FioReview";
 import Trading212Review from "./pages/Trading212Review";
-import BrokerComparison2025 from "./pages/BrokerComparison2025";
 import Tools from "./pages/Tools";
 import InvestmentCalculatorPage from "./pages/calculators/InvestmentCalculatorPage";
 import FeeCalculatorPage from "./pages/calculators/FeeCalculatorPage";
@@ -27,7 +26,6 @@ import CalculatorSitemapPage from "./pages/CalculatorSitemapPage";
 import ETFDetail from "./pages/ETFDetail";
 import NotFound from "./pages/NotFound";
 import BlogPage from "./pages/BlogPage";
-import BeginnerGuide from "./pages/BeginnerGuide";
 import NejlepsiETF2025 from "./pages/blog/NejlepsiETF2025";
 import NejlepsiETFNaAmerickeAkcie from "./pages/blog/NejlepsiETFNaAmerickeAkcie";
 import NejlepsiETFNaNASDAQ from "./pages/blog/NejlepsiETFNaNASDAQ";
@@ -40,6 +38,13 @@ import RebalancingPortfolia from "./pages/blog/RebalancingPortfolia";
 import ETFProDuchod from "./pages/blog/ETFProDuchod";
 import NejlevnejsiETFFondy from "./pages/blog/NejlevnejsiETFFondy";
 import ESGUdrzitelneETF from "./pages/blog/ESGUdrzitelneETF";
+import ETFGuideDownload from "./pages/ETFGuideDownload";
+import PortfolioStrategiesPage from "./pages/PortfolioStrategies";
+import BoglheadsThreeFundPage from "./pages/portfolio/BoglheadsThreeFund";
+import AkciovePage from "./pages/portfolio/AkciovePage";
+import RayDalioAllWeatherPage from "./pages/portfolio/RayDalioAllWeatherPage";
+import PermanentniPortfolioPage from "./pages/portfolio/PermanentniPortfolioPage";
+import NobelPortfolioPage from "./pages/portfolio/NobelPortfolioPage";
 import NewsletterUnsubscribe from "./pages/NewsletterUnsubscribe";
 import NewsletterAdminPage from "./pages/NewsletterAdminPage";
 import PublicETFAdminPage from "./pages/PublicETFAdminPage";
@@ -66,7 +71,6 @@ function App() {
             <Route path="/interactive-brokers-recenze" element={<InteractiveBrokersReview />} />
             <Route path="/fio-ebroker-recenze" element={<FioReview />} />
             <Route path="/trading212-recenze" element={<Trading212Review />} />
-            <Route path="/srovnani-brokeru" element={<BrokerComparison2025 />} />
             <Route path="/nastroje" element={<Tools />} />
             <Route path="/kalkulacky" element={<CalculatorSitemapPage />} />
             <Route path="/kalkulacky/investicni-kalkulacka" element={<InvestmentCalculatorPage />} />
@@ -78,7 +82,6 @@ function App() {
             <Route path="/kalkulacky/cisty-plat-2025" element={<NetSalaryCalculatorPage />} />
             <Route path="/kalkulacky/uverova-kalkulacka" element={<ConsumerLoanCalculatorPage />} />
             <Route path="/kalkulacky/hypotecni-kalkulacka" element={<MortgageCalculatorPage />} />
-            <Route path="/navod-pro-zacatecniky" element={<BeginnerGuide />} />
             <Route path="/etf/:isin" element={<ETFDetail />} />
             <Route path="/tipy" element={<BlogPage />} />
             <Route path="/tipy/nejlepsi-etf-2025" element={<NejlepsiETF2025 />} />
@@ -93,6 +96,13 @@ function App() {
             <Route path="/tipy/etf-pro-duchod" element={<ETFProDuchod />} />
             <Route path="/tipy/nejlevnejsi-etf-fondy" element={<NejlevnejsiETFFondy />} />
             <Route path="/tipy/esg-udrzitelne-etf" element={<ESGUdrzitelneETF />} />
+            <Route path="/navod-pro-zacatecniky" element={<ETFGuideDownload />} />
+            <Route path="/portfolio-strategie" element={<PortfolioStrategiesPage />} />
+            <Route path="/portfolio-strategie/bogleheads-three-fund" element={<BoglheadsThreeFundPage />} />
+            <Route path="/portfolio-strategie/akciove-portfolio" element={<AkciovePage />} />
+            <Route path="/portfolio-strategie/ray-dalio-all-weather" element={<RayDalioAllWeatherPage />} />
+            <Route path="/portfolio-strategie/permanentni-portfolio" element={<PermanentniPortfolioPage />} />
+            <Route path="/portfolio-strategie/nobel-portfolio" element={<NobelPortfolioPage />} />
             <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
             <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
             <Route path="/database-management-secure-2024" element={<PublicETFAdminPage />} />

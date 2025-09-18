@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { ETFListItem } from '@/types/etf';
-import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
+import { AdvancedFiltersState, AdvancedFilterValue } from '@/hooks/useETFTableLogic';
 
 interface ETFSearchLogicProps {
   etfs: ETFListItem[];
@@ -22,7 +22,7 @@ interface ETFSearchLogicProps {
     activeCategory: string;
     handleSort: (field: string) => void;
     handleCategoryChange: (value: string) => void;
-    handleAdvancedFilterChange: (key: keyof AdvancedFiltersState, value: any) => void;
+    handleAdvancedFilterChange: (key: keyof AdvancedFiltersState, value: AdvancedFilterValue) => void;
   }) => React.ReactNode;
 }
 
@@ -175,7 +175,7 @@ const ETFSearchLogic: React.FC<ETFSearchLogicProps> = ({
     setSelectedCategory(value);
   };
 
-  const handleAdvancedFilterChange = (key: keyof AdvancedFiltersState, value: any) => {
+  const handleAdvancedFilterChange = (key: keyof AdvancedFiltersState, value: AdvancedFilterValue) => {
     setAdvancedFilters(prevFilters => ({...prevFilters, [key]: value}));
   };
 

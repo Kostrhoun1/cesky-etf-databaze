@@ -63,22 +63,74 @@ const XTBReview = () => {
           </Link>
         </div>
 
-        {/* Hlavička */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Detailní Recenze Brokera XTB
-          </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            Kompletní hodnocení z pohledu českého investora
-          </p>
-          <div className="flex justify-center items-center mt-6 gap-4">
-            <Badge variant="secondary" className="text-lg px-4 py-2">
-              <Star className="h-5 w-5 mr-2 fill-current text-yellow-500" />
-              4.7/5
-            </Badge>
-            <Badge className="bg-green-600 text-lg px-4 py-2">
-              Top volba
-            </Badge>
+        {/* Hero sekce s gradientem */}
+        <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white rounded-3xl p-8 md:p-12 mb-12 relative overflow-hidden">
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="relative z-10 text-center">
+            <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <img 
+                src="/lovable-uploads/a7162820-5478-4cd8-9bfd-fd04b80a42ff.png" 
+                alt="XTB logo" 
+                className="w-8 h-8 mr-3 rounded-lg bg-white p-1"
+              />
+              <span className="font-medium">XTB Broker</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Detailní Recenze XTB
+            </h1>
+            <p className="text-xl text-blue-100 leading-relaxed max-w-3xl mx-auto mb-8">
+              Kompletní hodnocení polského brokera s českou podporou a nulovými poplatky za ETF
+            </p>
+            <div className="flex flex-wrap justify-center items-center gap-4">
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
+                <div className="flex items-center text-yellow-300 mb-2">
+                  <Star className="h-6 w-6 mr-2 fill-current" />
+                  <span className="text-2xl font-bold">4.7</span>
+                  <span className="text-lg ml-1">/5</span>
+                </div>
+                <div className="text-sm text-blue-100">Celkové hodnocení</div>
+              </div>
+              <div className="bg-green-500/90 backdrop-blur-sm rounded-2xl px-6 py-4">
+                <div className="text-lg font-bold mb-1">Top volba</div>
+                <div className="text-sm text-green-100">Pro začátečníky</div>
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
+                <div className="text-lg font-bold mb-1">0% poplatky</div>
+                <div className="text-sm text-blue-100">Do 100k EUR/měsíc</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Rychlý přehled s ikonami */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-100">
+            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mb-4">
+              <CheckCircle className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">Regulace</h3>
+            <p className="text-sm text-gray-600">CySEC (EU) + ČNB (CZ)</p>
+          </div>
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
+            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center mb-4">
+              <Users className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">Podpora</h3>
+            <p className="text-sm text-gray-600">Čeština 24/5</p>
+          </div>
+          <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl border border-purple-100">
+            <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center mb-4">
+              <Globe className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">Platformy</h3>
+            <p className="text-sm text-gray-600">xStation 5, Web, Mobile</p>
+          </div>
+          <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-2xl border border-orange-100">
+            <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center mb-4">
+              <Shield className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2">Ochrana</h3>
+            <p className="text-sm text-gray-600">100 000 EUR (EU)</p>
           </div>
         </div>
 
@@ -216,58 +268,129 @@ const XTBReview = () => {
           </CardContent>
         </Card>
 
-        {/* Poplatky */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Přehled klíčových poplatků pro české investory</CardTitle>
+        {/* Poplatky s vylepšeným designem */}
+        <Card className="mb-8 overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
+            <CardTitle className="flex items-center text-xl">
+              💰 Přehled klíčových poplatků pro české investory
+            </CardTitle>
+            <CardDescription>
+              Detailní rozpis všech nákladů, které můžete očekávat při investování přes XTB
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Typ aktiva/poplatku</TableHead>
-                  <TableHead>Poplatek</TableHead>
-                  <TableHead>Poznámky</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium">Akcie a ETF</TableCell>
-                  <TableCell className="text-green-600 font-bold">0 EUR</TableCell>
-                  <TableCell className="text-sm">Do měsíčního objemu 100 000 EUR</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Akcie a ETF nad limit</TableCell>
-                  <TableCell>0,2% (min. 10 EUR)</TableCell>
-                  <TableCell className="text-sm">Při překročení 100k EUR/měsíc</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Měnová konverze</TableCell>
-                  <TableCell className="text-yellow-600">0,5%</TableCell>
-                  <TableCell className="text-sm">Transparentní přirážka k tržnímu kurzu</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Vklady/výběry</TableCell>
-                  <TableCell className="text-green-600 font-medium">Zdarma</TableCell>
-                  <TableCell className="text-sm">Bankovní převody, výběry nad 3000 Kč</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Poplatek za neaktivitu</TableCell>
-                  <TableCell>10 EUR/měsíc</TableCell>
-                  <TableCell className="text-sm">Po 12 měsících bez obchodu/vkladu</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Custody fee</TableCell>
-                  <TableCell>0,2% ročně</TableCell>
-                  <TableCell className="text-sm">Pouze pro portfolia nad 250 000 EUR</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-            <div className="mt-4 bg-green-50 p-4 rounded-lg">
-              <p className="text-sm text-green-800">
-                <strong>Tip:</strong> Zkušení investoři vedou účet v EUR a koruny smění výhodněji přes Revolut (~0,1% marže), 
-                poté obchodují bez poplatků za konverzi.
-              </p>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-gray-50">
+                    <TableHead className="font-bold">Typ aktiva/poplatku</TableHead>
+                    <TableHead className="font-bold text-center">Poplatek</TableHead>
+                    <TableHead className="font-bold">Poznámky</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow className="hover:bg-green-50 transition-colors">
+                    <TableCell className="font-medium py-4">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                        Akcie a ETF
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center py-4">
+                      <Badge className="bg-green-600 text-white text-lg px-3 py-1">
+                        0 EUR
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm py-4 text-gray-600">Do měsíčního objemu 100 000 EUR</TableCell>
+                  </TableRow>
+                  <TableRow className="hover:bg-yellow-50 transition-colors">
+                    <TableCell className="font-medium py-4">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
+                        Akcie a ETF nad limit
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center py-4">
+                      <Badge variant="outline" className="text-lg px-3 py-1">
+                        0,2% (min. 10 EUR)
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm py-4 text-gray-600">Při překročení 100k EUR/měsíc</TableCell>
+                  </TableRow>
+                  <TableRow className="hover:bg-orange-50 transition-colors">
+                    <TableCell className="font-medium py-4">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-orange-500 rounded-full mr-3"></div>
+                        Měnová konverze
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center py-4">
+                      <Badge className="bg-orange-500 text-white text-lg px-3 py-1">
+                        0,5%
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm py-4 text-gray-600">Transparentní přirážka k tržnímu kurzu</TableCell>
+                  </TableRow>
+                  <TableRow className="hover:bg-green-50 transition-colors">
+                    <TableCell className="font-medium py-4">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                        Vklady/výběry
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center py-4">
+                      <Badge className="bg-green-600 text-white text-lg px-3 py-1">
+                        Zdarma
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm py-4 text-gray-600">Bankovní převody, výběry nad 3000 Kč</TableCell>
+                  </TableRow>
+                  <TableRow className="hover:bg-red-50 transition-colors">
+                    <TableCell className="font-medium py-4">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                        Poplatek za neaktivitu
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center py-4">
+                      <Badge className="bg-red-500 text-white text-lg px-3 py-1">
+                        10 EUR/měsíc
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm py-4 text-gray-600">Po 12 měsících bez obchodu/vkladu</TableCell>
+                  </TableRow>
+                  <TableRow className="hover:bg-blue-50 transition-colors">
+                    <TableCell className="font-medium py-4">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                        Custody fee
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center py-4">
+                      <Badge variant="outline" className="text-lg px-3 py-1">
+                        0,2% ročně
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm py-4 text-gray-600">Pouze pro portfolia nad 250 000 EUR</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+            <div className="p-6">
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-2xl border border-green-200">
+                <div className="flex items-start">
+                  <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center mr-4 mt-0.5">
+                    <span className="text-white font-bold text-sm">💡</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-green-900 mb-2">Pro tip pro zkušené investory</h4>
+                    <p className="text-sm text-green-800">
+                      Vedení účtu v EUR a předchozí směna korun přes Revolut (~0,1% marže) vám umožní obchodovat 
+                      zcela bez poplatků za konverzi měn.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -655,34 +778,87 @@ const XTBReview = () => {
           </CardContent>
         </Card>
 
+        {/* CTA sekce s vylepšeným designem */}
+        <div className="mt-12 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white rounded-3xl p-8 md:p-12 relative overflow-hidden">
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="relative z-10 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Připraveni začít investovat?
+            </h2>
+            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+              Porovnejte XTB s ostatními brokery nebo se dozvězte více o ETF investování
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                to="/kde-koupit-etf"
+                className="bg-white text-blue-600 px-8 py-4 rounded-2xl font-bold hover:bg-blue-50 transition-all transform hover:scale-105 flex items-center justify-center"
+              >
+                <TrendingUp className="h-5 w-5 mr-2" />
+                Srovnat všechny brokery
+              </Link>
+              <Link 
+                to="/co-jsou-etf"
+                className="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-2xl font-bold hover:bg-white/30 transition-all transform hover:scale-105 flex items-center justify-center"
+              >
+                <Star className="h-5 w-5 mr-2" />
+                Průvodce ETF investováním
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Navigation to related content */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
-              <h3 className="font-semibold mb-3">Srovnání brokerů</h3>
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
+              <h3 className="font-bold mb-3">Další recenze brokerů</h3>
               <p className="text-sm text-gray-600 mb-4">
-                Porovnejte XTB s ostatními brokery dostupnými v České republice
+                Přečtěte si detailní recenze DEGIRO, Trading 212 a dalších brokerů
               </p>
               <Link 
                 to="/kde-koupit-etf" 
                 className="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                Srovnání všech brokerů →
+                Všechny recenze →
               </Link>
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
-              <h3 className="font-semibold mb-3">ETF průvodce</h3>
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                <TrendingUp className="h-6 w-6 text-blue-600" />
+              </div>
+              <h3 className="font-bold mb-3">ETF srovnávač</h3>
               <p className="text-sm text-gray-600 mb-4">
-                Naučte se základy investování do ETF fondů
+                Najděte nejlepší ETF fondy pro vaše portfolio pomocí našich filtrů
+              </p>
+              <Link 
+                to="/srovnani-etf" 
+                className="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                Srovnat ETF fondy →
+              </Link>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                <Star className="h-6 w-6 text-purple-600" />
+              </div>
+              <h3 className="font-bold mb-3">Začátečnický průvodce</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Naučte se základy ETF investování od prvního nákupu po portfolio
               </p>
               <Link 
                 to="/co-jsou-etf" 
                 className="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                Co jsou ETF fondy →
+                Průvodce pro začátečníky →
               </Link>
             </CardContent>
           </Card>

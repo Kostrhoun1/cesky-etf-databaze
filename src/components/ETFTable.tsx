@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, memo } from 'react';
 import { ETFListItem } from '@/types/etf';
 import ETFTableFilters from './ETFTableFilters';
 import ETFTablePagination from './ETFTablePagination';
@@ -35,6 +35,8 @@ const ETFTable: React.FC<ETFTableProps> = ({
     sortOrder,
     handleSort,
     searchTerm,
+    minRating,
+    handleMinRatingChange,
     filteredETFs,
     totalPages,
     paginatedETFs,
@@ -240,4 +242,4 @@ const ETFTable: React.FC<ETFTableProps> = ({
   );
 };
 
-export default ETFTable;
+export default memo(ETFTable);

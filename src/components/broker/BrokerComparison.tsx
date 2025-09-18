@@ -21,6 +21,7 @@ const BrokerComparison: React.FC = () => {
                 <TableHead className="text-center">Fio e-Broker</TableHead>
                 <TableHead className="text-center">Trading 212</TableHead>
                 <TableHead className="text-center">Interactive Brokers</TableHead>
+                <TableHead className="text-center">Portu</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -32,6 +33,7 @@ const BrokerComparison: React.FC = () => {
                   <TableCell className="text-center text-sm">{row.fio}</TableCell>
                   <TableCell className="text-center text-sm">{row.trading212}</TableCell>
                   <TableCell className="text-center text-sm">{row.ibkr}</TableCell>
+                  <TableCell className="text-center text-sm">{row.portu}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

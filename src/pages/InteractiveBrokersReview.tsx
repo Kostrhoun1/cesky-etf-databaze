@@ -226,9 +226,14 @@ const IBKRReview = () => {
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell className="font-medium">US akcie/ETF</TableCell>
-                  <TableCell className="text-green-600">$0.0035/akcie (min. $0.35)</TableCell>
-                  <TableCell className="text-sm">Velmi levný pro větší objemy</TableCell>
+                  <TableCell className="font-medium">US akcie/ETF (IBKR Lite)</TableCell>
+                  <TableCell className="text-green-600 font-bold">$0</TableCell>
+                  <TableCell className="text-sm">Bezplatné, ale s horším plněním</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">US akcie/ETF (IBKR Pro)</TableCell>
+                  <TableCell className="text-green-600">$0.0005-0.0035/akcie</TableCell>
+                  <TableCell className="text-sm">Objemové slevy, lepší plnění</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell className="font-medium">EU akcie/ETF</TableCell>

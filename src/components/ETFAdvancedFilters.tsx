@@ -6,6 +6,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import { DualRangeSlider } from '@/components/ui/dual-range-slider';
 import {
   Accordion,
@@ -14,12 +15,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Filter, X } from 'lucide-react';
-import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
+import { AdvancedFiltersState, AdvancedFilterValue } from '@/hooks/useETFTableLogic';
 
 interface ETFAdvancedFiltersProps {
   etfs: ETFListItem[];
   filters: AdvancedFiltersState;
-  onFilterChange: (key: keyof AdvancedFiltersState, value: any) => void;
+  onFilterChange: (key: keyof AdvancedFiltersState, value: AdvancedFilterValue) => void;
   ranges: {
     ter: { min: number; max: number };
     fundSize: { min: number; max: number };
@@ -42,10 +43,12 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
     if (filters.region !== 'all') count++;
     if (filters.indexName !== 'all') count++;
     if (filters.fundCurrency !== 'all') count++;
+    if (filters.minRating > 0) count++;
     if (filters.maxTer < ranges.ter.max) count++;
     if (filters.terRange[0] > ranges.ter.min || filters.terRange[1] < ranges.ter.max) count++;
     if (filters.fundSizeRangeValues[0] > ranges.fundSize.min || filters.fundSizeRangeValues[1] < ranges.fundSize.max) count++;
     if (filters.dividendYieldRange[0] > ranges.dividendYield.min || filters.dividendYieldRange[1] < ranges.dividendYield.max) count++;
+    if (filters.includeLeveragedETFs) count++;
     return count;
   };
 
@@ -56,10 +59,12 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
     onFilterChange('region', 'all');
     onFilterChange('indexName', 'all');
     onFilterChange('fundCurrency', 'all');
+    onFilterChange('minRating', 0);
     onFilterChange('maxTer', ranges.ter.max);
     onFilterChange('terRange', [ranges.ter.min, ranges.ter.max]);
     onFilterChange('fundSizeRangeValues', [ranges.fundSize.min, ranges.fundSize.max]);
     onFilterChange('dividendYieldRange', [ranges.dividendYield.min, ranges.dividendYield.max]);
+    onFilterChange('includeLeveragedETFs', false);
   };
 
   const activeFiltersCount = getActiveFiltersCount();
@@ -116,6 +121,22 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
                   <Label htmlFor="dist-dist-adv" className="font-normal">Distribuční</Label>
                 </div>
               </RadioGroup>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label htmlFor="leveraged-etf-toggle" className="font-semibold">Zobrazit páková ETF</Label>
+                  <div className="text-sm text-gray-500">
+                    Páková ETF jsou rizikovější produkty s násobnou expozicí
+                  </div>
+                </div>
+                <Switch
+                  id="leveraged-etf-toggle"
+                  checked={filters.includeLeveragedETFs}
+                  onCheckedChange={(checked) => onFilterChange('includeLeveragedETFs', checked)}
+                />
+              </div>
             </div>
 
             <div>
@@ -205,6 +226,26 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
                   {uniqueCurrencies.map(currency => (
                     <SelectItem key={currency} value={currency}>{currency}</SelectItem>
                   ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="rating-filter-adv" className="font-semibold">Minimální hodnocení</Label>
+              <Select
+                value={filters.minRating.toString()}
+                onValueChange={(value) => onFilterChange('minRating', parseInt(value))}
+              >
+                <SelectTrigger id="rating-filter-adv" className="mt-2">
+                  <SelectValue placeholder="Všechna hodnocení" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">Všechna hodnocení</SelectItem>
+                  <SelectItem value="1">⭐ 1+ hvězdičky</SelectItem>
+                  <SelectItem value="2">⭐⭐ 2+ hvězdičky</SelectItem>
+                  <SelectItem value="3">⭐⭐⭐ 3+ hvězdičky</SelectItem>
+                  <SelectItem value="4">⭐⭐⭐⭐ 4+ hvězdičky</SelectItem>
+                  <SelectItem value="5">⭐⭐⭐⭐⭐ 5 hvězdiček</SelectItem>
                 </SelectContent>
               </Select>
             </div>

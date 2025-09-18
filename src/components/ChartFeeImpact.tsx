@@ -55,7 +55,16 @@ const data = [
 ];
 
 // Custom Tooltip
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface TooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    value: number;
+    [key: string]: any;
+  }>;
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload?.length) {
     return (
       <div className="bg-white p-3 rounded-lg shadow text-gray-700 border border-violet-200">

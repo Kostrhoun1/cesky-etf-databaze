@@ -31,4 +31,5 @@ export interface ComparisonRow {
   fio: string;
   trading212: string;
   ibkr: string;
+  portu: string;
 }

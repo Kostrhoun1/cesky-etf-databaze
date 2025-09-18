@@ -23,10 +23,15 @@ const BreadcrumbNav: React.FC = () => {
     // Main pages mapping
     const pageMapping: Record<string, string> = {
       'srovnani-etf': 'Srovnání ETF',
+      'portfolio-strategie': 'Portfolio Strategie',
       'co-jsou-etf': 'Co jsou ETF',
       'kde-koupit-etf': 'Kde koupit ETF', 
+      'kalkulacky': 'Kalkulačky',
       'degiro-recenze': 'DEGIRO recenze',
-      'nastroje': 'Nástroje',
+      'xtb-recenze': 'XTB recenze',
+      'trading212-recenze': 'Trading212 recenze',
+      'interactive-brokers-recenze': 'Interactive Brokers recenze',
+      'fio-ebroker-recenze': 'Fio e-Broker recenze',
       'navod-pro-zacatecniky': 'Návod pro začátečníky',
       'tipy': 'Tipy'
     };
@@ -41,6 +46,15 @@ const BreadcrumbNav: React.FC = () => {
       'all-weather-portfolio': 'All-Weather Portfolio'
     };
 
+    // Portfolio strategies mapping
+    const portfolioMapping: Record<string, string> = {
+      'permanentni-portfolio': 'Permanentní Portfolio',
+      'nobel-portfolio': 'Nobel Portfolio',
+      'bogleheads-three-fund': 'Bogleheads Three-Fund',
+      'akciove-portfolio': '100% Akciové Portfolio',
+      'ray-dalio-all-weather': 'Ray Dalio All-Weather'
+    };
+
     // Handle blog articles
     if (pathSegments[0] === 'tipy' && pathSegments.length > 1) {
       breadcrumbs.push({ label: 'Tipy', href: '/tipy' });
@@ -52,6 +66,42 @@ const BreadcrumbNav: React.FC = () => {
         });
       }
     } 
+    // Handle Portfolio Strategy detail pages
+    else if (pathSegments[0] === 'portfolio-strategie' && pathSegments.length > 1) {
+      breadcrumbs.push({ label: 'Portfolio Strategie', href: '/portfolio-strategie' });
+      const strategySlug = pathSegments[1];
+      if (portfolioMapping[strategySlug]) {
+        breadcrumbs.push({ 
+          label: portfolioMapping[strategySlug], 
+          href: `/portfolio-strategie/${strategySlug}` 
+        });
+      }
+    }
+    // Handle calculator pages
+    if (pathSegments[0] === 'kalkulacky' && pathSegments.length > 1) {
+      breadcrumbs.push({ label: 'Kalkulačky', href: '/kalkulacky' });
+      
+      // Calculator names mapping
+      const calculatorMapping: Record<string, string> = {
+        'hypotecni-kalkulacka': 'Hypoteční kalkulačka',
+        'uverova-kalkulacka': 'Spotřebitelský úvěr',
+        'cisty-plat-2025': 'Čistý plat 2025',
+        'investicni-kalkulacka': 'Investiční kalkulačka',
+        'penzijni-planovac': 'Penzijní plánovač',
+        'nouzova-rezerva': 'Nouzová rezerva',
+        'kalkulacka-poplatku-etf': 'ETF poplatky',
+        'monte-carlo-simulator': 'Monte Carlo simulátor',
+        'kurzovy-dopad-etf': 'Měnový dopad'
+      };
+      
+      const calculatorSlug = pathSegments[1];
+      if (calculatorMapping[calculatorSlug]) {
+        breadcrumbs.push({ 
+          label: calculatorMapping[calculatorSlug], 
+          href: `/kalkulacky/${calculatorSlug}` 
+        });
+      }
+    }
     // Handle ETF detail pages
     else if (pathSegments[0] === 'etf' && pathSegments.length > 1) {
       breadcrumbs.push({ label: 'Srovnání ETF', href: '/srovnani-etf' });

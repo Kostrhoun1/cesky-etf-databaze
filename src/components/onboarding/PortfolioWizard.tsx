@@ -178,6 +178,50 @@ const PortfolioWizard: React.FC<PortfolioWizardProps> = ({ onClose, className = 
       )
     },
     {
+      title: "Jaké jsou vaše zkušenosti s investováním?",
+      description: "Pomůže nám to doporučit vhodnou strategii",
+      content: (
+        <div className="space-y-4">
+          {[
+            { 
+              id: 'beginner', 
+              label: 'Začátečník', 
+              desc: 'Začínám s investováním, preferuji jednoduché řešení',
+              icon: GraduationCap
+            },
+            { 
+              id: 'intermediate', 
+              label: 'Pokročilý', 
+              desc: 'Mám nějaké zkušenosti, rozumím základům investování',
+              icon: Target
+            },
+            { 
+              id: 'advanced', 
+              label: 'Expert', 
+              desc: 'Mám rozsáhlé znalosti a chci sofistikované strategie',
+              icon: TrendingUp
+            }
+          ].map((option) => (
+            <Card 
+              key={option.id}
+              className={`cursor-pointer transition-all hover:border-violet-300 ${
+                profile.experience === option.id ? 'border-violet-500 bg-violet-50' : ''
+              }`}
+              onClick={() => setProfile({...profile, experience: option.id as any})}
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <option.icon className="w-8 h-8 text-violet-600" />
+                <div>
+                  <div className="font-medium">{option.label}</div>
+                  <div className="text-sm text-gray-600">{option.desc}</div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )
+    },
+    {
       title: "Jaké jsou vaše investiční cíle?",
       description: "Můžete vybrat více možností",
       content: (
@@ -242,40 +286,86 @@ const PortfolioWizard: React.FC<PortfolioWizardProps> = ({ onClose, className = 
       )
     },
     {
-      title: "Kolik plánujete investovat měsíčně?",
-      description: "Pomůže nám doporučit vhodný broker a strategii",
+      title: "Kolik plánujete investovat?",
+      description: "Nastavte jednorazovou i pravidelnou investici",
       content: (
-        <div className="space-y-6">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-violet-600 mb-2">
-              {(profile.monthlyAmount || 5000).toLocaleString()} Kč
+        <div className="space-y-8">
+          {/* Jednorazová investice */}
+          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <h4 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+              <PiggyBank className="w-4 h-4" />
+              Jednorazová vstupní investice
+            </h4>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600 mb-2">
+                {(profile.initialAmount || 0).toLocaleString()} Kč
+              </div>
+              <Slider
+                value={[profile.initialAmount || 0]}
+                onValueChange={(value) => setProfile({...profile, initialAmount: value[0]})}
+                max={500000}
+                min={0}
+                step={5000}
+                className="w-full"
+              />
+              <div className="flex justify-between text-sm text-gray-500 mt-2">
+                <span>0 Kč</span>
+                <span>500 000 Kč</span>
+              </div>
             </div>
-            <Slider
-              value={[profile.monthlyAmount || 5000]}
-              onValueChange={(value) => setProfile({...profile, monthlyAmount: value[0]})}
-              max={50000}
-              min={500}
-              step={500}
-              className="w-full"
-            />
-            <div className="flex justify-between text-sm text-gray-500 mt-2">
-              <span>500 Kč</span>
-              <span>50 000 Kč</span>
+            
+            <div className="grid grid-cols-4 gap-2 mt-3">
+              {[0, 50000, 100000, 250000].map(amount => (
+                <Button
+                  key={amount}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setProfile({...profile, initialAmount: amount})}
+                  className={profile.initialAmount === amount ? 'border-blue-500 bg-blue-50' : ''}
+                >
+                  {amount === 0 ? 'Žádná' : `${(amount/1000)} tis. Kč`}
+                </Button>
+              ))}
             </div>
           </div>
-          
-          <div className="grid grid-cols-3 gap-2">
-            {[1000, 5000, 10000].map(amount => (
-              <Button
-                key={amount}
-                variant="outline"
-                size="sm"
-                onClick={() => setProfile({...profile, monthlyAmount: amount})}
-                className={profile.monthlyAmount === amount ? 'border-violet-500 bg-violet-50' : ''}
-              >
-                {amount.toLocaleString()} Kč
-              </Button>
-            ))}
+
+          {/* Měsíční investice */}
+          <div className="bg-violet-50 p-4 rounded-lg border border-violet-200">
+            <h4 className="font-semibold text-violet-800 mb-3 flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              Pravidelná měsíční investice
+            </h4>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-violet-600 mb-2">
+                {(profile.monthlyAmount || 5000).toLocaleString()} Kč
+              </div>
+              <Slider
+                value={[profile.monthlyAmount || 5000]}
+                onValueChange={(value) => setProfile({...profile, monthlyAmount: value[0]})}
+                max={50000}
+                min={500}
+                step={500}
+                className="w-full"
+              />
+              <div className="flex justify-between text-sm text-gray-500 mt-2">
+                <span>500 Kč</span>
+                <span>50 000 Kč</span>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-2 mt-3">
+              {[1000, 5000, 10000].map(amount => (
+                <Button
+                  key={amount}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setProfile({...profile, monthlyAmount: amount})}
+                  className={profile.monthlyAmount === amount ? 'border-violet-500 bg-violet-50' : ''}
+                >
+                  {amount.toLocaleString()} Kč
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       )
@@ -386,6 +476,7 @@ const PortfolioWizard: React.FC<PortfolioWizardProps> = ({ onClose, className = 
             portfolioName={recommendation.name}
             riskLevel={recommendation.riskLevel}
             defaultMonthlyAmount={profile.monthlyAmount || 5000}
+            initialAmount={profile.initialAmount || 0}
             expectedReturn={recommendation.expectedReturn}
           />
         </div>
@@ -435,9 +526,10 @@ const PortfolioWizard: React.FC<PortfolioWizardProps> = ({ onClose, className = 
       case 1: return profile.age !== undefined;
       case 2: return profile.riskTolerance !== undefined;
       case 3: return profile.timeHorizon !== undefined;
-      case 4: return profile.goals && profile.goals.length > 0;
-      case 5: return profile.monthlyAmount !== undefined;
-      case 6: return recommendation !== null;
+      case 4: return profile.experience !== undefined;
+      case 5: return profile.goals && profile.goals.length > 0;
+      case 6: return profile.monthlyAmount !== undefined;
+      case 7: return recommendation !== null;
       default: return false;
     }
   };
@@ -495,11 +587,16 @@ const PortfolioWizard: React.FC<PortfolioWizardProps> = ({ onClose, className = 
               </Button>
               
               <Button 
-                onClick={handleNext}
-                disabled={!canProceed() || isLoading}
+                onClick={() => {
+                  if (recommendation && (recommendation as any).detailUrl) {
+                    navigate((recommendation as any).detailUrl);
+                  }
+                  onClose?.();
+                }}
+                disabled={!recommendation || isLoading}
                 className="bg-violet-600 hover:bg-violet-700"
               >
-                Zobrazit detaily
+                Zobrazit strategii
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>

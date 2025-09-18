@@ -228,7 +228,7 @@ const NejlepsiDividendoveETF: React.FC = () => {
               
               <p className="text-gray-700 text-sm mb-4 line-clamp-3">{etf.reason}</p>
               
-              <Link to={`/etf/${etf.isin}`} className="block">
+              <Link to={`/etf/${etf.isin}`} className="block" target="_blank" rel="noopener noreferrer">
                 <Button className="w-full bg-green-600 hover:bg-green-700">
                   Detail fondu
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -267,7 +267,7 @@ const NejlepsiDividendoveETF: React.FC = () => {
                 </div>
                 
                 <div className="lg:ml-6">
-                  <Link to={`/etf/${etf.isin}`}>
+                  <Link to={`/etf/${etf.isin}`} target="_blank" rel="noopener noreferrer">
                     <Button className="bg-green-600 hover:bg-green-700">
                       Detail fondu
                       <ArrowRight className="w-4 h-4 ml-2" />

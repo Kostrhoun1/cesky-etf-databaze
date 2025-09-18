@@ -24,11 +24,12 @@ const ETFWhereToBuySection: React.FC = () => {
           
           <div className="grid md:grid-cols-2 gap-6 mb-8">
             {[
-              { name: "XTB", desc: "česká pobočka, snadné ověření totožnosti, nákup ETF bez poplatků (na hlavní evropské burzy), jednoduché rozhraní.", color: "border-blue-200 bg-blue-50" },
-              { name: "Trading 212", desc: "intuitivní aplikace, široká nabídka evropských ETF, možnost nakoupit i frakční podíly.", color: "border-green-200 bg-green-50" },
-              { name: "DEGIRO", desc: "dlouhodobě populární volba v Evropě, velmi nízké poplatky, široká nabídka ETF (i některé bez poplatků).", color: "border-purple-200 bg-purple-50" },
-              { name: "Portu", desc: "vhodné pro úplné začátečníky, nabízí automatizované portfolia složená z ETF.", color: "border-orange-200 bg-orange-50" },
-              { name: "Interactive Brokers", desc: "vhodné pro pokročilejší investory a spravování větších portfolií.", color: "border-red-200 bg-red-50" }
+              { name: "XTB", desc: "polský broker s českou pobočkou, nákup ETF bez poplatků (do 100k EUR měsíčně), výborná česká podpora.", color: "border-blue-200 bg-blue-50" },
+              { name: "Trading 212", desc: "zcela bezpoplatkový broker s moderní mobilní aplikací, frakční investování a AutoInvest funkcí.", color: "border-green-200 bg-green-50" },
+              { name: "DEGIRO", desc: "dlouhodobě populární volba v Evropě, velmi nízké poplatky, široká nabídka ETF fondů.", color: "border-purple-200 bg-purple-50" },
+              { name: "Fio e-Broker", desc: "český broker s lokální podporou a optimálním zdaněním českých dividend (15%).", color: "border-orange-200 bg-orange-50" },
+              { name: "Interactive Brokers", desc: "globální broker s nejširší nabídkou trhů, pokročilé nástroje, velmi konkurenční poplatky.", color: "border-red-200 bg-red-50" },
+              { name: "Portu", desc: "český robo-advisor s plně automatizovaným investováním do ETF portfolií, vhodný pro úplné začátečníky.", color: "border-cyan-200 bg-cyan-50" }
             ].map((broker, index) => (
               <div key={index} className={`p-4 rounded-lg border-2 ${broker.color}`}>
                 <h5 className="font-bold text-lg mb-2">{broker.name}</h5>
@@ -74,7 +75,7 @@ const ETFWhereToBuySection: React.FC = () => {
           <Link to="/srovnani-etf">Porovnat ETF a brokery</Link>
         </Button>
         <Button asChild size="lg" variant="outline" className="border-2 border-orange-300 text-orange-700 hover:bg-orange-50 font-bold transition-all">
-          <Link to="/navod-pro-zacatecniky">Návod pro začátečníky</Link>
+          <Link to="/tipy/jak-zacit-investovat-do-etf">Jak začít investovat</Link>
         </Button>
       </div>
     </div>

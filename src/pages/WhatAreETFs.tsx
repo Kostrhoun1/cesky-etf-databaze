@@ -138,14 +138,14 @@ const WhatAreETFs: React.FC = () => {
                 href: "/kde-koupit-etf"
               },
               {
-                title: "Investiční kalkulačka",
+                title: "Investiční kalkulačky",
                 description: "Spočítejte si výnosy z pravidelného investování",
-                href: "/nastroje"
+                href: "/kalkulacky"
               },
               {
-                title: "Návod pro začátečníky",
+                title: "Jak začít investovat do ETF",
                 description: "Kompletní průvodce jak začít investovat do ETF",
-                href: "/navod-pro-zacatecniky"
+                href: "/tipy/jak-zacit-investovat-do-etf"
               }
             ]} />
           </div>

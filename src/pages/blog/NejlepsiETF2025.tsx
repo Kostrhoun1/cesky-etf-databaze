@@ -270,7 +270,7 @@ const NejlepsiETF2025: React.FC = () => {
                 </ul>
               </div>
               
-              <Link to={`/etf/${etf.isin}`}>
+              <Link to={`/etf/${etf.isin}`} target="_blank" rel="noopener noreferrer">
                 <Button className="w-full" variant={index === 0 ? "default" : "outline"}>
                   Detail ETF
                   <ArrowRight className="w-4 h-4 ml-2" />

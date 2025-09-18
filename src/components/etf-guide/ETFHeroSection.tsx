@@ -51,9 +51,9 @@ const ETFHeroSection: React.FC = () => {
               </Link>
             </Button>
             <Button asChild size="lg" className="bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/20 px-8 py-4 text-lg font-semibold">
-              <Link to="/nastroje">
+              <Link to="/kalkulacky">
                 <Calculator className="w-5 h-5 mr-2" />
-                Investiční nástroje
+                Investiční kalkulačky
               </Link>
             </Button>
           </div>

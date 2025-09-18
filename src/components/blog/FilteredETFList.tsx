@@ -67,6 +67,11 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter, showDividendY
         console.log('Filter object:', filter);
         
         // Aplikuj SQL filtrování podle zadaných kritérií
+        if (filter.category) {
+          console.log(`SQL filtering by category: ${filter.category}`);
+          query = query.eq('category', filter.category);
+        }
+        
         if (filter.indexNameKeywords && filter.indexNameKeywords.length > 0) {
           console.log(`SQL filtering by index keywords: ${filter.indexNameKeywords.join(', ')}`);
           const firstIndexKeyword = filter.indexNameKeywords[0];
@@ -82,8 +87,9 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter, showDividendY
         
         if (filter.nameKeywords && filter.nameKeywords.length > 0) {
           console.log(`SQL filtering by name keywords: ${filter.nameKeywords.join(', ')}`);
-          const firstNameKeyword = filter.nameKeywords[0];
-          query = query.ilike('name', `%${firstNameKeyword}%`);
+          // Vytvoř OR podmínku pro všechna klíčová slova
+          const orConditions = filter.nameKeywords.map(keyword => `name.ilike.%${keyword}%`).join(',');
+          query = query.or(orConditions);
         }
         
         if (filter.hasDividendYield) {
@@ -143,7 +149,7 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter, showDividendY
     };
 
     loadData();
-  }, [filter.sortBy, filter.sortOrder, filter.top, filter.indexNameKeywords, filter.regionKeywords, filter.nameKeywords, filter.fundProviderKeywords, filter.hasDividendYield, filter.minDividendYield]);
+  }, [filter.sortBy, filter.sortOrder, filter.top, filter.category, filter.indexNameKeywords, filter.regionKeywords, filter.nameKeywords, filter.fundProviderKeywords, filter.hasDividendYield, filter.minDividendYield]);
 
   if (isLoading) {
     return (

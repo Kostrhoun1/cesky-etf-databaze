@@ -2,7 +2,6 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import CurrencyImpactAnalyzer from '@/components/tools/CurrencyImpactAnalyzer';
 import SEOHead from '@/components/SEO/SEOHead';
-import BreadcrumbNav from '@/components/SEO/BreadcrumbNav';
 import FAQSection from '@/components/SEO/FAQSection';
 import InternalLinking from '@/components/SEO/InternalLinking';
 import StructuredData from '@/components/SEO/StructuredData';
@@ -71,13 +70,6 @@ const CurrencyImpactAnalyzerPage: React.FC = () => {
       <StructuredData data={breadcrumbSchema} />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <BreadcrumbNav
-          items={[
-            { name: "Domů", href: "/" },
-            { name: "Kalkulačky", href: "/nastroje" },
-            { name: "Kurzový dopad ETF" }
-          ]}
-        />
 
         {/* Hero sekce */}
         <div className="text-center mb-12">

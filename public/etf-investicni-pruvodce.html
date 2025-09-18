@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jak investovat do ETF fondů - ETF průvodce.cz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: white;
+            font-size: 14px;
+        }
+        
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20mm;
+            background: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #7c3aed;
+            padding-bottom: 20px;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #6b7280;
+            font-weight: 300;
+        }
+        
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #1f2937;
+            text-align: center;
+            margin: 40px 0;
+            line-height: 1.2;
+        }
+        
+        .chapter {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .chapter-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            border-left: 4px solid #7c3aed;
+            padding-left: 15px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 25px 0 15px 0;
+        }
+        
+        .subsection-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #374151;
+            margin: 20px 0 10px 0;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight-box {
+            background: #f3f4f6;
+            border-left: 4px solid #7c3aed;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .portfolio-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .portfolio-table th,
+        .portfolio-table td {
+            border: 1px solid #d1d5db;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .portfolio-table th {
+            background: #7c3aed;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .portfolio-table tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+        
+        .cta-box {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .cta-box h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .cta-box p {
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .cta-button {
+            background: white;
+            color: #7c3aed;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        @media print {
+            body { font-size: 12px; }
+            .container { padding: 15mm; }
+            .cta-button { color: #7c3aed !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">ETF průvodce.cz</div>
+            <div class="subtitle">Komplexní průvodce ETF fondy pro české investory</div>
+        </div>
+
+        <!-- Main Title -->
+        <h1 class="main-title">Jak investovat do ETF fondů<br>Praktický průvodce pro rok 2025</h1>
+
+        <!-- Introduction -->
+        <div class="chapter">
+            <h2 class="chapter-title">Úvod</h2>
+            <p>ETF fondy (Exchange Traded Funds) představují jednu z nejefektivnějších cest k dlouhodobému investování. Díky nízkim poplatkům, vysoké diverzifikaci a jednoduchosti se staly oblíbenou volbou investorů po celém světě.</p>
+            
+            <p>Tento průvodce vám pomůže zorientovat se ve světě ETF fondů a ukáže vám praktické kroky, jak sestavit vlastní investiční portfolio. Najdete zde konkrétní strategie, které jsou vhodné pro různé typy investorů.</p>
+
+            <div class="highlight-box">
+                <strong>Co se v tomto průvodci dozvíte:</strong>
+                <ul>
+                    <li>Jak správně naplánovat své investování pomocí 4 klíčových otázek</li>
+                    <li>3 ověřené portfolia strategie pro různé typy investorů</li>
+                    <li>Praktické tipy pro výběr brokerů a ETF fondů</li>
+                    <li>Jak využít nástroje na ETF průvodce.cz pro optimalizaci portfolia</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Chapter 1: Planning -->
+        <div class="chapter page-break">
+            <h2 class="chapter-title">1. Plánování investování</h2>
+            
+            <p>Před tím, než začnete investovat, je důležité si odpovědět na čtyři klíčové otázky. Tyto otázky vám pomohou definovat vaši investiční strategii a vybrat vhodné portfolio.</p>
+
+            <div class="section-title">Čtyři klíčové otázky pro každého investora</div>
+
+            <div class="subsection-title">1. Jaký je váš investiční horizont?</div>
+            <p>Investiční horizont určuje, jak dlouho plánujete své peníze investovat, než je budete potřebovat. Pro ETF investování doporučujeme minimálně 5 let, ideálně 10 a více let.</p>
+            
+            <ul>
+                <li><strong>Krátkodobé cíle (1-3 roky):</strong> Spořicí účty, státní dluhopisy</li>
+                <li><strong>Střednědobé cíle (3-7 let):</strong> Konzervativnější ETF portfolia</li>
+                <li><strong>Dlouhodobé cíle (7+ let):</strong> Akciová ETF portfolia s vyšším růstovým potenciálem</li>
+            </ul>
+
+            <div class="subsection-title">2. Jaká je vaše tolerance k riziku?</div>
+            <p>Tolerance k riziku odráží, jak velké kolísání hodnoty portfolia jste schopni psychicky snést. Toto je velmi individuální a závisí na vašich zkušenostech, věku a osobnostních charakteristikách.</p>
+
+            <div class="highlight-box">
+                <strong>Test tolerance k riziku:</strong> Představte si, že vaše portfolio za rok klesne o 20%. Jak byste reagovali?
+                <ul>
+                    <li><strong>Konzervativní:</strong> Prodal/a bych a vybral peníze</li>
+                    <li><strong>Umírněný:</strong> Byl/a bych nervózní, ale počkal/a bych</li>
+                    <li><strong>Agresivní:</strong> Využil/a bych poklesu k dokoupení</li>
+                </ul>
+            </div>
+
+            <div class="subsection-title">3. Kolik můžete pravidelně investovat?</div>
+            <p>Pravidelné investování (DCA - Dollar Cost Averaging) je klíčem k úspěšnému dlouhodobému investování. Důležité je investovat pouze částky, které nepotřebujete pro běžný život.</p>
+
+            <p><strong>Doporučený postup:</strong></p>
+            <ol>
+                <li>Vytvořte si nouzovou rezervu (3-6 měsíčních výdajů)</li>
+                <li>Splatě vysokoúrokové dluhy</li>
+                <li>Teprve poté začněte investovat</li>
+            </ol>
+
+            <div class="cta-box">
+                <h3>💡 Využijte naše kalkulačky</h3>
+                <p>Na ETF průvodce.cz najdete užitečné nástroje pro plánování:</p>
+                <a href="https://etfpruvodce.cz/kalkulacky/nouzova-rezerva" class="cta-button">Kalkulačka nouzové rezervy</a>
+                <a href="https://etfpruvodce.cz/kalkulacky/investicni-kalkulacka" class="cta-button">Investiční kalkulačka</a>
+            </div>
+
+            <div class="subsection-title">4. Jaké jsou vaše investiční cíle?</div>
+            <p>Jasně definované cíle vám pomohou udržet disciplínu a nevybočit z dlouhodobé strategie. Typické cíle mohou být:</p>
+            <ul>
+                <li>Důchod</li>
+                <li>Koupi nemovitosti</li>
+                <li>Vzdělání dětí</li>
+                <li>Finanční nezávislost</li>
+            </ul>
+        </div>
+
+        <!-- Chapter 2: Portfolio Strategies -->
+        <div class="chapter page-break">
+            <h2 class="chapter-title">2. Pět osvědčených investičních strategií</h2>
+            
+            <p>Na základě odpovědí na předchozí otázky si můžete vybrat jednu z následujících strategií. Každá je navržena pro jiný typ investora a nabízí různý poměr rizika a výnosu. Tyto strategie jsou založeny na vědeckých výzkumech a dlouhodobých zkušenostech úspěšných investorů.</p>
+
+            <div class="section-title">Strategie A: Permanentní 4% portfolio</div>
+            <p><strong>Vhodné pro:</strong> Konzervativní investory, kteří preferují stabilitu před vysokými výnosy</p>
+            <p><strong>Očekávaný výnos:</strong> 4-6% ročně</p>
+            <p><strong>Maximální pokles:</strong> Do -15%</p>
+            <p><strong>Filosofie:</strong> Klasické portfolio založené na teorii, že čtyři základní aktivní třídy (akcie, dluhopisy, komodity, zlato) reagují odlišně na ekonomické cykly. Rovnoměrné rozdělení 25/25/25/25 zajišťuje stabilitu bez ohledu na ekonomickou situaci.</p>
+
+            <table class="portfolio-table">
+                <thead>
+                    <tr>
+                        <th>Aktivum</th>
+                        <th>Alokace</th>
+                        <th>Doporučené ETF</th>
+                        <th>ISIN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Akcie</td>
+                        <td>25%</td>
+                        <td>Vanguard FTSE All-World</td>
+                        <td>IE00BK5BQT80</td>
+                    </tr>
+                    <tr>
+                        <td>Dluhopisy</td>
+                        <td>25%</td>
+                        <td>iShares Core Global Aggregate Bond</td>
+                        <td>IE00B3DKXQ41</td>
+                    </tr>
+                    <tr>
+                        <td>Komodity</td>
+                        <td>25%</td>
+                        <td>iShares Diversified Commodity Swap</td>
+                        <td>IE00BDFL4P12</td>
+                    </tr>
+                    <tr>
+                        <td>Zlato</td>
+                        <td>25%</td>
+                        <td>iShares Physical Gold ETC</td>
+                        <td>IE00B4ND3602</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">Strategie B: Nobel 6% portfolio</div>
+            <p><strong>Vhodné pro:</strong> Umírněné investory hledající vyváženost mezi rizikem a výnosem</p>
+            <p><strong>Očekávaný výnos:</strong> 6-8% ročně</p>
+            <p><strong>Maximální pokles:</strong> Do -25%</p>
+            <p><strong>Filosofie:</strong> Založeno na moderní portfoliové teorii a výzkumech nositelů Nobelovy ceny za ekonomii. Kombinuje globální diverzifikaci akcií s dluhopisovou stabilitou a přidává nemovitostní sektor (REIT) pro další diverzifikaci.</p>
+
+            <table class="portfolio-table">
+                <thead>
+                    <tr>
+                        <th>Aktivum</th>
+                        <th>Alokace</th>
+                        <th>Doporučené ETF</th>
+                        <th>ISIN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Rozvinuté akcie</td>
+                        <td>40%</td>
+                        <td>Vanguard FTSE Developed World</td>
+                        <td>IE00BKX55T58</td>
+                    </tr>
+                    <tr>
+                        <td>Rozvíjející se akcie</td>
+                        <td>20%</td>
+                        <td>Vanguard FTSE Emerging Markets</td>
+                        <td>IE00BK5BR626</td>
+                    </tr>
+                    <tr>
+                        <td>Dluhopisy</td>
+                        <td>30%</td>
+                        <td>Vanguard Global Bond Index</td>
+                        <td>IE00BG47KH54</td>
+                    </tr>
+                    <tr>
+                        <td>REIT</td>
+                        <td>10%</td>
+                        <td>iShares Developed Markets Property Yield</td>
+                        <td>IE00B1FZS467</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">Strategie C: Akciové 8% portfolio</div>
+            <p><strong>Vhodné pro:</strong> Agresivní investory s dlouhým investičním horizontem</p>
+            <p><strong>Očekávaný výnos:</strong> 8-12% ročně</p>
+            <p><strong>Maximální pokles:</strong> Do -40%</p>
+            <p><strong>Filosofie:</strong> Čistě akciový přístup založený na historických datech o dlouhodobé nadřazenosti akcií nad ostatními třídami aktiv. Geografická diverzifikace snižuje riziko, zatímco zaměření na růstové trhy (USA, technologie) maximalizuje potenciální výnosy.</p>
+
+            <table class="portfolio-table">
+                <thead>
+                    <tr>
+                        <th>Region</th>
+                        <th>Alokace</th>
+                        <th>Doporučené ETF</th>
+                        <th>ISIN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>USA</td>
+                        <td>50%</td>
+                        <td>iShares Core S&P 500</td>
+                        <td>IE00B5BMR087</td>
+                    </tr>
+                    <tr>
+                        <td>Evropa</td>
+                        <td>25%</td>
+                        <td>iShares Core MSCI Europe</td>
+                        <td>IE00B4K48X80</td>
+                    </tr>
+                    <tr>
+                        <td>Asie a rozvojové trhy</td>
+                        <td>20%</td>
+                        <td>Vanguard FTSE Emerging Markets</td>
+                        <td>IE00BK5BR626</td>
+                    </tr>
+                    <tr>
+                        <td>Technologické akcie</td>
+                        <td>5%</td>
+                        <td>iShares NASDAQ 100</td>
+                        <td>IE00B53SZB19</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">Strategie D: Ray Dalio All-Weather Portfolio</div>
+            <p><strong>Vhodné pro:</strong> Investory hledající stabilní výnosy ve všech ekonomických podmínkách</p>
+            <p><strong>Očekávaný výnos:</strong> 5-8% ročně</p>
+            <p><strong>Maximální pokles:</strong> Do -20%</p>
+            <p><strong>Filosofie:</strong> Portfolio navržené legendárním hedgeovým fondem manažerem Rayem Daliem, které má fungovat ve všech ekonomických prostředích - růst, recese, inflace i deflace.</p>
+
+            <table class="portfolio-table">
+                <thead>
+                    <tr>
+                        <th>Aktivum</th>
+                        <th>Alokace</th>
+                        <th>Doporučené ETF</th>
+                        <th>ISIN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dlouhodobé dluhopisy</td>
+                        <td>40%</td>
+                        <td>iShares Core EUR Govt Bond</td>
+                        <td>IE00B4WXJJ64</td>
+                    </tr>
+                    <tr>
+                        <td>Akcie</td>
+                        <td>30%</td>
+                        <td>Vanguard FTSE All-World</td>
+                        <td>IE00BK5BQT80</td>
+                    </tr>
+                    <tr>
+                        <td>Střednědobé dluhopisy</td>
+                        <td>15%</td>
+                        <td>iShares Core Global Aggregate Bond</td>
+                        <td>IE00B3DKXQ41</td>
+                    </tr>
+                    <tr>
+                        <td>Komodity</td>
+                        <td>7.5%</td>
+                        <td>iShares Diversified Commodity Swap</td>
+                        <td>IE00BDFL4P12</td>
+                    </tr>
+                    <tr>
+                        <td>TIPS (inflační dluhopisy)</td>
+                        <td>7.5%</td>
+                        <td>SPDR US TIPS</td>
+                        <td>IE00B6YX5D40</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">Strategie E: Bogleheads Three-Fund Portfolio</div>
+            <p><strong>Vhodné pro:</strong> Začínající investory preferující jednoduchost a nízké náklady</p>
+            <p><strong>Očekávaný výnos:</strong> 6-9% ročně</p>
+            <p><strong>Maximální pokles:</strong> Do -30%</p>
+            <p><strong>Filosofie:</strong> Extrémně jednoduchý přístup založený na učení Jacka Boglea, zakladatele Vanguard. Používá pouze tři ETF fondy pro globální diverzifikaci.</p>
+
+            <table class="portfolio-table">
+                <thead>
+                    <tr>
+                        <th>Aktivum</th>
+                        <th>Alokace</th>
+                        <th>Doporučené ETF</th>
+                        <th>ISIN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Rozvinuté světové akcie</td>
+                        <td>60%</td>
+                        <td>Vanguard FTSE Developed World</td>
+                        <td>IE00BKX55T58</td>
+                    </tr>
+                    <tr>
+                        <td>Rozvíjející se trhy</td>
+                        <td>20%</td>
+                        <td>Vanguard FTSE Emerging Markets</td>
+                        <td>IE00BK5BR626</td>
+                    </tr>
+                    <tr>
+                        <td>Světové dluhopisy</td>
+                        <td>20%</td>
+                        <td>Vanguard Global Bond Index</td>
+                        <td>IE00BG47KH54</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <strong>💡 Jak vybrat správnou strategii:</strong>
+                <ul>
+                    <li><strong>Konzervativní investoři:</strong> Strategie A (Permanentní) nebo D (All-Weather)</li>
+                    <li><strong>Vyvážení investoři:</strong> Strategie B (Nobel) nebo E (Three-Fund)</li>
+                    <li><strong>Agresivní investoři:</strong> Strategie C (Akciové) s možností úprav podle preferencí</li>
+                    <li><strong>Začátečníci:</strong> Strategie E (Three-Fund) pro jednoduchost</li>
+                </ul>
+            </div>
+
+            <div class="cta-box">
+                <h3>🔍 Prozkoumejte naši databázi ETF</h3>
+                <p>Všechna zmíněná ETF a mnoho dalších najdete v naší komplexní databázi s detailními informacemi a srovnáním.</p>
+                <a href="https://etfpruvodce.cz/srovnani-etf" class="cta-button">Srovnání ETF</a>
+            </div>
+        </div>
+
+        <!-- Chapter 3: Implementation -->
+        <div class="chapter page-break">
+            <h2 class="chapter-title">3. Praktická realizace investování</h2>
+
+            <div class="section-title">Výběr brokera</div>
+            <p>Volba správného brokera je klíčová pro úspěšné investování. Při výběru zvažte tyto faktory:</p>
+
+            <ul>
+                <li><strong>Poplatky za transakce:</strong> Hledejte brokerů s nízkými poplatky za nákup ETF</li>
+                <li><strong>Dostupnost ETF:</strong> Ujistěte se, že broker nabízí ETF, která chcete</li>
+                <li><strong>Regulace:</strong> Vybírejte pouze regulované brokerů (CySEC, FCA, BaFin)</li>
+                <li><strong>Uživatelské rozhraní:</strong> Platforma by měla být intuitivní a spolehlivá</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>Doporučení brokeři pro české investory (2025):</strong>
+                <ul>
+                    <li><strong>DEGIRO:</strong> Nejnižší poplatky, široká nabídka ETF</li>
+                    <li><strong>Interactive Brokers:</strong> Profesionální platforma, nízké poplatky</li>
+                    <li><strong>XTB:</strong> Bez poplatků za ETF, české prostředí</li>
+                    <li><strong>Trading 212:</strong> Bez poplatků, jednoduché rozhraní</li>
+                </ul>
+            </div>
+
+            <div class="section-title">Pravidelné investování vs. jednorázové investování</div>
+            <p>Pro většinu investorů doporučujeme strategii pravidelného investování (DCA). Výhody této strategie:</p>
+            
+            <ul>
+                <li>Snižuje dopad časování trhu</li>
+                <li>Buduje disciplínu</li>
+                <li>Využívá průměrování nákladů</li>
+                <li>Snižuje emocionální stres</li>
+            </ul>
+
+            <div class="section-title">Rebalancing portfolia</div>
+            <p>Portfolio by se mělo pravidelně rebalancovat, aby se udržely cílové alokace. Doporučené frekvence:</p>
+            
+            <ul>
+                <li><strong>Čtvrtletně:</strong> Pro aktivnější investory</li>
+                <li><strong>Pololetně:</strong> Optimální pro většinu investorů</li>
+                <li><strong>Ročně:</strong> Minimální frekvence</li>
+            </ul>
+
+            <div class="cta-box">
+                <h3>📊 Porovnejte brokery</h3>
+                <p>Detailní srovnání všech dostupných brokerů včetně poplatků a hodnocení najdete na našem webu.</p>
+                <a href="https://etfpruvodce.cz/srovnani-brokeru" class="cta-button">Srovnání brokerů</a>
+            </div>
+        </div>
+
+        <!-- Chapter 4: Advanced Topics -->
+        <div class="chapter page-break">
+            <h2 class="chapter-title">4. Pokročilá témata</h2>
+
+            <div class="section-title">Daňové aspekty investování do ETF</div>
+            <p>V České republice podléhají zisky z ETF dani z příjmů. Klíčové body:</p>
+
+            <ul>
+                <li><strong>Daň z příjmů:</strong> 15% z realizovaných zisků</li>
+                <li><strong>Tříleté osvobození:</strong> Zisky jsou osvobozené, pokud držíte ETF déle než 3 roky</li>
+                <li><strong>Dividendy:</strong> Podléhají srážkové dani v zemi domicilu ETF</li>
+                <li><strong>Reportování:</strong> Zisky je třeba uvést v daňovém přiznání</li>
+            </ul>
+
+            <div class="section-title">Kurzové riziko</div>
+            <p>Většina ETF je denominovaná v cizích měnách (EUR, USD). To znamená kurzové riziko. Způsoby jak jej minimalizovat:</p>
+
+            <ul>
+                <li>Využití ETF s měnovou hedgem</li>
+                <li>Diverzifikace mezi různé měny</li>
+                <li>Dlouhodobé držení (kurzové fluktuace se vyrovnají)</li>
+            </ul>
+
+            <div class="cta-box">
+                <h3>💹 Kalkulačka kurzového dopadu</h3>
+                <p>Zjistěte, jak kurzové změny ovlivní vaše ETF portfolio.</p>
+                <a href="https://etfpruvodce.cz/kalkulacky/kurzovy-dopad-etf" class="cta-button">Kalkulačka kurzového dopadu</a>
+            </div>
+
+            <div class="section-title">ESG investování</div>
+            <p>Stále více investorů se zajímá o udržitelné investování. ESG ETF se zaměřují na společnosti s vysokými standardy v oblasti:</p>
+
+            <ul>
+                <li><strong>Environmental (E):</strong> Ochrana životního prostředí</li>
+                <li><strong>Social (S):</strong> Sociální odpovědnost</li>
+                <li><strong>Governance (G):</strong> Řízení společností</li>
+            </ul>
+
+            <div class="section-title">Alternativní ETF strategie</div>
+            <p>Kromě klasických strategií existují pokročilejší přístupy:</p>
+
+            <ul>
+                <li><strong>Faktory ETF:</strong> Zaměření na konkrétní faktory (value, quality, momentum)</li>
+                <li><strong>Sektorové ETF:</strong> Investice do konkrétních sektorů</li>
+                <li><strong>Smart Beta ETF:</strong> Alternativní vážení indexů</li>
+                <li><strong>Dividendové ETF:</strong> Zaměření on vysoké dividendy</li>
+            </ul>
+        </div>
+
+        <!-- Chapter 5: Common Mistakes -->
+        <div class="chapter page-break">
+            <h2 class="chapter-title">5. Časté chyby a jak se jim vyhnout</h2>
+
+            <div class="section-title">10 nejčastějších chyb začínajících investorů</div>
+
+            <div class="subsection-title">1. Nedostatečná diverzifikace</div>
+            <p>Investování pouze do jednoho regionu nebo sektoru. <strong>Řešení:</strong> Využijte globálně diverzifikované ETF.</p>
+
+            <div class="subsection-title">2. Časování trhu</div>
+            <p>Snaha odhadnout nejlepší čas pro nákup a prodej. <strong>Řešení:</strong> Pravidelné investování bez ohledu na tržní situaci.</p>
+
+            <div class="subsection-title">3. Emocionální rozhodování</div>
+            <p>Prodej během paniků nebo nákup během euforie. <strong>Řešení:</strong> Předem stanovený plán a jeho dodržování.</p>
+
+            <div class="subsection-title">4. Vysoké poplatky</div>
+            <p>Výběr ETF s vysokým TER nebo drahé brokery. <strong>Řešení:</strong> Porovnání poplatků před investováním.</p>
+
+            <div class="subsection-title">5. Nedostatečná nouzová rezerva</div>
+            <p>Investování peněz, které můžete potřebovat. <strong>Řešení:</strong> Nejprve vytvořte rezervu 3-6 měsíčních výdajů.</p>
+
+            <div class="highlight-box">
+                <strong>Další časté chyby:</strong>
+                <ul>
+                    <li><strong>Přílišné monitorování portfolia:</strong> Denní kontrola může vést k unáhleným rozhodnutím</li>
+                    <li><strong>Změna strategie:</strong> Časté měnění přístupu škodí dlouhodobým výsledkům</li>
+                    <li><strong>Ignorování daní:</strong> Neznalost daňových dopadů může snížit reálné výnosy</li>
+                    <li><strong>Nadměrná komplexita:</strong> Příliš složitá portfolia jsou těžká na správu</li>
+                    <li><strong>Nedostatečné vzdělávání:</strong> Investování bez pochopení základů</li>
+                </ul>
+            </div>
+
+            <div class="section-title">Jak udržet investiční disciplínu</div>
+            <p>Dlouhodobý úspěch v investování vyžaduje disciplínu. Tipy pro její udržení:</p>
+
+            <ol>
+                <li><strong>Automatizace:</strong> Nastavte automatické investování</li>
+                <li><strong>Vzdělávání:</strong> Kontinuálně se vzdělávejte</li>
+                <li><strong>Zápis cílů:</strong> Mějte jasně napsané investiční cíle</li>
+                <li><strong>Podpora:</strong> Najděte si investiční komunitu</li>
+                <li><strong>Pravidelné hodnocení:</strong> Jednou ročně zhodnoťte svoji strategii</li>
+            </ol>
+        </div>
+
+        <!-- Chapter 6: Tools and Resources -->
+        <div class="chapter page-break">
+            <h2 class="chapter-title">6. Nástroje a zdroje pro investory</h2>
+
+            <div class="section-title">Nástroje na ETF průvodce.cz</div>
+            <p>Náš web nabízí komplexní sadu nástrojů pro každého ETF investora:</p>
+
+            <div class="subsection-title">Kalkulačky</div>
+            <ul>
+                <li><strong>Investiční kalkulačka:</strong> Simulace růstu investic</li>
+                <li><strong>Kalkulačka poplatků:</strong> Porovnání nákladů různých ETF</li>
+                <li><strong>Nouzová rezerva:</strong> Výpočet optimální výše rezervy</li>
+                <li><strong>Monte Carlo simulátor:</strong> Analýza rizik portfolia</li>
+                <li><strong>Penzijní plánovač:</strong> Plánování důchodu</li>
+            </ul>
+
+            <div class="subsection-title">Databáze a srovnání</div>
+            <ul>
+                <li><strong>Databáze ETF:</strong> Více než 2000 ETF fondů s detailními údaji</li>
+                <li><strong>Srovnání brokerů:</strong> Aktuální poplatky a hodnocení</li>
+                <li><strong>Screening nástroje:</strong> Filtrování ETF podle kritérií</li>
+            </ul>
+
+            <div class="section-title">Doporučené další zdroje</div>
+
+            <div class="subsection-title">Zahraniční weby</div>
+            <ul>
+                <li><strong>Morningstar:</strong> Analýzy a hodnocení fondů</li>
+                <li><strong>JustETF:</strong> Evropsky zaměřená ETF platforma</li>
+                <li><strong>ETF.com:</strong> Americký ETF portál</li>
+            </ul>
+
+            <div class="subsection-title">Literatura</div>
+            <ul>
+                <li><strong>"The Bogleheads' Guide to Investing"</strong> - Taylor Larimore</li>
+                <li><strong>"A Random Walk Down Wall Street"</strong> - Burton Malkiel</li>
+                <li><strong>"The Little Book of Common Sense Investing"</strong> - John Bogle</li>
+            </ul>
+
+            <div class="cta-box">
+                <h3>🚀 Začněte investovat ještě dnes</h3>
+                <p>Využijte naše nástroje k vytvoření vlastní investiční strategie.</p>
+                <a href="https://etfpruvodce.cz/" class="cta-button">Navštivte ETF průvodce.cz</a>
+                <a href="https://etfpruvodce.cz/navod-pro-zacatecniky" class="cta-button">Průvodce pro začátečníky</a>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="chapter page-break">
+            <h2 class="chapter-title">Závěr</h2>
+            
+            <p>ETF fondy představují vynikající způsob, jak budovat dlouhodobé bohatství. Kombinují výhody aktivního i pasivního investování - nízké poplatky, vysokou diverzifikaci a jednoduchost správy.</p>
+
+            <p>Klíčem k úspěchu je:</p>
+            <ul>
+                <li>Jasně definované investiční cíle</li>
+                <li>Výběr vhodné strategie podle vašeho profilu</li>
+                <li>Pravidelné investování a dodržování disciplíny</li>
+                <li>Kontinuální vzdělávání a sledování trendů</li>
+            </ul>
+
+            <p>Pamatujte si, že investování je maraton, ne sprint. Nejdůležitější je začít a být konzistentní. Čas je váš nejcennější spojenec při budování bohatství prostřednictvím ETF fondů.</p>
+
+            <div class="highlight-box">
+                <strong>Váš další krok:</strong> Navštivte ETF průvodce.cz a začněte využívat naše nástroje pro plánování vaší investiční strategie. Máte-li jakékoliv otázky, neváhejte nás kontaktovat na info@etfpruvodce.cz.
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>ETF průvodce.cz</strong> - Komplexní průvodce ETF fondy pro české investory</p>
+            <p>www.etfpruvodce.cz | info@etfpruvodce.cz</p>
+            <p>© 2025 ETF průvodce.cz - Tento materiál je určen pouze pro vzdělávací účely a nepředstavuje investiční doporučení.</p>
+        </div>
+    </div>
+</body>
+</html>

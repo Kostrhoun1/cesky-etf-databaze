@@ -110,7 +110,7 @@ const NewsletterSubscribeForm: React.FC = () => {
         description: insertError.message || "Zkuste to prosím znovu.",
         variant: "destructive",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       setSubmitting(false);
       toast({
         title: "Chyba",
