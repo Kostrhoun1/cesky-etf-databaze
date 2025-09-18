@@ -2,15 +2,15 @@ import { ETF, ETFListItem } from '@/types/etf';
 
 /**
  * Calculates ETF rating based on objective criteria from database data
- * Rating scale: 1-5 stars
+ * Rating scale: 1-5 stars (only awarded to ETFs with minimum 3 years of track record)
  * 
- * Criteria:
- * - TER (Total Expense Ratio) - Lower is better
- * - Fund Size - Larger is better (stability/liquidity)
- * - Track Record - Longer is better  
- * - Fund Provider - Top providers get bonus
- * - Performance consistency - Lower volatility for risk-adjusted returns
- * - Tracking quality - Lower tracking error is better
+ * Criteria (exactly 100 points total):
+ * - TER (Total Expense Ratio): 0-30 points - Lower is better (most important)
+ * - Fund Size: 0-25 points - Larger is better (stability/liquidity)
+ * - Track Record: 0-15 points - Longer history is better  
+ * - Fund Provider: 0-10 points - Top providers get bonus
+ * - Performance: 0-20 points - Risk-adjusted returns and consistency
+ * (Tracking quality removed - data not available for most ETFs)
  */
 
 export interface ETFRating {
@@ -40,26 +40,26 @@ function getYearsSinceInception(inceptionDate: string): number {
   return (now.getTime() - inception.getTime()) / (1000 * 60 * 60 * 24 * 365);
 }
 
-// Score TER (0-25 points): Lower TER is better
+// Score TER (0-30 points): Lower TER is better - most important factor
 function scoreTER(ter: number): number {
-  if (ter <= 0.05) return 25; // <= 0.05% = Excellent
-  if (ter <= 0.10) return 22; // <= 0.10% = Very Good  
-  if (ter <= 0.15) return 19; // <= 0.15% = Good
-  if (ter <= 0.25) return 15; // <= 0.25% = Average
-  if (ter <= 0.50) return 10; // <= 0.50% = Below Average
-  if (ter <= 0.75) return 5;  // <= 0.75% = Poor
-  return 1; // > 0.75% = Very Poor
+  if (ter <= 0.05) return 30; // <= 0.05% = Excellent
+  if (ter <= 0.10) return 26; // <= 0.10% = Very Good  
+  if (ter <= 0.15) return 22; // <= 0.15% = Good
+  if (ter <= 0.25) return 17; // <= 0.25% = Above Average
+  if (ter <= 0.50) return 12; // <= 0.50% = Average
+  if (ter <= 0.75) return 6;  // <= 0.75% = Below Average
+  return 1; // > 0.75% = Poor
 }
 
-// Score Fund Size (0-20 points): Larger funds are more stable
+// Score Fund Size (0-25 points): Larger funds are more stable - expanded for 100-point scale
 function scoreFundSize(sizeInBillion: number): number {
-  if (sizeInBillion >= 50) return 20;    // >= 50B = Excellent
-  if (sizeInBillion >= 20) return 18;    // >= 20B = Very Good
-  if (sizeInBillion >= 10) return 16;    // >= 10B = Good
-  if (sizeInBillion >= 5) return 14;     // >= 5B = Above Average
-  if (sizeInBillion >= 1) return 12;     // >= 1B = Average
-  if (sizeInBillion >= 0.5) return 8;    // >= 500M = Below Average
-  if (sizeInBillion >= 0.1) return 4;    // >= 100M = Poor
+  if (sizeInBillion >= 50) return 25;    // >= 50B = Excellent
+  if (sizeInBillion >= 20) return 22;    // >= 20B = Very Good
+  if (sizeInBillion >= 10) return 19;    // >= 10B = Good
+  if (sizeInBillion >= 5) return 16;     // >= 5B = Above Average
+  if (sizeInBillion >= 1) return 13;     // >= 1B = Average
+  if (sizeInBillion >= 0.5) return 10;   // >= 500M = Below Average
+  if (sizeInBillion >= 0.1) return 5;    // >= 100M = Poor
   return 1; // < 100M = Very Poor
 }
 
@@ -74,61 +74,56 @@ function scoreTrackRecord(years: number): number {
   return 1; // < 1 year = Poor
 }
 
-// Score Fund Provider (0-15 points): Top providers get bonus
+// Score Fund Provider (0-10 points): Top providers get bonus
 function scoreProvider(provider: string): number {
+  if (!provider) return 5;
+  
   const normalizedProvider = provider.toLowerCase();
   
   // Check for top providers (case insensitive)
   for (const topProvider of TOP_PROVIDERS) {
     if (normalizedProvider.includes(topProvider.toLowerCase())) {
-      return 15; // Top provider bonus
+      return 10; // Top provider bonus
     }
   }
   
-  return 8; // Standard provider
+  return 5; // Standard provider
 }
 
-// Score Performance (0-15 points): Risk-adjusted returns and consistency
+// Score Performance (0-20 points): Risk-adjusted returns and consistency - expanded for 100-point scale
 function scorePerformance(etf: ETF | ETFListItem): number {
   const return3y = 'return_3y' in etf ? etf.return_3y : 0;
-  const volatility3y = 'volatility_3y' in etf ? (etf as ETF).volatility_3y : null;
   const returnPerRisk3y = 'return_per_risk_3y' in etf ? (etf as ETF).return_per_risk_3y : null;
   
   let score = 8; // Base score
   
-  // Bonus for good 3-year returns
-  if (return3y > 15) score += 4;      // > 15% = Excellent
-  else if (return3y > 10) score += 3; // > 10% = Very Good
-  else if (return3y > 7) score += 2;  // > 7% = Good
-  else if (return3y > 5) score += 1;  // > 5% = Average
-  // No bonus for < 5%
+  // Bonus for good 3-year returns (convert from decimal to percentage for comparison)
+  const return3yPct = return3y && return3y < 1 ? return3y * 100 : return3y;
   
-  // Bonus for good risk-adjusted returns
+  if (return3yPct > 15) score += 9;      // > 15% = Excellent
+  else if (return3yPct > 10) score += 7; // > 10% = Very Good
+  else if (return3yPct > 7) score += 5;  // > 7% = Good
+  else if (return3yPct > 5) score += 3;  // > 5% = Average
+  else if (return3yPct > 0) score += 1;  // > 0% = Positive
+  
+  // Bonus for good risk-adjusted returns - but only if data exists
+  // Since 99.9% of ETFs have no return_per_risk_3y data, we give smaller bonus
   if (returnPerRisk3y && returnPerRisk3y > 0.5) score += 3;
   else if (returnPerRisk3y && returnPerRisk3y > 0.3) score += 2;
   else if (returnPerRisk3y && returnPerRisk3y > 0.1) score += 1;
   
-  return Math.min(score, 15);
+  return Math.min(score, 20);
 }
 
-// Score Tracking Quality (0-10 points): Lower tracking error is better
-function scoreTracking(trackingError: number): number {
-  if (!trackingError || trackingError <= 0) return 10; // Perfect or no data
-  if (trackingError <= 0.1) return 10;  // <= 0.1% = Excellent
-  if (trackingError <= 0.2) return 8;   // <= 0.2% = Very Good
-  if (trackingError <= 0.5) return 6;   // <= 0.5% = Good
-  if (trackingError <= 1.0) return 4;   // <= 1.0% = Average
-  if (trackingError <= 2.0) return 2;   // <= 2.0% = Below Average
-  return 1; // > 2.0% = Poor
-}
+// REMOVED: score_tracking - tracking error not available for most ETFs
 
-// Convert total score to star rating
+// Convert total score to star rating - adjusted based on actual distribution
 function scoreToStars(score: number): number {
-  if (score >= 85) return 5;      // 85+ = 5 stars (Excellent)
-  if (score >= 70) return 4;      // 70-84 = 4 stars (Very Good)
-  if (score >= 55) return 3;      // 55-69 = 3 stars (Good)
-  if (score >= 40) return 2;      // 40-54 = 2 stars (Average)
-  return 1;                       // < 40 = 1 star (Poor)
+  if (score >= 75) return 5;      // 75+ = 5 stars (Excellent) - was 85+
+  if (score >= 65) return 4;      // 65-74 = 4 stars (Very Good) - was 70-84
+  if (score >= 50) return 3;      // 50-64 = 3 stars (Good) - was 55-69
+  if (score >= 35) return 2;      // 35-49 = 2 stars (Average) - was 40-54
+  return 1;                       // < 35 = 1 star (Poor) - was < 40
 }
 
 // Get category from score
@@ -161,10 +156,10 @@ export function calculateETFRating(etf: ETF | ETFListItem): ETFRating {
   const trackRecordScore = scoreTrackRecord(years);
   const providerScore = scoreProvider(provider);
   const performanceScore = scorePerformance(etf);
-  const trackingScore = scoreTracking(trackingError);
+  // tracking_score removed - data not available for most ETFs
   
-  // Total score (max 100)
-  const totalScore = terScore + sizeScore + trackRecordScore + providerScore + performanceScore + trackingScore;
+  // Total score (exactly 100) - TER:30 + Size:25 + Track Record:15 + Provider:10 + Performance:20 = 100
+  const totalScore = terScore + sizeScore + trackRecordScore + providerScore + performanceScore;
   
   return {
     rating: scoreToStars(totalScore),
@@ -174,8 +169,8 @@ export function calculateETFRating(etf: ETF | ETFListItem): ETFRating {
       fundSize: sizeScore,
       trackRecord: trackRecordScore,
       provider: providerScore,
-      performance: performanceScore,
-      tracking: trackingScore
+      performance: performanceScore
+      // tracking removed - not available for most ETFs
     },
     category: getCategory(totalScore)
   };

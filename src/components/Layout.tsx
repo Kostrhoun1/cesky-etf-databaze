@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { Menu, Mail, Settings } from 'lucide-react';
 import Logo from './Logo';
 import BreadcrumbNav from './SEO/BreadcrumbNav';
@@ -29,9 +30,10 @@ const Layout: React.FC<LayoutProps> = ({ children, lastUpdated }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-lg sticky top-0 z-40 border-b border-gray-200">
+    <TooltipProvider delayDuration={300} skipDelayDuration={100}>
+      <div className="min-h-screen bg-gray-50 font-sans">
+        {/* Header */}
+        <header className="bg-white/80 backdrop-blur-lg sticky top-0 z-40 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
@@ -158,7 +160,8 @@ const Layout: React.FC<LayoutProps> = ({ children, lastUpdated }) => {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </TooltipProvider>
   );
 };
 
