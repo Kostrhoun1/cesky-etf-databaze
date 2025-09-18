@@ -63,7 +63,8 @@ export class InvestmentRecommendationEngine {
           region, investment_focus
         `)
         .not('name', 'is', null)
-        .not('ter_numeric', 'is', null);
+        .not('ter_numeric', 'is', null)
+;
 
       // Filter based on user profile
       if (profile.experience === 'beginner') {

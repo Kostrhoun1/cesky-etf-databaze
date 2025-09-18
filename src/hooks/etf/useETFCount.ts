@@ -7,7 +7,8 @@ export const useETFCount = () => {
     try {
       const { count, error } = await supabase
         .from('etf_funds')
-        .select('*', { count: 'exact', head: true });
+        .select('*', { count: 'exact', head: true })
+;
 
       if (error) {
         console.error('Error counting ETFs:', error);
