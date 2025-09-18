@@ -171,7 +171,12 @@ export type Database = {
           primary_exchange: string | null
           primary_ticker: string | null
           rating: number | null
+          rating_performance_score: number | null
+          rating_provider_score: number | null
           rating_score: number | null
+          rating_size_score: number | null
+          rating_ter_score: number | null
+          rating_track_record_score: number | null
           region: string | null
           replication: string | null
           retry_count: number | null
@@ -311,7 +316,12 @@ export type Database = {
           primary_exchange?: string | null
           primary_ticker?: string | null
           rating?: number | null
+          rating_performance_score?: number | null
+          rating_provider_score?: number | null
           rating_score?: number | null
+          rating_size_score?: number | null
+          rating_ter_score?: number | null
+          rating_track_record_score?: number | null
           region?: string | null
           replication?: string | null
           retry_count?: number | null
@@ -451,7 +461,12 @@ export type Database = {
           primary_exchange?: string | null
           primary_ticker?: string | null
           rating?: number | null
+          rating_performance_score?: number | null
+          rating_provider_score?: number | null
           rating_score?: number | null
+          rating_size_score?: number | null
+          rating_ter_score?: number | null
+          rating_track_record_score?: number | null
           region?: string | null
           replication?: string | null
           retry_count?: number | null
