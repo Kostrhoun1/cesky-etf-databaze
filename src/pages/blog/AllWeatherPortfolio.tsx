@@ -96,6 +96,7 @@ const BONDS_ETF_FILTER = {
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
   category: "Dluhopisy",
+  minFundSize: 1, // Vyloučí ETF bez údaje o velikosti fondu
 };
 
 const COMMODITIES_ETF_FILTER = {
@@ -103,6 +104,7 @@ const COMMODITIES_ETF_FILTER = {
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
   nameKeywords: ["Gold", "Commodity", "Commodities", "Zlato", "Physical", "Energy"],
+  minFundSize: 1, // Vyloučí ETF bez údaje o velikosti fondu
 };
 
 const GLOBAL_STOCKS_FILTER = {
@@ -110,6 +112,7 @@ const GLOBAL_STOCKS_FILTER = {
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
   indexNameKeywords: ["msci world", "ftse all-world"],
+  minFundSize: 1, // Vyloučí ETF bez údaje o velikosti fondu
 };
 
 const AllWeatherPortfolio: React.FC = () => {

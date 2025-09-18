@@ -85,7 +85,9 @@ const EU_ETF_TABLE_FILTER = {
   top: 12,
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
+  category: "Akcie", // Vyloučí dluhopisové fondy
   regionKeywords: ["Evropa"],
+  minFundSize: 1, // Vyloučí ETF bez údaje o velikosti fondu
 };
 
 const NejlepsiETFNaEvropskeAkcie: React.FC = () => {

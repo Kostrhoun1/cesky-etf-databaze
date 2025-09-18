@@ -107,7 +107,7 @@ const US_ETF_TABLE_FILTER = {
   sortBy: "fund_size_numeric" as const,
   sortOrder: "desc" as const,
   regionKeywords: ["US"],
-  minFundSize: 100, // Vyloučí ETF s velikostí fondu pod 100M EUR
+  minFundSize: 1, // Vyloučí ETF bez údaje o velikosti fondu
 };
 
 const NejlepsiETFNaAmerickeAkcie: React.FC = () => {
