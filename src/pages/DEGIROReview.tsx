@@ -42,11 +42,11 @@ const DEGIROReview = () => {
   return (
     <Layout>
       <SEOHead
-        title={`DEGIRO recenze ${currentYear}: Kompletní hodnocení pro české investory | ETF průvodce.cz`}
-        description={`Detailní DEGIRO recenze ${currentYear} - poplatky, bezpečnost, daňové aspekty pro ČR. Výhody a nevýhody, srovnání s konkurencí. Hodnocení 4.5/5.`}
+        title={`DEGIRO ETF ${currentYear} 📊 - Recenze, poplatky, ETF zdarma | ČR`}
+        description={`★ DEGIRO ETF recenze ${currentYear} ★ 200+ ETF zdarma, poplatky 1-3€, Core Selection ETF. Kompletní průvodce pro české investory + daňové aspekty. Hodnocení 4.5/5.`}
         canonical="https://etfpruvodce.cz/degiro-recenze"
-        keywords={`DEGIRO recenze ${currentYear}, DEGIRO zkušenosti, DEGIRO poplatky, DEGIRO Česká republika, online broker hodnocení`}
-        ogImage="https://etfpruvodce.cz/og-degiro-review.jpg"
+        keywords={`DEGIRO ETF, DEGIRO ETF zdarma, DEGIRO poplatky ${currentYear}, DEGIRO Core Selection, DEGIRO recenze ${currentYear}, DEGIRO Česká republika, ETF broker DEGIRO`}
+        ogImage="https://etfpruvodce.cz/og-degiro-etf.jpg"
         schema={combinedSchema}
         publishedTime={`${currentYear}-01-01`}
         modifiedTime={new Date().toISOString()}
@@ -77,7 +77,7 @@ const DEGIROReview = () => {
               <span className="font-medium">DEGIRO Broker</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Detailní Recenze DEGIRO
+              DEGIRO ETF recenze {currentYear}
             </h1>
             <p className="text-xl text-orange-100 leading-relaxed max-w-3xl mx-auto mb-8">
               Komplexní hodnocení evropského brokera s nízkými poplatky a širokou nabídkou ETF
@@ -202,6 +202,64 @@ const DEGIROReview = () => {
               <p className="text-sm text-blue-800">
                 <strong>Důležité:</strong> Fúze s flatex AG v roce 2020 posílila finanční zázemí a přinesla vyšší úroveň regulace pod německým dohledem.
               </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* DEGIRO ETF sekce */}
+        <Card className="mb-8 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+          <CardHeader>
+            <CardTitle className="text-2xl text-blue-900">🎯 DEGIRO ETF - Klíčové informace</CardTitle>
+            <CardDescription className="text-blue-700">Vše o investování do ETF přes DEGIRO broker</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white/80 p-4 rounded-lg">
+                <h4 className="font-semibold text-blue-800 mb-3">📋 DEGIRO Core Selection ETF</h4>
+                <ul className="space-y-2 text-sm">
+                  <li>• <strong>200+ ETF zdarma</strong> (první transakce měsíčně)</li>
+                  <li>• Největší světové ETF providery (iShares, Vanguard, Xtrackers)</li>
+                  <li>• S&P 500, MSCI World, Emerging Markets ETF</li>
+                  <li>• Aktualizovaný seznam každý měsíc</li>
+                </ul>
+              </div>
+              <div className="bg-white/80 p-4 rounded-lg">
+                <h4 className="font-semibold text-green-800 mb-3">💰 DEGIRO ETF poplatky</h4>
+                <ul className="space-y-2 text-sm">
+                  <li>• <strong>Core Selection:</strong> 1€ za transakci</li>
+                  <li>• <strong>Ostatní ETF:</strong> 3€ za transakci</li>
+                  <li>• <strong>Roční poplatek:</strong> 2,5€ za zahraniční burzu</li>
+                  <li>• <strong>Konverze měn:</strong> Zdarma (CZK/EUR)</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <h4 className="font-semibold text-green-800 mb-2">🏆 Nejpopulárnější DEGIRO ETF pro české investory:</h4>
+              <div className="grid md:grid-cols-3 gap-4 mt-3">
+                <div className="text-sm">
+                  <strong>VWCE</strong> - Vanguard FTSE All-World<br/>
+                  <span className="text-green-700">TER: 0.22% | Core Selection</span>
+                </div>
+                <div className="text-sm">
+                  <strong>CSPX</strong> - iShares Core S&P 500<br/>
+                  <span className="text-green-700">TER: 0.07% | Core Selection</span>
+                </div>
+                <div className="text-sm">
+                  <strong>IWDA</strong> - iShares MSCI World<br/>
+                  <span className="text-green-700">TER: 0.20% | Core Selection</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <h4 className="font-semibold text-yellow-800 mb-2">⚠️ DEGIRO ETF - Na co si dát pozor:</h4>
+              <ul className="space-y-1 text-sm text-yellow-700">
+                <li>• Core Selection ETF zdarma pouze první transakce měsíčně</li>
+                <li>• Akumulační ETF jsou daňově výhodnější než distribuční</li>
+                <li>• Evropské UCITS ETF preferovat před americkými (kvůli regulaci)</li>
+                <li>• Roční poplatek 2,5€ za každou využitou zahraniční burzu</li>
+              </ul>
             </div>
           </CardContent>
         </Card>

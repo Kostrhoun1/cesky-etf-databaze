@@ -269,6 +269,157 @@ const WhereToBuyETFs = () => {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Často kladené otázky o koupi ETF
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Odpovědi na nejčastější dotazy o výběru brokera pro ETF investice
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto space-y-6">
+            {[
+              {
+                question: "Kde koupit ETF v České republice?",
+                answer: "ETF můžete koupit u online brokerů jako DEGIRO, XTB, Trading 212, Interactive Brokers nebo u českých bank jako Fio e-Broker. Nejlepší volbou jsou online brokeři s nízkými poplatky a širokým výběrem ETF fondů."
+              },
+              {
+                question: "Který broker je nejlepší pro začátečníky?",
+                answer: "Pro začátečníky doporučujeme DEGIRO (snadné ovládání, ETF zdarma) nebo XTB (0% poplatky do 100 000 EUR měsíčně, česká podpora). Oba nabízejí intuitivní rozhraní a nízké náklady."
+              },
+              {
+                question: "Kolik stojí nákup ETF u různých brokerů?",
+                answer: "Poplatky se liší: DEGIRO - 0€ za vybrané ETF, jinak 2€ + 0,03%; XTB - 0€ do 100 000 EUR měsíčně; Trading 212 - 0€; Interactive Brokers - od 1,25€; Fio e-Broker - 0,4% (min. 7,90€)."
+              },
+              {
+                question: "Jsou online brokeři bezpeční?",
+                answer: "Ano, všichni doporučení brokeři jsou regulovaní v EU a nabízejí ochranu investorů do 20 000€ podle ESMA směrnic. DEGIRO, XTB, Trading 212 a Interactive Brokers jsou ověřené platformy s miliony uživatelů."
+              },
+              {
+                question: "Mohu koupit americké ETF u evropských brokerů?",
+                answer: "Ne, kvůli MiFID II regulaci nemohou evropští brokeři nabízet americké ETF retailovým investorům. Místo toho lze koupit evropské ETF (UCITS) sledující stejné indexy, např. CSPX místo SPY."
+              },
+              {
+                question: "Jak začít s malými částkami?",
+                answer: "Většina brokerů neumožňuje částečné akcie, ale nabízejí spořící plány už od 25€ měsíčně. Trading 212 umožňuje nákup frakcí akcií/ETF už od 1€."
+              }
+            ].map((faq, index) => (
+              <details key={index} className="group border border-gray-200 rounded-lg">
+                <summary className="flex justify-between items-center w-full px-6 py-4 text-left bg-gray-50 cursor-pointer hover:bg-gray-100 rounded-lg group-open:rounded-b-none transition-colors">
+                  <span className="font-semibold text-lg text-gray-900">{faq.question}</span>
+                  <svg className="w-5 h-5 text-gray-500 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                <div className="px-6 py-4 text-gray-700 leading-relaxed bg-white rounded-b-lg">
+                  {faq.answer}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto prose prose-lg">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">Kde koupit ETF - kompletní průvodce pro české investory</h2>
+            
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">🌍 Online brokeři (doporučeno)</h3>
+                <ul className="space-y-2 text-gray-700">
+                  <li>• <strong>DEGIRO</strong> - ETF zdarma, nízké poplatky</li>
+                  <li>• <strong>XTB</strong> - 0% poplatky do 100k EUR</li>
+                  <li>• <strong>Trading 212</strong> - kompletně zdarma</li>
+                  <li>• <strong>Interactive Brokers</strong> - profesionální platforma</li>
+                </ul>
+              </div>
+              
+              <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">🏦 České banky a instituce</h3>
+                <ul className="space-y-2 text-gray-700">
+                  <li>• <strong>Fio e-Broker</strong> - český broker, vyšší poplatky</li>
+                  <li>• <strong>Česká spořitelna</strong> - omezený výběr ETF</li>
+                  <li>• <strong>Komerční banka</strong> - premium služby</li>
+                  <li>• <strong>ČSOB</strong> - tradičné bankovnictví</li>
+                </ul>
+              </div>
+            </div>
+
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Jak vybrat nejlepšího brokera pro ETF?</h3>
+            
+            <p className="text-gray-700 leading-relaxed mb-6">
+              Při výběru brokera pro nákup ETF v České republice je důležité zvážit několik klíčových faktorů. 
+              <strong>Kde koupit ETF</strong> závisí na vašich investičních cílech, výši investic a preferencích ohledně služeb.
+            </p>
+
+            <div className="bg-blue-50 border-l-4 border-blue-400 p-6 mb-8">
+              <h4 className="font-semibold text-blue-900 mb-3">💡 Tip pro začátečníky</h4>
+              <p className="text-blue-800">
+                Pokud si nejste jisti, kde koupit ETF, začněte s DEGIRO nebo XTB. Oba brokeři nabízejí 
+                nízké poplatky, široký výběr ETF a jsou vhodní pro české investory.
+              </p>
+            </div>
+
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Porovnání nákladů na koupi ETF</h3>
+            
+            <div className="overflow-x-auto mb-8">
+              <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Broker</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Poplatek za nákup</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Měsíční poplatek</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Výhody</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">DEGIRO</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">0€ (vybrané ETF)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">0€</td>
+                    <td className="px-6 py-4 text-gray-600">200+ ETF zdarma</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">XTB</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">0€ (do 100k EUR)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">0€</td>
+                    <td className="px-6 py-4 text-gray-600">Česká podpora</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Trading 212</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">0€</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">0€</td>
+                    <td className="px-6 py-4 text-gray-600">Frakční akcie</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Fio e-Broker</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">0,4% (min. 7,90€)</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">0€</td>
+                    <td className="px-6 py-4 text-gray-600">Český broker</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Daňové aspekty při koupi ETF</h3>
+            
+            <p className="text-gray-700 leading-relaxed mb-6">
+              Při rozhodování <strong>kde koupit ETF</strong> nezapomeňte na daňové dopady. Evropské ETF (UCITS) 
+              jsou daňově výhodnější než americké ETF kvůli smlouvám o zamezení dvojího zdanění. 
+              Všichni doporučení brokeři poskytují daňové reporty pro české investory.
+            </p>
+
+          </div>
+        </div>
+      </section>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Internal Linking */}
         <InternalLinking 

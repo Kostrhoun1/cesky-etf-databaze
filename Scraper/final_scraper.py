@@ -39,6 +39,14 @@ import sys
 from dataclasses import dataclass
 from etf_rating import calculate_etf_rating
 
+# Ochrana proti uspávání počítače (macOS/Linux)
+try:
+    import subprocess
+    import threading
+    CAFFEINE_AVAILABLE = True
+except ImportError:
+    CAFFEINE_AVAILABLE = False
+
 # OPRAVA UNICODE - nastavení kodování pro Windows
 if sys.platform.startswith('win'):
     import codecs
@@ -124,6 +132,11 @@ logger.addHandler(console_handler)
 
 def safe_log(level: str, message: str):
     """Bezpečná logging funkce která odstraní problematické znaky pro Windows"""
+    # Filtruj spam zprávy ale nech důležité info
+    if level in ['debug', 'info'] and 'EXCHANGE:' in message:
+        return
+    if level == 'debug' and any(keyword in message for keyword in ['DIVIDEND:', 'SKIP:']):
+        return
     try:
         # Pokus o normální log
         getattr(logger, level.lower())(message)
@@ -448,10 +461,71 @@ class ETFDataComplete:
         return 'synthetic' in (self.replication or '').lower()
 
 
+class KeepAwakeManager:
+    """Správce pro udržení počítače v aktivním stavu během scrapingu"""
+    def __init__(self):
+        self.caffeinate_process = None
+        self.keep_awake_thread = None
+        self.running = False
+        
+    def start_keep_awake(self):
+        """Spustí systém pro udržení počítače vzhůru"""
+        if not CAFFEINE_AVAILABLE:
+            safe_log("warning", "Caffeinate není dostupné - počítač se může uspat")
+            return
+            
+        if sys.platform == "darwin":  # macOS
+            try:
+                self.caffeinate_process = subprocess.Popen(['caffeinate', '-d'])
+                safe_log("info", "💡 Caffeinate aktivní - počítač nebude uspán")
+            except Exception as e:
+                safe_log("warning", f"Nelze spustit caffeinate: {e}")
+        elif sys.platform.startswith("linux"):  # Linux
+            self._start_linux_keep_awake()
+        else:
+            safe_log("warning", "Ochrana proti uspání není dostupná pro tento OS")
+    
+    def _start_linux_keep_awake(self):
+        """Udržuje Linux počítač vzhůru pomocí xdotool nebo jiných metod"""
+        self.running = True
+        def keep_awake_loop():
+            while self.running:
+                try:
+                    # Pokusí se poslat neviditelný keystroke
+                    subprocess.run(['xdotool', 'key', 'ctrl'], 
+                                 stdout=subprocess.DEVNULL, 
+                                 stderr=subprocess.DEVNULL, 
+                                 timeout=1)
+                except:
+                    pass
+                time.sleep(300)  # Každých 5 minut
+        
+        self.keep_awake_thread = threading.Thread(target=keep_awake_loop, daemon=True)
+        self.keep_awake_thread.start()
+        safe_log("info", "💡 Linux keep-awake aktivní")
+    
+    def stop_keep_awake(self):
+        """Zastaví systém pro udržení počítače vzhůru"""
+        self.running = False
+        
+        if self.caffeinate_process:
+            try:
+                self.caffeinate_process.terminate()
+                self.caffeinate_process.wait(timeout=5)
+                safe_log("info", "💡 Caffeinate ukončen")
+            except:
+                try:
+                    self.caffeinate_process.kill()
+                except:
+                    pass
+            self.caffeinate_process = None
+
+
 class CompleteProductionScraper:
     def __init__(self, batch_size: int = 50):
         self.batch_size = batch_size
         self.current_etf_index = 0  # For reduced logging
+        self.keep_awake_manager = KeepAwakeManager()
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -707,11 +781,9 @@ class CompleteProductionScraper:
                     safe_log("debug", f"SKIP: Přeskočen {isin} (už hotový)")
                     continue
             
-            # Show progress every 10 ETFs or for first/last ETF in batch
-            if i == 1 or i % 10 == 0 or i == len(batch_isins):
+            # Show progress every 10 ETFs only
+            if i % 10 == 0 or i == len(batch_isins):
                 safe_log("info", f"[Batch {batch_id}] Processing {i}/{len(batch_isins)} ETFs... Current: {isin}")
-            elif i <= 3:  # Show first 3 for initial confirmation
-                safe_log("info", f"[{batch_id}:{i}/{len(batch_isins)}] {isin}")
             
             etf = self.scrape_etf_complete_with_retry(isin)
             etf_list.append(etf)
@@ -762,49 +834,57 @@ class CompleteProductionScraper:
         safe_log("info", "START: Spuštění KOMPLETNÍHO production scrapingu + DIVIDENDY")
         safe_log("info", f"CONFIG: batch_size={self.batch_size}, resume={resume}, exchange_data={EXTRACT_EXCHANGE_DATA}, dividend_data={EXTRACT_DIVIDEND_DATA}")
         
-        # Načti ISIN kódy
-        all_isins = self.load_isins_from_csv(csv_file)
-        total_batches = (len(all_isins) + self.batch_size - 1) // self.batch_size
+        # Spustí ochranu proti uspávání
+        self.keep_awake_manager.start_keep_awake()
         
-        safe_log("info", f"TOTAL: {len(all_isins)} ETF v {total_batches} batch")
-        
-        all_results = []
-        
-        for batch_id in range(start_batch, total_batches):
-            start_idx = batch_id * self.batch_size
-            end_idx = min(start_idx + self.batch_size, len(all_isins))
-            batch_isins = all_isins[start_idx:end_idx]
+        try:
+            # Načti ISIN kódy
+            all_isins = self.load_isins_from_csv(csv_file)
+            total_batches = (len(all_isins) + self.batch_size - 1) // self.batch_size
             
-            safe_log("info", f"BATCH: {batch_id + 1}/{total_batches}")
+            safe_log("info", f"TOTAL: {len(all_isins)} ETF v {total_batches} batch")
             
-            # Zkontroluj, zda už je batch dokončený
-            if resume and self.is_batch_completed(batch_id, len(batch_isins)):
-                safe_log("info", f"SKIP: Batch {batch_id} už je dokončený, přeskakuji")
-                checkpoint = self.load_checkpoint(batch_id)
-                if checkpoint:
-                    all_results.extend(checkpoint)
-                continue
+            all_results = []
             
-            try:
-                batch_results = self.process_batch(batch_id, batch_isins, resume)
-                self.export_batch_results(batch_id, batch_results)
-                all_results.extend(batch_results)
+            for batch_id in range(start_batch, total_batches):
+                start_idx = batch_id * self.batch_size
+                end_idx = min(start_idx + self.batch_size, len(all_isins))
+                batch_isins = all_isins[start_idx:end_idx]
                 
-                # Statistiky průběhu
-                total_processed = (batch_id + 1) * self.batch_size
-                total_processed = min(total_processed, len(all_isins))
-                progress = (total_processed / len(all_isins)) * 100
+                safe_log("info", f"BATCH: {batch_id + 1}/{total_batches}")
                 
-                safe_log("info", f"PROGRESS: {total_processed}/{len(all_isins)} ({progress:.1f}%)")
+                # Zkontroluj, zda už je batch dokončený
+                if resume and self.is_batch_completed(batch_id, len(batch_isins)):
+                    safe_log("info", f"SKIP: Batch {batch_id} už je dokončený, přeskakuji")
+                    checkpoint = self.load_checkpoint(batch_id)
+                    if checkpoint:
+                        all_results.extend(checkpoint)
+                    continue
                 
-            except Exception as e:
-                safe_log("error", f"ERROR: Chyba v batch {batch_id}: {e}")
-                continue
+                try:
+                    batch_results = self.process_batch(batch_id, batch_isins, resume)
+                    self.export_batch_results(batch_id, batch_results)
+                    all_results.extend(batch_results)
+                    
+                    # Statistiky průběhu
+                    total_processed = (batch_id + 1) * self.batch_size
+                    total_processed = min(total_processed, len(all_isins))
+                    progress = (total_processed / len(all_isins)) * 100
+                    
+                    safe_log("info", f"PROGRESS: {total_processed}/{len(all_isins)} ({progress:.1f}%)")
+                    
+                except Exception as e:
+                    safe_log("error", f"ERROR: Chyba v batch {batch_id}: {e}")
+                    continue
         
-        # Finální export všech výsledků
-        self.export_final_results(all_results)
+            # Finální export všech výsledků
+            self.export_final_results(all_results)
+            
+            safe_log("info", "DONE: KOMPLETNÍ production scraping s dividendy dokončen!")
         
-        safe_log("info", "DONE: KOMPLETNÍ production scraping s dividendy dokončen!")
+        finally:
+            # Vypni ochranu proti uspávání
+            self.keep_awake_manager.stop_keep_awake()
     
     def export_final_results(self, all_results: List[ETFDataComplete]):
         """Finální export všech KOMPLETNÍCH výsledků s dividendy"""
@@ -1243,14 +1323,14 @@ class CompleteProductionScraper:
                                         string=re.compile(r'Stock\s+exchange', re.I))
         
         if self.current_etf_index <= 3:
-            safe_log("info", f"EXCHANGE: Found {len(exchange_elements)} elements with 'Stock exchange' text")
+            safe_log("debug", f"EXCHANGE: Found {len(exchange_elements)} elements with 'Stock exchange' text")
         
         # Pokus 2: Hledej jen "exchange" 
         if not exchange_elements:
             exchange_elements = soup.find_all(['section', 'div', 'table'], 
                                             string=re.compile(r'exchange', re.I))
             if self.current_etf_index <= 3:
-                safe_log("info", f"EXCHANGE: Found {len(exchange_elements)} elements with 'exchange' text")
+                safe_log("debug", f"EXCHANGE: Found {len(exchange_elements)} elements with 'exchange' text")
         
         # Pokus 3: Hledej tabulky s typickými exchange headers
         if not exchange_elements:
@@ -1265,13 +1345,13 @@ class CompleteProductionScraper:
                 if has_exchange and has_ticker and has_currency:
                     exchange_elements = [table]
                     if self.current_etf_index <= 3:
-                        safe_log("info", f"EXCHANGE: Found exchange table with listing+ticker+currency keywords")
+                        safe_log("debug", f"EXCHANGE: Found exchange table with listing+ticker+currency keywords")
                     break
                 elif has_ticker and has_currency and ('xetra' in text or 'london' in text):
                     # Fallback - pokud najde ticker+currency+známou burzu
                     exchange_elements = [table]
                     if self.current_etf_index <= 3:
-                        safe_log("info", f"EXCHANGE: Found exchange table with ticker+currency+exchange names")
+                        safe_log("debug", f"EXCHANGE: Found exchange table with ticker+currency+exchange names")
                     break
         
         for element in exchange_elements:
@@ -1279,16 +1359,16 @@ class CompleteProductionScraper:
             if parent:
                 exchange_section = parent
                 if self.current_etf_index <= 3:
-                    safe_log("info", f"EXCHANGE: Found parent section for stock exchange")
+                    safe_log("debug", f"EXCHANGE: Found parent section for stock exchange")
                 break
         
         if exchange_section:
             if self.current_etf_index <= 3:
-                safe_log("info", f"EXCHANGE: Found exchange section, calling _parse_exchange_table")
+                safe_log("debug", f"EXCHANGE: Found exchange section, calling _parse_exchange_table")
             self._parse_exchange_table(exchange_section, etf)
         else:
             if self.current_etf_index <= 3:
-                safe_log("info", f"EXCHANGE: No exchange section found, calling _extract_exchange_from_text")
+                safe_log("debug", f"EXCHANGE: No exchange section found, calling _extract_exchange_from_text")
             self._extract_exchange_from_text(soup, etf)
         
         # Metoda 2: Nastav primary ticker z nejlepšího table kandidáta
@@ -1323,7 +1403,7 @@ class CompleteProductionScraper:
         header_row = rows[0]
         headers = [th.get_text().strip().lower() for th in header_row.find_all(['th', 'td'])]
         if self.current_etf_index <= 3:
-            safe_log("info", f"EXCHANGE: Headers found: {headers}")
+            safe_log("debug", f"EXCHANGE: Headers found: {headers}")
         
         col_mapping = {}
         for i, header in enumerate(headers):
@@ -1339,7 +1419,7 @@ class CompleteProductionScraper:
                 col_mapping['reuters'] = i
         
         if self.current_etf_index <= 3:
-            safe_log("info", f"EXCHANGE: Column mapping: {col_mapping}")
+            safe_log("debug", f"EXCHANGE: Column mapping: {col_mapping}")
         
         # Parsuj data řádky
         for row_idx, row in enumerate(rows[1:], 1):
@@ -1348,7 +1428,7 @@ class CompleteProductionScraper:
                 continue
             
             if self.current_etf_index <= 3:
-                safe_log("info", f"EXCHANGE: Row {row_idx} cells: {[cell.get_text().strip() for cell in cells]}")
+                safe_log("debug", f"EXCHANGE: Row {row_idx} cells: {[cell.get_text().strip() for cell in cells]}")
             
             listing = ExchangeListing()
             
@@ -1361,7 +1441,7 @@ class CompleteProductionScraper:
             if 'ticker' in col_mapping and col_mapping['ticker'] < len(cells):
                 raw_ticker = cells[col_mapping['ticker']].get_text().strip()
                 if self.current_etf_index <= 3:
-                    safe_log("info", f"EXCHANGE: Raw ticker from cell {col_mapping['ticker']}: '{raw_ticker}'")
+                    safe_log("debug", f"EXCHANGE: Raw ticker from cell {col_mapping['ticker']}: '{raw_ticker}'")
                 listing.ticker = raw_ticker
             
             if 'bloomberg' in col_mapping and col_mapping['bloomberg'] < len(cells):

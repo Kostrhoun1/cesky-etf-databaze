@@ -151,6 +151,7 @@ export interface ETFListItem {
   fund_size_numeric: number;
   degiro_free: boolean;
   primary_ticker?: string;
+  ticker?: string; // Alias pro primary_ticker pro kompatibilitu
   distribution_policy: string;
   index_name: string;
   fund_currency: string;

@@ -20,9 +20,15 @@ const HomePage: React.FC = () => {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "ETF průvodce.cz",
+    "name": "ETF průvodce 2025 - Nejlepší ETF fondy pro české investory",
+    "alternateName": "ETF průvodce.cz",
     "url": "https://etfpruvodce.cz",
-    "description": "Nejlepší ETF fondy pro české investory. Srovnání, analýza a detailní informace o ETF fondech. Kalkulačky, nástroje a vzdělávací obsah o investování.",
+    "description": "Najděte nejlepší ETF fondy 2025. Kde koupit ETF, srovnání poplatků, DEGIRO ETF zdarma. Kompletní guide pro české investory s 3500+ ETF databází.",
+    "inLanguage": "cs-CZ",
+    "audience": {
+      "@type": "Audience",
+      "audienceType": "Čeští investoři"
+    },
     "publisher": {
       "@type": "Organization",
       "name": "ETF průvodce.cz",
@@ -31,21 +37,33 @@ const HomePage: React.FC = () => {
         "url": "https://etfpruvodce.cz/og-image.jpg"
       }
     },
+    "mainEntity": {
+      "@type": "WebApplication",
+      "name": "ETF srovnání a databáze",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "CZK"
+      }
+    },
     "potentialAction": {
       "@type": "SearchAction",
       "target": "https://etfpruvodce.cz/srovnani-etf?search={search_term_string}",
       "query-input": "required name=search_term_string"
-    }
+    },
+    "keywords": "nejlepší ETF, ETF fondy, kde koupit ETF, co jsou ETF, ETF poplatky, DEGIRO ETF, dividendové ETF, S&P 500 ETF, ETF srovnání"
   };
 
   return (
     <Layout lastUpdated={lastUpdated}>
       <GlobalSEO />
       <SEOHead
-        title="ETF průvodce.cz - Komplexní průvodce ETF fondy pro české investory 2025"
-        description="Nejlepší ETF fondy pro české investory 2025. Srovnání, analýza a detailní informace o ETF fondech. Kalkulačky, nástroje a vzdělávací obsah o investování."
+        title="ETF průvodce 2025 🇨🇿 - Nejlepší ETF fondy pro české investory"
+        description="★ ZDARMA ETF průvodce ★ Najděte nejlepší ETF fondy 2025. Kde koupit ETF, srovnání poplatků, DEGIRO ETF zdarma. Kompletní guide pro české investory s 3500+ ETF databází."
         canonical="https://etfpruvodce.cz/"
-        keywords="ETF fondy, investování, srovnání ETF, české investování, DEGIRO, Trading 212, XTB, nejlepší ETF 2025, brokeři"
+        keywords="nejlepší ETF, ETF fondy, kde koupit ETF, co jsou ETF, ETF poplatky, DEGIRO ETF, dividendové ETF, S&P 500 ETF, ETF srovnání, česky investování"
         ogImage="https://etfpruvodce.cz/og-homepage.jpg"
         schema={websiteSchema}
       />

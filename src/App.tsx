@@ -15,6 +15,7 @@ import Trading212Review from "./pages/Trading212Review";
 import Tools from "./pages/Tools";
 import InvestmentCalculatorPage from "./pages/calculators/InvestmentCalculatorPage";
 import FeeCalculatorPage from "./pages/calculators/FeeCalculatorPage";
+import ETFPoplatky from "./pages/ETFPoplatky";
 import MonteCarloSimulatorPage from "./pages/calculators/MonteCarloSimulatorPage";
 import RetirementPlannerPage from "./pages/calculators/RetirementPlannerPage";
 import EmergencyFundCalculatorPage from "./pages/calculators/EmergencyFundCalculatorPage";
@@ -66,6 +67,7 @@ function App() {
             <Route path="/srovnani-etf" element={<ETFComparison />} />
             <Route path="/co-jsou-etf" element={<WhatAreETFs />} />
             <Route path="/kde-koupit-etf" element={<WhereToBuyETFs />} />
+            <Route path="/etf-poplatky-srovnani" element={<ETFPoplatky />} />
             <Route path="/degiro-recenze" element={<DEGIROReview />} />
             <Route path="/xtb-recenze" element={<XTBReview />} />
             <Route path="/interactive-brokers-recenze" element={<InteractiveBrokersReview />} />

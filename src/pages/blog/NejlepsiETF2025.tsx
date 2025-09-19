@@ -151,10 +151,10 @@ const NejlepsiETF2025: React.FC = () => {
 
   return (
     <BlogArticleLayout
-      title="Nejlepší ETF 2025"
-      perex="Výběr nejlepších ETF fondů pro rok 2025. Analýza podle správcovských poplatků, velikosti fondu, výkonnosti a diverzifikace s konkrétními doporučeními pro české investory."
-      seoDescription="Nejlepší ETF 2025: kompletní srovnání a doporučení fondů podle velikosti, poplatků a výnosu. Analýza a tipy na globální, americké, evropské, dividendové a sektorové ETF pro české investory."
-      readTime="8 min"
+      title="Nejlepší ETF 2025 ⭐ - Top 10 fondů pro české investory"
+      perex="★ Objevte nejlepší ETF fondy pro rok 2025 ★ Analýza top S&P 500, světových a evropských ETF s nejnižšími poplatky a nejvyšší výkonností. Kompletní průvodce pro české investory s DEGIRO doporučeními a praktickými tipy."
+      seoDescription="Nejlepší ETF 2025: ⭐ TOP 10 ETF fondů pro české investory ⭐ VWCE, CSPX, EUNL analýza. Kde koupit ETF, DEGIRO ETF zdarma, dividendové ETF, S&P 500 ETF. Kompletní průvodce s TER poplatky a výkonností."
+      readTime="10 min"
       difficulty="Začátečník"
       category="Doporučení"
     >

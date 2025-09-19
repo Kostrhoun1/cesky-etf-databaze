@@ -18,8 +18,8 @@ const WhatAreETFs: React.FC = () => {
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Co jsou ETF fondy? - Kompletní průvodce pro české investory",
-    "description": "Vše, co potřebujete vědět o ETF. Zjistěte co jsou ETF, jak fungují, jejich výhody, nevýhody, typy a jak do nich investovat.",
+    "headline": "Co jsou ETF fondy 2025? Kompletní průvodce pro začátečníky",
+    "description": "Kompletní průvodce co jsou ETF fondy pro české investory 2025. Jak fungují ETF, výhody, nevýhody, typy a praktické příklady investování do ETF fondů.",
     "author": {
       "@type": "Organization",
       "name": "ETF průvodce.cz"
@@ -44,14 +44,14 @@ const WhatAreETFs: React.FC = () => {
   return (
     <Layout>
       <SEOHead
-        title="Co jsou ETF fondy? - Detailní průvodce | ETF průvodce.cz"
-        description="Vše, co potřebujete vědět o ETF. Zjistěte co jsou ETF, jak fungují, jejich výhody, nevýhody, typy a jak do nich investovat. Nejlepší průvodce pro české investory 2025."
+        title="Co jsou ETF fondy 2025? Kompletní průvodce pro začátečníky"
+        description="★ Co jsou ETF fondy? ★ Kompletní průvodce 2025 pro české investory. Jak fungují ETF, výhody, nevýhody, typy a praktické příklady. Srovnání s akciemi a dluhopisy + FAQ."
         canonical="https://etfpruvodce.cz/co-jsou-etf"
-        keywords="ETF fondy, co jsou ETF, exchange traded funds, investování do ETF, typy ETF, výhody ETF, nevýhody ETF"
+        keywords="co jsou ETF, ETF fondy, exchange traded funds, co je ETF, jak fungují ETF, výhody ETF, investování do ETF, ETF pro začátečníky, ETF vs akcie, ETF průvodce"
         ogType="article"
         ogImage="https://etfpruvodce.cz/og-what-are-etfs.jpg"
         publishedTime="2025-01-01"
-        modifiedTime="2025-01-03"
+        modifiedTime="2025-01-18"
         author="ETF průvodce.cz"
         schema={articleSchema}
       />
