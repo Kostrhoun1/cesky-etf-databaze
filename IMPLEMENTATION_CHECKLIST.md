@@ -1,44 +1,47 @@
 # ✅ ETF Průvodce - Implementation Checklist
 
-## 🎯 **FÁZE 1: RESTRUKTURALIZACE** (Týden 1-2)
+## 🎯 **FÁZE 1: RESTRUKTURALIZACE** (23. září - 6. října 2025)
 
-### **Week 1 - Planning & Setup**
-- [ ] **1.1** Rozhodnout finální název sekce (`/analyzy-a-clanky/` vs jiný)
+### **Week 1 - Planning & Setup (23.-29. září 2025)**
+- [x] **1.1** ✅ Rozhodnout finální název sekce:
+  - URL: `/analyzy-a-clanky/` (SEO optimized)  
+  - Menu: "Články" (beginner-friendly)
+  - Tooltip: "Články a tipy o ETF investování"
 - [ ] **1.2** Vytvořit novou strukturu složek v projektu
-- [ ] **1.3** Navrhnout nové URL schema
-- [ ] **1.4** Připravit 301 redirects mapping
+- [ ] **1.3** Navrhnout nové URL schema s kategoriemi (beginner-focused)
+- [ ] **1.4** Připravit 301 redirects mapping z `/tipy/*`
 - [ ] **1.5** Aktualizovat sitemap.xml
-- [ ] **1.6** Vytvořit wireframes pro nové category pages
+- [ ] **1.6** Vytvořit wireframes pro category pages (přístupné pro začátečníky)
 
-### **Week 2 - Technical Implementation**
-- [ ] **2.1** Implementovat novou URL strukturu
-- [ ] **2.2** Vytvořit 301 redirecty ze starých URLs
-- [ ] **2.3** Aktualizovat navigační menu
-- [ ] **2.4** Aktualizovat všechny interní odkazy
-- [ ] **2.5** Vytvořit category landing pages
-- [ ] **2.6** Přesunout existující články do kategorií
-- [ ] **2.7** Aktualizovat breadcrumbs
-- [ ] **2.8** Test všech redirectů a links
+### **Week 2 - Technical Implementation (30. září - 6. října 2025)**
+- [ ] **2.1** Implementovat novou URL strukturu `/analyzy-a-clanky/`
+- [ ] **2.2** Vytvořit 301 redirecty ze starých URLs `/tipy/*`
+- [ ] **2.3** Aktualizovat navigační menu: "Tipy" → "Články" s tooltip
+- [ ] **2.4** Aktualizovat všechny interní odkazy v komponentách
+- [ ] **2.5** Vytvořit 7 category landing pages (beginner-friendly obsah)
+- [ ] **2.6** Přesunout existující 14 článků do kategorií
+- [ ] **2.7** Aktualizovat breadcrumbs komponenty
+- [ ] **2.8** Test všech redirectů a links + UX testing pro začátečníky
 
 ---
 
 ## 📝 **FÁZE 2: CONTENT CREATION** (Týden 3-26)
 
-### **Month 1 (Týden 3-6) - Foundation Articles**
-- [ ] **3.1** Článek: "ETF Trh: Leden 2025 - Analýza a Výhled"
-- [ ] **3.2** Článek: "Nejlepší ETF na umělou inteligenci 2025"
-- [ ] **3.3** Článek: "MSCI World ETF Mega Test: IWDA vs SWRD vs EUNL"
-- [ ] **3.4** Článek: "Akumulující vs Distribuční ETF: Co je lepší?"
-- [ ] **3.5** Setup content calendar pro dalších 6 měsíců
-- [ ] **3.6** Vytvořit templates pro různé typy článků
+### **Month 1 (7. října - 3. listopadu 2025) - Foundation Articles**
+- [ ] **3.1** Článek: "ETF Trh: Říjen 2025 - Q3 Earnings Outlook" (target: říjen)
+- [ ] **3.2** Článek: "Nejlepší ETF pro začátečníky 2025" (2.1k searches/month)
+- [ ] **3.3** Článek: "S&P 500 ETF Battle: CSPX vs VUAA vs SXR8" (1.5k searches/month)  
+- [ ] **3.4** Článek: "Akumulující vs Distribuční ETF: Daňové aspekty ČR" (600 searches/month)
+- [ ] **3.5** Setup content calendar od listopadu 2025 do března 2026
+- [ ] **3.6** Vytvořit templates pro různé typy článků (monthly, weekly, reviews)
 
-### **Month 2 (Týden 7-10) - High-Volume Keywords**
-- [ ] **4.1** Článek: "Top 10 ETF pro začátečníky 2025" 
-- [ ] **4.2** Článek: "S&P 500 ETF Battle: CSPX vs VUAA vs SXR8"
-- [ ] **4.3** Článek: "ETF Dividendy: Únor 2025 Přehled Výplat"
-- [ ] **4.4** Článek: "Dollar Cost Averaging s ETF: Praktický průvodce"
-- [ ] **4.5** Týdenní analýza: "Týdenní ETF Report: Co hýbe trhy"
-- [ ] **4.6** Měření performance prvních článků
+### **Month 2 (4. listopadu - 1. prosince 2025) - High-Volume Keywords**
+- [ ] **4.1** Článek: "Nejlepší ETF listopad 2025 - Holiday Season Plays" (120 searches/month)
+- [ ] **4.2** Článek: "MSCI World ETF Mega Test: IWDA vs SWRD vs EUNL" (800 searches/month)
+- [ ] **4.3** Článek: "Dollar Cost Averaging s ETF: Praktický průvodce" (400 searches/month)
+- [ ] **4.4** Článek: "Nejlepší ETF na umělou inteligenci 2025" (1.2k searches/month)
+- [ ] **4.5** Týdenní analýza: "ETF Watchlist: 5 fondů pro Q4 2025"
+- [ ] **4.6** Měření performance prvních článků + SEO audit
 
 ### **Month 3 (Týden 11-14) - Specialization**
 - [ ] **5.1** Článek: "Nejlevnější Broad Market ETF 2025"
@@ -170,19 +173,29 @@
 
 ---
 
-## 🚀 **NEXT ACTIONS (This Week)**
+## 🚀 **NEXT ACTIONS (23.-29. září 2025)**
 
-### **Immediate Tasks (Day 1-2)**
-1. [ ] Rozhodnout název sekce - `analyzy-a-clanky` vs `etf-blog`
-2. [ ] Navrhnout URL strukturu
-3. [ ] Připravit list redirectů
-4. [ ] Prioritizovat první 4 články
+### **Immediate Tasks (Dnes - 22. září)**
+1. [x] ✅ Rozhodnout název sekce: 
+   - URL: `/analyzy-a-clanky/` (SEO optimized)
+   - Menu: "Články" (beginner-friendly)
+   - Tooltip: "Články a tipy o ETF investování"
+2. [ ] Navrhnout detailní URL strukturu pro kategorie
+3. [ ] Připravit kompletní list 301 redirectů z `/tipy/*`
+4. [ ] Prioritizovat první 4 články pro říjen 2025 (beginner focus)
 
-### **This Week Tasks (Day 3-7)**
-1. [ ] Implementovat URL changes
-2. [ ] Vytvořit category pages
-3. [ ] Začít psát první článek
-4. [ ] Setup Google Analytics events
-5. [ ] Plan content calendar detailně
+### **This Week Tasks (23.-29. září)**
+1. [ ] Implementovat URL changes v React routeru
+2. [ ] Vytvořit 7 category landing pages (přístupné pro začátečníky)
+3. [ ] Začít psát "Nejlepší ETF pro začátečníky 2025: Kompletní průvodce"
+4. [ ] Setup Google Analytics events pro novou sekci
+5. [ ] Detailní content calendar říjen 2025 - březen 2026 (beginner-focused)
+
+## 🎯 **KLÍČOVÉ PRINCIPY PRO IMPLEMENTACI**
+- **Beginner-first approach** - všechny texty a UX pro začátečníky
+- **České reálie** - daně, brokeři, praktické aspekty pro ČR
+- **Actionable content** - vždy konkrétní kroky "jak na to"
+- **Přístupný jazyk** - minimalizovat odbornou terminologii
+- **Practical examples** - reálné situace českých investorů
 
 **🎯 Ready to start? Řekněte mi, kterou část chcete implementovat jako první!**
