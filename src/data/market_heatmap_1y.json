@@ -1,7 +1,7 @@
 {
   "metadata": {
     "period": "1y",
-    "generated_at": "2025-09-20T14:31:38.720580",
+    "generated_at": "2025-09-20T14:38:43.482607",
     "data_source": "Yahoo Finance"
   },
   "sectors": {
@@ -11,7 +11,7 @@
       "current_price": 278.92,
       "currency": "USD",
       "name": "The Technology Select Sector SPDR Fund",
-      "last_updated": "2025-09-20T14:31:39.054951"
+      "last_updated": "2025-09-20T14:38:43.810985"
     },
     "Healthcare": {
       "symbol": "XLV",
@@ -19,7 +19,7 @@
       "current_price": 137.29,
       "currency": "USD",
       "name": "The Health Care Select Sector SPDR Fund",
-      "last_updated": "2025-09-20T14:31:39.393659"
+      "last_updated": "2025-09-20T14:38:44.186970"
     },
     "Financials": {
       "symbol": "XLF",
@@ -27,7 +27,7 @@
       "current_price": 54.25,
       "currency": "USD",
       "name": "The Financial Select Sector SPDR Fund",
-      "last_updated": "2025-09-20T14:31:39.758972"
+      "last_updated": "2025-09-20T14:38:44.552446"
     },
     "Energy": {
       "symbol": "XLE",
@@ -35,7 +35,7 @@
       "current_price": 88.52,
       "currency": "USD",
       "name": "The Energy Select Sector SPDR Fund",
-      "last_updated": "2025-09-20T14:31:40.160871"
+      "last_updated": "2025-09-20T14:38:44.921719"
     },
     "Utilities": {
       "symbol": "XLU",
@@ -43,7 +43,7 @@
       "current_price": 84.95,
       "currency": "USD",
       "name": "The Utilities Select Sector SPDR Fund",
-      "last_updated": "2025-09-20T14:31:40.518573"
+      "last_updated": "2025-09-20T14:38:45.300959"
     },
     "Consumer Staples": {
       "symbol": "XLP",
@@ -51,7 +51,7 @@
       "current_price": 79.38,
       "currency": "USD",
       "name": "The Consumer Staples Select Sector SPDR Fund",
-      "last_updated": "2025-09-20T14:31:40.850550"
+      "last_updated": "2025-09-20T14:38:45.634550"
     },
     "Consumer Discretionary": {
       "symbol": "XLY",
@@ -59,7 +59,7 @@
       "current_price": 241.39,
       "currency": "USD",
       "name": "The Consumer Discretionary Select Sector SPDR Fund",
-      "last_updated": "2025-09-20T14:31:41.182089"
+      "last_updated": "2025-09-20T14:38:46.003294"
     },
     "Industrials": {
       "symbol": "XLI",
@@ -67,7 +67,7 @@
       "current_price": 153.12,
       "currency": "USD",
       "name": "The Industrial Select Sector SPDR Fund",
-      "last_updated": "2025-09-20T14:31:41.637606"
+      "last_updated": "2025-09-20T14:38:46.365804"
     },
     "Materials": {
       "symbol": "XLB",
@@ -75,7 +75,7 @@
       "current_price": 90.83,
       "currency": "USD",
       "name": "The Materials Select Sector SPDR Fund",
-      "last_updated": "2025-09-20T14:31:42.045441"
+      "last_updated": "2025-09-20T14:38:46.732855"
     },
     "Real Estate": {
       "symbol": "XLRE",
@@ -83,7 +83,7 @@
       "current_price": 41.85,
       "currency": "USD",
       "name": "The Real Estate Select Sector SPDR Fund",
-      "last_updated": "2025-09-20T14:31:42.415282"
+      "last_updated": "2025-09-20T14:38:47.066341"
     },
     "Communication Services": {
       "symbol": "XLC",
@@ -91,7 +91,7 @@
       "current_price": 119.41,
       "currency": "USD",
       "name": "The Communication Services Select Sector SPDR ETF Fund",
-      "last_updated": "2025-09-20T14:31:42.727062"
+      "last_updated": "2025-09-20T14:38:47.386797"
     }
   },
   "regions": {
@@ -101,7 +101,7 @@
       "current_price": 328.44,
       "currency": "USD",
       "name": "Vanguard Total Stock Market Index Fund ETF Shares",
-      "last_updated": "2025-09-20T14:31:43.110787"
+      "last_updated": "2025-09-20T14:38:47.733574"
     },
     "Europe": {
       "symbol": "VGK",
@@ -109,7 +109,7 @@
       "current_price": 79.13,
       "currency": "USD",
       "name": "Vanguard FTSE Europe ETF",
-      "last_updated": "2025-09-20T14:31:43.438396"
+      "last_updated": "2025-09-20T14:38:48.080414"
     },
     "Japan": {
       "symbol": "EWJ",
@@ -117,7 +117,7 @@
       "current_price": 80.79,
       "currency": "USD",
       "name": "iShares MSCI Japan ETF",
-      "last_updated": "2025-09-20T14:31:43.817028"
+      "last_updated": "2025-09-20T14:38:48.444076"
     },
     "China": {
       "symbol": "FXI",
@@ -125,7 +125,7 @@
       "current_price": 40.93,
       "currency": "USD",
       "name": "iShares China Large-Cap ETF",
-      "last_updated": "2025-09-20T14:31:44.177992"
+      "last_updated": "2025-09-20T14:38:48.831093"
     },
     "Emerging Markets": {
       "symbol": "VWO",
@@ -133,7 +133,7 @@
       "current_price": 53.92,
       "currency": "USD",
       "name": "Vanguard Emerging Markets Stock Index Fund",
-      "last_updated": "2025-09-20T14:31:44.515351"
+      "last_updated": "2025-09-20T14:38:49.169728"
     },
     "Developed Markets": {
       "symbol": "VEA",
@@ -141,7 +141,7 @@
       "current_price": 59.65,
       "currency": "USD",
       "name": "Vanguard FTSE Developed Markets Index Fund ETF Shares",
-      "last_updated": "2025-09-20T14:31:44.839387"
+      "last_updated": "2025-09-20T14:38:49.510532"
     },
     "Asia Pacific": {
       "symbol": "VPL",
@@ -149,7 +149,7 @@
       "current_price": 88.23,
       "currency": "USD",
       "name": "Vanguard FTSE Pacific Index Fund ETF Shares",
-      "last_updated": "2025-09-20T14:31:45.161235"
+      "last_updated": "2025-09-20T14:38:49.896845"
     }
   },
   "asset_classes": {
@@ -159,7 +159,7 @@
       "current_price": 328.44,
       "currency": "USD",
       "name": "Vanguard Total Stock Market Index Fund ETF Shares",
-      "last_updated": "2025-09-20T14:31:45.420610"
+      "last_updated": "2025-09-20T14:38:50.164657"
     },
     "International Stocks": {
       "symbol": "VTIAX",
@@ -167,7 +167,7 @@
       "current_price": 39.28,
       "currency": "USD",
       "name": "Vanguard Total Intl Stock Index Admiral",
-      "last_updated": "2025-09-20T14:31:45.754870"
+      "last_updated": "2025-09-20T14:38:50.502864"
     },
     "Bonds": {
       "symbol": "BND",
@@ -175,7 +175,7 @@
       "current_price": 74.43,
       "currency": "USD",
       "name": "Vanguard Total Bond Market Index Fund",
-      "last_updated": "2025-09-20T14:31:46.096928"
+      "last_updated": "2025-09-20T14:38:50.825040"
     },
     "REITs": {
       "symbol": "VNQ",
@@ -183,7 +183,7 @@
       "current_price": 91.65,
       "currency": "USD",
       "name": "Vanguard Real Estate Index Fund ETF Shares",
-      "last_updated": "2025-09-20T14:31:46.431753"
+      "last_updated": "2025-09-20T14:38:51.212576"
     },
     "Commodities": {
       "symbol": "DJP",
@@ -191,7 +191,7 @@
       "current_price": 34.68,
       "currency": "USD",
       "name": "iPath Bloomberg Commodity Index Total Return(SM) ETN",
-      "last_updated": "2025-09-20T14:31:46.736015"
+      "last_updated": "2025-09-20T14:38:51.631392"
     },
     "Gold": {
       "symbol": "GLD",
@@ -199,15 +199,15 @@
       "current_price": 339.18,
       "currency": "USD",
       "name": "SPDR Gold Shares",
-      "last_updated": "2025-09-20T14:31:47.031945"
+      "last_updated": "2025-09-20T14:38:51.940241"
     },
     "Bitcoin": {
       "symbol": "BTC-USD",
       "performance": 83.37,
-      "current_price": 115874.88,
+      "current_price": 115878.24,
       "currency": "USD",
       "name": "Bitcoin USD",
-      "last_updated": "2025-09-20T14:31:47.370102"
+      "last_updated": "2025-09-20T14:38:52.434875"
     },
     "Oil": {
       "symbol": "USO",
@@ -215,7 +215,7 @@
       "current_price": 73.52,
       "currency": "USD",
       "name": "United States Oil Fund, LP",
-      "last_updated": "2025-09-20T14:31:47.683773"
+      "last_updated": "2025-09-20T14:38:52.760058"
     }
   },
   "summary_stats": {
