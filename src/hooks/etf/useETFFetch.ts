@@ -111,13 +111,19 @@ export const useETFFetch = () => {
             fund_provider,
             category,
             ter_numeric,
+            return_1y,
+            return_3y,
+            return_5y,
+            return_ytd,
             fund_size_numeric,
+            degiro_free,
             primary_ticker,
             distribution_policy,
             index_name,
             fund_currency,
             replication,
             region,
+            current_dividend_yield_numeric,
             exchange_1_ticker,
             exchange_2_ticker,
             exchange_3_ticker,
@@ -125,6 +131,7 @@ export const useETFFetch = () => {
             exchange_5_ticker,
             rating,
             rating_score,
+            updated_at,
             is_leveraged
           `)
           .order('fund_size_numeric', { ascending: false })
@@ -141,8 +148,9 @@ export const useETFFetch = () => {
         let latestUpdate: Date | null = null;
         if (data) {
           data.forEach(item => {
-            if (item.updated_at) {
-              const updateDate = new Date(item.updated_at);
+            // Use created_at since updated_at might not be available in all queries
+            const updateDate = new Date(item.updated_at || '');
+            if (updateDate && !isNaN(updateDate.getTime())) {
               if (!latestUpdate || updateDate > latestUpdate) {
                 latestUpdate = updateDate;
               }

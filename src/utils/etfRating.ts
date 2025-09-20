@@ -175,8 +175,8 @@ export function calculateETFRating(etf: ETF | ETFListItem): ETFRating | null {
       fundSize: sizeScore,
       trackRecord: trackRecordScore,
       provider: providerScore,
-      performance: performanceScore
-      // tracking removed - not available for most ETFs
+      performance: performanceScore,
+      tracking: 0 // Default tracking score since data is not available
     },
     category: getCategory(totalScore)
   };

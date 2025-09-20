@@ -168,6 +168,7 @@ export type Database = {
           max_drawdown_5y: number | null
           max_drawdown_inception: number | null
           name: string | null
+          performance_last_updated: string | null
           primary_exchange: string | null
           primary_ticker: string | null
           rating: number | null
@@ -181,12 +182,20 @@ export type Database = {
           replication: string | null
           retry_count: number | null
           return_10y_percent: number | null
+          return_1m: number | null
           return_1y: number | null
           return_1y_percent: number | null
+          return_2021: number | null
+          return_2022: number | null
+          return_2023: number | null
+          return_2024: number | null
+          return_3m: number | null
           return_3y: number | null
           return_3y_percent: number | null
           return_5y: number | null
           return_5y_percent: number | null
+          return_6m: number | null
+          return_inception: number | null
           return_per_risk_1y: number | null
           return_per_risk_3y: number | null
           return_per_risk_5y: number | null
@@ -313,6 +322,7 @@ export type Database = {
           max_drawdown_5y?: number | null
           max_drawdown_inception?: number | null
           name?: string | null
+          performance_last_updated?: string | null
           primary_exchange?: string | null
           primary_ticker?: string | null
           rating?: number | null
@@ -326,12 +336,20 @@ export type Database = {
           replication?: string | null
           retry_count?: number | null
           return_10y_percent?: number | null
+          return_1m?: number | null
           return_1y?: number | null
           return_1y_percent?: number | null
+          return_2021?: number | null
+          return_2022?: number | null
+          return_2023?: number | null
+          return_2024?: number | null
+          return_3m?: number | null
           return_3y?: number | null
           return_3y_percent?: number | null
           return_5y?: number | null
           return_5y_percent?: number | null
+          return_6m?: number | null
+          return_inception?: number | null
           return_per_risk_1y?: number | null
           return_per_risk_3y?: number | null
           return_per_risk_5y?: number | null
@@ -458,6 +476,7 @@ export type Database = {
           max_drawdown_5y?: number | null
           max_drawdown_inception?: number | null
           name?: string | null
+          performance_last_updated?: string | null
           primary_exchange?: string | null
           primary_ticker?: string | null
           rating?: number | null
@@ -471,12 +490,20 @@ export type Database = {
           replication?: string | null
           retry_count?: number | null
           return_10y_percent?: number | null
+          return_1m?: number | null
           return_1y?: number | null
           return_1y_percent?: number | null
+          return_2021?: number | null
+          return_2022?: number | null
+          return_2023?: number | null
+          return_2024?: number | null
+          return_3m?: number | null
           return_3y?: number | null
           return_3y_percent?: number | null
           return_5y?: number | null
           return_5y_percent?: number | null
+          return_6m?: number | null
+          return_inception?: number | null
           return_per_risk_1y?: number | null
           return_per_risk_3y?: number | null
           return_per_risk_5y?: number | null

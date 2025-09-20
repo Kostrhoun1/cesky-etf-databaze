@@ -1,13 +1,13 @@
 
 import React from 'react';
 import { ETFListItem } from '@/types/etf';
-import { AdvancedFiltersState, AdvancedFilterValue } from '@/hooks/useETFTableLogic';
+import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
 import ETFAdvancedFilters from '@/components/ETFAdvancedFilters';
 
 interface ETFComparisonFiltersProps {
   etfs: ETFListItem[];
   advancedFilters: AdvancedFiltersState;
-  onAdvancedFilterChange: (key: keyof AdvancedFiltersState, value: AdvancedFilterValue) => void;
+  onAdvancedFilterChange: (key: keyof AdvancedFiltersState, value: any) => void;
   ranges: {
     ter: { min: number; max: number };
     fundSize: { min: number; max: number };
