@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { useETFData } from '@/hooks/useETFData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Sparkles, TrendingUp, Shield, Bitcoin, Gem, Building } from 'lucide-react';
+import MarketHeatmap from '@/components/infographics/MarketHeatmap';
 
 interface InfographicProps {
   title: string;
@@ -143,11 +144,13 @@ const StatCard: React.FC<{ label: string; value: string | number; color: string 
 );
 
 const InfographicsGenerator: React.FC = () => {
-  const [infographicMode, setInfographicMode] = useState<'performance' | 'ter'>('performance');
+  const [infographicMode, setInfographicMode] = useState<'performance' | 'ter' | 'heatmap'>('performance');
   const [category, setCategory] = useState<string>('Akcie');
   const [period, setPeriod] = useState<string>('3y');
   const [index, setIndex] = useState<string>('sp500');
   const [terMode, setTerMode] = useState<'category' | 'index'>('category');
+  const [heatmapPeriod, setHeatmapPeriod] = useState<'1d' | 'wtd' | 'mtd' | 'ytd' | '1y' | '3y' | '5y' | '10y'>('1d');
+  const [heatmapData, setHeatmapData] = useState<any>(null);
   
   const { fetchETFs } = useETFData();
   const [etfs, setEtfs] = useState<any[]>([]);
@@ -157,14 +160,16 @@ const InfographicsGenerator: React.FC = () => {
   const selectedType = React.useMemo(() => {
     if (infographicMode === 'performance') {
       return `top-${category.toLowerCase()}-${period}`;
-    } else {
+    } else if (infographicMode === 'ter') {
       if (terMode === 'category') {
         return `nejlevnejsi-${category.toLowerCase()}`;
       } else {
         return `nejlevnejsi-${index}`;
       }
+    } else if (infographicMode === 'heatmap') {
+      return `heatmap-${heatmapPeriod}`;
     }
-  }, [infographicMode, category, period, terMode, index]);
+  }, [infographicMode, category, period, terMode, index, heatmapPeriod]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -181,6 +186,23 @@ const InfographicsGenerator: React.FC = () => {
 
     loadData();
   }, [fetchETFs]);
+
+
+  // Load heatmap data
+  useEffect(() => {
+    if (infographicMode === 'heatmap') {
+      const loadHeatmapData = async () => {
+        try {
+          const response = await fetch(`/data/market_heatmap_${heatmapPeriod}.json`);
+          const data = await response.json();
+          setHeatmapData(data);
+        } catch (error) {
+          console.error('Chyba při načítání heatmap dat:', error);
+        }
+      };
+      loadHeatmapData();
+    }
+  }, [infographicMode, heatmapPeriod]);
 
 
 
@@ -207,10 +229,10 @@ const InfographicsGenerator: React.FC = () => {
     // Funkce pro získání barvy medaile (sdílená mezi všemi infografikami)
     const getMedalColor = (rank: number) => {
       switch (rank) {
-        case 1: return { bg: 'bg-gradient-to-r from-yellow-400 to-yellow-500', color: 'bg-yellow-500' };
-        case 2: return { bg: 'bg-gradient-to-r from-gray-300 to-gray-400', color: 'bg-gray-400' };
-        case 3: return { bg: 'bg-gradient-to-r from-amber-600 to-amber-700', color: 'bg-amber-600' };
-        default: return { bg: 'bg-violet-100', color: 'bg-violet-500' };
+        case 1: return { bg: 'bg-gradient-to-r from-yellow-400 to-yellow-500', color: 'bg-yellow-500', border: 'border-yellow-400', text: 'text-yellow-800' };
+        case 2: return { bg: 'bg-gradient-to-r from-gray-300 to-gray-400', color: 'bg-gray-400', border: 'border-gray-400', text: 'text-gray-800' };
+        case 3: return { bg: 'bg-gradient-to-r from-amber-600 to-amber-700', color: 'bg-amber-600', border: 'border-amber-600', text: 'text-amber-800' };
+        default: return { bg: 'bg-violet-100', color: 'bg-violet-500', border: 'border-violet-400', text: 'text-violet-800' };
       }
     };
 
@@ -296,6 +318,7 @@ const InfographicsGenerator: React.FC = () => {
           title={`TOP 5 NEJVÝKONĚJŠÍCH ${getCategoryNameForTitle(category)} ETF`} 
           subtitle={`${getPeriodDescription(period, periodLabel)}`}
           category={category}
+          type="stats"
         >
           <div className="space-y-2 h-full">
             {topFunds.length > 0 ? topFunds.map((etf) => {
@@ -390,6 +413,7 @@ const InfographicsGenerator: React.FC = () => {
           title={`TOP 5 NEJLEVNĚJŠÍCH ${getCategoryNameForTitle(category)} ETF`} 
           subtitle={`Podle TER (Total Expense Ratio), k datu: ${new Date().toLocaleDateString('cs-CZ')}`}
           category={category}
+          type="stats"
         >
           <div className="space-y-2 h-full">
             {topFunds.length > 0 ? topFunds.map((etf) => {
@@ -459,6 +483,7 @@ const InfographicsGenerator: React.FC = () => {
           title={`TOP 5 NEJLEVNĚJŠÍCH ${indexName} ETF`} 
           subtitle={`Podle TER (Total Expense Ratio), k datu: ${new Date().toLocaleDateString('cs-CZ')}`}
           category="Akcie"
+          type="stats"
         >
           <div className="space-y-2 h-full">
             {topFunds.length > 0 ? topFunds.map((etf) => {
@@ -560,6 +585,28 @@ const InfographicsGenerator: React.FC = () => {
         return getCheapestETFsByIndex(['FTSE', 'Financial Times'], 'FTSE');
       case 'nejlevnejsi-stoxx':
         return getCheapestETFsByIndex(['STOXX', 'Euro Stoxx'], 'STOXX');
+      
+      // Market Heatmap
+      case 'heatmap-1d':
+      case 'heatmap-wtd':
+      case 'heatmap-mtd':
+      case 'heatmap-ytd':
+      case 'heatmap-1y':
+      case 'heatmap-3y':
+      case 'heatmap-5y':
+      case 'heatmap-10y':
+        if (heatmapData) {
+          return <MarketHeatmap data={heatmapData} />;
+        } else {
+          return (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <Sparkles className="w-8 h-8 text-violet-600 animate-spin mx-auto mb-4" />
+                <p className="text-gray-600">Načítám market heatmap...</p>
+              </div>
+            </div>
+          );
+        }
 
       default:
         return null;
@@ -570,7 +617,17 @@ const InfographicsGenerator: React.FC = () => {
     <Layout>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Generator infografik pro X</h1>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-3xl font-bold text-gray-900">Generator infografik pro X</h1>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => window.location.href = '/admin/infographics'}
+              className="text-sm"
+            >
+              🌍 English Version
+            </Button>
+          </div>
           <p className="text-lg text-gray-600 mb-6">
             Vytvořte profesionální infografiky s daty o výkonnosti ETF fondů pro publikování na sociálních sítích.
           </p>
@@ -579,7 +636,7 @@ const InfographicsGenerator: React.FC = () => {
             {/* Výběr typu infografiky */}
             <div>
               <h3 className="text-lg font-semibold mb-3">Typ infografiky</h3>
-              <RadioGroup value={infographicMode} onValueChange={(value: 'performance' | 'ter') => setInfographicMode(value)} className="flex gap-6">
+              <RadioGroup value={infographicMode} onValueChange={(value: 'performance' | 'ter' | 'heatmap') => setInfographicMode(value)} className="flex gap-6">
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="performance" id="performance" />
                   <Label htmlFor="performance" className="text-base">📈 Výkonnost (TOP ETF)</Label>
@@ -587,6 +644,10 @@ const InfographicsGenerator: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="ter" id="ter" />
                   <Label htmlFor="ter" className="text-base">💰 Nejlevnější (TER)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="heatmap" id="heatmap" />
+                  <Label htmlFor="heatmap" className="text-base">🔥 Market Heatmap</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -678,6 +739,32 @@ const InfographicsGenerator: React.FC = () => {
               </div>
             )}
 
+            {/* Nastavení pro heatmap */}
+            {infographicMode === 'heatmap' && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm font-medium mb-2 block">Časové období</Label>
+                    <Select value={heatmapPeriod} onValueChange={(value: '1d' | 'wtd' | 'mtd' | 'ytd' | '1y' | '3y' | '5y' | '10y') => setHeatmapPeriod(value)}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1d">📊 Denní změna</SelectItem>
+                        <SelectItem value="wtd">📅 WTD (týden)</SelectItem>
+                        <SelectItem value="mtd">📆 MTD (měsíc)</SelectItem>
+                        <SelectItem value="ytd">📈 YTD (rok)</SelectItem>
+                        <SelectItem value="1y">🗓️ 1 rok</SelectItem>
+                        <SelectItem value="3y">📈 3 roky</SelectItem>
+                        <SelectItem value="5y">📊 5 let</SelectItem>
+                        <SelectItem value="10y">🏆 10 let</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center justify-between pt-4 border-t">
               <Badge variant="secondary" className="text-sm">
                 {etfs.length} ETF fondů v databázi
@@ -685,7 +772,18 @@ const InfographicsGenerator: React.FC = () => {
               <Badge variant="outline" className="text-sm">
                 {infographicMode === 'performance' ? 
                   `${category} • ${period === 'ytd' ? 'YTD' : period === '3y' ? '3 roky' : '5 let'}` :
-                  `TER • ${terMode === 'category' ? category : index.toUpperCase()}`
+                  infographicMode === 'ter' ?
+                  `TER • ${terMode === 'category' ? category : index.toUpperCase()}` :
+                  `Heatmap • ${
+                    heatmapPeriod === '1d' ? 'Denní' :
+                    heatmapPeriod === 'wtd' ? 'WTD' :
+                    heatmapPeriod === 'mtd' ? 'MTD' :
+                    heatmapPeriod === 'ytd' ? 'YTD' :
+                    heatmapPeriod === '1y' ? '1 rok' :
+                    heatmapPeriod === '3y' ? '3 roky' :
+                    heatmapPeriod === '5y' ? '5 let' :
+                    heatmapPeriod === '10y' ? '10 let' : heatmapPeriod
+                  }`
                 }
               </Badge>
             </div>

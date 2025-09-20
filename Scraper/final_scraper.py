@@ -38,6 +38,7 @@ import csv
 import sys
 from dataclasses import dataclass
 from etf_rating import calculate_etf_rating
+from market_heatmap_generator import MarketHeatmapGenerator
 
 # Ochrana proti uspávání počítače (macOS/Linux)
 try:
@@ -46,6 +47,14 @@ try:
     CAFFEINE_AVAILABLE = True
 except ImportError:
     CAFFEINE_AVAILABLE = False
+
+# FTP/SFTP knihovny pro nahrávání na server
+try:
+    import ftplib
+    import paramiko  # pro SFTP
+    FTP_AVAILABLE = True
+except ImportError:
+    FTP_AVAILABLE = False
 
 # OPRAVA UNICODE - nastavení kodování pro Windows
 if sys.platform.startswith('win'):
@@ -91,6 +100,22 @@ DEBUG_MODE = False
 EXTRACT_EXCHANGE_DATA = True
 EXTRACT_DIVIDEND_DATA = True  # NOVÉ: Extrakce dividendových dat
 AUTO_UPLOAD_TO_DB = True and SUPABASE_AVAILABLE  # NOVÉ: Automatické nahrávání do databáze
+GENERATE_MARKET_HEATMAP = True  # NOVÉ: Generování market heatmap dat
+UPLOAD_HEATMAP_TO_SERVER = True  # NOVÉ: Automatické nahrávání heatmap dat na server
+
+# Konfigurace serveru pro nahrávání market heatmap dat
+# Pokud existuje server_config.py, načti z něj, jinak použij výchozí hodnoty
+try:
+    from server_config import FTP_SERVER, FTP_USERNAME, FTP_PASSWORD, FTP_REMOTE_PATH, UPLOAD_METHOD
+    SERVER_CONFIG_LOADED = True
+except ImportError:
+    # Výchozí hodnoty - UPRAVTE PODLE VAŠEHO SERVERU
+    FTP_SERVER = "your-domain.com"  # Nahraďte svou doménou
+    FTP_USERNAME = "your-username"  # Nahraďte svým FTP uživatelským jménem
+    FTP_PASSWORD = "your-password"  # Nahraďte svým FTP heslem (nebo použijte SSH klíče)
+    FTP_REMOTE_PATH = "/public_html/data/"  # Cesta na serveru kam nahrát JSON soubory
+    UPLOAD_METHOD = "sftp"  # "ftp" nebo "sftp" nebo "scp"
+    SERVER_CONFIG_LOADED = False
 
 # Výstupní složky
 OUTPUT_DIR = "justetf_complete_production"
@@ -937,6 +962,171 @@ class CompleteProductionScraper:
                 safe_log("info", f"📤 DATABÁZE: Automatické nahrávání je zapnuté, ale Supabase klient není dostupný")
             else:
                 safe_log("info", f"💾 DATABÁZE: Automatické nahrávání je vypnuté (AUTO_UPLOAD_TO_DB=False)")
+        
+        # NOVÉ: Generování market heatmap dat
+        if GENERATE_MARKET_HEATMAP:
+            self._generate_market_heatmap_data()
+    
+    def _upload_file_to_server(self, local_file_path: str, remote_filename: str) -> bool:
+        """Nahraje soubor na server pomocí FTP/SFTP"""
+        if not UPLOAD_HEATMAP_TO_SERVER or not FTP_AVAILABLE:
+            return False
+            
+        try:
+            if UPLOAD_METHOD == "dry_run":
+                safe_log("info", f"🧪 DRY RUN: Simuluji nahrání {remote_filename} na {FTP_SERVER}{FTP_REMOTE_PATH}")
+                safe_log("info", f"   Lokální soubor: {local_file_path} ({os.path.getsize(local_file_path)} bytů)")
+                return True
+            elif UPLOAD_METHOD == "sftp":
+                return self._upload_via_sftp(local_file_path, remote_filename)
+            elif UPLOAD_METHOD == "ftp":
+                return self._upload_via_ftp(local_file_path, remote_filename)
+            elif UPLOAD_METHOD == "scp":
+                return self._upload_via_scp(local_file_path, remote_filename)
+            else:
+                safe_log("error", f"❌ UPLOAD: Neznámá metoda nahrávání: {UPLOAD_METHOD}")
+                return False
+        except Exception as e:
+            safe_log("error", f"❌ UPLOAD: Chyba při nahrávání {remote_filename}: {e}")
+            return False
+    
+    def _upload_via_sftp(self, local_file_path: str, remote_filename: str) -> bool:
+        """Nahraje soubor přes SFTP"""
+        try:
+            # Vytvořit SSH klienta
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            
+            # Připojit se k serveru
+            safe_log("debug", f"🔗 SFTP: Připojuji se k {FTP_SERVER}...")
+            ssh.connect(FTP_SERVER, username=FTP_USERNAME, password=FTP_PASSWORD)
+            
+            # Vytvořit SFTP klienta
+            sftp = ssh.open_sftp()
+            
+            # Nahrát soubor
+            remote_path = FTP_REMOTE_PATH + remote_filename
+            safe_log("debug", f"📤 SFTP: Nahrávám {local_file_path} → {remote_path}")
+            sftp.put(local_file_path, remote_path)
+            
+            # Zavřít spojení
+            sftp.close()
+            ssh.close()
+            
+            safe_log("info", f"✅ SFTP: Úspěšně nahráno: {remote_filename}")
+            return True
+            
+        except Exception as e:
+            safe_log("error", f"❌ SFTP: Chyba při nahrávání {remote_filename}: {e}")
+            return False
+    
+    def _upload_via_ftp(self, local_file_path: str, remote_filename: str) -> bool:
+        """Nahraje soubor přes FTP"""
+        try:
+            # Vytvořit FTP spojení
+            ftp = ftplib.FTP(FTP_SERVER)
+            ftp.login(FTP_USERNAME, FTP_PASSWORD)
+            
+            # Změnit na cílovou složku
+            ftp.cwd(FTP_REMOTE_PATH)
+            
+            # Nahrát soubor
+            with open(local_file_path, 'rb') as file:
+                ftp.storbinary(f'STOR {remote_filename}', file)
+            
+            # Zavřít spojení
+            ftp.quit()
+            
+            safe_log("info", f"✅ FTP: Úspěšně nahráno: {remote_filename}")
+            return True
+            
+        except Exception as e:
+            safe_log("error", f"❌ FTP: Chyba při nahrávání {remote_filename}: {e}")
+            return False
+    
+    def _upload_via_scp(self, local_file_path: str, remote_filename: str) -> bool:
+        """Nahraje soubor přes SCP (pomocí subprocess)"""
+        try:
+            remote_path = f"{FTP_USERNAME}@{FTP_SERVER}:{FTP_REMOTE_PATH}{remote_filename}"
+            cmd = ["scp", local_file_path, remote_path]
+            
+            safe_log("debug", f"🔗 SCP: {' '.join(cmd)}")
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            
+            if result.returncode == 0:
+                safe_log("info", f"✅ SCP: Úspěšně nahráno: {remote_filename}")
+                return True
+            else:
+                safe_log("error", f"❌ SCP: Chyba: {result.stderr}")
+                return False
+                
+        except Exception as e:
+            safe_log("error", f"❌ SCP: Chyba při nahrávání {remote_filename}: {e}")
+            return False
+    
+    def _generate_market_heatmap_data(self):
+        """Generování market heatmap dat pro všechna období"""
+        safe_log("info", "🔥 HEATMAP: Začínám generování market heatmap dat...")
+        
+        try:
+            # Vytvořit instanci generátoru
+            generator = MarketHeatmapGenerator()
+            
+            # Nastavit cestu pro uložení dat do frontend složky
+            frontend_data_path = "/Users/tomaskostrhoun/Documents/ETF/src/data"
+            
+            # Generovat data pro všechna období
+            periods = ['1d', 'wtd', 'mtd', 'ytd', '1y', '3y', '5y', '10y']
+            
+            successful_periods = 0
+            total_periods = len(periods)
+            
+            for period in periods:
+                try:
+                    safe_log("info", f"🔄 HEATMAP: Generuji data pro období {period}...")
+                    
+                    # Generovat heatmap data
+                    heatmap_data = generator.generate_heatmap_data(period)
+                    
+                    # Přidat statistiky
+                    stats = generator.generate_summary_stats(heatmap_data)
+                    heatmap_data['summary_stats'] = stats
+                    
+                    # Uložit do ETF frontend složky
+                    filename = f"market_heatmap_{period}.json"
+                    output_path = os.path.join(frontend_data_path, filename)
+                    
+                    # Vytvořit složku pokud neexistuje
+                    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+                    
+                    with open(output_path, 'w', encoding='utf-8') as f:
+                        json.dump(heatmap_data, f, indent=2, ensure_ascii=False)
+                    
+                    successful_periods += 1
+                    safe_log("info", f"✅ HEATMAP: {period} úspěšně uloženo do {output_path}")
+                    
+                    # Nahrát soubor na server (pokud je to zapnuté)
+                    if UPLOAD_HEATMAP_TO_SERVER:
+                        upload_success = self._upload_file_to_server(output_path, filename)
+                        if upload_success:
+                            safe_log("info", f"🌐 HEATMAP: {period} úspěšně nahráno na server")
+                        else:
+                            safe_log("warning", f"⚠️ HEATMAP: Chyba při nahrávání {period} na server")
+                    
+                    # Zobrazit souhrn pro období
+                    for category, avg in stats['category_averages'].items():
+                        safe_log("debug", f"   {category}: {avg:.2f}% průměr")
+                        
+                except Exception as period_error:
+                    safe_log("error", f"❌ HEATMAP: Chyba při generování {period}: {period_error}")
+                    continue
+            
+            # Finální statistiky
+            safe_log("info", f"🎉 HEATMAP: Dokončeno! Úspěšně vygenerováno {successful_periods}/{total_periods} období")
+            safe_log("info", f"📁 HEATMAP: Data uložena do: {frontend_data_path}")
+            
+        except Exception as e:
+            safe_log("error", f"❌ HEATMAP: Kritická chyba při generování market heatmap: {e}")
     
     def _print_final_complete_statistics(self, etf_list: List[ETFDataComplete]):
         """Výpis KOMPLETNÍCH finálních statistik včetně dividend"""
@@ -3209,6 +3399,7 @@ def main():
     print("   ✅ Kategorizace ETF (Akcie/Dluhopisy/Krypto/Komodity)")
     print("   ✅ Automatické určení regionu (US/Evropa/Čína/Rozvíjející se země atd.)")
     print("   ✅ DIVIDENDOVÉ INFORMACE (Current yield, Last 12 months)")
+    print("   ✅ MARKET HEATMAP generování (Yahoo Finance API)")
     print("   ✅ Batch processing s checkpointy")
     print("   ✅ Resume capability")
     print("   ✅ Unicode/emoji problémů pro Windows (FIX)")
@@ -3221,9 +3412,18 @@ def main():
     print(f"Dividend data: {EXTRACT_DIVIDEND_DATA}")
     print(f"Překlady: {TRANSLATE_DESCRIPTIONS}")
     print(f"Automatické nahrávání do DB: {AUTO_UPLOAD_TO_DB}")
+    print(f"Market heatmap generování: {GENERATE_MARKET_HEATMAP}")
+    print(f"Market heatmap upload na server: {UPLOAD_HEATMAP_TO_SERVER and FTP_AVAILABLE}")
     print(f"Výstupní složka: {OUTPUT_DIR}")
     print(f"Export formáty: Excel (.xlsx), JSON (.json), CSV (.csv)")
     print("="*80)
+    
+    # Log info o server konfiguraci
+    if SERVER_CONFIG_LOADED:
+        print(f"📁 CONFIG: Načtena konfigurace serveru ze server_config.py")
+    else:
+        print(f"⚠️ CONFIG: Používám výchozí konfiguraci serveru. Vytvořte server_config.py pro vlastní nastavení.")
+        print(f"   Example config: server_config_example.py")
     
     scraper = CompleteProductionScraper(batch_size=args.batch_size)
     scraper.run_complete_production_scraping(
