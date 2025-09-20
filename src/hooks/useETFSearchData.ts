@@ -17,44 +17,14 @@ export const useETFSearchData = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [maxTerFromData, setMaxTerFromData] = useState<number>(2);
   const [totalETFCount, setTotalETFCount] = useState<number>(0);
-  const [isLoadingComplete, setIsLoadingComplete] = useState<boolean>(false);
   const { fetchETFs, isLoading, lastUpdated, getETFCount } = useETFData();
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        console.log('🚀 Starting two-phase ETF loading...');
+        console.log('🚀 Loading all ETF data...');
         
-        // FÁZE 1: Rychle načti top 100 největších ETF pro okamžité zobrazení
-        console.log('📊 Phase 1: Loading top 100 ETFs...');
-        const topETFs = await fetchETFs(100);
-        
-        // Přidej ticker alias pro kompatibilitu
-        const topETFsWithTicker = topETFs.map(etf => ({
-          ...etf,
-          ticker: etf.primary_ticker || etf.exchange_1_ticker || 'N/A'
-        }));
-        setETFs(topETFsWithTicker);
-        
-        // Rychle spočítej celkový počet ETF pro zobrazení
-        const totalCount = await getETFCount();
-        setTotalETFCount(totalCount);
-        
-        // Extract categories z top ETF (alespoň něco)
-        const initialCategories = Array.from(new Set(topETFsWithTicker.map(etf => etf.category).filter(Boolean)));
-        setCategories(sortCategories(initialCategories));
-        
-        // Calculate max TER z top ETF
-        const initialTerValues = topETFsWithTicker.map(etf => etf.ter_numeric).filter(ter => ter && ter > 0);
-        if (initialTerValues.length > 0) {
-          const maxTer = Math.max(...initialTerValues);
-          setMaxTerFromData(Math.ceil(maxTer * 100) / 100);
-        }
-        
-        console.log(`✅ Phase 1 complete: ${topETFs.length} ETFs loaded, total in DB: ${totalCount}`);
-        
-        // FÁZE 2: V pozadí načti všechny ETF pro kompletní filtrování
-        console.log('🔄 Phase 2: Loading all ETFs in background...');
+        // Načti všechny ETF najednou (bez dvoufázového načítání)
         const allETFs = await fetchETFs(); // bez limitu = všechny
         
         // Přidej ticker alias pro kompatibilitu
@@ -63,19 +33,23 @@ export const useETFSearchData = () => {
           ticker: etf.primary_ticker || etf.exchange_1_ticker || 'N/A'
         }));
         setETFs(allETFsWithTicker);
-        setIsLoadingComplete(true);
         
-        // Aktualizuj kategorie a max TER ze všech dat
+        // Spočítej celkový počet ETF
+        const totalCount = await getETFCount();
+        setTotalETFCount(totalCount);
+        
+        // Extract všechny kategorie
         const allCategories = Array.from(new Set(allETFsWithTicker.map(etf => etf.category).filter(Boolean)));
         setCategories(sortCategories(allCategories));
         
+        // Calculate max TER ze všech dat
         const allTerValues = allETFsWithTicker.map(etf => etf.ter_numeric).filter(ter => ter && ter > 0);
         if (allTerValues.length > 0) {
           const maxTer = Math.max(...allTerValues);
           setMaxTerFromData(Math.ceil(maxTer * 100) / 100);
         }
         
-        console.log(`🎉 Phase 2 complete: ${allETFs.length} ETFs total loaded`);
+        console.log(`✅ Loading complete: ${allETFs.length} ETFs loaded`);
         
       } catch (error) {
         console.error('Error loading ETF data:', error);
