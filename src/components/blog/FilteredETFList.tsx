@@ -60,7 +60,10 @@ const FilteredETFList: React.FC<FilteredETFListProps> = ({ filter, showDividendY
             exchange_2_ticker,
             exchange_3_ticker,
             exchange_4_ticker,
-            exchange_5_ticker
+            exchange_5_ticker,
+            is_leveraged,
+            rating,
+            rating_score
           `);
         
         // Debug: jaké filtry používáme

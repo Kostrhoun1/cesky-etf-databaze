@@ -477,7 +477,7 @@ const PortfolioWizard: React.FC<PortfolioWizardProps> = ({ onClose, className = 
             riskLevel={recommendation.riskLevel}
             defaultMonthlyAmount={profile.monthlyAmount || 5000}
             initialAmount={profile.initialAmount || 0}
-            expectedReturn={recommendation.expectedReturn}
+            expectedReturn={parseFloat(recommendation.expectedReturn) || 0}
           />
         </div>
       ) : (
