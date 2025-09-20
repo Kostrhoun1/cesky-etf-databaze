@@ -61,7 +61,7 @@ const PermanentniPortfolioPage: React.FC = () => {
         description="Kompletní průvodce Permanentním Portfoliem podle Harryho Browna. Historická performance, implementace a praktické tipy pro české investory."
         keywords="permanentní portfolio, Harry Browne, 25/25/25/25 strategie, stabilní investování, zlato ETF, komodity, konzervativní portfolio"
         canonical="https://etfpruvodce.cz/portfolio-strategie/permanentni-portfolio"
-        structuredData={{
+        schema={{
           "@context": "https://schema.org",
           "@type": "FinancialProduct",
           "name": "Permanentní Portfolio",

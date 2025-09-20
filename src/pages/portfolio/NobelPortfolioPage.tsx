@@ -60,7 +60,7 @@ const NobelPortfolioPage: React.FC = () => {
         description="Kompletní průvodce Nobel Portfolio strategií založené na výzkumu laureátů Nobelovy ceny. Moderní teorie portfolia, faktory hodnoty a praktická implementace."
         keywords="Nobel portfolio, moderní teorie portfolia, Harry Markowitz, Eugene Fama, value investing, small cap premium, faktory rizika"
         canonical="https://etfpruvodce.cz/portfolio-strategie/nobel-portfolio"
-        structuredData={{
+        schema={{
           "@context": "https://schema.org",
           "@type": "FinancialProduct",
           "name": "Nobel Portfolio",

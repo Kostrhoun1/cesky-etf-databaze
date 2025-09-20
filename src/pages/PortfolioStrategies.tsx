@@ -18,7 +18,7 @@ const PortfolioStrategiesPage: React.FC = () => {
         title="5 Osvědčených Portfolio Strategií pro ETF Investory 2025"
         description="Porovnejte reálnou performance 5 investičních strategií: Permanentní Portfolio, Ray Dalio All-Weather, Bogleheads Three-Fund a další. Včetně aktuálních dat z databáze ETF."
         keywords="portfolio strategie, ETF strategie, investiční portfolio, Ray Dalio All Weather, Bogleheads, permanentní portfolio, performance ETF, asset allocation"
-        structuredData={{
+        schema={{
           "@context": "https://schema.org",
           "@type": "FinancialProduct",
           "name": "Portfolio Strategie pro ETF Investory",

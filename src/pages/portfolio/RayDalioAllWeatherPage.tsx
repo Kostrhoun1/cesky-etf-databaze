@@ -57,7 +57,7 @@ const RayDalioAllWeatherPage: React.FC = () => {
         description="Kompletní průvodce Ray Dalio All-Weather portfolio strategií. Risk-parity přístup, historická performance a implementace pro české investory."
         keywords="Ray Dalio All Weather, risk parity, stabilní portfolio, diverzifikace, komodity, TIPS, Bridgewater Associates"
         canonical="https://etfpruvodce.cz/portfolio-strategie/ray-dalio-all-weather"
-        structuredData={{
+        schema={{
           "@context": "https://schema.org",
           "@type": "FinancialProduct",
           "name": "Ray Dalio All-Weather Portfolio",

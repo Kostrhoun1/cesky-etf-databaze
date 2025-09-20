@@ -65,6 +65,7 @@ export const useETFSearchData = () => {
     maxTerFromData,
     totalETFCount, // Pro zobrazení celkového počtu
     isLoading,
+    isLoadingComplete: !isLoading,
     lastUpdated
   };
 };
