@@ -8,6 +8,7 @@ import InternalLinking from '@/components/SEO/InternalLinking';
 import StructuredData from '@/components/SEO/StructuredData';
 import { Card, CardContent } from '@/components/ui/card';
 import { TrendingUp, Calculator, PiggyBank, Target } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const InvestmentCalculatorPage: React.FC = () => {
   const breadcrumbSchema = {

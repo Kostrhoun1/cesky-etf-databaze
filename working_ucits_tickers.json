@@ -1,0 +1,2606 @@
+{
+  "timestamp": "2025-09-20T07:40:03.289577",
+  "summary": {
+    "total_tested": 100,
+    "successful": 83,
+    "failed": 17,
+    "success_rate_percent": 83.0
+  },
+  "working_tickers": [
+    {
+      "isin": "IE00B5BMR087",
+      "name": "iShares Core S&P 500 UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "CSP1",
+        "CSP1",
+        "SXR8",
+        "SXR8"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "CSP1.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 52614.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 8693,
+        "long_name": "iShares Core S&P 500 UCITS ETF USD (Acc)",
+        "short_name": "ISHARES VII PLC ISHRS CORE S&P "
+      },
+      "test_timestamp": "2025-09-20T07:37:28.423800"
+    },
+    {
+      "isin": "IE00B4L5Y983",
+      "name": "iShares Core MSCI World UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "SWDA",
+        "SWDA",
+        "EUNL",
+        "EUNL"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "SWDA.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 9316.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 35865,
+        "long_name": "iShares Core MSCI World UCITS ETF USD (Acc)",
+        "short_name": "ISHARES III PLC ISHRS CORE MSCI"
+      },
+      "test_timestamp": "2025-09-20T07:37:28.888141"
+    },
+    {
+      "isin": "IE00B3XXRP09",
+      "name": "Vanguard S&P 500 UCITS ETF (USD) Distributing",
+      "original_tickers": [
+        "VUSA",
+        "VUSA",
+        "VUSA",
+        "VUSA"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Euronext Paris",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "VUSA.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 93.245,
+        "currency": "GBP",
+        "exchange": "LSE",
+        "volume": 339239,
+        "long_name": "Vanguard S&P 500 UCITS ETF",
+        "short_name": "VANGUARD FUNDS PLC VANGUARD S&P"
+      },
+      "test_timestamp": "2025-09-20T07:37:29.453848"
+    },
+    {
+      "isin": "IE00B3YCGJ38",
+      "name": "Invesco S&P 500 UCITS ETF Acc",
+      "original_tickers": [
+        "SPXP",
+        "SPXP",
+        "P500",
+        "SPXS"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "SPXP.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 97910.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 2148,
+        "long_name": "Invesco S&P 500 UCITS ETF",
+        "short_name": "INVESCO MARKETS PLC INVESCO S&P"
+      },
+      "test_timestamp": "2025-09-20T07:37:29.981888"
+    },
+    {
+      "isin": "IE00BKM4GZ66",
+      "name": "iShares Core MSCI Emerging Markets IMI UCITS ETF (Acc)",
+      "original_tickers": [
+        "EMIM",
+        "EMIM",
+        "IS3N",
+        "IS3N"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "EMIM.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 3200.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 170547,
+        "long_name": "iShares Core MSCI EM IMI UCITS ETF USD (Acc)",
+        "short_name": "ISHARES PLC ISHARES CORE EM IMI"
+      },
+      "test_timestamp": "2025-09-20T07:37:30.502595"
+    },
+    {
+      "isin": "IE00B4ND3602",
+      "name": "iShares Physical Gold ETC",
+      "original_tickers": [
+        "SGLN",
+        "SGLN",
+        "EGLN",
+        "IGLN"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "London Stock Exchange",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "SGLN.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 5287.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 224030,
+        "long_name": "iShares Physical Gold ETC",
+        "short_name": "ISHARES PHYSICAL METALS PLC ISH"
+      },
+      "test_timestamp": "2025-09-20T07:37:31.023147"
+    },
+    {
+      "isin": "IE00BFMXXD54",
+      "name": "Vanguard S&P 500 UCITS ETF (USD) Accumulating",
+      "original_tickers": [
+        "VUAA",
+        "VUAA",
+        "-",
+        "VUAA"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Bolsa Mexicana de Valores",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "VUAA.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 127.12,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 90455,
+        "long_name": "Vanguard S&P 500 UCITS ETF USD Accumulation",
+        "short_name": "VANGUARD FUNDS PLC VANGUARD S&P"
+      },
+      "test_timestamp": "2025-09-20T07:37:31.508858"
+    },
+    {
+      "isin": "IE00BK5BQT80",
+      "name": "Vanguard FTSE All-World UCITS ETF (USD) Accumulating",
+      "original_tickers": [
+        "VWCE",
+        "VWCE",
+        "VWCE",
+        "VWCE"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "VWCE.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 139.04,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 108562,
+        "long_name": "Vanguard FTSE All-World UCITS ETF USD Accumulation",
+        "short_name": "Vanguard FTSE All-World U.ETF R"
+      },
+      "test_timestamp": "2025-09-20T07:37:34.940785"
+    },
+    {
+      "isin": "IE00B579F325",
+      "name": "Invesco Physical Gold A",
+      "original_tickers": [
+        "SGLD",
+        "SGLD",
+        "SGLD",
+        "SGLD"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "SIX Swiss Exchange",
+        "Euronext Amsterdam",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "SGLD.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 353.43,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 22326,
+        "long_name": "Invesco Physical Gold ETC",
+        "short_name": "INVESCO PHYSICAL MARKETS PUBLIC"
+      },
+      "test_timestamp": "2025-09-20T07:37:35.481736"
+    },
+    {
+      "isin": "IE00B6R52259",
+      "name": "iShares MSCI ACWI UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "SSAC",
+        "SSAC",
+        "IUSQ",
+        "IUSQ"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "SSAC.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 7751.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 23379,
+        "long_name": "iShares MSCI ACWI UCITS ETF USD Acc",
+        "short_name": "ISHARES V PUBLIC LIMITED COMPAN"
+      },
+      "test_timestamp": "2025-09-20T07:37:36.173400"
+    },
+    {
+      "isin": "IE00B3RBWM25",
+      "name": "Vanguard FTSE All-World UCITS ETF (USD) Distributing",
+      "original_tickers": [
+        "VWRL",
+        "VWRL",
+        "VGWL",
+        "VGWL"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Euronext Paris",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "VWRL.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 118.66,
+        "currency": "GBP",
+        "exchange": "LSE",
+        "volume": 45293,
+        "long_name": "Vanguard FTSE All-World UCITS ETF",
+        "short_name": "VANGUARD FUNDS PLC VANGUARD FTS"
+      },
+      "test_timestamp": "2025-09-20T07:37:36.793456"
+    },
+    {
+      "isin": "DE000A0S9GB0",
+      "name": "Xetra-Gold",
+      "original_tickers": [
+        "4GLD",
+        "4GLD",
+        "4GLD",
+        "4GLD"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "XETRA",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "4GLD.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 100.57,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 220231,
+        "long_name": "Xetra-Gold",
+        "short_name": "DT.BOERSE COM. XETRA-GOLD"
+      },
+      "test_timestamp": "2025-09-20T07:37:40.241798"
+    },
+    {
+      "isin": "LU0290358497",
+      "name": "Xtrackers II EUR Overnight Rate Swap UCITS ETF 1C",
+      "original_tickers": [
+        "XEON",
+        "XEON",
+        "XEON",
+        "XEON"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "SIX Swiss Exchange"
+      ],
+      "working_ticker": "XEON.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 147.245,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 74679,
+        "long_name": "Xtrackers II EUR Overnight Rate Swap UCITS ETF 1C",
+        "short_name": "Xtrackers II EUR Over.Rate Sw.I"
+      },
+      "test_timestamp": "2025-09-20T07:37:42.953419"
+    },
+    {
+      "isin": "IE0031442068",
+      "name": "iShares Core S&P 500 UCITS ETF USD (Dist)",
+      "original_tickers": [
+        "IUSA",
+        "IUSA",
+        "IUSA",
+        "IUSA"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "IUSA.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 4899.75,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 81314,
+        "long_name": "iShares Core S&P 500 UCITS ETF USD Dist",
+        "short_name": "ISHARES PLC ISHARES S&P 500 UCI"
+      },
+      "test_timestamp": "2025-09-20T07:37:43.591705"
+    },
+    {
+      "isin": "IE00BJ0KDQ92",
+      "name": "Xtrackers MSCI World UCITS ETF 1C",
+      "original_tickers": [
+        "XDWD",
+        "XDWD",
+        "XDWD",
+        "XDWD"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "XDWD.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 137.33,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 41016,
+        "long_name": "Xtrackers MSCI World UCITS ETF 1C",
+        "short_name": "XTRACKERS (IE) PUBLIC LIMITED C"
+      },
+      "test_timestamp": "2025-09-20T07:37:44.108582"
+    },
+    {
+      "isin": "IE0005042456",
+      "name": "iShares Core FTSE 100 UCITS ETF GBP (Dist)",
+      "original_tickers": [
+        "ISF",
+        "ISF",
+        "IUSZ",
+        "IUSZ"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "ISF.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 896.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 2999464,
+        "long_name": "iShares Core FTSE 100 UCITS ETF GBP (Dist)",
+        "short_name": "ISHARES PLC ISHARES CORE FTSE10"
+      },
+      "test_timestamp": "2025-09-20T07:37:44.705810"
+    },
+    {
+      "isin": "IE00B6YX5C33",
+      "name": "SPDR S&P 500 UCITS ETF (Dist)",
+      "original_tickers": [
+        "SPY5",
+        "SPY5",
+        "SPY5",
+        "SPY5"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "SPY5.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 664.015,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 8695,
+        "long_name": "SPDR S&P 500 UCITS ETF",
+        "short_name": "SSGA SPDR ETFS EUROPE I PLC SPD"
+      },
+      "test_timestamp": "2025-09-20T07:37:57.368084"
+    },
+    {
+      "isin": "LU0908500753",
+      "name": "Amundi Core Stoxx Europe 600 UCITS ETF Acc",
+      "original_tickers": [
+        "LYP6",
+        "LYP6",
+        "LYP6",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "LYP6.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 266.05,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 47031,
+        "long_name": "Amundi Core Stoxx Europe 600 UCITS ETF Acc",
+        "short_name": "AIS-Amundi Stoxx Europe 600   A"
+      },
+      "test_timestamp": "2025-09-20T07:37:59.903709"
+    },
+    {
+      "isin": "IE00BFY0GT14",
+      "name": "SPDR MSCI World UCITS ETF",
+      "original_tickers": [
+        "SPPW",
+        "SPPW",
+        "SWRD",
+        "SWRD"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "Euronext Amsterdam"
+      ],
+      "working_ticker": "SPPW.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 39.084,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 32954,
+        "long_name": "SPDR MSCI World UCITS ETF",
+        "short_name": "SPDR MSCI World UCITS ETF     R"
+      },
+      "test_timestamp": "2025-09-20T07:38:02.574438"
+    },
+    {
+      "isin": "IE00B4K48X80",
+      "name": "iShares Core MSCI Europe UCITS ETF EUR (Acc)",
+      "original_tickers": [
+        "SMEA",
+        "SMEA",
+        "EUNK",
+        "EUNK"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "SMEA.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 7645.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 23038,
+        "long_name": "iShares Core MSCI Europe UCITS ETF EUR (Acc)",
+        "short_name": "ISHARES III PLC ISHARES MSCI EU"
+      },
+      "test_timestamp": "2025-09-20T07:38:03.087417"
+    },
+    {
+      "isin": "IE00B3WJKG14",
+      "name": "iShares S&P 500 Information Technology Sector UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "IITU",
+        "IITU",
+        "QDVE",
+        "QDVE"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "IITU.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 2979.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 142736,
+        "long_name": "iShares S&P 500 Information Technology Sector UCITS ETF USD (Acc)",
+        "short_name": "ISHARES V PUBLIC LIMITED COMPAN"
+      },
+      "test_timestamp": "2025-09-20T07:38:03.605444"
+    },
+    {
+      "isin": "IE00BFNM3G45",
+      "name": "iShares MSCI USA Screened UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "SGAS",
+        "SGAS",
+        "GPSA",
+        "SGAS"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "London Stock Exchange",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "SGAS.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 11.738,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 363569,
+        "long_name": "iShares MSCI USA Screened UCITS ETF USD (Acc)",
+        "short_name": "iShs IV-iShs MSCI USA Scr.UETFR"
+      },
+      "test_timestamp": "2025-09-20T07:38:05.736767"
+    },
+    {
+      "isin": "LU1135865084",
+      "name": "Amundi Core S&P 500 Swap UCITS ETF Acc",
+      "original_tickers": [
+        "SP5C",
+        "SP5C",
+        "LYP7",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Borsa Italiana",
+        "gettex",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "SP5C.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 477.75,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 213634,
+        "long_name": "Amundi Core S&P 500 Swap UCITS ETF Acc",
+        "short_name": "MULTI UNITS LUXEMBOURG AMUNDI S"
+      },
+      "test_timestamp": "2025-09-20T07:38:06.301618"
+    },
+    {
+      "isin": "IE00B4X9L533",
+      "name": "HSBC MSCI World UCITS ETF USD",
+      "original_tickers": [
+        "HMWO",
+        "HMWO",
+        "H4ZJ",
+        "H4Z3"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "HMWO.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 3188.75,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 66187,
+        "long_name": "HSBC MSCI World UCITS ETF",
+        "short_name": "HSBC ETFS PLC HSBC MSCI WORLD U"
+      },
+      "test_timestamp": "2025-09-20T07:38:06.875404"
+    },
+    {
+      "isin": "IE00BHZPJ890",
+      "name": "iShares MSCI USA ESG Enhanced CTB UCITS ETF USD (Dist)",
+      "original_tickers": [
+        "OM3L",
+        "OM3L",
+        "EEDG",
+        "OM3L"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "London Stock Exchange",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "OM3L.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 9.878,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 156535,
+        "long_name": "iShares MSCI USA ESG Enhanced CTB UCITS ETF USD Inc",
+        "short_name": "iShsIV-MSCI USA ESG Enh.CTB UER"
+      },
+      "test_timestamp": "2025-09-20T07:38:09.662878"
+    },
+    {
+      "isin": "IE000XZSV718",
+      "name": "SPDR S&P 500 UCITS ETF (Acc)",
+      "original_tickers": [
+        "SPYL",
+        "SPYL",
+        "-",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Bolsa Mexicana de Valores",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "SPYL.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 16.266,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 327754,
+        "long_name": "SPDR S&P 500 UCITS ETF USD Acc",
+        "short_name": "SSGA SPDR ETFS EUROPE I PLC SPD"
+      },
+      "test_timestamp": "2025-09-20T07:38:10.214823"
+    },
+    {
+      "isin": "IE00BF4G7076",
+      "name": "JPMorgan US Research Enhanced Index Equity (ESG) UCITS ETF USD (acc)",
+      "original_tickers": [
+        "JREU",
+        "JREU",
+        "JREU",
+        "JREU"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "JREU.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 65.875,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 45259,
+        "long_name": "JPMorgan ETFs (Ireland) ICAV - US Research Enhanced Index Equity Active UCITS ETF - USD (acc)",
+        "short_name": "JPMORGAN ETFS (IRELAND) ICAV JP"
+      },
+      "test_timestamp": "2025-09-20T07:38:10.722381"
+    },
+    {
+      "isin": "IE00BJ0KDR00",
+      "name": "Xtrackers MSCI USA UCITS ETF 1C",
+      "original_tickers": [
+        "XD9U",
+        "XD9U",
+        "XD9U",
+        "XD9U"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "XD9U.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 195.26,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 20906,
+        "long_name": "Xtrackers MSCI USA UCITS ETF 1C",
+        "short_name": "XTRACKERS (IE) PUBLIC LIMITED C"
+      },
+      "test_timestamp": "2025-09-20T07:38:11.217551"
+    },
+    {
+      "isin": "IE00B1YZSC51",
+      "name": "iShares Core MSCI Europe UCITS ETF EUR (Dist)",
+      "original_tickers": [
+        "IMEU",
+        "IMEU",
+        "IQQY",
+        "IQQY"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "IMEU.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 3003.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 5801,
+        "long_name": "iShares Core MSCI Europe UCITS ETF EUR (Dist)",
+        "short_name": "ISHARES II PLC ISHARES MSCI EUR"
+      },
+      "test_timestamp": "2025-09-20T07:38:11.757413"
+    },
+    {
+      "isin": "IE00BMTX1Y45",
+      "name": "iShares S&P 500 Swap UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "I500",
+        "I500",
+        "I500",
+        "I500"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Borsa Italiana",
+        "gettex",
+        "Euronext Amsterdam"
+      ],
+      "working_ticker": "I500.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 8.1685,
+        "currency": "GBP",
+        "exchange": "LSE",
+        "volume": 119527,
+        "long_name": "iShares S&P 500 Swap UCITS ETF",
+        "short_name": "ISHARES VI PLC ISH S&P500 SWAP "
+      },
+      "test_timestamp": "2025-09-20T07:38:12.259972"
+    },
+    {
+      "isin": "IE000BI8OT95",
+      "name": "Amundi Core MSCI World UCITS ETF Acc",
+      "original_tickers": [
+        "MWRD",
+        "MWRD",
+        "MWRE",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Borsa Italiana",
+        "gettex",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "MWRD.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 117.005,
+        "currency": "GBP",
+        "exchange": "GER",
+        "volume": 601,
+        "long_name": "Amundi Core MSCI World UCITS ETF Acc",
+        "short_name": "Am.ETF I.-MSCI World U.ETF    R"
+      },
+      "test_timestamp": "2025-09-20T07:38:14.531072"
+    },
+    {
+      "isin": "DE0005933956",
+      "name": "iShares EURO STOXX 50 UCITS ETF (DE)",
+      "original_tickers": [
+        "EXW1",
+        "EXW1",
+        "EXW1",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "BATS Chi-X Europe"
+      ],
+      "working_ticker": "EXW1.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 54.92,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 3800122,
+        "long_name": "iShares Core EURO STOXX 50 UCITS ETF (DE)",
+        "short_name": "iShares Core EO STOX.50 U.E.DEI"
+      },
+      "test_timestamp": "2025-09-20T07:38:17.113843"
+    },
+    {
+      "isin": "DE0002635307",
+      "name": "iShares STOXX Europe 600 UCITS ETF (DE)",
+      "original_tickers": [
+        "EXSA",
+        "EXSA",
+        "EXSA",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "EXSA.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 54.92,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 118485,
+        "long_name": "iShares STOXX Europe 600 UCITS ETF (DE) EUR (Dist)",
+        "short_name": "iSh.STOXX Europe 600 U.ETF DE I"
+      },
+      "test_timestamp": "2025-09-20T07:38:19.927851"
+    },
+    {
+      "isin": "FR0013416716",
+      "name": "Amundi Physical Gold ETC (C)",
+      "original_tickers": [
+        "GOLD",
+        "GOLD",
+        "GOLD",
+        "GLDA"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Euronext Amsterdam",
+        "Borsa Italiana",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "GOLD.MI",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 123.95,
+        "currency": "EUR",
+        "exchange": "MIL",
+        "volume": 3055,
+        "long_name": "Amundi Physical Gold ETC",
+        "short_name": "AMUNDI PHYSICAL GOLD ETC"
+      },
+      "test_timestamp": "2025-09-20T07:38:24.135988"
+    },
+    {
+      "isin": "IE00BFMNPS42",
+      "name": "Xtrackers MSCI USA ESG UCITS ETF 1C",
+      "original_tickers": [
+        "XZMU",
+        "XZMU",
+        "XZMU",
+        "XZMU"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "XZMU.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 71.96,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 4349,
+        "long_name": "Xtrackers MSCI USA ESG UCITS ETF 1C",
+        "short_name": "XTRACKERS (IE) PUBLIC LIMITED C"
+      },
+      "test_timestamp": "2025-09-20T07:38:24.624458"
+    },
+    {
+      "isin": "IE00B3ZW0K18",
+      "name": "iShares S&P 500 EUR Hedged UCITS ETF (Acc)",
+      "original_tickers": [
+        "IBCF",
+        "IBCF",
+        "IBCF",
+        "IUSE"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "IBCF.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 137.91,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 40178,
+        "long_name": "iShares S&P 500 EUR Hedged UCITS ETF (Acc)",
+        "short_name": "iShsV-S&P500 EUR Hgd U.ETF AccR"
+      },
+      "test_timestamp": "2025-09-20T07:38:27.168450"
+    },
+    {
+      "isin": "IE00BLNMYC90",
+      "name": "Xtrackers S&P 500 Equal Weight UCITS ETF 1C",
+      "original_tickers": [
+        "XDEW",
+        "XDEW",
+        "XDEW",
+        "XDEW"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "XDEW.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 103.55,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 91193,
+        "long_name": "Xtrackers S&P 500 Equal Weight UCITS ETF 1C",
+        "short_name": "XTRACKERS (IE) PUBLIC LIMITED C"
+      },
+      "test_timestamp": "2025-09-20T07:38:27.667998"
+    },
+    {
+      "isin": "FR0010315770",
+      "name": "Amundi MSCI World Swap II UCITS ETF Dist",
+      "original_tickers": [
+        "LYYA",
+        "LYYA",
+        "LYYA",
+        "OLY3"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "LYYA.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 364.82,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 4229,
+        "long_name": "Amundi MSCI World Swap II UCITS ETF Dist",
+        "short_name": "MUF-Amundi MSCI Wld Swap II UEA"
+      },
+      "test_timestamp": "2025-09-20T07:38:30.247368"
+    },
+    {
+      "isin": "IE00B0M62Q58",
+      "name": "iShares MSCI World UCITS ETF (Dist)",
+      "original_tickers": [
+        "IWRD",
+        "IWRD",
+        "IQQW",
+        "IQQW"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "IWRD.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 6758.5,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 12140,
+        "long_name": "iShares MSCI World UCITS ETF USD (Dist)",
+        "short_name": "ISHARES PLC ISHARES MSCI WORLD "
+      },
+      "test_timestamp": "2025-09-20T07:38:30.882849"
+    },
+    {
+      "isin": "IE00BTJRMP35",
+      "name": "Xtrackers MSCI Emerging Markets UCITS ETF 1C",
+      "original_tickers": [
+        "XMME",
+        "XMME",
+        "XMME",
+        "XMME"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "XMME.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 72.06,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 49858,
+        "long_name": "Xtrackers MSCI Emerging Markets UCITS ETF 1C",
+        "short_name": "XTRACKERS (IE) PUBLIC LIMITED C"
+      },
+      "test_timestamp": "2025-09-20T07:38:31.386815"
+    },
+    {
+      "isin": "IE00BHZPJ908",
+      "name": "iShares MSCI USA ESG Enhanced CTB UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "EDMU",
+        "EDMU",
+        "-",
+        "EDME"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Bolsa Mexicana de Valores",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "EDMU.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 10.198,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 356239,
+        "long_name": "iShares MSCI USA ESG Enhanced CTB UCITS ETF USD Acc",
+        "short_name": "iShsIV-MSCI USA ESG Enh.CTB UER"
+      },
+      "test_timestamp": "2025-09-20T07:38:33.936804"
+    },
+    {
+      "isin": "IE00B5KQNG97",
+      "name": "HSBC S&P 500 UCITS ETF USD",
+      "original_tickers": [
+        "HSPX",
+        "HSPX",
+        "H4ZF",
+        "HSPD"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "HSPX.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 4970.1,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 28045,
+        "long_name": "HSBC S&P 500 UCITS ETF",
+        "short_name": "HSBC ETFS PLC HSBC S&P 500 UCIT"
+      },
+      "test_timestamp": "2025-09-20T07:38:34.480690"
+    },
+    {
+      "isin": "IE00BYX2JD69",
+      "name": "iShares MSCI World SRI UCITS ETF EUR (Acc)",
+      "original_tickers": [
+        "2B7K",
+        "2B7K",
+        "2B7K",
+        "SUSW"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "2B7K.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 11.728,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 87165,
+        "long_name": "iShares MSCI World SRI UCITS ETF",
+        "short_name": "iShsIV-MSCI Wld.SRI UCITS ETF R"
+      },
+      "test_timestamp": "2025-09-20T07:38:37.037309"
+    },
+    {
+      "isin": "IE00BYML9W36",
+      "name": "Invesco S&P 500 UCITS ETF Dist",
+      "original_tickers": [
+        "SPXD",
+        "SPXD",
+        "D500",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Borsa Italiana",
+        "gettex",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "SPXD.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 61.47,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 6338,
+        "long_name": "Invesco S&P 500 UCITS ETF (Dist)",
+        "short_name": "INVESCO MARKETS PLC INVESCO S&P"
+      },
+      "test_timestamp": "2025-09-20T07:38:37.541009"
+    },
+    {
+      "isin": "IE000YYE6WK5",
+      "name": "VanEck Defense UCITS ETF A",
+      "original_tickers": [
+        "DFNS",
+        "DFNS",
+        "DFEN",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Borsa Italiana",
+        "gettex",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "DFNS.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 61.8,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 87033,
+        "long_name": "VanEck Defense ETF",
+        "short_name": "VANECK UCITS ETFS PLC VANECK DE"
+      },
+      "test_timestamp": "2025-09-20T07:38:38.086902"
+    },
+    {
+      "isin": "IE00B60SX394",
+      "name": "Invesco MSCI World UCITS ETF Acc",
+      "original_tickers": [
+        "MXWS",
+        "MXWS",
+        "SC0J",
+        "SC0J"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "MXWS.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 9995.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 17762,
+        "long_name": "Invesco MSCI World UCITS ETF",
+        "short_name": "INVESCO MARKETS PLC INVESCO MSC"
+      },
+      "test_timestamp": "2025-09-20T07:38:38.594529"
+    },
+    {
+      "isin": "DE000A2T0VU5",
+      "name": "Xtrackers IE Physical Gold ETC Securities",
+      "original_tickers": [
+        "XGDU",
+        "XGDU",
+        "XGDU",
+        "XGDP"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "XETRA",
+        "gettex",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "XGDU.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 56.5,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 31386,
+        "long_name": "Xtrackers IE Physical Gold ETC",
+        "short_name": "XTRACKERS ETC PUBLIC LIMITED CO"
+      },
+      "test_timestamp": "2025-09-20T07:38:39.099435"
+    },
+    {
+      "isin": "LU0274209237",
+      "name": "Xtrackers MSCI Europe UCITS ETF 1C",
+      "original_tickers": [
+        "XMEU",
+        "XMEU",
+        "XMEU",
+        "XMEU"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "XMEU.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 8738.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 3798,
+        "long_name": "Xtrackers MSCI Europe UCITS ETF 1C",
+        "short_name": "XTRACKERS X MSCI EUROPE 1C"
+      },
+      "test_timestamp": "2025-09-20T07:38:39.595070"
+    },
+    {
+      "isin": "IE00B60SX170",
+      "name": "Invesco MSCI USA UCITS ETF",
+      "original_tickers": [
+        "SC0H",
+        "SC0H",
+        "SC0H",
+        "MXUS"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "SC0H.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 165.46,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 3507,
+        "long_name": "Invesco MSCI USA UCITS ETF",
+        "short_name": "InvescoMI MSCI USA ETF        R"
+      },
+      "test_timestamp": "2025-09-20T07:38:42.274961"
+    },
+    {
+      "isin": "IE00BZ02LR44",
+      "name": "Xtrackers MSCI World ESG UCITS ETF 1C",
+      "original_tickers": [
+        "XZW0",
+        "XZW0",
+        "XZW0",
+        "XZW0"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "XZW0.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 49.6225,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 777,
+        "long_name": "Xtrackers MSCI World ESG UCITS ETF 1C",
+        "short_name": "XTRACKERS (IE) PUBLIC LIMITED C"
+      },
+      "test_timestamp": "2025-09-20T07:38:42.836818"
+    },
+    {
+      "isin": "IE00B3VWN393",
+      "name": "iShares USD Treasury Bond 3-7yr UCITS ETF (Acc)",
+      "original_tickers": [
+        "CU71",
+        "CU71",
+        "SXRL",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "CU71.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 10516.5,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 421,
+        "long_name": "iShares $ Treasury Bond 3-7yr UCITS ETF USD (Acc)",
+        "short_name": "ISHARES VII PLC ISHRS USD TRSRY"
+      },
+      "test_timestamp": "2025-09-20T07:38:43.330601"
+    },
+    {
+      "isin": "IE00BF4G6Y48",
+      "name": "JPMorgan Global Research Enhanced Index Equity (ESG) UCITS ETF USD (acc)",
+      "original_tickers": [
+        "JREG",
+        "JREG",
+        "JREG",
+        "JREG"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "JREG.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 57.985,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 5542,
+        "long_name": "JPMorgan ETFs (Ireland) ICAV - Global Research Enhanced Index Equity Active UCITS ETF - USD (acc)",
+        "short_name": "JPMORGAN ETFS (IRELAND) ICAV JP"
+      },
+      "test_timestamp": "2025-09-20T07:38:43.834009"
+    },
+    {
+      "isin": "IE00B8GKDB10",
+      "name": "Vanguard FTSE All-World High Dividend Yield UCITS ETF Distributing",
+      "original_tickers": [
+        "VHYL",
+        "VHYL",
+        "VGWD",
+        "VGWD"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Euronext Paris",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "VHYL.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 57.64,
+        "currency": "GBP",
+        "exchange": "LSE",
+        "volume": 52001,
+        "long_name": "Vanguard FTSE All-World High Dividend Yield UCITS ETF USD Distributing",
+        "short_name": "VANGUARD FUNDS PLC VANGUARD FTS"
+      },
+      "test_timestamp": "2025-09-20T07:38:44.384992"
+    },
+    {
+      "isin": "IE00B4L5YX21",
+      "name": "iShares Core MSCI Japan IMI UCITS ETF",
+      "original_tickers": [
+        "SJPA",
+        "SJPA",
+        "EUNN",
+        "EUNN"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "SJPA.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 4956.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 17434,
+        "long_name": "iShares Core MSCI Japan IMI UCITS ETF USD (Acc)",
+        "short_name": "ISHARES III PLC ISHRS CORE MSCI"
+      },
+      "test_timestamp": "2025-09-20T07:38:44.874492"
+    },
+    {
+      "isin": "JE00B1VS3770",
+      "name": "WisdomTree Physical Gold",
+      "original_tickers": [
+        "PHAU",
+        "PHAU",
+        "PHAU",
+        "PHGP"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Euronext Amsterdam",
+        "Borsa Italiana",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "PHAU.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 341.68,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 8056,
+        "long_name": "WisdomTree Physical Gold",
+        "short_name": "WISDOMTREE METAL SECURITIES LIM"
+      },
+      "test_timestamp": "2025-09-20T07:38:45.405648"
+    },
+    {
+      "isin": "IE00B53L3W79",
+      "name": "iShares Core EURO STOXX 50 UCITS ETF EUR (Acc)",
+      "original_tickers": [
+        "CS51",
+        "CS51",
+        "SXRT",
+        "SXRT"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "CS51.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 18100.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 6356,
+        "long_name": "iShares VII PLC - iShares Core EURO STOXX 50 ETF EUR Acc",
+        "short_name": "ISHARES VII PLC ISHRS CORE EURO"
+      },
+      "test_timestamp": "2025-09-20T07:38:45.892926"
+    },
+    {
+      "isin": "IE00B66F4759",
+      "name": "iShares EUR High Yield Corporate Bond UCITS ETF EUR (Dist)",
+      "original_tickers": [
+        "EUNW",
+        "EUNW",
+        "EUNW",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "EUNW.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 92.698,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 20555,
+        "long_name": "iShares € High Yield Corp Bond UCITS ETF EUR (Dist)",
+        "short_name": "iShs EO H.Yield Corp Bd U.ETF R"
+      },
+      "test_timestamp": "2025-09-20T07:38:48.630676"
+    },
+    {
+      "isin": "IE00BHZPJ239",
+      "name": "iShares MSCI EM ESG Enhanced CTB UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "EDM2",
+        "EDM2",
+        "-",
+        "EMEG"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Bolsa Mexicana de Valores",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "EDM2.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 6.313,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 242964,
+        "long_name": "iShares MSCI EM ESG Enhanced CTB UCITS ETF USD Acc",
+        "short_name": "iShsIV-MSCI EM.ESG.Enh.CTB UE R"
+      },
+      "test_timestamp": "2025-09-20T07:38:50.771123"
+    },
+    {
+      "isin": "IE00BF4RFH31",
+      "name": "iShares MSCI World Small Cap UCITS ETF",
+      "original_tickers": [
+        "IUSN",
+        "IUSN",
+        "IUSN",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "IUSN.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 7.495,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 646073,
+        "long_name": "iShares MSCI World Small Cap UCITS ETF",
+        "short_name": "iShsIII-MSCI Wld Sm.Ca.UCI.ETFR"
+      },
+      "test_timestamp": "2025-09-20T07:38:53.327275"
+    },
+    {
+      "isin": "LU2572257124",
+      "name": "Amundi Core MSCI World Swap UCITS ETF Dist",
+      "original_tickers": [
+        "AHYQ",
+        "AHYQ",
+        "MSCW",
+        "AHYR"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "London Stock Exchange",
+        "XETRA"
+      ],
+      "working_ticker": "AHYQ.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 103.675,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 8561,
+        "long_name": "Amundi Index Solutions - Amundi Core MSCI World Swap UCITS ETF Dist",
+        "short_name": "Amundi.I.S. MSCI World3       A"
+      },
+      "test_timestamp": "2025-09-20T07:38:55.878214"
+    },
+    {
+      "isin": "LU2009147757",
+      "name": "Xtrackers S&P 500 Swap UCITS ETF 1D",
+      "original_tickers": [
+        "XSXD",
+        "XSXD",
+        "XSXD",
+        "XSXD"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "XSXD.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 14.532,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 23034,
+        "long_name": "Xtrackers S&P 500 Swap UCITS ETF 1D",
+        "short_name": "XTRACKERS XTRACKERS S&P 500 SWA"
+      },
+      "test_timestamp": "2025-09-20T07:38:56.385115"
+    },
+    {
+      "isin": "IE00BGV5VN51",
+      "name": "Xtrackers Artificial Intelligence & Big Data UCITS ETF 1C 1C",
+      "original_tickers": [
+        "XAIX",
+        "XAIX",
+        "XAIX",
+        "XAID"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "XAIX.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 130.16,
+        "currency": "GBP",
+        "exchange": "LSE",
+        "volume": 10410,
+        "long_name": "Xtrackers Artificial Intelligence & Big Data UCITS ETF 1C",
+        "short_name": "XTRACKERS (IE) PUBLIC LIMITED C"
+      },
+      "test_timestamp": "2025-09-20T07:38:56.881113"
+    },
+    {
+      "isin": "IE00B0M63177",
+      "name": "iShares MSCI EM UCITS ETF (Dist)",
+      "original_tickers": [
+        "IEEM",
+        "IEEM",
+        "IQQE",
+        "IQQE"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "IEEM.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 3886.25,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 16163,
+        "long_name": "iShares MSCI EM UCITS ETF USD (Dist)",
+        "short_name": "ISHARES PLC ISHARES MSCI EM UCI"
+      },
+      "test_timestamp": "2025-09-20T07:39:10.553211"
+    },
+    {
+      "isin": "IE00B53QG562",
+      "name": "iShares Core MSCI EMU UCITS ETF EUR (Acc)",
+      "original_tickers": [
+        "CEU1",
+        "CEU1",
+        "SXR7",
+        "SXR7"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "CEU1.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 17891.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 117,
+        "long_name": "iShares VII PLC -iShares Core MSCI EMU UCITS ETF EUR (Acc)",
+        "short_name": "ISHARES VII PLC ISHRS MSCI EMU "
+      },
+      "test_timestamp": "2025-09-20T07:39:11.141980"
+    },
+    {
+      "isin": "LU0380865021",
+      "name": "Xtrackers EURO STOXX 50 UCITS ETF 1C",
+      "original_tickers": [
+        "XESC",
+        "XESC",
+        "XESC",
+        "XESC"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "XESC.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 8271.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 12953,
+        "long_name": "Xtrackers Euro Stoxx 50 UCITS ETF 1C",
+        "short_name": "XTRACKERS X EURO STOXX 50 1C"
+      },
+      "test_timestamp": "2025-09-20T07:39:11.655139"
+    },
+    {
+      "isin": "LU1681043599",
+      "name": "Amundi MSCI World Swap UCITS ETF EUR Acc",
+      "original_tickers": [
+        "AMEW",
+        "AMEW",
+        "AMEW",
+        "CW8"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "AMEW.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 583.8,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 2040,
+        "long_name": "Amundi Index Solutions - Amundi MSCI World Swap UCITS ETF EUR Acc",
+        "short_name": "AIS-Amundi MSCI World         N"
+      },
+      "test_timestamp": "2025-09-20T07:39:14.490986"
+    },
+    {
+      "isin": "LU0274211217",
+      "name": "Xtrackers EURO STOXX 50 UCITS ETF 1D",
+      "original_tickers": [
+        "XESX",
+        "XESX",
+        "XESX",
+        "XESX"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "XESX.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 4930.5,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 2206,
+        "long_name": "Xtrackers Euro Stoxx 50 UCITS ETF 1D",
+        "short_name": "XTRACKERS X EURO STOXX 50 1D"
+      },
+      "test_timestamp": "2025-09-20T07:39:15.074066"
+    },
+    {
+      "isin": "IE00B4L5YC18",
+      "name": "iShares MSCI EM UCITS ETF (Acc)",
+      "original_tickers": [
+        "SEMA",
+        "SEMA",
+        "EUNM",
+        "EUNM"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "SEMA.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 3695.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 14011,
+        "long_name": "iShares MSCI EM UCITS ETF USD (Acc)",
+        "short_name": "ISHARES III PLC ISHARES MSCI EM"
+      },
+      "test_timestamp": "2025-09-20T07:39:15.599357"
+    },
+    {
+      "isin": "IE00BM67HT60",
+      "name": "Xtrackers MSCI World Information Technology UCITS ETF 1C",
+      "original_tickers": [
+        "XDWT",
+        "XDWT",
+        "XDWT",
+        "XDWT"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "XDWT.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 113.195,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 112701,
+        "long_name": "Xtrackers MSCI World Information Technology UCITS ETF 1C",
+        "short_name": "XTRACKERS (IE) PUBLIC LIMITED C"
+      },
+      "test_timestamp": "2025-09-20T07:39:16.152871"
+    },
+    {
+      "isin": "IE00BZCQB185",
+      "name": "iShares MSCI India UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "QDV5",
+        "QDV5",
+        "QDV5",
+        "NDIA"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "QDV5.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 8.319,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 150866,
+        "long_name": "iShares MSCI India UCITS ETF USD Acc",
+        "short_name": "iShs IV-iShs MSCI India UC.ETFR"
+      },
+      "test_timestamp": "2025-09-20T07:39:18.973347"
+    },
+    {
+      "isin": "LU0274208692",
+      "name": "Xtrackers MSCI World Swap UCITS ETF 1C",
+      "original_tickers": [
+        "DBXW",
+        "DBXW",
+        "XMWO",
+        "XMWD"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "DBXW.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 114.735,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 5718,
+        "long_name": "Xtrackers MSCI World Swap UCITS ETF",
+        "short_name": "Xtrackers MSCI World Swap     I"
+      },
+      "test_timestamp": "2025-09-20T07:39:21.701516"
+    },
+    {
+      "isin": "IE00B441G979",
+      "name": "iShares MSCI World EUR Hedged UCITS ETF (Acc)",
+      "original_tickers": [
+        "IBCH",
+        "IBCH",
+        "IBCH",
+        "IWDE"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "IBCH.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 103.54,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 36852,
+        "long_name": "iShares MSCI World EUR Hedged UCITS ETF (Acc)",
+        "short_name": "iShsV-MSCI W.EUR Hgd U.ETF AccR"
+      },
+      "test_timestamp": "2025-09-20T07:39:24.364070"
+    },
+    {
+      "isin": "IE0008471009",
+      "name": "iShares Core EURO STOXX 50 UCITS ETF EUR (Dist)",
+      "original_tickers": [
+        "EUE",
+        "EUE",
+        "EUN2",
+        "EUN2"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "London Stock Exchange",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "EUE.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 4836.0,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 15494,
+        "long_name": "iShares Core EURO STOXX 50 UCITS ETF EUR (Dist)",
+        "short_name": "ISHARES II PLC ISHRS EURO STOXX"
+      },
+      "test_timestamp": "2025-09-20T07:39:24.906809"
+    },
+    {
+      "isin": "IE00BFNM3P36",
+      "name": "iShares MSCI EM IMI Screened UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "AYEM",
+        "AYEM",
+        "SEGM",
+        "AYEM"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "London Stock Exchange",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "AYEM.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 7.023,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 481478,
+        "long_name": "iShares MSCI EM IMI Screened UCITS ETF USD (Acc)",
+        "short_name": "iShs IV-iShs MSCI EM IMI SCR. R"
+      },
+      "test_timestamp": "2025-09-20T07:39:39.471493"
+    },
+    {
+      "isin": "IE00B810Q511",
+      "name": "Vanguard FTSE 100 UCITS ETF (GBP) Distributing",
+      "original_tickers": [
+        "VUKE",
+        "VUKE",
+        "VUKE",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "VUKE.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 40.0,
+        "currency": "GBP",
+        "exchange": "LSE",
+        "volume": 270272,
+        "long_name": "Vanguard FTSE 100 UCITS ETF",
+        "short_name": "VANGUARD FUNDS PLC VANGUARD FTS"
+      },
+      "test_timestamp": "2025-09-20T07:39:40.089881"
+    },
+    {
+      "isin": "IE00BH4GPZ28",
+      "name": "SPDR S&P 500 Leaders UCITS ETF USD Unhedged (Acc)",
+      "original_tickers": [
+        "SPPY",
+        "SPPY",
+        "500X",
+        "500X"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "Euronext Amsterdam"
+      ],
+      "working_ticker": "SPPY.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 35.0275,
+        "currency": "GBP",
+        "exchange": "LSE",
+        "volume": 5023,
+        "long_name": "SPDR S&P 500 Leaders UCITS ETF",
+        "short_name": "SSGA SPDR ETFS EUROPE I PLC SPD"
+      },
+      "test_timestamp": "2025-09-20T07:39:40.628463"
+    },
+    {
+      "isin": "IE00BGHQ0G80",
+      "name": "Xtrackers MSCI AC World Screened UCITS ETF 1C",
+      "original_tickers": [
+        "XMAW",
+        "XMAW",
+        "XMAW",
+        "XMAW"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Borsa Italiana"
+      ],
+      "working_ticker": "XMAW.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 3657.5,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 4,
+        "long_name": "Xtrackers MSCI AC World Screened UCITS ETF 1C",
+        "short_name": "XTRACKERS (IE) PUBLIC LIMITED C"
+      },
+      "test_timestamp": "2025-09-20T07:39:41.129039"
+    },
+    {
+      "isin": "IE00BK5BQV03",
+      "name": "Vanguard FTSE Developed World UCITS ETF Acc",
+      "original_tickers": [
+        "VGVF",
+        "VGVF",
+        "VHVE",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "Frankfurt Stock Exchange"
+      ],
+      "working_ticker": "VGVF.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 109.8,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 18104,
+        "long_name": "Vanguard FTSE Developed World UCITS ETF USD Accumulation",
+        "short_name": "Vang.FTSE Develop.World U.ETF R"
+      },
+      "test_timestamp": "2025-09-20T07:39:43.672910"
+    },
+    {
+      "isin": "LU1781541252",
+      "name": "Amundi Core MSCI Japan UCITS ETF Acc",
+      "original_tickers": [
+        "LCJP",
+        "LCJP",
+        "LCUJ",
+        "LCUJ"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "Borsa Italiana",
+        "gettex",
+        "Stuttgart Stock Exchange"
+      ],
+      "working_ticker": "LCJP.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 15.89,
+        "currency": "GBP",
+        "exchange": "LSE",
+        "volume": 79152,
+        "long_name": "Amundi Core MSCI Japan UCITS ETF Acc",
+        "short_name": "MULTI UNITS LUXEMBOURG AMUNDI M"
+      },
+      "test_timestamp": "2025-09-20T07:39:44.173621"
+    },
+    {
+      "isin": "IE00BK1PV551",
+      "name": "Xtrackers MSCI World UCITS ETF 1D",
+      "original_tickers": [
+        "XDWL",
+        "XDWL",
+        "XDWL",
+        "XDWL"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "London Stock Exchange"
+      ],
+      "working_ticker": "XDWL.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 114.63,
+        "currency": "USD",
+        "exchange": "LSE",
+        "volume": 1440,
+        "long_name": "Xtrackers MSCI World UCITS ETF 1D",
+        "short_name": "XTRACKERS (IE) PUBLIC LIMITED C"
+      },
+      "test_timestamp": "2025-09-20T07:39:44.940053"
+    },
+    {
+      "isin": "IE00BHZPJ569",
+      "name": "iShares MSCI World ESG Enhanced CTB UCITS ETF USD (Acc)",
+      "original_tickers": [
+        "EDMW",
+        "EDMW",
+        "-",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "BATS Chi-X Europe",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "EDMW.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 9.08,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 33598,
+        "long_name": "iShares MSCI World ESG Enhanced CTB UCITS ETF USD Acc",
+        "short_name": "iShsIV-MSCI Wld ESG Enh.CTB UER"
+      },
+      "test_timestamp": "2025-09-20T07:39:47.536317"
+    },
+    {
+      "isin": "IE00BFNM3D14",
+      "name": "iShares MSCI Europe Screened UCITS ETF EUR (Acc)",
+      "original_tickers": [
+        "SLMC",
+        "SLMC",
+        "SLMC",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Stuttgart Stock Exchange",
+        "Bolsa Mexicana de Valores"
+      ],
+      "working_ticker": "SLMC.DE",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 9.281,
+        "currency": "EUR",
+        "exchange": "GER",
+        "volume": 90386,
+        "long_name": "iShares MSCI Europe Screened UCITS ETF EUR (Acc)",
+        "short_name": "iShs IV-MSCI Europe Screen.UE R"
+      },
+      "test_timestamp": "2025-09-20T07:39:50.069920"
+    },
+    {
+      "isin": "LU0274210672",
+      "name": "Xtrackers MSCI USA Swap UCITS ETF 1C",
+      "original_tickers": [
+        "XMUS",
+        "XMUS",
+        "XMUS",
+        "-"
+      ],
+      "original_exchanges": [
+        "Primary",
+        "gettex",
+        "Borsa Italiana",
+        "Hong Kong Stock Exchange"
+      ],
+      "working_ticker": "XMUS.L",
+      "yahoo_data": {
+        "working": true,
+        "days": 5,
+        "start_date": "2025-09-15",
+        "end_date": "2025-09-19",
+        "current_price": 14704.5,
+        "currency": "GBp",
+        "exchange": "LSE",
+        "volume": 1444,
+        "long_name": "Xtrackers MSCI USA Swap UCITS ETF 1C",
+        "short_name": "XTRACKERS X MSCI USA SWAP"
+      },
+      "test_timestamp": "2025-09-20T07:40:03.289277"
+    }
+  ],
+  "failed_etfs": [
+    {
+      "isin": "IE00B53SZB19",
+      "name": "iShares Nasdaq 100 UCITS ETF (Acc)",
+      "provider": "iShares"
+    },
+    {
+      "isin": "IE00BGSF1X88",
+      "name": "iShares USD Treasury Bond 0-1yr UCITS ETF (Acc)",
+      "provider": "iShares"
+    },
+    {
+      "isin": "IE00B3F81R35",
+      "name": "iShares Core EUR Corporate Bond UCITS ETF (Dist)",
+      "provider": "iShares"
+    },
+    {
+      "isin": "IE0032077012",
+      "name": "Invesco EQQQ Nasdaq-100 UCITS ETF",
+      "provider": "Invesco"
+    },
+    {
+      "isin": "DE0005933931",
+      "name": "iShares Core DAX® UCITS ETF (DE) EUR (Acc)",
+      "provider": "iShares"
+    },
+    {
+      "isin": "IE00BLF7VX27",
+      "name": "SPDR Bloomberg SASB U.S. Corporate ESG UCITS ETF",
+      "provider": "SPDR"
+    },
+    {
+      "isin": "LU0274211480",
+      "name": "Xtrackers DAX UCITS ETF 1C",
+      "provider": "Xtrackers"
+    },
+    {
+      "isin": "IE00BYXPSP02",
+      "name": "iShares USD Treasury Bond 1-3yr UCITS ETF (Acc)",
+      "provider": "iShares"
+    },
+    {
+      "isin": "IE00B4WXJJ64",
+      "name": "iShares Core Euro Government Bond UCITS ETF (Dist)",
+      "provider": "iShares"
+    },
+    {
+      "isin": "LU1437018168",
+      "name": "Amundi Index Euro Corporate SRI UCITS ETF DR (C)",
+      "provider": "Amundi"
+    },
+    {
+      "isin": "LU0478205379",
+      "name": "Xtrackers II EUR Corporate Bond UCITS ETF 1C",
+      "provider": "Xtrackers"
+    },
+    {
+      "isin": "DE000A0F5UF5",
+      "name": "iShares Nasdaq 100 UCITS ETF (DE)",
+      "provider": "iShares"
+    },
+    {
+      "isin": "IE00BYXYYP94",
+      "name": "iShares USD Short Duration Corporate Bond UCITS ETF (Acc)",
+      "provider": "iShares"
+    },
+    {
+      "isin": "LU1829221024",
+      "name": "Amundi Core Nasdaq-100 Swap UCITS ETF Acc",
+      "provider": "Amundi"
+    },
+    {
+      "isin": "IE00BYZTVT56",
+      "name": "iShares EUR Corporate Bond ESG SRI UCITS ETF (Dist)",
+      "provider": "iShares"
+    },
+    {
+      "isin": "IE00B4L60045",
+      "name": "iShares EUR Corporate Bond 1-5yr UCITS ETF EUR (Dist)",
+      "provider": "iShares"
+    },
+    {
+      "isin": "IE00B3VWN518",
+      "name": "iShares USD Treasury Bond 7-10yr UCITS ETF (Acc)",
+      "provider": "iShares"
+    }
+  ],
+  "analysis": {
+    "suffix_distribution": {
+      ".L": 55,
+      ".DE": 27,
+      ".MI": 1
+    },
+    "exchange_distribution": {
+      "LSE": 55,
+      "GER": 27,
+      "MIL": 1
+    },
+    "currency_distribution": {
+      "GBp": 27,
+      "EUR": 27,
+      "USD": 20,
+      "GBP": 9
+    }
+  }
+}

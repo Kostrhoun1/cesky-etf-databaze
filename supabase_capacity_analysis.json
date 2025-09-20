@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-09-20T06:40:11.910698",
+  "current_usage": {
+    "etf_count": 3618,
+    "etf_with_primary_ticker": 1000,
+    "etf_with_exchange_ticker": 1000,
+    "total_ticker_fields": 6000,
+    "estimated_size_mb": 10.599609375,
+    "data_quality": {
+      "name": 10,
+      "ter_numeric": 10,
+      "return_1y": 8,
+      "fund_size_numeric": 9,
+      "primary_ticker": 9
+    }
+  },
+  "recommendations": {
+    "free_plan_sufficient_for": "Top 100 ETF s 1-2 roky historie",
+    "pro_plan_recommended_for": "V\u0161ech 3500 ETF s 5 lety historie",
+    "estimated_full_size": "450 MB (historick\u00e1 data) + 20 MB (ETF data) = 470 MB"
+  }
+}

@@ -39,6 +39,8 @@ import RebalancingPortfolia from "./pages/blog/RebalancingPortfolia";
 import ETFProDuchod from "./pages/blog/ETFProDuchod";
 import NejlevnejsiETFFondy from "./pages/blog/NejlevnejsiETFFondy";
 import ESGUdrzitelneETF from "./pages/blog/ESGUdrzitelneETF";
+import TydeniETFPrehled20250920 from "./pages/blog/TydeniETFPrehled20250920";
+import FedSnizilSazbyETFAnalyza2025 from "./pages/blog/FedSnizilSazbyETFAnalyza2025";
 import ETFGuideDownload from "./pages/ETFGuideDownload";
 import PortfolioStrategiesPage from "./pages/PortfolioStrategies";
 import BoglheadsThreeFundPage from "./pages/portfolio/BoglheadsThreeFund";
@@ -51,6 +53,7 @@ import NewsletterAdminPage from "./pages/NewsletterAdminPage";
 import PublicETFAdminPage from "./pages/PublicETFAdminPage";
 import SitemapXML from "./pages/SitemapXML";
 import InfographicsGenerator from "./pages/InfographicsGenerator";
+import InfographicsGeneratorEN from "./pages/InfographicsGeneratorEN";
 import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -99,6 +102,8 @@ function App() {
             <Route path="/tipy/etf-pro-duchod" element={<ETFProDuchod />} />
             <Route path="/tipy/nejlevnejsi-etf-fondy" element={<NejlevnejsiETFFondy />} />
             <Route path="/tipy/esg-udrzitelne-etf" element={<ESGUdrzitelneETF />} />
+            <Route path="/tipy/tydeni-etf-prehled-2025-09-20" element={<TydeniETFPrehled20250920 />} />
+            <Route path="/tipy/fed-snizil-sazby-etf-analyza-2025" element={<FedSnizilSazbyETFAnalyza2025 />} />
             <Route path="/navod-pro-zacatecniky" element={<ETFGuideDownload />} />
             <Route path="/portfolio-strategie" element={<PortfolioStrategiesPage />} />
             <Route path="/portfolio-strategie/bogleheads-three-fund" element={<BoglheadsThreeFundPage />} />
@@ -110,6 +115,7 @@ function App() {
             <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
             <Route path="/database-management-secure-2024" element={<PublicETFAdminPage />} />
             <Route path="/admin/infografiky" element={<InfographicsGenerator />} />
+            <Route path="/admin/infographics" element={<InfographicsGeneratorEN />} />
             <Route path="/sitemap.xml" element={<SitemapXML />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

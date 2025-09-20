@@ -968,8 +968,8 @@ class CompleteProductionScraper:
             self._generate_market_heatmap_data()
     
     def _upload_file_to_server(self, local_file_path: str, remote_filename: str) -> bool:
-        """Nahraje soubor na server pomocí FTP/SFTP"""
-        if not UPLOAD_HEATMAP_TO_SERVER or not FTP_AVAILABLE:
+        """Nahraje soubor na server pomocí FTP/SFTP/GitHub"""
+        if not UPLOAD_HEATMAP_TO_SERVER:
             return False
             
         try:
@@ -977,6 +977,8 @@ class CompleteProductionScraper:
                 safe_log("info", f"🧪 DRY RUN: Simuluji nahrání {remote_filename} na {FTP_SERVER}{FTP_REMOTE_PATH}")
                 safe_log("info", f"   Lokální soubor: {local_file_path} ({os.path.getsize(local_file_path)} bytů)")
                 return True
+            elif UPLOAD_METHOD == "github_commit":
+                return self._upload_via_github_commit(local_file_path, remote_filename)
             elif UPLOAD_METHOD == "sftp":
                 return self._upload_via_sftp(local_file_path, remote_filename)
             elif UPLOAD_METHOD == "ftp":
@@ -1062,6 +1064,45 @@ class CompleteProductionScraper:
                 
         except Exception as e:
             safe_log("error", f"❌ SCP: Chyba při nahrávání {remote_filename}: {e}")
+            return False
+    
+    def _upload_via_github_commit(self, local_file_path: str, remote_filename: str) -> bool:
+        """Nahraje soubor přes automatický Git commit a push"""
+        try:
+            # Soubor je už uložený v správném místě (/src/data/), jen commitneme změny
+            safe_log("info", f"🔗 GITHUB: Commituji {remote_filename} do Git repository...")
+            
+            # Git add pro konkrétní soubor
+            git_add_cmd = ["git", "add", local_file_path]
+            result = subprocess.run(git_add_cmd, capture_output=True, text=True, cwd="/Users/tomaskostrhoun/Documents/ETF")
+            
+            if result.returncode != 0:
+                safe_log("error", f"❌ GITHUB: Git add selhalo: {result.stderr}")
+                return False
+            
+            # Git commit s automatickým message
+            commit_message = f"📊 Automatická aktualizace market heatmap dat ({remote_filename})\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>"
+            git_commit_cmd = ["git", "commit", "-m", commit_message]
+            result = subprocess.run(git_commit_cmd, capture_output=True, text=True, cwd="/Users/tomaskostrhoun/Documents/ETF")
+            
+            # Pokud není co commitnout, je to OK
+            if result.returncode != 0 and "nothing to commit" not in result.stdout:
+                safe_log("warning", f"⚠️ GITHUB: Git commit: {result.stderr}")
+                # Pokračujeme i přesto - možná už je commitnuto
+            
+            # Git push
+            git_push_cmd = ["git", "push", "origin", "main"]
+            result = subprocess.run(git_push_cmd, capture_output=True, text=True, cwd="/Users/tomaskostrhoun/Documents/ETF")
+            
+            if result.returncode == 0:
+                safe_log("info", f"✅ GITHUB: Úspěšně commitnuto a pushnuto: {remote_filename}")
+                return True
+            else:
+                safe_log("error", f"❌ GITHUB: Git push selhalo: {result.stderr}")
+                return False
+                
+        except Exception as e:
+            safe_log("error", f"❌ GITHUB: Chyba při commitování {remote_filename}: {e}")
             return False
     
     def _generate_market_heatmap_data(self):

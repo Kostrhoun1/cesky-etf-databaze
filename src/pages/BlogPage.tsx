@@ -19,6 +19,7 @@ import PerformanceMetrics from "@/components/SEO/PerformanceMetrics";
 const PLACEHOLDER_IMAGE = "/placeholder.svg"; // existuje v public složce
 
 const ARTICLE_IMAGES: Record<string, string> = {
+  "fed-snizil-sazby-etf-analyza-2025": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=600&fit=crop",
   "nejlepsi-etf-2025": etf2025Image,
   "nejlepsi-etf-na-americke-akcie": usStocksImage,
   "nejlepsi-etf-na-nasdaq": nasdaqTechImage,
@@ -35,6 +36,7 @@ const ARTICLE_IMAGES: Record<string, string> = {
 
 // Optimalizované alt texty pro SEO
 const ARTICLE_ALT_TEXTS: Record<string, string> = {
+  "fed-snizil-sazby-etf-analyza-2025": "Fed snižuje úrokové sazby a analýza dopadu na ETF fondy, gold mining a bankovní sektor září 2025",
   "nejlepsi-etf-2025": "Graf výkonnosti nejlepších ETF fondů pro rok 2025 s analýzou poplatků TER",
   "nejlepsi-etf-na-americke-akcie": "Americký akciový trh ETF fondy zaměřené na S&P 500 a americké společnosti",
   "nejlepsi-etf-na-nasdaq": "NASDAQ technologické ETF fondy s výkonnostními daty a porovnáním poplatků",
@@ -50,6 +52,15 @@ const ARTICLE_ALT_TEXTS: Record<string, string> = {
 };
 
 const ARTICLES = [
+  {
+    slug: "fed-snizil-sazby-etf-analyza-2025",
+    title: "Fed snížil sazby o 0,25%: ETF fondy reagují na první úrokové uvolnění roku 2025",
+    perex:
+      "Středeční rozhodnutí Federální rezervy snížit úrokové sazby odstartovalo první uvolnění měnové politiky v roce 2025. Analýza dopadu na ETF trhy, zlatá horečka mining fondů a investiční příležitosti.",
+    category: "Týdenní zprávy",
+    readTime: "12 min",
+    difficulty: "Mírně pokročilé"
+  },
   {
     slug: "nejlepsi-etf-2025",
     title: "Nejlepší ETF 2025",
@@ -173,6 +184,7 @@ const BlogPage: React.FC = () => {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
+      "Týdenní zprávy": "bg-red-100 text-red-800",
       "Doporučení": "bg-blue-100 text-blue-800",
       "Regionální": "bg-purple-100 text-purple-800",
       "Sektorové": "bg-orange-100 text-orange-800",

@@ -1,0 +1,102 @@
+isin,yahoo_ticker,name,fund_provider,category,fund_size_billions,ter_percent,currency,manual_add
+IE00B5BMR087,CSP1,iShares Core S&P 500 UCITS ETF USD (Acc),iShares,Akcie,0.000108538,7.000000000000001,USD,False
+IE00B4L5Y983,SWDA,iShares Core MSCI World UCITS ETF USD (Acc),iShares,Akcie,0.000100932,20.0,USD,False
+IE00B3XXRP09,VUSA,Vanguard S&P 500 UCITS ETF (USD) Distributing,Vanguard,Akcie,4.1442e-05,7.000000000000001,USD,False
+IE00B3YCGJ38,SPXP,Invesco S&P 500 UCITS ETF Acc,Invesco,Akcie,2.8884e-05,5.0,USD,False
+IE00BKM4GZ66,EMIM,iShares Core MSCI Emerging Markets IMI UCITS ETF (Acc),iShares,Akcie,2.4898e-05,18.0,USD,False
+IE00B4ND3602,SGLN,iShares Physical Gold ETC,iShares,Akcie,2.3676e-05,12.0,USD,False
+IE00BFMXXD54,VUAA,Vanguard S&P 500 UCITS ETF (USD) Accumulating,Vanguard,Akcie,2.2887e-05,7.000000000000001,USD,False
+IE00BK5BQT80,VWCE,Vanguard FTSE All-World UCITS ETF (USD) Accumulating,Vanguard,Akcie,2.259e-05,22.0,USD,False
+IE00B579F325,SGLD,Invesco Physical Gold A,Invesco,Komodity,2.1892e-05,12.0,USD,False
+IE00B6R52259,SSAC,iShares MSCI ACWI UCITS ETF USD (Acc),iShares,Akcie,1.9821e-05,20.0,USD,False
+IE00B3RBWM25,VWRL,Vanguard FTSE All-World UCITS ETF (USD) Distributing,Vanguard,Akcie,1.7755e-05,22.0,USD,False
+DE000A0S9GB0,4GLD,Xetra-Gold,,Komodity,1.7602e-05,0.0,EUR,False
+LU0290358497,XEON,Xtrackers II EUR Overnight Rate Swap UCITS ETF 1C,Xtrackers,Ostatní,1.7239e-05,10.0,EUR,False
+IE0031442068,IUSA,iShares Core S&P 500 UCITS ETF USD (Dist),iShares,Akcie,1.6868e-05,7.000000000000001,USD,False
+IE00BJ0KDQ92,XDWD,Xtrackers MSCI World UCITS ETF 1C,Xtrackers,Akcie,1.5472e-05,12.0,USD,False
+IE0005042456,ISF,iShares Core FTSE 100 UCITS ETF GBP (Dist),iShares,Akcie,1.4718e-05,7.000000000000001,GBP,False
+IE00BGSF1X88,IBC1,iShares USD Treasury Bond 0-1yr UCITS ETF (Acc),iShares,Dluhopisy,1.4376e-05,7.000000000000001,USD,False
+IE00B6YX5C33,SPY5,SPDR S&P 500 UCITS ETF (Dist),SPDR,Akcie,1.4346e-05,3.0,USD,False
+LU0908500753,LYP6,Amundi Core Stoxx Europe 600 UCITS ETF Acc,Amundi,Akcie,1.3176e-05,7.000000000000001,EUR,False
+IE00BFY0GT14,SPPW,SPDR MSCI World UCITS ETF,SPDR,Akcie,1.2285e-05,12.0,USD,False
+IE00B4K48X80,SMEA,iShares Core MSCI Europe UCITS ETF EUR (Acc),iShares,Akcie,1.1968e-05,12.0,EUR,False
+IE00B3WJKG14,IITU,iShares S&P 500 Information Technology Sector UCITS ETF USD (Acc),iShares,Akcie,1.1714e-05,15.0,USD,False
+IE00BFNM3G45,SGAS,iShares MSCI USA Screened UCITS ETF USD (Acc),iShares,Akcie,1.1533e-05,7.000000000000001,USD,False
+LU1135865084,SP5C,Amundi Core S&P 500 Swap UCITS ETF Acc,Amundi,Akcie,1.1433e-05,5.0,EUR,False
+IE00B4X9L533,HMWO,HSBC MSCI World UCITS ETF USD,HSBC,Akcie,1.1404e-05,15.0,USD,False
+IE00BHZPJ890,OM3L,iShares MSCI USA ESG Enhanced CTB UCITS ETF USD (Dist),iShares,Akcie,1.0638e-05,7.000000000000001,USD,False
+IE000XZSV718,SPYL,SPDR S&P 500 UCITS ETF (Acc),SPDR,Akcie,1.0445e-05,3.0,USD,False
+IE00BF4G7076,JREU,JPMorgan US Research Enhanced Index Equity (ESG) UCITS ETF USD (acc),JPMorgan,Akcie,9.612e-06,20.0,USD,False
+IE00BJ0KDR00,XD9U,Xtrackers MSCI USA UCITS ETF 1C,Xtrackers,Akcie,9.329e-06,7.000000000000001,USD,False
+IE00B1YZSC51,IMEU,iShares Core MSCI Europe UCITS ETF EUR (Dist),iShares,Akcie,9.227e-06,12.0,EUR,False
+IE00BMTX1Y45,I500,iShares S&P 500 Swap UCITS ETF USD (Acc),iShares,Akcie,9.094e-06,5.0,USD,False
+IE000BI8OT95,MWRD,Amundi Core MSCI World UCITS ETF Acc,Amundi,Akcie,8.682e-06,12.0,USD,False
+DE0005933956,EXW1,iShares EURO STOXX 50 UCITS ETF (DE),iShares,Akcie,8.075e-06,9.0,EUR,False
+DE0002635307,EXSA,iShares STOXX Europe 600 UCITS ETF (DE),iShares,Akcie,8.033e-06,20.0,EUR,False
+FR0013416716,GOLD,Amundi Physical Gold ETC (C),Amundi,Komodity,7.857e-06,12.0,USD,False
+IE00BFMNPS42,XZMU,Xtrackers MSCI USA ESG UCITS ETF 1C,Xtrackers,Akcie,7.804e-06,15.0,USD,False
+IE00B3ZW0K18,IBCF,iShares S&P 500 EUR Hedged UCITS ETF (Acc),iShares,Akcie,7.65e-06,20.0,EUR,False
+IE00BLNMYC90,XDEW,Xtrackers S&P 500 Equal Weight UCITS ETF 1C,Xtrackers,Akcie,7.508e-06,20.0,USD,False
+FR0010315770,LYYA,Amundi MSCI World Swap II UCITS ETF Dist,Amundi,Akcie,7.399e-06,30.0,EUR,False
+IE00B0M62Q58,IWRD,iShares MSCI World UCITS ETF (Dist),iShares,Akcie,7.214e-06,50.0,USD,False
+IE00BTJRMP35,XMME,Xtrackers MSCI Emerging Markets UCITS ETF 1C,Xtrackers,Akcie,7.197e-06,18.0,USD,False
+IE00BHZPJ908,EDMU,iShares MSCI USA ESG Enhanced CTB UCITS ETF USD (Acc),iShares,Akcie,6.944e-06,7.000000000000001,USD,False
+IE00B5KQNG97,HSPX,HSBC S&P 500 UCITS ETF USD,HSBC,Akcie,6.688e-06,9.0,USD,False
+IE00BYX2JD69,2B7K,iShares MSCI World SRI UCITS ETF EUR (Acc),iShares,Akcie,6.686e-06,20.0,EUR,False
+IE00BYML9W36,SPXD,Invesco S&P 500 UCITS ETF Dist,Invesco,Akcie,6.618e-06,5.0,USD,False
+IE000YYE6WK5,DFNS,VanEck Defense UCITS ETF A,VanEck,Ostatní,6.025e-06,55.00000000000001,USD,False
+IE00B60SX394,MXWS,Invesco MSCI World UCITS ETF Acc,Invesco,Akcie,5.931e-06,19.0,USD,False
+DE000A2T0VU5,XGDU,Xtrackers IE Physical Gold ETC Securities,Xtrackers,Komodity,5.915e-06,11.0,USD,False
+LU0274209237,XMEU,Xtrackers MSCI Europe UCITS ETF 1C,Xtrackers,Akcie,5.904e-06,12.0,USD,False
+IE00B60SX170,SC0H,Invesco MSCI USA UCITS ETF,Invesco,Akcie,5.864e-06,5.0,USD,False
+IE00BZ02LR44,XZW0,Xtrackers MSCI World ESG UCITS ETF 1C,Xtrackers,Akcie,5.804e-06,20.0,USD,False
+IE00B3VWN393,CU71,iShares USD Treasury Bond 3-7yr UCITS ETF (Acc),iShares,Dluhopisy,5.787e-06,7.000000000000001,USD,False
+IE00BF4G6Y48,JREG,JPMorgan Global Research Enhanced Index Equity (ESG) UCITS ETF USD (acc),JPMorgan,Akcie,5.779e-06,25.0,USD,False
+IE00B8GKDB10,VHYL,Vanguard FTSE All-World High Dividend Yield UCITS ETF Distributing,Vanguard,Dluhopisy,5.733e-06,28.999999999999996,USD,False
+IE00B4L5YX21,SJPA,iShares Core MSCI Japan IMI UCITS ETF,iShares,Akcie,5.667e-06,12.0,USD,False
+JE00B1VS3770,PHAU,WisdomTree Physical Gold,WisdomTree,Komodity,5.614e-06,39.0,USD,False
+IE00B53L3W79,CS51,iShares Core EURO STOXX 50 UCITS ETF EUR (Acc),iShares,Akcie,5.604e-06,10.0,EUR,False
+IE00B66F4759,EUNW,iShares EUR High Yield Corporate Bond UCITS ETF EUR (Dist),iShares,Dluhopisy,5.584e-06,50.0,EUR,False
+IE00BHZPJ239,EDM2,iShares MSCI EM ESG Enhanced CTB UCITS ETF USD (Acc),iShares,Akcie,5.565e-06,18.0,USD,False
+IE00BF4RFH31,IUSN,iShares MSCI World Small Cap UCITS ETF,iShares,Akcie,5.504e-06,35.0,USD,False
+LU2572257124,AHYQ,Amundi Core MSCI World Swap UCITS ETF Dist,Amundi,Akcie,5.481e-06,20.0,USD,False
+LU2009147757,XSXD,Xtrackers S&P 500 Swap UCITS ETF 1D,Xtrackers,Akcie,5.307e-06,7.000000000000001,USD,False
+IE00BGV5VN51,XAIX,Xtrackers Artificial Intelligence & Big Data UCITS ETF 1C 1C,Xtrackers,Ostatní,5.3e-06,35.0,USD,False
+IE00BYXPSP02,IS0F,iShares USD Treasury Bond 1-3yr UCITS ETF (Acc),iShares,Dluhopisy,5.276e-06,7.000000000000001,USD,False
+IE00B0M63177,IEEM,iShares MSCI EM UCITS ETF (Dist),iShares,Akcie,5.271e-06,18.0,USD,False
+IE00B53QG562,CEU1,iShares Core MSCI EMU UCITS ETF EUR (Acc),iShares,Akcie,5.125e-06,12.0,EUR,False
+LU0380865021,XESC,Xtrackers EURO STOXX 50 UCITS ETF 1C,Xtrackers,Akcie,5.112e-06,9.0,EUR,False
+LU1681043599,AMEW,Amundi MSCI World Swap UCITS ETF EUR Acc,Amundi,Akcie,5.059e-06,38.0,EUR,False
+LU0274211217,XESX,Xtrackers EURO STOXX 50 UCITS ETF 1D,Xtrackers,Akcie,5e-06,9.0,EUR,False
+IE00B4L5YC18,SEMA,iShares MSCI EM UCITS ETF (Acc),iShares,Akcie,4.702e-06,18.0,USD,False
+IE00BM67HT60,XDWT,Xtrackers MSCI World Information Technology UCITS ETF 1C,Xtrackers,Akcie,4.674e-06,25.0,USD,False
+IE00BZCQB185,QDV5,iShares MSCI India UCITS ETF USD (Acc),iShares,Akcie,4.665e-06,65.0,USD,False
+LU0274208692,DBXW,Xtrackers MSCI World Swap UCITS ETF 1C,Xtrackers,Akcie,4.657e-06,45.0,USD,False
+IE00B441G979,IBCH,iShares MSCI World EUR Hedged UCITS ETF (Acc),iShares,Akcie,4.651e-06,55.00000000000001,EUR,False
+IE0008471009,EUE,iShares Core EURO STOXX 50 UCITS ETF EUR (Dist),iShares,Akcie,4.576e-06,10.0,EUR,False
+IE00BYXYYP94,IS09,iShares USD Short Duration Corporate Bond UCITS ETF (Acc),iShares,Dluhopisy,4.569e-06,20.0,USD,False
+IE00BFNM3P36,AYEM,iShares MSCI EM IMI Screened UCITS ETF USD (Acc),iShares,Akcie,4.517e-06,18.0,USD,False
+IE00B810Q511,VUKE,Vanguard FTSE 100 UCITS ETF (GBP) Distributing,Vanguard,Akcie,4.46e-06,9.0,GBP,False
+IE00BH4GPZ28,SPPY,SPDR S&P 500 Leaders UCITS ETF USD Unhedged (Acc),SPDR,Akcie,4.357e-06,3.0,USD,False
+IE00BGHQ0G80,XMAW,Xtrackers MSCI AC World Screened UCITS ETF 1C,Xtrackers,Akcie,4.33e-06,25.0,EUR,False
+IE00BK5BQV03,VGVF,Vanguard FTSE Developed World UCITS ETF Acc,Vanguard,Akcie,4.293e-06,12.0,USD,False
+LU1781541252,LCJP,Amundi Core MSCI Japan UCITS ETF Acc,Amundi,Akcie,4.231e-06,12.0,JPY,False
+IE00BK1PV551,XDWL,Xtrackers MSCI World UCITS ETF 1D,Xtrackers,Akcie,4.153e-06,12.0,USD,False
+IE00BHZPJ569,EDMW,iShares MSCI World ESG Enhanced CTB UCITS ETF USD (Acc),iShares,Akcie,4.134e-06,20.0,USD,False
+IE00BFNM3D14,SLMC,iShares MSCI Europe Screened UCITS ETF EUR (Acc),iShares,Akcie,4.03e-06,12.0,EUR,False
+IE00B3VWN518,-,iShares USD Treasury Bond 7-10yr UCITS ETF (Acc),iShares,Dluhopisy,3.982e-06,7.000000000000001,USD,False
+LU0274210672,XMUS,Xtrackers MSCI USA Swap UCITS ETF 1C,Xtrackers,Akcie,3.974e-06,15.0,USD,False
+IE00B44Z5B48,SPYY,SPDR MSCI All Country World UCITS ETF (Acc),SPDR,Akcie,3.952e-06,12.0,USD,False
+LU0629459743,UIMM,UBS MSCI World Socially Responsible UCITS ETF USD dis,UBS,Akcie,3.937e-06,22.0,USD,False
+IE000KXCEXR3,S500,Amundi S&P 500 Screened UCITS ETF Acc,Amundi,Akcie,3.924e-06,12.0,EUR,False
+IE00BFNM3J75,SNAW,iShares MSCI World Screened UCITS ETF USD (Acc),iShares,Akcie,3.883e-06,20.0,USD,False
+DE000ETFL508,ELFW,Deka MSCI World UCITS ETF Distribution,,Akcie,3.863e-06,31.0,EUR,False
+JE00B588CD74,SGBS,WisdomTree Physical Swiss Gold,WisdomTree,Komodity,3.846e-06,15.0,USD,False
+LU0950674175,-,UBS Core MSCI EM UCITS ETF USD acc,UBS,Akcie,3.836e-06,15.0,USD,False
+IE00B945VV12,VEUR,Vanguard FTSE Developed Europe UCITS ETF Distributing,Vanguard,Akcie,3.779e-06,10.0,EUR,False
+IE00B2NPKV68,SEMB,iShares J.P. Morgan USD Emerging Markets Bond UCITS ETF (Dist),iShares,Dluhopisy,3.762e-06,45.0,USD,False
+LU0490618542,D5BM,Xtrackers S&P 500 Swap UCITS ETF 1C,Xtrackers,Akcie,3.741e-06,15.0,USD,False
+IE00B5L8K969,CEA1,iShares MSCI EM Asia UCITS ETF (Acc),iShares,Akcie,3.734e-06,20.0,USD,False
+IE00BHZPJ676,EMNU,iShares MSCI Europe ESG Enhanced CTB UCITS ETF EUR (Dist),iShares,Akcie,3.733e-06,12.0,EUR,False
+IE00B4YBJ215,SPY4,SPDR S&P 400 U.S. Mid Cap UCITS ETF USD Unhedged (Acc),SPDR,Akcie,3.719e-06,30.0,USD,False
+IE00BK5BR626,VFEM.DE,Vanguard FTSE Emerging Markets,,,0.0,0.0,,True

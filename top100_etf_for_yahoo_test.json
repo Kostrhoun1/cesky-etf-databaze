@@ -1,0 +1,2008 @@
+[
+  {
+    "isin": "IE00B5BMR087",
+    "name": "iShares Core S&P 500 UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 108538.0,
+    "primary_ticker": "CSP1",
+    "exchange_1_ticker": "CSP1",
+    "exchange_2_ticker": "SXR8",
+    "exchange_3_ticker": "SXR8",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "CSP1",
+      "CSP1",
+      "SXR8",
+      "SXR8"
+    ],
+    "yahoo_ticker": "CSP1"
+  },
+  {
+    "isin": "IE00B4L5Y983",
+    "name": "iShares Core MSCI World UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 100932.0,
+    "primary_ticker": "SWDA",
+    "exchange_1_ticker": "SWDA",
+    "exchange_2_ticker": "EUNL",
+    "exchange_3_ticker": "EUNL",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "SWDA",
+      "SWDA",
+      "EUNL",
+      "EUNL"
+    ],
+    "yahoo_ticker": "SWDA"
+  },
+  {
+    "isin": "IE00B3XXRP09",
+    "name": "Vanguard S&P 500 UCITS ETF (USD) Distributing",
+    "fund_provider": "Vanguard",
+    "fund_size_numeric": 41442.0,
+    "primary_ticker": "VUSA",
+    "exchange_1_ticker": "VUSA",
+    "exchange_2_ticker": "VUSA",
+    "exchange_3_ticker": "VUSA",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "VUSA",
+      "VUSA",
+      "VUSA",
+      "VUSA"
+    ],
+    "yahoo_ticker": "VUSA"
+  },
+  {
+    "isin": "IE00B3YCGJ38",
+    "name": "Invesco S&P 500 UCITS ETF Acc",
+    "fund_provider": "Invesco",
+    "fund_size_numeric": 28884.0,
+    "primary_ticker": "SPXP",
+    "exchange_1_ticker": "SPXP",
+    "exchange_2_ticker": "P500",
+    "exchange_3_ticker": "SPXS",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.05,
+    "available_tickers": [
+      "SPXP",
+      "SPXP",
+      "P500",
+      "SPXS"
+    ],
+    "yahoo_ticker": "SPXP"
+  },
+  {
+    "isin": "IE00BKM4GZ66",
+    "name": "iShares Core MSCI Emerging Markets IMI UCITS ETF (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 24898.0,
+    "primary_ticker": "EMIM",
+    "exchange_1_ticker": "EMIM",
+    "exchange_2_ticker": "IS3N",
+    "exchange_3_ticker": "IS3N",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.18,
+    "available_tickers": [
+      "EMIM",
+      "EMIM",
+      "IS3N",
+      "IS3N"
+    ],
+    "yahoo_ticker": "EMIM"
+  },
+  {
+    "isin": "IE00B4ND3602",
+    "name": "iShares Physical Gold ETC",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 23676.0,
+    "primary_ticker": "SGLN",
+    "exchange_1_ticker": "SGLN",
+    "exchange_2_ticker": "EGLN",
+    "exchange_3_ticker": "IGLN",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "SGLN",
+      "SGLN",
+      "EGLN",
+      "IGLN"
+    ],
+    "yahoo_ticker": "SGLN"
+  },
+  {
+    "isin": "IE00BFMXXD54",
+    "name": "Vanguard S&P 500 UCITS ETF (USD) Accumulating",
+    "fund_provider": "Vanguard",
+    "fund_size_numeric": 22887.0,
+    "primary_ticker": "VUAA",
+    "exchange_1_ticker": "VUAA",
+    "exchange_2_ticker": "-",
+    "exchange_3_ticker": "VUAA",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "VUAA",
+      "VUAA",
+      "-",
+      "VUAA"
+    ],
+    "yahoo_ticker": "VUAA"
+  },
+  {
+    "isin": "IE00BK5BQT80",
+    "name": "Vanguard FTSE All-World UCITS ETF (USD) Accumulating",
+    "fund_provider": "Vanguard",
+    "fund_size_numeric": 22590.0,
+    "primary_ticker": "VWCE",
+    "exchange_1_ticker": "VWCE",
+    "exchange_2_ticker": "VWCE",
+    "exchange_3_ticker": "VWCE",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.22,
+    "available_tickers": [
+      "VWCE",
+      "VWCE",
+      "VWCE",
+      "VWCE"
+    ],
+    "yahoo_ticker": "VWCE"
+  },
+  {
+    "isin": "IE00B579F325",
+    "name": "Invesco Physical Gold A",
+    "fund_provider": "Invesco",
+    "fund_size_numeric": 21892.0,
+    "primary_ticker": "SGLD",
+    "exchange_1_ticker": "SGLD",
+    "exchange_2_ticker": "SGLD",
+    "exchange_3_ticker": "SGLD",
+    "category": "Komodity",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "SGLD",
+      "SGLD",
+      "SGLD",
+      "SGLD"
+    ],
+    "yahoo_ticker": "SGLD"
+  },
+  {
+    "isin": "IE00B6R52259",
+    "name": "iShares MSCI ACWI UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 19821.0,
+    "primary_ticker": "SSAC",
+    "exchange_1_ticker": "SSAC",
+    "exchange_2_ticker": "IUSQ",
+    "exchange_3_ticker": "IUSQ",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "SSAC",
+      "SSAC",
+      "IUSQ",
+      "IUSQ"
+    ],
+    "yahoo_ticker": "SSAC"
+  },
+  {
+    "isin": "IE00B3RBWM25",
+    "name": "Vanguard FTSE All-World UCITS ETF (USD) Distributing",
+    "fund_provider": "Vanguard",
+    "fund_size_numeric": 17755.0,
+    "primary_ticker": "VWRL",
+    "exchange_1_ticker": "VWRL",
+    "exchange_2_ticker": "VGWL",
+    "exchange_3_ticker": "VGWL",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.22,
+    "available_tickers": [
+      "VWRL",
+      "VWRL",
+      "VGWL",
+      "VGWL"
+    ],
+    "yahoo_ticker": "VWRL"
+  },
+  {
+    "isin": "DE000A0S9GB0",
+    "name": "Xetra-Gold",
+    "fund_provider": "",
+    "fund_size_numeric": 17602.0,
+    "primary_ticker": "4GLD",
+    "exchange_1_ticker": "4GLD",
+    "exchange_2_ticker": "4GLD",
+    "exchange_3_ticker": "4GLD",
+    "category": "Komodity",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.0,
+    "available_tickers": [
+      "4GLD",
+      "4GLD",
+      "4GLD",
+      "4GLD"
+    ],
+    "yahoo_ticker": "4GLD"
+  },
+  {
+    "isin": "LU0290358497",
+    "name": "Xtrackers II EUR Overnight Rate Swap UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 17239.0,
+    "primary_ticker": "XEON",
+    "exchange_1_ticker": "XEON",
+    "exchange_2_ticker": "XEON",
+    "exchange_3_ticker": "XEON",
+    "category": "Ostatní",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.1,
+    "available_tickers": [
+      "XEON",
+      "XEON",
+      "XEON",
+      "XEON"
+    ],
+    "yahoo_ticker": "XEON"
+  },
+  {
+    "isin": "IE0031442068",
+    "name": "iShares Core S&P 500 UCITS ETF USD (Dist)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 16868.0,
+    "primary_ticker": "IUSA",
+    "exchange_1_ticker": "IUSA",
+    "exchange_2_ticker": "IUSA",
+    "exchange_3_ticker": "IUSA",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "IUSA",
+      "IUSA",
+      "IUSA",
+      "IUSA"
+    ],
+    "yahoo_ticker": "IUSA"
+  },
+  {
+    "isin": "IE00BJ0KDQ92",
+    "name": "Xtrackers MSCI World UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 15472.0,
+    "primary_ticker": "XDWD",
+    "exchange_1_ticker": "XDWD",
+    "exchange_2_ticker": "XDWD",
+    "exchange_3_ticker": "XDWD",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "XDWD",
+      "XDWD",
+      "XDWD",
+      "XDWD"
+    ],
+    "yahoo_ticker": "XDWD"
+  },
+  {
+    "isin": "IE0005042456",
+    "name": "iShares Core FTSE 100 UCITS ETF GBP (Dist)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 14718.0,
+    "primary_ticker": "ISF",
+    "exchange_1_ticker": "ISF",
+    "exchange_2_ticker": "IUSZ",
+    "exchange_3_ticker": "IUSZ",
+    "category": "Akcie",
+    "fund_currency": "GBP",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "ISF",
+      "ISF",
+      "IUSZ",
+      "IUSZ"
+    ],
+    "yahoo_ticker": "ISF"
+  },
+  {
+    "isin": "IE00BGSF1X88",
+    "name": "iShares USD Treasury Bond 0-1yr UCITS ETF (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 14376.0,
+    "primary_ticker": "IBC1",
+    "exchange_1_ticker": "IBC1",
+    "exchange_2_ticker": "-",
+    "exchange_3_ticker": "IB01",
+    "category": "Dluhopisy",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "IBC1",
+      "IBC1",
+      "-",
+      "IB01"
+    ],
+    "yahoo_ticker": "IBC1"
+  },
+  {
+    "isin": "IE00B6YX5C33",
+    "name": "SPDR S&P 500 UCITS ETF (Dist)",
+    "fund_provider": "SPDR",
+    "fund_size_numeric": 14346.0,
+    "primary_ticker": "SPY5",
+    "exchange_1_ticker": "SPY5",
+    "exchange_2_ticker": "SPY5",
+    "exchange_3_ticker": "SPY5",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.03,
+    "available_tickers": [
+      "SPY5",
+      "SPY5",
+      "SPY5",
+      "SPY5"
+    ],
+    "yahoo_ticker": "SPY5"
+  },
+  {
+    "isin": "LU0908500753",
+    "name": "Amundi Core Stoxx Europe 600 UCITS ETF Acc",
+    "fund_provider": "Amundi",
+    "fund_size_numeric": 13176.0,
+    "primary_ticker": "LYP6",
+    "exchange_1_ticker": "LYP6",
+    "exchange_2_ticker": "LYP6",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "LYP6",
+      "LYP6",
+      "LYP6",
+      "-"
+    ],
+    "yahoo_ticker": "LYP6"
+  },
+  {
+    "isin": "IE00BFY0GT14",
+    "name": "SPDR MSCI World UCITS ETF",
+    "fund_provider": "SPDR",
+    "fund_size_numeric": 12285.0,
+    "primary_ticker": "SPPW",
+    "exchange_1_ticker": "SPPW",
+    "exchange_2_ticker": "SWRD",
+    "exchange_3_ticker": "SWRD",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "SPPW",
+      "SPPW",
+      "SWRD",
+      "SWRD"
+    ],
+    "yahoo_ticker": "SPPW"
+  },
+  {
+    "isin": "IE00B4K48X80",
+    "name": "iShares Core MSCI Europe UCITS ETF EUR (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 11968.0,
+    "primary_ticker": "SMEA",
+    "exchange_1_ticker": "SMEA",
+    "exchange_2_ticker": "EUNK",
+    "exchange_3_ticker": "EUNK",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "SMEA",
+      "SMEA",
+      "EUNK",
+      "EUNK"
+    ],
+    "yahoo_ticker": "SMEA"
+  },
+  {
+    "isin": "IE00B3WJKG14",
+    "name": "iShares S&P 500 Information Technology Sector UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 11714.0,
+    "primary_ticker": "IITU",
+    "exchange_1_ticker": "IITU",
+    "exchange_2_ticker": "QDVE",
+    "exchange_3_ticker": "QDVE",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.15,
+    "available_tickers": [
+      "IITU",
+      "IITU",
+      "QDVE",
+      "QDVE"
+    ],
+    "yahoo_ticker": "IITU"
+  },
+  {
+    "isin": "IE00BFNM3G45",
+    "name": "iShares MSCI USA Screened UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 11533.0,
+    "primary_ticker": "SGAS",
+    "exchange_1_ticker": "SGAS",
+    "exchange_2_ticker": "GPSA",
+    "exchange_3_ticker": "SGAS",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "SGAS",
+      "SGAS",
+      "GPSA",
+      "SGAS"
+    ],
+    "yahoo_ticker": "SGAS"
+  },
+  {
+    "isin": "LU1135865084",
+    "name": "Amundi Core S&P 500 Swap UCITS ETF Acc",
+    "fund_provider": "Amundi",
+    "fund_size_numeric": 11433.0,
+    "primary_ticker": "SP5C",
+    "exchange_1_ticker": "SP5C",
+    "exchange_2_ticker": "LYP7",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.05,
+    "available_tickers": [
+      "SP5C",
+      "SP5C",
+      "LYP7",
+      "-"
+    ],
+    "yahoo_ticker": "SP5C"
+  },
+  {
+    "isin": "IE00B4X9L533",
+    "name": "HSBC MSCI World UCITS ETF USD",
+    "fund_provider": "HSBC",
+    "fund_size_numeric": 11404.0,
+    "primary_ticker": "HMWO",
+    "exchange_1_ticker": "HMWO",
+    "exchange_2_ticker": "H4ZJ",
+    "exchange_3_ticker": "H4Z3",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.15,
+    "available_tickers": [
+      "HMWO",
+      "HMWO",
+      "H4ZJ",
+      "H4Z3"
+    ],
+    "yahoo_ticker": "HMWO"
+  },
+  {
+    "isin": "IE00BHZPJ890",
+    "name": "iShares MSCI USA ESG Enhanced CTB UCITS ETF USD (Dist)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 10638.0,
+    "primary_ticker": "OM3L",
+    "exchange_1_ticker": "OM3L",
+    "exchange_2_ticker": "EEDG",
+    "exchange_3_ticker": "OM3L",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "OM3L",
+      "OM3L",
+      "EEDG",
+      "OM3L"
+    ],
+    "yahoo_ticker": "OM3L"
+  },
+  {
+    "isin": "IE000XZSV718",
+    "name": "SPDR S&P 500 UCITS ETF (Acc)",
+    "fund_provider": "SPDR",
+    "fund_size_numeric": 10445.0,
+    "primary_ticker": "SPYL",
+    "exchange_1_ticker": "SPYL",
+    "exchange_2_ticker": "-",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.03,
+    "available_tickers": [
+      "SPYL",
+      "SPYL",
+      "-",
+      "-"
+    ],
+    "yahoo_ticker": "SPYL"
+  },
+  {
+    "isin": "IE00BF4G7076",
+    "name": "JPMorgan US Research Enhanced Index Equity (ESG) UCITS ETF USD (acc)",
+    "fund_provider": "JPMorgan",
+    "fund_size_numeric": 9612.0,
+    "primary_ticker": "JREU",
+    "exchange_1_ticker": "JREU",
+    "exchange_2_ticker": "JREU",
+    "exchange_3_ticker": "JREU",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "JREU",
+      "JREU",
+      "JREU",
+      "JREU"
+    ],
+    "yahoo_ticker": "JREU"
+  },
+  {
+    "isin": "IE00BJ0KDR00",
+    "name": "Xtrackers MSCI USA UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 9329.0,
+    "primary_ticker": "XD9U",
+    "exchange_1_ticker": "XD9U",
+    "exchange_2_ticker": "XD9U",
+    "exchange_3_ticker": "XD9U",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "XD9U",
+      "XD9U",
+      "XD9U",
+      "XD9U"
+    ],
+    "yahoo_ticker": "XD9U"
+  },
+  {
+    "isin": "IE00B1YZSC51",
+    "name": "iShares Core MSCI Europe UCITS ETF EUR (Dist)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 9227.0,
+    "primary_ticker": "IMEU",
+    "exchange_1_ticker": "IMEU",
+    "exchange_2_ticker": "IQQY",
+    "exchange_3_ticker": "IQQY",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "IMEU",
+      "IMEU",
+      "IQQY",
+      "IQQY"
+    ],
+    "yahoo_ticker": "IMEU"
+  },
+  {
+    "isin": "IE00BMTX1Y45",
+    "name": "iShares S&P 500 Swap UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 9094.0,
+    "primary_ticker": "I500",
+    "exchange_1_ticker": "I500",
+    "exchange_2_ticker": "I500",
+    "exchange_3_ticker": "I500",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.05,
+    "available_tickers": [
+      "I500",
+      "I500",
+      "I500",
+      "I500"
+    ],
+    "yahoo_ticker": "I500"
+  },
+  {
+    "isin": "IE000BI8OT95",
+    "name": "Amundi Core MSCI World UCITS ETF Acc",
+    "fund_provider": "Amundi",
+    "fund_size_numeric": 8682.0,
+    "primary_ticker": "MWRD",
+    "exchange_1_ticker": "MWRD",
+    "exchange_2_ticker": "MWRE",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "MWRD",
+      "MWRD",
+      "MWRE",
+      "-"
+    ],
+    "yahoo_ticker": "MWRD"
+  },
+  {
+    "isin": "DE0005933956",
+    "name": "iShares EURO STOXX 50 UCITS ETF (DE)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 8075.0,
+    "primary_ticker": "EXW1",
+    "exchange_1_ticker": "EXW1",
+    "exchange_2_ticker": "EXW1",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.09,
+    "available_tickers": [
+      "EXW1",
+      "EXW1",
+      "EXW1",
+      "-"
+    ],
+    "yahoo_ticker": "EXW1"
+  },
+  {
+    "isin": "DE0002635307",
+    "name": "iShares STOXX Europe 600 UCITS ETF (DE)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 8033.0,
+    "primary_ticker": "EXSA",
+    "exchange_1_ticker": "EXSA",
+    "exchange_2_ticker": "EXSA",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "EXSA",
+      "EXSA",
+      "EXSA",
+      "-"
+    ],
+    "yahoo_ticker": "EXSA"
+  },
+  {
+    "isin": "FR0013416716",
+    "name": "Amundi Physical Gold ETC (C)",
+    "fund_provider": "Amundi",
+    "fund_size_numeric": 7857.0,
+    "primary_ticker": "GOLD",
+    "exchange_1_ticker": "GOLD",
+    "exchange_2_ticker": "GOLD",
+    "exchange_3_ticker": "GLDA",
+    "category": "Komodity",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "GOLD",
+      "GOLD",
+      "GOLD",
+      "GLDA"
+    ],
+    "yahoo_ticker": "GOLD"
+  },
+  {
+    "isin": "IE00BFMNPS42",
+    "name": "Xtrackers MSCI USA ESG UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 7804.0,
+    "primary_ticker": "XZMU",
+    "exchange_1_ticker": "XZMU",
+    "exchange_2_ticker": "XZMU",
+    "exchange_3_ticker": "XZMU",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.15,
+    "available_tickers": [
+      "XZMU",
+      "XZMU",
+      "XZMU",
+      "XZMU"
+    ],
+    "yahoo_ticker": "XZMU"
+  },
+  {
+    "isin": "IE00B3ZW0K18",
+    "name": "iShares S&P 500 EUR Hedged UCITS ETF (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 7650.0,
+    "primary_ticker": "IBCF",
+    "exchange_1_ticker": "IBCF",
+    "exchange_2_ticker": "IBCF",
+    "exchange_3_ticker": "IUSE",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "IBCF",
+      "IBCF",
+      "IBCF",
+      "IUSE"
+    ],
+    "yahoo_ticker": "IBCF"
+  },
+  {
+    "isin": "IE00BLNMYC90",
+    "name": "Xtrackers S&P 500 Equal Weight UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 7508.0,
+    "primary_ticker": "XDEW",
+    "exchange_1_ticker": "XDEW",
+    "exchange_2_ticker": "XDEW",
+    "exchange_3_ticker": "XDEW",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "XDEW",
+      "XDEW",
+      "XDEW",
+      "XDEW"
+    ],
+    "yahoo_ticker": "XDEW"
+  },
+  {
+    "isin": "FR0010315770",
+    "name": "Amundi MSCI World Swap II UCITS ETF Dist",
+    "fund_provider": "Amundi",
+    "fund_size_numeric": 7399.0,
+    "primary_ticker": "LYYA",
+    "exchange_1_ticker": "LYYA",
+    "exchange_2_ticker": "LYYA",
+    "exchange_3_ticker": "OLY3",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.3,
+    "available_tickers": [
+      "LYYA",
+      "LYYA",
+      "LYYA",
+      "OLY3"
+    ],
+    "yahoo_ticker": "LYYA"
+  },
+  {
+    "isin": "IE00B0M62Q58",
+    "name": "iShares MSCI World UCITS ETF (Dist)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 7214.0,
+    "primary_ticker": "IWRD",
+    "exchange_1_ticker": "IWRD",
+    "exchange_2_ticker": "IQQW",
+    "exchange_3_ticker": "IQQW",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.5,
+    "available_tickers": [
+      "IWRD",
+      "IWRD",
+      "IQQW",
+      "IQQW"
+    ],
+    "yahoo_ticker": "IWRD"
+  },
+  {
+    "isin": "IE00BTJRMP35",
+    "name": "Xtrackers MSCI Emerging Markets UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 7197.0,
+    "primary_ticker": "XMME",
+    "exchange_1_ticker": "XMME",
+    "exchange_2_ticker": "XMME",
+    "exchange_3_ticker": "XMME",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.18,
+    "available_tickers": [
+      "XMME",
+      "XMME",
+      "XMME",
+      "XMME"
+    ],
+    "yahoo_ticker": "XMME"
+  },
+  {
+    "isin": "IE00BHZPJ908",
+    "name": "iShares MSCI USA ESG Enhanced CTB UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 6944.0,
+    "primary_ticker": "EDMU",
+    "exchange_1_ticker": "EDMU",
+    "exchange_2_ticker": "-",
+    "exchange_3_ticker": "EDME",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "EDMU",
+      "EDMU",
+      "-",
+      "EDME"
+    ],
+    "yahoo_ticker": "EDMU"
+  },
+  {
+    "isin": "IE00B5KQNG97",
+    "name": "HSBC S&P 500 UCITS ETF USD",
+    "fund_provider": "HSBC",
+    "fund_size_numeric": 6688.0,
+    "primary_ticker": "HSPX",
+    "exchange_1_ticker": "HSPX",
+    "exchange_2_ticker": "H4ZF",
+    "exchange_3_ticker": "HSPD",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.09,
+    "available_tickers": [
+      "HSPX",
+      "HSPX",
+      "H4ZF",
+      "HSPD"
+    ],
+    "yahoo_ticker": "HSPX"
+  },
+  {
+    "isin": "IE00BYX2JD69",
+    "name": "iShares MSCI World SRI UCITS ETF EUR (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 6686.0,
+    "primary_ticker": "2B7K",
+    "exchange_1_ticker": "2B7K",
+    "exchange_2_ticker": "2B7K",
+    "exchange_3_ticker": "SUSW",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "2B7K",
+      "2B7K",
+      "2B7K",
+      "SUSW"
+    ],
+    "yahoo_ticker": "2B7K"
+  },
+  {
+    "isin": "IE00BYML9W36",
+    "name": "Invesco S&P 500 UCITS ETF Dist",
+    "fund_provider": "Invesco",
+    "fund_size_numeric": 6618.0,
+    "primary_ticker": "SPXD",
+    "exchange_1_ticker": "SPXD",
+    "exchange_2_ticker": "D500",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.05,
+    "available_tickers": [
+      "SPXD",
+      "SPXD",
+      "D500",
+      "-"
+    ],
+    "yahoo_ticker": "SPXD"
+  },
+  {
+    "isin": "IE000YYE6WK5",
+    "name": "VanEck Defense UCITS ETF A",
+    "fund_provider": "VanEck",
+    "fund_size_numeric": 6025.0,
+    "primary_ticker": "DFNS",
+    "exchange_1_ticker": "DFNS",
+    "exchange_2_ticker": "DFEN",
+    "exchange_3_ticker": "-",
+    "category": "Ostatní",
+    "fund_currency": "USD",
+    "ter_numeric": 0.55,
+    "available_tickers": [
+      "DFNS",
+      "DFNS",
+      "DFEN",
+      "-"
+    ],
+    "yahoo_ticker": "DFNS"
+  },
+  {
+    "isin": "IE00B60SX394",
+    "name": "Invesco MSCI World UCITS ETF Acc",
+    "fund_provider": "Invesco",
+    "fund_size_numeric": 5931.0,
+    "primary_ticker": "MXWS",
+    "exchange_1_ticker": "MXWS",
+    "exchange_2_ticker": "SC0J",
+    "exchange_3_ticker": "SC0J",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.19,
+    "available_tickers": [
+      "MXWS",
+      "MXWS",
+      "SC0J",
+      "SC0J"
+    ],
+    "yahoo_ticker": "MXWS"
+  },
+  {
+    "isin": "DE000A2T0VU5",
+    "name": "Xtrackers IE Physical Gold ETC Securities",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 5915.0,
+    "primary_ticker": "XGDU",
+    "exchange_1_ticker": "XGDU",
+    "exchange_2_ticker": "XGDU",
+    "exchange_3_ticker": "XGDP",
+    "category": "Komodity",
+    "fund_currency": "USD",
+    "ter_numeric": 0.11,
+    "available_tickers": [
+      "XGDU",
+      "XGDU",
+      "XGDU",
+      "XGDP"
+    ],
+    "yahoo_ticker": "XGDU"
+  },
+  {
+    "isin": "LU0274209237",
+    "name": "Xtrackers MSCI Europe UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 5904.0,
+    "primary_ticker": "XMEU",
+    "exchange_1_ticker": "XMEU",
+    "exchange_2_ticker": "XMEU",
+    "exchange_3_ticker": "XMEU",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "XMEU",
+      "XMEU",
+      "XMEU",
+      "XMEU"
+    ],
+    "yahoo_ticker": "XMEU"
+  },
+  {
+    "isin": "IE00B60SX170",
+    "name": "Invesco MSCI USA UCITS ETF",
+    "fund_provider": "Invesco",
+    "fund_size_numeric": 5864.0,
+    "primary_ticker": "SC0H",
+    "exchange_1_ticker": "SC0H",
+    "exchange_2_ticker": "SC0H",
+    "exchange_3_ticker": "MXUS",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.05,
+    "available_tickers": [
+      "SC0H",
+      "SC0H",
+      "SC0H",
+      "MXUS"
+    ],
+    "yahoo_ticker": "SC0H"
+  },
+  {
+    "isin": "IE00BZ02LR44",
+    "name": "Xtrackers MSCI World ESG UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 5804.0,
+    "primary_ticker": "XZW0",
+    "exchange_1_ticker": "XZW0",
+    "exchange_2_ticker": "XZW0",
+    "exchange_3_ticker": "XZW0",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "XZW0",
+      "XZW0",
+      "XZW0",
+      "XZW0"
+    ],
+    "yahoo_ticker": "XZW0"
+  },
+  {
+    "isin": "IE00B3VWN393",
+    "name": "iShares USD Treasury Bond 3-7yr UCITS ETF (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 5787.0,
+    "primary_ticker": "CU71",
+    "exchange_1_ticker": "CU71",
+    "exchange_2_ticker": "SXRL",
+    "exchange_3_ticker": "-",
+    "category": "Dluhopisy",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "CU71",
+      "CU71",
+      "SXRL",
+      "-"
+    ],
+    "yahoo_ticker": "CU71"
+  },
+  {
+    "isin": "IE00BF4G6Y48",
+    "name": "JPMorgan Global Research Enhanced Index Equity (ESG) UCITS ETF USD (acc)",
+    "fund_provider": "JPMorgan",
+    "fund_size_numeric": 5779.0,
+    "primary_ticker": "JREG",
+    "exchange_1_ticker": "JREG",
+    "exchange_2_ticker": "JREG",
+    "exchange_3_ticker": "JREG",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.25,
+    "available_tickers": [
+      "JREG",
+      "JREG",
+      "JREG",
+      "JREG"
+    ],
+    "yahoo_ticker": "JREG"
+  },
+  {
+    "isin": "IE00B8GKDB10",
+    "name": "Vanguard FTSE All-World High Dividend Yield UCITS ETF Distributing",
+    "fund_provider": "Vanguard",
+    "fund_size_numeric": 5733.0,
+    "primary_ticker": "VHYL",
+    "exchange_1_ticker": "VHYL",
+    "exchange_2_ticker": "VGWD",
+    "exchange_3_ticker": "VGWD",
+    "category": "Dluhopisy",
+    "fund_currency": "USD",
+    "ter_numeric": 0.29,
+    "available_tickers": [
+      "VHYL",
+      "VHYL",
+      "VGWD",
+      "VGWD"
+    ],
+    "yahoo_ticker": "VHYL"
+  },
+  {
+    "isin": "IE00B4L5YX21",
+    "name": "iShares Core MSCI Japan IMI UCITS ETF",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 5667.0,
+    "primary_ticker": "SJPA",
+    "exchange_1_ticker": "SJPA",
+    "exchange_2_ticker": "EUNN",
+    "exchange_3_ticker": "EUNN",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "SJPA",
+      "SJPA",
+      "EUNN",
+      "EUNN"
+    ],
+    "yahoo_ticker": "SJPA"
+  },
+  {
+    "isin": "JE00B1VS3770",
+    "name": "WisdomTree Physical Gold",
+    "fund_provider": "WisdomTree",
+    "fund_size_numeric": 5614.0,
+    "primary_ticker": "PHAU",
+    "exchange_1_ticker": "PHAU",
+    "exchange_2_ticker": "PHAU",
+    "exchange_3_ticker": "PHGP",
+    "category": "Komodity",
+    "fund_currency": "USD",
+    "ter_numeric": 0.39,
+    "available_tickers": [
+      "PHAU",
+      "PHAU",
+      "PHAU",
+      "PHGP"
+    ],
+    "yahoo_ticker": "PHAU"
+  },
+  {
+    "isin": "IE00B53L3W79",
+    "name": "iShares Core EURO STOXX 50 UCITS ETF EUR (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 5604.0,
+    "primary_ticker": "CS51",
+    "exchange_1_ticker": "CS51",
+    "exchange_2_ticker": "SXRT",
+    "exchange_3_ticker": "SXRT",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.1,
+    "available_tickers": [
+      "CS51",
+      "CS51",
+      "SXRT",
+      "SXRT"
+    ],
+    "yahoo_ticker": "CS51"
+  },
+  {
+    "isin": "IE00B66F4759",
+    "name": "iShares EUR High Yield Corporate Bond UCITS ETF EUR (Dist)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 5584.0,
+    "primary_ticker": "EUNW",
+    "exchange_1_ticker": "EUNW",
+    "exchange_2_ticker": "EUNW",
+    "exchange_3_ticker": "-",
+    "category": "Dluhopisy",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.5,
+    "available_tickers": [
+      "EUNW",
+      "EUNW",
+      "EUNW",
+      "-"
+    ],
+    "yahoo_ticker": "EUNW"
+  },
+  {
+    "isin": "IE00BHZPJ239",
+    "name": "iShares MSCI EM ESG Enhanced CTB UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 5565.0,
+    "primary_ticker": "EDM2",
+    "exchange_1_ticker": "EDM2",
+    "exchange_2_ticker": "-",
+    "exchange_3_ticker": "EMEG",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.18,
+    "available_tickers": [
+      "EDM2",
+      "EDM2",
+      "-",
+      "EMEG"
+    ],
+    "yahoo_ticker": "EDM2"
+  },
+  {
+    "isin": "IE00BF4RFH31",
+    "name": "iShares MSCI World Small Cap UCITS ETF",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 5504.0,
+    "primary_ticker": "IUSN",
+    "exchange_1_ticker": "IUSN",
+    "exchange_2_ticker": "IUSN",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.35,
+    "available_tickers": [
+      "IUSN",
+      "IUSN",
+      "IUSN",
+      "-"
+    ],
+    "yahoo_ticker": "IUSN"
+  },
+  {
+    "isin": "LU2572257124",
+    "name": "Amundi Core MSCI World Swap UCITS ETF Dist",
+    "fund_provider": "Amundi",
+    "fund_size_numeric": 5481.0,
+    "primary_ticker": "AHYQ",
+    "exchange_1_ticker": "AHYQ",
+    "exchange_2_ticker": "MSCW",
+    "exchange_3_ticker": "AHYR",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "AHYQ",
+      "AHYQ",
+      "MSCW",
+      "AHYR"
+    ],
+    "yahoo_ticker": "AHYQ"
+  },
+  {
+    "isin": "LU2009147757",
+    "name": "Xtrackers S&P 500 Swap UCITS ETF 1D",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 5307.0,
+    "primary_ticker": "XSXD",
+    "exchange_1_ticker": "XSXD",
+    "exchange_2_ticker": "XSXD",
+    "exchange_3_ticker": "XSXD",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "XSXD",
+      "XSXD",
+      "XSXD",
+      "XSXD"
+    ],
+    "yahoo_ticker": "XSXD"
+  },
+  {
+    "isin": "IE00BGV5VN51",
+    "name": "Xtrackers Artificial Intelligence & Big Data UCITS ETF 1C 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 5300.0,
+    "primary_ticker": "XAIX",
+    "exchange_1_ticker": "XAIX",
+    "exchange_2_ticker": "XAIX",
+    "exchange_3_ticker": "XAID",
+    "category": "Ostatní",
+    "fund_currency": "USD",
+    "ter_numeric": 0.35,
+    "available_tickers": [
+      "XAIX",
+      "XAIX",
+      "XAIX",
+      "XAID"
+    ],
+    "yahoo_ticker": "XAIX"
+  },
+  {
+    "isin": "IE00BYXPSP02",
+    "name": "iShares USD Treasury Bond 1-3yr UCITS ETF (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 5276.0,
+    "primary_ticker": "IS0F",
+    "exchange_1_ticker": "IS0F",
+    "exchange_2_ticker": "-",
+    "exchange_3_ticker": "IBTA",
+    "category": "Dluhopisy",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "IS0F",
+      "IS0F",
+      "-",
+      "IBTA"
+    ],
+    "yahoo_ticker": "IS0F"
+  },
+  {
+    "isin": "IE00B0M63177",
+    "name": "iShares MSCI EM UCITS ETF (Dist)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 5271.0,
+    "primary_ticker": "IEEM",
+    "exchange_1_ticker": "IEEM",
+    "exchange_2_ticker": "IQQE",
+    "exchange_3_ticker": "IQQE",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.18,
+    "available_tickers": [
+      "IEEM",
+      "IEEM",
+      "IQQE",
+      "IQQE"
+    ],
+    "yahoo_ticker": "IEEM"
+  },
+  {
+    "isin": "IE00B53QG562",
+    "name": "iShares Core MSCI EMU UCITS ETF EUR (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 5125.0,
+    "primary_ticker": "CEU1",
+    "exchange_1_ticker": "CEU1",
+    "exchange_2_ticker": "SXR7",
+    "exchange_3_ticker": "SXR7",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "CEU1",
+      "CEU1",
+      "SXR7",
+      "SXR7"
+    ],
+    "yahoo_ticker": "CEU1"
+  },
+  {
+    "isin": "LU0380865021",
+    "name": "Xtrackers EURO STOXX 50 UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 5112.0,
+    "primary_ticker": "XESC",
+    "exchange_1_ticker": "XESC",
+    "exchange_2_ticker": "XESC",
+    "exchange_3_ticker": "XESC",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.09,
+    "available_tickers": [
+      "XESC",
+      "XESC",
+      "XESC",
+      "XESC"
+    ],
+    "yahoo_ticker": "XESC"
+  },
+  {
+    "isin": "LU1681043599",
+    "name": "Amundi MSCI World Swap UCITS ETF EUR Acc",
+    "fund_provider": "Amundi",
+    "fund_size_numeric": 5059.0,
+    "primary_ticker": "AMEW",
+    "exchange_1_ticker": "AMEW",
+    "exchange_2_ticker": "AMEW",
+    "exchange_3_ticker": "CW8",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.38,
+    "available_tickers": [
+      "AMEW",
+      "AMEW",
+      "AMEW",
+      "CW8"
+    ],
+    "yahoo_ticker": "AMEW"
+  },
+  {
+    "isin": "LU0274211217",
+    "name": "Xtrackers EURO STOXX 50 UCITS ETF 1D",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 5000.0,
+    "primary_ticker": "XESX",
+    "exchange_1_ticker": "XESX",
+    "exchange_2_ticker": "XESX",
+    "exchange_3_ticker": "XESX",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.09,
+    "available_tickers": [
+      "XESX",
+      "XESX",
+      "XESX",
+      "XESX"
+    ],
+    "yahoo_ticker": "XESX"
+  },
+  {
+    "isin": "IE00B4L5YC18",
+    "name": "iShares MSCI EM UCITS ETF (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 4702.0,
+    "primary_ticker": "SEMA",
+    "exchange_1_ticker": "SEMA",
+    "exchange_2_ticker": "EUNM",
+    "exchange_3_ticker": "EUNM",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.18,
+    "available_tickers": [
+      "SEMA",
+      "SEMA",
+      "EUNM",
+      "EUNM"
+    ],
+    "yahoo_ticker": "SEMA"
+  },
+  {
+    "isin": "IE00BM67HT60",
+    "name": "Xtrackers MSCI World Information Technology UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 4674.0,
+    "primary_ticker": "XDWT",
+    "exchange_1_ticker": "XDWT",
+    "exchange_2_ticker": "XDWT",
+    "exchange_3_ticker": "XDWT",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.25,
+    "available_tickers": [
+      "XDWT",
+      "XDWT",
+      "XDWT",
+      "XDWT"
+    ],
+    "yahoo_ticker": "XDWT"
+  },
+  {
+    "isin": "IE00BZCQB185",
+    "name": "iShares MSCI India UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 4665.0,
+    "primary_ticker": "QDV5",
+    "exchange_1_ticker": "QDV5",
+    "exchange_2_ticker": "QDV5",
+    "exchange_3_ticker": "NDIA",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.65,
+    "available_tickers": [
+      "QDV5",
+      "QDV5",
+      "QDV5",
+      "NDIA"
+    ],
+    "yahoo_ticker": "QDV5"
+  },
+  {
+    "isin": "LU0274208692",
+    "name": "Xtrackers MSCI World Swap UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 4657.0,
+    "primary_ticker": "DBXW",
+    "exchange_1_ticker": "DBXW",
+    "exchange_2_ticker": "XMWO",
+    "exchange_3_ticker": "XMWD",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.45,
+    "available_tickers": [
+      "DBXW",
+      "DBXW",
+      "XMWO",
+      "XMWD"
+    ],
+    "yahoo_ticker": "DBXW"
+  },
+  {
+    "isin": "IE00B441G979",
+    "name": "iShares MSCI World EUR Hedged UCITS ETF (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 4651.0,
+    "primary_ticker": "IBCH",
+    "exchange_1_ticker": "IBCH",
+    "exchange_2_ticker": "IBCH",
+    "exchange_3_ticker": "IWDE",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.55,
+    "available_tickers": [
+      "IBCH",
+      "IBCH",
+      "IBCH",
+      "IWDE"
+    ],
+    "yahoo_ticker": "IBCH"
+  },
+  {
+    "isin": "IE0008471009",
+    "name": "iShares Core EURO STOXX 50 UCITS ETF EUR (Dist)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 4576.0,
+    "primary_ticker": "EUE",
+    "exchange_1_ticker": "EUE",
+    "exchange_2_ticker": "EUN2",
+    "exchange_3_ticker": "EUN2",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.1,
+    "available_tickers": [
+      "EUE",
+      "EUE",
+      "EUN2",
+      "EUN2"
+    ],
+    "yahoo_ticker": "EUE"
+  },
+  {
+    "isin": "IE00BYXYYP94",
+    "name": "iShares USD Short Duration Corporate Bond UCITS ETF (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 4569.0,
+    "primary_ticker": "IS09",
+    "exchange_1_ticker": "IS09",
+    "exchange_2_ticker": "-",
+    "exchange_3_ticker": "SDIA",
+    "category": "Dluhopisy",
+    "fund_currency": "USD",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "IS09",
+      "IS09",
+      "-",
+      "SDIA"
+    ],
+    "yahoo_ticker": "IS09"
+  },
+  {
+    "isin": "IE00BFNM3P36",
+    "name": "iShares MSCI EM IMI Screened UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 4517.0,
+    "primary_ticker": "AYEM",
+    "exchange_1_ticker": "AYEM",
+    "exchange_2_ticker": "SEGM",
+    "exchange_3_ticker": "AYEM",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.18,
+    "available_tickers": [
+      "AYEM",
+      "AYEM",
+      "SEGM",
+      "AYEM"
+    ],
+    "yahoo_ticker": "AYEM"
+  },
+  {
+    "isin": "IE00B810Q511",
+    "name": "Vanguard FTSE 100 UCITS ETF (GBP) Distributing",
+    "fund_provider": "Vanguard",
+    "fund_size_numeric": 4460.0,
+    "primary_ticker": "VUKE",
+    "exchange_1_ticker": "VUKE",
+    "exchange_2_ticker": "VUKE",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "GBP",
+    "ter_numeric": 0.09,
+    "available_tickers": [
+      "VUKE",
+      "VUKE",
+      "VUKE",
+      "-"
+    ],
+    "yahoo_ticker": "VUKE"
+  },
+  {
+    "isin": "IE00BH4GPZ28",
+    "name": "SPDR S&P 500 Leaders UCITS ETF USD Unhedged (Acc)",
+    "fund_provider": "SPDR",
+    "fund_size_numeric": 4357.0,
+    "primary_ticker": "SPPY",
+    "exchange_1_ticker": "SPPY",
+    "exchange_2_ticker": "500X",
+    "exchange_3_ticker": "500X",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.03,
+    "available_tickers": [
+      "SPPY",
+      "SPPY",
+      "500X",
+      "500X"
+    ],
+    "yahoo_ticker": "SPPY"
+  },
+  {
+    "isin": "IE00BGHQ0G80",
+    "name": "Xtrackers MSCI AC World Screened UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 4330.0,
+    "primary_ticker": "XMAW",
+    "exchange_1_ticker": "XMAW",
+    "exchange_2_ticker": "XMAW",
+    "exchange_3_ticker": "XMAW",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.25,
+    "available_tickers": [
+      "XMAW",
+      "XMAW",
+      "XMAW",
+      "XMAW"
+    ],
+    "yahoo_ticker": "XMAW"
+  },
+  {
+    "isin": "IE00BK5BQV03",
+    "name": "Vanguard FTSE Developed World UCITS ETF Acc",
+    "fund_provider": "Vanguard",
+    "fund_size_numeric": 4293.0,
+    "primary_ticker": "VGVF",
+    "exchange_1_ticker": "VGVF",
+    "exchange_2_ticker": "VHVE",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "VGVF",
+      "VGVF",
+      "VHVE",
+      "-"
+    ],
+    "yahoo_ticker": "VGVF"
+  },
+  {
+    "isin": "LU1781541252",
+    "name": "Amundi Core MSCI Japan UCITS ETF Acc",
+    "fund_provider": "Amundi",
+    "fund_size_numeric": 4231.0,
+    "primary_ticker": "LCJP",
+    "exchange_1_ticker": "LCJP",
+    "exchange_2_ticker": "LCUJ",
+    "exchange_3_ticker": "LCUJ",
+    "category": "Akcie",
+    "fund_currency": "JPY",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "LCJP",
+      "LCJP",
+      "LCUJ",
+      "LCUJ"
+    ],
+    "yahoo_ticker": "LCJP"
+  },
+  {
+    "isin": "IE00BK1PV551",
+    "name": "Xtrackers MSCI World UCITS ETF 1D",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 4153.0,
+    "primary_ticker": "XDWL",
+    "exchange_1_ticker": "XDWL",
+    "exchange_2_ticker": "XDWL",
+    "exchange_3_ticker": "XDWL",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "XDWL",
+      "XDWL",
+      "XDWL",
+      "XDWL"
+    ],
+    "yahoo_ticker": "XDWL"
+  },
+  {
+    "isin": "IE00BHZPJ569",
+    "name": "iShares MSCI World ESG Enhanced CTB UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 4134.0,
+    "primary_ticker": "EDMW",
+    "exchange_1_ticker": "EDMW",
+    "exchange_2_ticker": "-",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "EDMW",
+      "EDMW",
+      "-",
+      "-"
+    ],
+    "yahoo_ticker": "EDMW"
+  },
+  {
+    "isin": "IE00BFNM3D14",
+    "name": "iShares MSCI Europe Screened UCITS ETF EUR (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 4030.0,
+    "primary_ticker": "SLMC",
+    "exchange_1_ticker": "SLMC",
+    "exchange_2_ticker": "SLMC",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "SLMC",
+      "SLMC",
+      "SLMC",
+      "-"
+    ],
+    "yahoo_ticker": "SLMC"
+  },
+  {
+    "isin": "IE00B3VWN518",
+    "name": "iShares USD Treasury Bond 7-10yr UCITS ETF (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 3982.0,
+    "primary_ticker": "-",
+    "exchange_1_ticker": "-",
+    "exchange_2_ticker": "-",
+    "exchange_3_ticker": "CBU0",
+    "category": "Dluhopisy",
+    "fund_currency": "USD",
+    "ter_numeric": 0.07,
+    "available_tickers": [
+      "-",
+      "-",
+      "-",
+      "CBU0"
+    ],
+    "yahoo_ticker": "-"
+  },
+  {
+    "isin": "LU0274210672",
+    "name": "Xtrackers MSCI USA Swap UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 3974.0,
+    "primary_ticker": "XMUS",
+    "exchange_1_ticker": "XMUS",
+    "exchange_2_ticker": "XMUS",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.15,
+    "available_tickers": [
+      "XMUS",
+      "XMUS",
+      "XMUS",
+      "-"
+    ],
+    "yahoo_ticker": "XMUS"
+  },
+  {
+    "isin": "IE00B44Z5B48",
+    "name": "SPDR MSCI All Country World UCITS ETF (Acc)",
+    "fund_provider": "SPDR",
+    "fund_size_numeric": 3952.0,
+    "primary_ticker": "SPYY",
+    "exchange_1_ticker": "SPYY",
+    "exchange_2_ticker": "SPYY",
+    "exchange_3_ticker": "ACWE",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "SPYY",
+      "SPYY",
+      "SPYY",
+      "ACWE"
+    ],
+    "yahoo_ticker": "SPYY"
+  },
+  {
+    "isin": "LU0629459743",
+    "name": "UBS MSCI World Socially Responsible UCITS ETF USD dis",
+    "fund_provider": "UBS",
+    "fund_size_numeric": 3937.0,
+    "primary_ticker": "UIMM",
+    "exchange_1_ticker": "UIMM",
+    "exchange_2_ticker": "UIMM",
+    "exchange_3_ticker": "WSREUA",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.22,
+    "available_tickers": [
+      "UIMM",
+      "UIMM",
+      "UIMM",
+      "WSREUA"
+    ],
+    "yahoo_ticker": "UIMM"
+  },
+  {
+    "isin": "IE000KXCEXR3",
+    "name": "Amundi S&P 500 Screened UCITS ETF Acc",
+    "fund_provider": "Amundi",
+    "fund_size_numeric": 3924.0,
+    "primary_ticker": "S500",
+    "exchange_1_ticker": "S500",
+    "exchange_2_ticker": "F500",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "S500",
+      "S500",
+      "F500",
+      "-"
+    ],
+    "yahoo_ticker": "S500"
+  },
+  {
+    "isin": "IE00BFNM3J75",
+    "name": "iShares MSCI World Screened UCITS ETF USD (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 3883.0,
+    "primary_ticker": "SNAW",
+    "exchange_1_ticker": "SNAW",
+    "exchange_2_ticker": "SNAW",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "SNAW",
+      "SNAW",
+      "SNAW",
+      "-"
+    ],
+    "yahoo_ticker": "SNAW"
+  },
+  {
+    "isin": "DE000ETFL508",
+    "name": "Deka MSCI World UCITS ETF Distribution",
+    "fund_provider": "",
+    "fund_size_numeric": 3863.0,
+    "primary_ticker": "ELFW",
+    "exchange_1_ticker": "ELFW",
+    "exchange_2_ticker": "ELFW",
+    "exchange_3_ticker": "ELFW",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.31,
+    "available_tickers": [
+      "ELFW",
+      "ELFW",
+      "ELFW",
+      "ELFW"
+    ],
+    "yahoo_ticker": "ELFW"
+  },
+  {
+    "isin": "JE00B588CD74",
+    "name": "WisdomTree Physical Swiss Gold",
+    "fund_provider": "WisdomTree",
+    "fund_size_numeric": 3846.0,
+    "primary_ticker": "SGBS",
+    "exchange_1_ticker": "SGBS",
+    "exchange_2_ticker": "SGBS",
+    "exchange_3_ticker": "SGBX",
+    "category": "Komodity",
+    "fund_currency": "USD",
+    "ter_numeric": 0.15,
+    "available_tickers": [
+      "SGBS",
+      "SGBS",
+      "SGBS",
+      "SGBX"
+    ],
+    "yahoo_ticker": "SGBS"
+  },
+  {
+    "isin": "LU0950674175",
+    "name": "UBS Core MSCI EM UCITS ETF USD acc",
+    "fund_provider": "UBS",
+    "fund_size_numeric": 3836.0,
+    "primary_ticker": "-",
+    "exchange_1_ticker": "-",
+    "exchange_2_ticker": "EMMUSC",
+    "exchange_3_ticker": "EMMUSC",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.15,
+    "available_tickers": [
+      "-",
+      "-",
+      "EMMUSC",
+      "EMMUSC"
+    ],
+    "yahoo_ticker": "-"
+  },
+  {
+    "isin": "IE00B945VV12",
+    "name": "Vanguard FTSE Developed Europe UCITS ETF Distributing",
+    "fund_provider": "Vanguard",
+    "fund_size_numeric": 3779.0,
+    "primary_ticker": "VEUR",
+    "exchange_1_ticker": "VEUR",
+    "exchange_2_ticker": "VGEU",
+    "exchange_3_ticker": "VGEU",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.1,
+    "available_tickers": [
+      "VEUR",
+      "VEUR",
+      "VGEU",
+      "VGEU"
+    ],
+    "yahoo_ticker": "VEUR"
+  },
+  {
+    "isin": "IE00B2NPKV68",
+    "name": "iShares J.P. Morgan USD Emerging Markets Bond UCITS ETF (Dist)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 3762.0,
+    "primary_ticker": "SEMB",
+    "exchange_1_ticker": "SEMB",
+    "exchange_2_ticker": "IUS7",
+    "exchange_3_ticker": "IUS7",
+    "category": "Dluhopisy",
+    "fund_currency": "USD",
+    "ter_numeric": 0.45,
+    "available_tickers": [
+      "SEMB",
+      "SEMB",
+      "IUS7",
+      "IUS7"
+    ],
+    "yahoo_ticker": "SEMB"
+  },
+  {
+    "isin": "LU0490618542",
+    "name": "Xtrackers S&P 500 Swap UCITS ETF 1C",
+    "fund_provider": "Xtrackers",
+    "fund_size_numeric": 3741.0,
+    "primary_ticker": "D5BM",
+    "exchange_1_ticker": "D5BM",
+    "exchange_2_ticker": "D5BM",
+    "exchange_3_ticker": "XSPX",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.15,
+    "available_tickers": [
+      "D5BM",
+      "D5BM",
+      "D5BM",
+      "XSPX"
+    ],
+    "yahoo_ticker": "D5BM"
+  },
+  {
+    "isin": "IE00B5L8K969",
+    "name": "iShares MSCI EM Asia UCITS ETF (Acc)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 3734.0,
+    "primary_ticker": "CEA1",
+    "exchange_1_ticker": "CEA1",
+    "exchange_2_ticker": "CEBL",
+    "exchange_3_ticker": "CEBL",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.2,
+    "available_tickers": [
+      "CEA1",
+      "CEA1",
+      "CEBL",
+      "CEBL"
+    ],
+    "yahoo_ticker": "CEA1"
+  },
+  {
+    "isin": "IE00BHZPJ676",
+    "name": "iShares MSCI Europe ESG Enhanced CTB UCITS ETF EUR (Dist)",
+    "fund_provider": "iShares",
+    "fund_size_numeric": 3733.0,
+    "primary_ticker": "EMNU",
+    "exchange_1_ticker": "EMNU",
+    "exchange_2_ticker": "EMNU",
+    "exchange_3_ticker": "EEUD",
+    "category": "Akcie",
+    "fund_currency": "EUR",
+    "ter_numeric": 0.12,
+    "available_tickers": [
+      "EMNU",
+      "EMNU",
+      "EMNU",
+      "EEUD"
+    ],
+    "yahoo_ticker": "EMNU"
+  },
+  {
+    "isin": "IE00B4YBJ215",
+    "name": "SPDR S&P 400 U.S. Mid Cap UCITS ETF USD Unhedged (Acc)",
+    "fund_provider": "SPDR",
+    "fund_size_numeric": 3719.0,
+    "primary_ticker": "SPY4",
+    "exchange_1_ticker": "SPY4",
+    "exchange_2_ticker": "SPY4",
+    "exchange_3_ticker": "-",
+    "category": "Akcie",
+    "fund_currency": "USD",
+    "ter_numeric": 0.3,
+    "available_tickers": [
+      "SPY4",
+      "SPY4",
+      "SPY4",
+      "-"
+    ],
+    "yahoo_ticker": "SPY4"
+  },
+  {
+    "isin": "IE00BK5BR626",
+    "yahoo_ticker": "VFEM.DE",
+    "name": "Vanguard FTSE Emerging Markets",
+    "manual": true
+  }
+]

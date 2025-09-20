@@ -11,6 +11,7 @@ interface SEOHeadProps {
   modifiedTime?: string;
   author?: string;
   schema?: object;
+  structuredData?: object;
 }
 
 const SEOHead: React.FC<SEOHeadProps> = ({
@@ -23,7 +24,8 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   publishedTime,
   modifiedTime,
   author,
-  schema
+  schema,
+  structuredData
 }) => {
   useEffect(() => {
     // Set document title

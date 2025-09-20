@@ -1,0 +1,135 @@
+{
+  "timestamp": "2025-09-20T06:37:37.763071",
+  "european_etfs": [
+    {
+      "ticker": "VWCE.DE",
+      "history_available": true,
+      "total_days": 1276,
+      "start_date": "2020-09-21",
+      "end_date": "2025-09-19",
+      "has_dividends": false,
+      "dividend_count": 0,
+      "has_splits": false
+    },
+    {
+      "ticker": "CSPX.L",
+      "history_available": true,
+      "total_days": 1262,
+      "start_date": "2020-09-21",
+      "end_date": "2025-09-19",
+      "has_dividends": false,
+      "dividend_count": 0,
+      "has_splits": false
+    },
+    {
+      "ticker": "EUNL.DE",
+      "history_available": true,
+      "total_days": 1276,
+      "start_date": "2020-09-21",
+      "end_date": "2025-09-19",
+      "has_dividends": false,
+      "dividend_count": 0,
+      "has_splits": false
+    },
+    {
+      "ticker": "VFEM.DE",
+      "history_available": true,
+      "total_days": 1276,
+      "start_date": "2020-09-21",
+      "end_date": "2025-09-19",
+      "has_dividends": true,
+      "dividend_count": 31,
+      "has_splits": false
+    }
+  ],
+  "us_etfs": [
+    {
+      "ticker": "SPY",
+      "history_available": true,
+      "total_days": 8217,
+      "start_date": "1993-01-29",
+      "end_date": "2025-09-19",
+      "has_dividends": true,
+      "dividend_count": 132,
+      "has_splits": false
+    },
+    {
+      "ticker": "VTI",
+      "history_available": true,
+      "total_days": 6102,
+      "start_date": "2001-06-15",
+      "end_date": "2025-09-19",
+      "has_dividends": true,
+      "dividend_count": 97,
+      "has_splits": true
+    },
+    {
+      "ticker": "QQQ",
+      "history_available": true,
+      "total_days": 6675,
+      "start_date": "1999-03-10",
+      "end_date": "2025-09-19",
+      "has_dividends": true,
+      "dividend_count": 85,
+      "has_splits": true
+    },
+    {
+      "ticker": "IVV",
+      "history_available": true,
+      "total_days": 6372,
+      "start_date": "2000-05-19",
+      "end_date": "2025-09-19",
+      "has_dividends": true,
+      "dividend_count": 104,
+      "has_splits": false
+    },
+    {
+      "ticker": "VOO",
+      "history_available": true,
+      "total_days": 3781,
+      "start_date": "2010-09-09",
+      "end_date": "2025-09-19",
+      "has_dividends": true,
+      "dividend_count": 59,
+      "has_splits": true
+    }
+  ],
+  "data_volume_analysis": {
+    "1y": {
+      "days": 250,
+      "size_mb": 0.0171661376953125,
+      "start": "2024-09-20",
+      "end": "2025-09-19"
+    },
+    "2y": {
+      "days": 502,
+      "size_mb": 0.0344696044921875,
+      "start": "2023-09-20",
+      "end": "2025-09-19"
+    },
+    "5y": {
+      "days": 1256,
+      "size_mb": 0.08624267578125,
+      "start": "2020-09-21",
+      "end": "2025-09-19"
+    },
+    "10y": {
+      "days": 2515,
+      "size_mb": 0.17269134521484375,
+      "start": "2015-09-21",
+      "end": "2025-09-19"
+    },
+    "max": {
+      "days": 8217,
+      "size_mb": 0.5642166137695312,
+      "start": "1993-01-29",
+      "end": "2025-09-19"
+    }
+  },
+  "summary": {
+    "total_tested": 9,
+    "successful": 9,
+    "avg_days": 4026.3333333333335,
+    "oldest_date": "1993-01-29"
+  }
+}
