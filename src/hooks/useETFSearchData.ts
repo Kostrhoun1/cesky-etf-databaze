@@ -65,7 +65,6 @@ export const useETFSearchData = () => {
     maxTerFromData,
     totalETFCount, // Pro zobrazení celkového počtu
     isLoading,
-    isLoadingComplete, // True když jsou načtená všechna data
     lastUpdated
   };
 };
