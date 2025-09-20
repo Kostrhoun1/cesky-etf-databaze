@@ -56,7 +56,7 @@ const AkciovePage: React.FC = () => {
         description="Komplexní průvodce akciovou portfolio strategií s 95% alokací do akcií. Historická performance, implementace a tipy pro české investory."
         keywords="akciové portfolio, růstová strategie, ETF akcie, vysoké výnosy, investování do akcií, portfolio management"
         canonical="https://etfpruvodce.cz/portfolio-strategie/akciove-portfolio"
-        structuredData={{
+        schema={{
           "@context": "https://schema.org",
           "@type": "FinancialProduct",
           "name": "Akciové Portfolio",

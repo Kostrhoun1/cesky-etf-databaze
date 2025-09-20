@@ -52,7 +52,7 @@ const BoglheadsThreeFundPage: React.FC = () => {
         description="Podrobný průvodce Bogleheads Three-Fund Portfolio strategií. Reálná performance, složení, implementace a tipy pro české investory."
         keywords="Bogleheads Three-Fund, ETF portfolio, John Bogle, pasivní investování, diverzifikace, investiční strategie"
         canonical="https://etfpruvodce.cz/portfolio-strategie/bogleheads-three-fund"
-        structuredData={{
+        schema={{
           "@context": "https://schema.org",
           "@type": "FinancialProduct",
           "name": "Bogleheads Three-Fund Portfolio",
