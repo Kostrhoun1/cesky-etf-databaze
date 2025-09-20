@@ -50,6 +50,7 @@ import NewsletterUnsubscribe from "./pages/NewsletterUnsubscribe";
 import NewsletterAdminPage from "./pages/NewsletterAdminPage";
 import PublicETFAdminPage from "./pages/PublicETFAdminPage";
 import SitemapXML from "./pages/SitemapXML";
+import InfographicsGenerator from "./pages/InfographicsGenerator";
 import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -108,6 +109,7 @@ function App() {
             <Route path="/newsletter/unsubscribe" element={<NewsletterUnsubscribe />} />
             <Route path="/admin/newsletter" element={<NewsletterAdminPage />} />
             <Route path="/database-management-secure-2024" element={<PublicETFAdminPage />} />
+            <Route path="/admin/infografiky" element={<InfographicsGenerator />} />
             <Route path="/sitemap.xml" element={<SitemapXML />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -1804,19 +1804,7 @@ class CompleteProductionScraper:
             etf.category = 'Krypto'
             return
         
-        # 2. DLUHOPISOVÉ ETF
-        bond_keywords = [
-            'bond', 'bonds', 'government', 'corporate', 'treasury', 'gilt',
-            'bund', 'sovereign', 'credit', 'fixed income', 'duration',
-            'maturity', 'yield', 'bloomberg', 'barclays', 'aggregate'
-        ]
-        
-        if any(keyword in name_lower for keyword in bond_keywords) or \
-           any(keyword in index_lower for keyword in bond_keywords):
-            etf.category = 'Dluhopisy'
-            return
-        
-        # 3. NEMOVITOSTI (REIT) - MUSÍ BÝT PŘED OBECNOU AKCIÍ!
+        # 2. NEMOVITOSTI (REIT) - MUSÍ BÝT PŘED DLUHOPISY KVŮLI "YIELD"!
         real_estate_keywords = [
             'real estate', 'reit', 'property', 'infrastructure',
             'immobilien', 'immobilier', 'prop', 'properties', 'realestate',
@@ -1832,6 +1820,18 @@ class CompleteProductionScraper:
         if any(keyword in name_lower for keyword in real_estate_keywords) or \
            any(keyword in index_lower for keyword in real_estate_keywords):
             etf.category = 'Nemovitosti'
+            return
+        
+        # 3. DLUHOPISOVÉ ETF
+        bond_keywords = [
+            'bond', 'bonds', 'government', 'corporate', 'treasury', 'gilt',
+            'bund', 'sovereign', 'credit', 'fixed income', 'duration',
+            'maturity', 'yield', 'bloomberg', 'barclays', 'aggregate'
+        ]
+        
+        if any(keyword in name_lower for keyword in bond_keywords) or \
+           any(keyword in index_lower for keyword in bond_keywords):
+            etf.category = 'Dluhopisy'
             return
 
         # 4. AKCIOVÉ ETF
