@@ -13,11 +13,9 @@ const CurrencyImpactAnalyzer: React.FC = () => {
   const [usdAllocation, setUsdAllocation] = useState<number>(60);
   const [eurAllocation, setEurAllocation] = useState<number>(30);
   const [czkAllocation, setCzkAllocation] = useState<number>(10);
-  const [hedgedPercentage, setHedgedPercentage] = useState<number>(0);
   const [investmentHorizon, setInvestmentHorizon] = useState<number>(10);
   const [currentUsdCzk, setCurrentUsdCzk] = useState<number>(23.5);
   const [currentEurCzk, setCurrentEurCzk] = useState<number>(25.2);
-  const [riskTolerance, setRiskTolerance] = useState<'conservative' | 'moderate' | 'aggressive'>('moderate');
   const [results, setResults] = useState<CurrencyImpactData | null>(null);
 
   const handleCalculate = () => {
@@ -34,13 +32,11 @@ const CurrencyImpactAnalyzer: React.FC = () => {
         eur: normalizedEur,
         czk: normalizedCzk
       },
-      hedgedPercentage,
       investmentHorizon,
       currentRates: {
         usdCzk: currentUsdCzk,
         eurCzk: currentEurCzk
-      },
-      riskTolerance
+      }
     };
     
     const calculatedResults = calculateCurrencyImpact(params);
@@ -97,19 +93,6 @@ const CurrencyImpactAnalyzer: React.FC = () => {
                     max="30"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="riskTolerance">Tolerance rizika</Label>
-                  <Select value={riskTolerance} onValueChange={(value: 'conservative' | 'moderate' | 'aggressive') => setRiskTolerance(value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="conservative">Konzervativní</SelectItem>
-                      <SelectItem value="moderate">Střední</SelectItem>
-                      <SelectItem value="aggressive">Agresivní</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
               </CardContent>
             </Card>
 
@@ -152,10 +135,10 @@ const CurrencyImpactAnalyzer: React.FC = () => {
             </Card>
           </div>
 
-          {/* Měnová alokace */}
+          {/* Měnová expozice */}
           <Card className="bg-purple-50">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg">Měnová alokace portfolia</CardTitle>
+              <CardTitle className="text-lg">Měnová expozice portfolia (podle podkladových aktiv)</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid md:grid-cols-3 gap-4">
@@ -173,7 +156,7 @@ const CurrencyImpactAnalyzer: React.FC = () => {
                     max="100"
                   />
                   <p className="text-xs text-gray-600 mt-1">
-                    US ETF (VTI, SPY, QQQ, atd.)
+                    US akcie v jakémkoliv ETF (<a href="/etf/cspx" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CSPX</a>, VTI, SPY)
                   </p>
                 </div>
                 <div>
@@ -190,7 +173,7 @@ const CurrencyImpactAnalyzer: React.FC = () => {
                     max="100"
                   />
                   <p className="text-xs text-gray-600 mt-1">
-                    EU ETF (VWCE, CSPX, EUNL)
+                    Evropské akcie (<a href="/etf/eunl" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">EUNL</a>, SX5E, EXSA)
                   </p>
                 </div>
                 <div>
@@ -208,53 +191,28 @@ const CurrencyImpactAnalyzer: React.FC = () => {
                   </p>
                 </div>
               </div>
+              <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+                <p className="text-sm text-amber-800 mb-2">
+                  <strong>⚠️ Důležité:</strong> Zadejte expozici podle <strong>podkladových aktiv</strong>, ne podle měny fondu!
+                </p>
+                <p className="text-xs text-amber-700">
+                  Například: <a href="/etf/cspx" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CSPX</a> (EUR fond kupující US akcie) = 100% USD expozice
+                </p>
+              </div>
               <div className="flex items-center justify-between p-3 bg-purple-100 rounded-lg">
-                <span className="font-medium">Celková alokace:</span>
+                <span className="font-medium">Celková expozice:</span>
                 <span className={`font-bold ${isAllocationValid ? 'text-green-600' : 'text-red-600'}`}>
                   {totalAllocation.toFixed(1)}%
                 </span>
               </div>
               {!isAllocationValid && (
                 <p className="text-sm text-red-600">
-                  ⚠️ Celková alokace by měla být 100%. Automaticky se normalizuje při výpočtu.
+                  ⚠️ Celková expozice by měla být 100%. Automaticky se normalizuje při výpočtu.
                 </p>
               )}
             </CardContent>
           </Card>
 
-          {/* Hedging strategie */}
-          <Card className="bg-orange-50">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <TrendingDown className="h-5 w-5" />
-                Hedging strategie
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="hedgedPercentage">Hedged ETF podíl (%)</Label>
-                <Input
-                  id="hedgedPercentage"
-                  type="number"
-                  value={hedgedPercentage || ''}
-                  onChange={(e) => setHedgedPercentage(Number(e.target.value) || 0)}
-                  min="0"
-                  max="100"
-                />
-                <p className="text-xs text-gray-600 mt-1">
-                  Kolik procent portfolia je v currency-hedged ETF (např. VWCE vs VWCE-H)
-                </p>
-              </div>
-              <div className="bg-orange-100 p-3 rounded-lg">
-                <h4 className="font-semibold text-orange-800 mb-2">Hedging možnosti:</h4>
-                <div className="text-sm text-orange-700 space-y-1">
-                  <p>• <strong>0% hedged:</strong> Plná expozice k kurzovým změnám</p>
-                  <p>• <strong>50% hedged:</strong> Vyvážená strategie</p>
-                  <p>• <strong>100% hedged:</strong> Minimální kurzové riziko</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
           <Button onClick={handleCalculate} className="w-full" size="lg">
             Analyzovat kurzový dopad

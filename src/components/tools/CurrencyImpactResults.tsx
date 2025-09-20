@@ -41,7 +41,7 @@ const CurrencyImpactResults: React.FC<CurrencyImpactResultsProps> = ({ results }
   };
 
   const totalExposure = results.currentExposure.unhedgedUsd + results.currentExposure.unhedgedEur;
-  const totalPortfolio = totalExposure + results.currentExposure.hedgedAmount + results.currentExposure.czkAmount;
+  const totalPortfolio = totalExposure + results.currentExposure.czkAmount;
 
   return (
     <div className="space-y-6">
@@ -50,16 +50,16 @@ const CurrencyImpactResults: React.FC<CurrencyImpactResultsProps> = ({ results }
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <DollarSign className="h-5 w-5" />
-            Současná měnová expozice
+            Současná měnová expozice (podle podkladových aktiv)
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             <Card className="bg-red-50">
               <CardContent className="p-4 text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <DollarSign className="h-4 w-4 text-red-600" />
-                  <h4 className="font-semibold text-red-800">USD Nehedged</h4>
+                  <h4 className="font-semibold text-red-800">USD expozice</h4>
                 </div>
                 <p className="text-2xl font-bold text-red-600">
                   {formatCurrency(results.currentExposure.unhedgedUsd)}
@@ -74,7 +74,7 @@ const CurrencyImpactResults: React.FC<CurrencyImpactResultsProps> = ({ results }
               <CardContent className="p-4 text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <Euro className="h-4 w-4 text-blue-600" />
-                  <h4 className="font-semibold text-blue-800">EUR Nehedged</h4>
+                  <h4 className="font-semibold text-blue-800">EUR expozice</h4>
                 </div>
                 <p className="text-2xl font-bold text-blue-600">
                   {formatCurrency(results.currentExposure.unhedgedEur)}
@@ -85,20 +85,6 @@ const CurrencyImpactResults: React.FC<CurrencyImpactResultsProps> = ({ results }
               </CardContent>
             </Card>
 
-            <Card className="bg-green-50">
-              <CardContent className="p-4 text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <Shield className="h-4 w-4 text-green-600" />
-                  <h4 className="font-semibold text-green-800">Hedged</h4>
-                </div>
-                <p className="text-2xl font-bold text-green-600">
-                  {formatCurrency(results.currentExposure.hedgedAmount)}
-                </p>
-                <p className="text-sm text-green-700">
-                  {((results.currentExposure.hedgedAmount / totalPortfolio) * 100).toFixed(1)}% portfolia
-                </p>
-              </CardContent>
-            </Card>
 
             <Card className="bg-purple-50">
               <CardContent className="p-4 text-center">
@@ -189,165 +175,43 @@ const CurrencyImpactResults: React.FC<CurrencyImpactResultsProps> = ({ results }
         </CardContent>
       </Card>
 
-      {/* Doporučená strategie */}
-      <Card className={getStrategyColor(results.recommendations.strategy.type)}>
+      {/* Stručné shrnutí výsledků */}
+      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5" />
-            Doporučená hedging strategie
-          </CardTitle>
+          <CardTitle className="text-blue-800">📊 Shrnutí analýzy</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-xl font-bold mb-2">{results.recommendations.strategy.name}</h3>
-              <p className="text-gray-700 mb-4">{results.recommendations.strategy.description}</p>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="font-semibold">Optimální hedge ratio:</span>
-                <Badge variant="default" className="text-lg px-3 py-1">
-                  {results.recommendations.optimalHedgingRatio}%
-                </Badge>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600 mb-1">
+                {((totalExposure / totalPortfolio) * 100).toFixed(1)}%
               </div>
-              <p className="text-sm text-gray-600 italic">{results.recommendations.strategy.suitability}</p>
+              <div className="text-sm text-blue-700">Kurzová expozice</div>
             </div>
-            
-            <div className="space-y-4">
-              <div>
-                <h4 className="font-semibold text-green-800 mb-2">✅ Výhody:</h4>
-                <ul className="text-sm text-gray-700 space-y-1">
-                  {results.recommendations.strategy.pros.map((pro, idx) => (
-                    <li key={idx}>• {pro}</li>
-                  ))}
-                </ul>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-600 mb-1">
+                {results.riskMetrics.portfolioVolatility.toFixed(1)}%
               </div>
-              <div>
-                <h4 className="font-semibold text-red-800 mb-2">❌ Nevýhody:</h4>
-                <ul className="text-sm text-gray-700 space-y-1">
-                  {results.recommendations.strategy.cons.map((con, idx) => (
-                    <li key={idx}>• {con}</li>
-                  ))}
-                </ul>
+              <div className="text-sm text-orange-700">Celková volatilita</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-red-600 mb-1">
+                {formatCurrency(results.riskMetrics.valueAtRisk)}
               </div>
+              <div className="text-sm text-red-700">Value at Risk (95%)</div>
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* ETF doporučení */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Doporučené ETF podle strategie</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {results.recommendations.etfRecommendations.map((etf, index) => (
-              <Card key={index} className="border border-gray-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <h4 className="font-semibold text-lg">{etf.ticker}</h4>
-                      <Badge variant={etf.hedged ? 'default' : 'outline'}>
-                        {etf.currency} {etf.hedged ? 'Hedged' : 'Unhedged'}
-                      </Badge>
-                      <Badge variant="secondary">
-                        {etf.allocation.toFixed(1)}% alokace
-                      </Badge>
-                    </div>
-                  </div>
-                  <p className="font-medium text-gray-800 mb-2">{etf.name}</p>
-                  <p className="text-sm text-gray-600">{etf.reason}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Rizikové metriky */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5" />
-              Rizikové metriky
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Portfolio volatilita:</span>
-              <span className="font-semibold">{results.riskMetrics.portfolioVolatility.toFixed(1)}%</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Měnová volatilita:</span>
-              <span className="font-semibold">{(results.riskMetrics.currencyVolatility * 100).toFixed(1)}%</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Max drawdown (odhad):</span>
-              <span className="font-semibold text-red-600">{results.riskMetrics.maxDrawdown.toFixed(1)}%</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Value at Risk (95%):</span>
-              <span className="font-semibold text-orange-600">{formatCurrency(results.riskMetrics.valueAtRisk)}</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Historická analýza</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <h4 className="font-semibold text-red-800 mb-2">Nejhorší období: {results.historicalAnalysis.worstCase.period}</h4>
-              <p className="text-sm text-gray-700">
-                Portfolio dopad: <span className="font-semibold text-red-600">
-                  {formatPercentage(results.historicalAnalysis.worstCase.totalPortfolioImpact)}
-                </span>
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-green-800 mb-2">Nejlepší období: {results.historicalAnalysis.bestCase.period}</h4>
-              <p className="text-sm text-gray-700">
-                Portfolio dopad: <span className="font-semibold text-green-600">
-                  {formatPercentage(results.historicalAnalysis.bestCase.totalPortfolioImpact)}
-                </span>
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-800 mb-2">Průměrný roční dopad</h4>
-              <p className="text-sm text-gray-700">
-                <span className="font-semibold">{results.historicalAnalysis.averageImpact.toFixed(1)}%</span> ročně
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Implementační rada */}
-      <Card className="bg-blue-50 border-blue-200">
-        <CardHeader>
-          <CardTitle className="text-blue-800">💡 Implementační doporučení</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-semibold text-blue-800 mb-2">Okamžité kroky:</h4>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Přehodnotit současnou měnovou alokaci portfolia</li>
-                <li>• Zvážit přechod na {results.recommendations.optimalHedgingRatio}% hedged pozice</li>
-                <li>• Monitorovat kurzy EUR/CZK a USD/CZK</li>
-                <li>• Nastavit rebalancing pravidla</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-blue-800 mb-2">Dlouhodobá strategie:</h4>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Pravidelně revidovat hedging ratio každých 6-12 měsíců</li>
-                <li>• Sledovat změny v měnových trendech</li>
-                <li>• Diverzifikovat mezi různé měny a regiony</li>
-                <li>• Zvážit dynamický hedging při velkých kurzových změnách</li>
-              </ul>
-            </div>
+          
+          <div className="mt-4 p-3 bg-white rounded-lg border">
+            <p className="text-sm text-gray-700">
+              <strong>Klíčové pozorování:</strong> {
+                totalExposure / totalPortfolio > 0.7 
+                  ? "Vysoká kurzová expozice - zvažte EUR hedged ETF pro snížení volatility"
+                  : totalExposure / totalPortfolio > 0.3
+                  ? "Střední kurzová expozice - vyvážené portfolio s mírným kurzovým rizikem"
+                  : "Nízká kurzová expozice - převážně domácí nebo zajištěné investice"
+              }
+            </p>
           </div>
         </CardContent>
       </Card>
