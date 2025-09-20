@@ -31,7 +31,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
   const ranges = useMemo(() => {
     const ters = etfs.map(etf => etf.ter_numeric || 0).filter(ter => ter > 0);
     const sizes = etfs.map(etf => etf.fund_size_numeric || 0).filter(size => size > 0);
-    const dividendYields = etfs.map(etf => etf.dividend_yield_numeric || 0).filter(dividendYield => dividendYield > 0);
+    const dividendYields = etfs.map(etf => etf.current_dividend_yield_numeric || 0).filter(dividendYield => dividendYield > 0);
     
     return {
       ter: { min: 0, max: Math.max(...ters, 1) },
@@ -128,7 +128,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
         
         const terRangeMatch = (etf.ter_numeric || 0) >= terRange[0] && (etf.ter_numeric || 0) <= terRange[1];
         const fundSizeRangeMatch = !etf.fund_size_numeric || (etf.fund_size_numeric >= fundSizeRangeValues[0] && etf.fund_size_numeric <= fundSizeRangeValues[1]);
-        const dividendYieldRangeMatch = !etf.dividend_yield_numeric || (etf.dividend_yield_numeric >= dividendYieldRange[0] && etf.dividend_yield_numeric <= dividendYieldRange[1]);
+        const dividendYieldRangeMatch = !etf.current_dividend_yield_numeric || (etf.current_dividend_yield_numeric >= dividendYieldRange[0] && etf.current_dividend_yield_numeric <= dividendYieldRange[1]);
         
         const replicationMatch = replicationMethod === 'all' || etf.replication === replicationMethod;
         

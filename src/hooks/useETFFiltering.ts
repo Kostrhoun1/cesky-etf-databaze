@@ -45,7 +45,7 @@ export const useETFFiltering = (etfs: ETFListItem[], defaultCategory?: string) =
   const ranges = useMemo<ETFRanges>(() => {
     const ters = etfs.map(etf => etf.ter_numeric || 0).filter(ter => ter > 0);
     const sizes = etfs.map(etf => etf.fund_size_numeric || 0).filter(size => size > 0);
-    const dividendYields = etfs.map(etf => etf.dividend_yield_numeric || 0).filter(dividendYield => dividendYield > 0);
+    const dividendYields = etfs.map(etf => etf.current_dividend_yield_numeric || 0).filter(dividendYield => dividendYield > 0);
     
     return {
       ter: { min: 0, max: Math.max(...ters, 1) },
@@ -174,9 +174,9 @@ export const useETFFiltering = (etfs: ETFListItem[], defaultCategory?: string) =
         }
 
         // Dividend yield range filter
-        if (etf.dividend_yield_numeric) {
-          if (etf.dividend_yield_numeric < filters.dividendYieldRange[0] || 
-              etf.dividend_yield_numeric > filters.dividendYieldRange[1]) return false;
+        if (etf.current_dividend_yield_numeric) {
+          if (etf.current_dividend_yield_numeric < filters.dividendYieldRange[0] || 
+              etf.current_dividend_yield_numeric > filters.dividendYieldRange[1]) return false;
         }
 
         // Fund size category filter

@@ -262,7 +262,9 @@ const ETFFiltersComponent: React.FC<ETFFiltersProps> = ({
                 max={ranges.ter.max}
                 step={0.01}
                 value={filters.terRange}
-                onValueChange={(value) => onFilterChange('terRange', value)}
+                onValueChange={(value: number[]) => 
+                  onFilterChange('terRange', value.length >= 2 ? [value[0], value[1]] as [number, number] : [ranges.ter.min, ranges.ter.max] as [number, number])
+                }
                 className="mt-3"
               />
               <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -290,7 +292,9 @@ const ETFFiltersComponent: React.FC<ETFFiltersProps> = ({
                 max={ranges.fundSize.max}
                 step={10}
                 value={filters.fundSizeRangeValues}
-                onValueChange={(value) => onFilterChange('fundSizeRangeValues', value)}
+                onValueChange={(value: number[]) => 
+                  onFilterChange('fundSizeRangeValues', value.length >= 2 ? [value[0], value[1]] as [number, number] : [ranges.fundSize.min, ranges.fundSize.max] as [number, number])
+                }
                 className="mt-3"
               />
               <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -318,7 +322,9 @@ const ETFFiltersComponent: React.FC<ETFFiltersProps> = ({
                 max={ranges.dividendYield.max}
                 step={0.1}
                 value={filters.dividendYieldRange}
-                onValueChange={(value) => onFilterChange('dividendYieldRange', value)}
+                onValueChange={(value: number[]) => 
+                  onFilterChange('dividendYieldRange', value.length >= 2 ? [value[0], value[1]] as [number, number] : [ranges.dividendYield.min, ranges.dividendYield.max] as [number, number])
+                }
                 className="mt-3"
               />
               <div className="flex justify-between text-xs text-gray-500 mt-1">

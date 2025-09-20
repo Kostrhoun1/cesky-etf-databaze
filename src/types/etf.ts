@@ -134,6 +134,22 @@ export interface ETF {
   // Rating fields from database
   rating?: number;
   rating_score?: number;
+  // Rating component scores
+  rating_ter_score?: number;
+  rating_size_score?: number;
+  rating_track_record_score?: number;
+  rating_provider_score?: number;
+  rating_performance_score?: number;
+  // New performance periods
+  return_1m?: number;
+  return_3m?: number;
+  return_6m?: number;
+  return_2024?: number;
+  return_2023?: number;
+  return_2022?: number;
+  return_2021?: number;
+  return_inception?: number;
+  performance_last_updated?: string;
 }
 
 // Simplified ETF type for list displays
@@ -170,4 +186,20 @@ export interface ETFListItem {
   // Rating z databáze
   rating?: number;
   rating_score?: number;
+  // Rating component scores
+  rating_ter_score?: number;
+  rating_size_score?: number;
+  rating_track_record_score?: number;
+  rating_provider_score?: number;
+  rating_performance_score?: number;
+  // New performance periods
+  return_1m?: number;
+  return_3m?: number;
+  return_6m?: number;
+  return_2024?: number;
+  return_2023?: number;
+  return_2022?: number;
+  return_2021?: number;
+  return_inception?: number;
+  performance_last_updated?: string;
 }

@@ -15,12 +15,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Filter, X } from 'lucide-react';
-import { AdvancedFiltersState, AdvancedFilterValue } from '@/hooks/useETFTableLogic';
+import { AdvancedFiltersState } from '@/hooks/useETFTableLogic';
 
 interface ETFAdvancedFiltersProps {
   etfs: ETFListItem[];
   filters: AdvancedFiltersState;
-  onFilterChange: (key: keyof AdvancedFiltersState, value: AdvancedFilterValue) => void;
+  onFilterChange: (key: keyof AdvancedFiltersState, value: any) => void;
   ranges: {
     ter: { min: number; max: number };
     fundSize: { min: number; max: number };
