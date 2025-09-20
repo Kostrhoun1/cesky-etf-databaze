@@ -23,18 +23,25 @@ const ETFRating: React.FC<ETFRatingProps> = ({
   let rating = etf.rating;
   let score = etf.rating_score;
   let breakdown = null;
-  
+  let isYoungFund = false;
   
   // Only try to calculate rating if we don't have it from database
   if (!rating) {
     try {
       const ratingData = calculateETFRating(etf);
-      rating = ratingData.rating;
-      score = ratingData.score;
-      breakdown = ratingData.breakdown;
+      if (ratingData) {
+        rating = ratingData.rating;
+        score = ratingData.score;
+        breakdown = ratingData.breakdown;
+      } else {
+        // Fund is too young for rating
+        isYoungFund = true;
+        rating = null;
+        score = null;
+      }
     } catch (error) {
       console.warn('Failed to calculate ETF rating:', error);
-      // Fallback to default values
+      // For calculation errors (not young funds), still show default
       rating = 3; // Default middle rating
       score = 50;
       breakdown = null;
@@ -48,8 +55,47 @@ const ETFRating: React.FC<ETFRatingProps> = ({
   };
   
   const starSize = sizeClasses[size];
-  const ratingColor = getRatingColor(rating);
-  const description = getRatingDescription(rating);
+  const ratingColor = rating ? getRatingColor(rating) : 'text-gray-400';
+  const description = rating ? getRatingDescription(rating) : 'Fond je příliš mladý pro hodnocení';
+  
+  // If no rating (young fund), show gray stars with tooltip
+  if (!rating || isYoungFund) {
+    return (
+      <div className={`flex items-center gap-2 ${className}`}>
+        {/* Gray Stars for Young Funds */}
+        <div className="flex items-center gap-0.5">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <Star
+              key={index}
+              className={`${starSize} text-gray-300`}
+            />
+          ))}
+        </div>
+        
+        {/* Young Fund Message */}
+        <Tooltip>
+          <TooltipTrigger>
+            <span className="text-sm text-gray-400 cursor-help">
+              Nehodnoceno
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>
+            <div className="text-xs">
+              Fond je příliš mladý pro hodnocení.<br />
+              Rating je dostupný po 3 letech existence.
+            </div>
+          </TooltipContent>
+        </Tooltip>
+        
+        {/* Description for young funds */}
+        {showDescription && (
+          <span className="text-xs text-gray-500">
+            {description}
+          </span>
+        )}
+      </div>
+    );
+  }
   
   return (
     <div className={`flex items-center gap-2 ${className}`}>

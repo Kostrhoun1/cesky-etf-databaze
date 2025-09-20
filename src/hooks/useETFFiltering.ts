@@ -159,8 +159,8 @@ export const useETFFiltering = (etfs: ETFListItem[], defaultCategory?: string) =
 
         // Rating filter
         if (filters.minRating > 0) {
-          const rating = etf.rating || calculateETFRating(etf).rating;
-          if (rating < filters.minRating) return false;
+          const rating = etf.rating || calculateETFRating(etf)?.rating;
+          if (!rating || rating < filters.minRating) return false;
         }
 
         // TER range filter

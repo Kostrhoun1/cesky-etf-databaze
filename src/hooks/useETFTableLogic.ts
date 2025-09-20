@@ -104,8 +104,8 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
       .filter(etf => {
         // Rating filter - use database rating if available, fallback to calculated
         if (advancedFilters.minRating > 0) {
-          const rating = etf.rating || calculateETFRating(etf).rating;
-          if (rating < advancedFilters.minRating) {
+          const rating = etf.rating || calculateETFRating(etf)?.rating;
+          if (!rating || rating < advancedFilters.minRating) {
             return false;
           }
         }

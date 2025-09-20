@@ -13,7 +13,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { getETFTicker } from '@/utils/etfTickerMapping';
 import { ArrowLeft } from 'lucide-react';
 import ETFRating from '@/components/ETFRating';
-import Breadcrumb from '@/components/Breadcrumb';
 
 const ETFDetail: React.FC = () => {
   const { isin } = useParams<{ isin: string }>();
@@ -237,27 +236,13 @@ const ETFDetail: React.FC = () => {
   const topHoldings = getTopHoldings();
   const topCountries = getTopCountries();
   const topSectors = getTopSectors();
-  
-  const breadcrumbItems = [
-    {
-      label: 'Srovnání ETF',
-      href: '/srovnani-etf'
-    },
-    {
-      label: etf.name,
-      current: true
-    }
-  ];
 
   return (
     <Layout>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb Navigation */}
-        <Breadcrumb items={breadcrumbItems} />
-        
         {/* Header */}
         <div className="mb-8">
-          {fromPortfolio ? (
+          {fromPortfolio && (
             <div className="mb-4 p-3 bg-violet-50 border border-violet-200 rounded-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -277,13 +262,6 @@ const ETFDetail: React.FC = () => {
                 </Button>
               </div>
             </div>
-          ) : (
-            <Button asChild variant="outline" className="mb-4">
-              <Link to="/srovnani-etf">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Zpět na srovnání ETF
-              </Link>
-            </Button>
           )}
           
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">

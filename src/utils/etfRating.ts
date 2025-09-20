@@ -137,8 +137,9 @@ function getCategory(score: number): ETFRating['category'] {
 
 /**
  * Calculate comprehensive ETF rating based on database data
+ * Rating is only awarded to ETFs with minimum 3 years of track record
  */
-export function calculateETFRating(etf: ETF | ETFListItem): ETFRating {
+export function calculateETFRating(etf: ETF | ETFListItem): ETFRating | null {
   // Handle missing or invalid data gracefully
   const ter = etf.ter_numeric || 0;
   const fundSizeNumeric = etf.fund_size_numeric || 0;
@@ -149,6 +150,11 @@ export function calculateETFRating(etf: ETF | ETFListItem): ETFRating {
   const trackingError = 'tracking_error' in etf ? (etf as ETF).tracking_error : 0;
   
   const years = getYearsSinceInception(inceptionDate);
+  
+  // Minimum age requirement: 3 years for rating (same as backend)
+  if (years < 3.0) {
+    return null; // No rating for young funds
+  }
   
   // Calculate individual scores
   const terScore = scoreTER(ter);
@@ -179,8 +185,9 @@ export function calculateETFRating(etf: ETF | ETFListItem): ETFRating {
 /**
  * Get star rating only (for simple displays)
  */
-export function getETFStarRating(etf: ETF | ETFListItem): number {
-  return calculateETFRating(etf).rating;
+export function getETFStarRating(etf: ETF | ETFListItem): number | null {
+  const rating = calculateETFRating(etf);
+  return rating ? rating.rating : null;
 }
 
 /**
