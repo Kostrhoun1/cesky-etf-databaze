@@ -465,6 +465,100 @@ Transformovat současnou sekci "Tipy" (14 článků) na **profesionální conten
 - **Usage KPIs**: Spuštění kalkulaček, kliky na srovnání, newsletter signups
 - **Competitive advantage**: Rychlost publikování + propojení s nástroji
 
+### **🎯 NOVÁ POKROČILÁ SEO PRAVIDLA (GPT doporučení)**
+
+#### **🔗 PRAVIDLA INTERNÍCH ODKAZŮ (PRIORITA #1)**
+
+**Hub → Spoke (hlavní landingy → články):**
+- Min. **6 strategických odkazů** na články s kontextovými anchory
+- **1× CTA button** "Otevřít v porovnání" / "Použít kalkulačku" 
+- Odkazy integrovat do přirozeného toku textu, ne jako seznam
+
+**Spoke → Hub (články → hlavní landingy):**
+- Min. **3 strategické odkazy** na hub stránky (/srovnani-etf, /nastroje, /tipy)
+- **Prvních 300 slov**: Povinně 1 odkaz na hlavní landing page
+- **Popisné anchory**: "srovnání nejlepších ETF fondů" místo "zde"
+
+**Implementační standard:**
+- Každý článek = **8+ interních odkazů** (3 hub + 5 related články)
+- **Deep linking**: Odkazy s #kotvy na specifické sekce kalkulaček
+- **Kontextové umístění**: V přirozeném toku textu, relevant k tématu
+
+#### **🏆 E-E-A-T RYCHLÁ VRSTVA**
+
+**Metodika a důvěryhodnost (bez autora):**
+- **Metodika box**: Zdroje dat + kalkulace + **link na /metodika-vypoctu**
+- **Primární zdroje**: Citace KID/prospekt, metodika indexu, oficiální dokumenty
+- **Viditelnost**: Stránky `/metodika-hodnoceni` v patičce i hlavním menu
+- **Expertise**: Každý článek má link na "Jak hodnotíme ETF" metodiku
+- **Transparentnost**: Jasné uvedení omezení kalkulaček a upozornění
+
+**Poznámka**: Sekce autor se přidá později podle potřeby
+
+#### **📄 SERP-FIRST ŠABLONA (standardizace)**
+
+**Povinný formát pro všechny nové stránky:**
+
+1. **Title formule:**
+   ```
+   [Tool/Topic] [Year] ⚡ [Key Benefit] [Target Keyword] | ETF průvodce.cz
+   ```
+   Příklad: `Kalkulačka ETF poplatků 2025 ⚡ Skutečné náklady USD/EUR/CZK | ETF průvodce.cz`
+
+2. **5-bodové shrnutí (prvních 200 slov):**
+   - Vizuální grid 5 karet s emoji + klíčovou informací
+   - Rychlé odpovědi na "co, jak, kdy, kolik, proč"
+   - Každá karta = max 10 slov
+
+3. **Intent-driven meta description:**
+   ```
+   🎯 [Konkrétní výsledek] za [čas]. [Klíčové upozornění]! [Metoda/analýza]. Optimalizace pro ČR.
+   ```
+
+4. **Above-the-fold struktura:**
+   - SERP shrnutí (200 slov)
+   - CTA na nástroj (primární akce)
+   - Rychlé navigation (kotvy na sekce)
+   - FAQ sekce: 3-5 Q&A s 50-80 slovy/odpověď + schema FAQPage
+
+#### **⚙️ TECHNICKÉ KPIs & IMPLEMENTACE**
+
+**Core Web Vitals cíle:**
+- **LCP (Largest Contentful Paint)**: <2.5s
+  - Lazy loading pro komponenty pod fold
+  - Preload kritických fontů a CSS
+  - Image optimization (WebP + responsive)
+- **FID/INP (First Input Delay/Interaction to Next Paint)**: <100ms/<200ms
+  - Suspense wrappery pro React komponenty
+  - Code splitting na úrovni pages
+- **CLS (Cumulative Layout Shift)**: <0.1
+  - Fixed dimensions pro all images
+  - Skeleton loading states
+
+**Indexace a crawling:**
+- **Faceted URLs** (filtry v DB): `noindex,follow` + canonical na čistý slug
+- **Dynamické sitemap**: Auto-generované XML pro kalkulačky + ETF DB
+- **Robots.txt optimization**: Allow prioritní cesty, disallow admin/temp
+
+**Performance monitoring:**
+- **GTMetrix alerts**: Týdenní reports na Core Web Vitals
+- **GSC monitoring**: Crawl errors, index coverage alerts
+- **GA4 events**: tool_usage, calculator_completion, serp_ctr
+
+**Schema markup standardy:**
+- Každá nová stránka = validní Article + Breadcrumb + u landingů ItemList
+- FAQPage schema pro všechny FAQ sekce
+- WebApplication schema pro kalkulačky
+
+#### **🔧 IMPLEMENTAČNÍ CHECKLIST**
+- [ ] Audit stávajících článků na interní linking (min. 3+6 pravidlo)
+- [ ] Vytvořit SERP-first template s povinnými elementy
+- [ ] Nastavit CWV monitoring a optimalizace  
+- [ ] Implementovat technické SEO požadavky (facety, sitemap, schema)
+- [ ] Vytvořit template pro 5-bodové shrnutí s emoji kartami
+- [ ] Implementovat lazy loading a Suspense wrappery
+- [ ] Nastavit performance monitoring (GTMetrix, GSC)
+
 ### **🎯 ROZŠÍŘENÁ SCOPE STRATEGIE**
 
 #### **FÁZE A: Základní huby (Říjen-Listopad 2025)** - 20 článků

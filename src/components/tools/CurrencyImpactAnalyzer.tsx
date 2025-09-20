@@ -156,7 +156,7 @@ const CurrencyImpactAnalyzer: React.FC = () => {
                     max="100"
                   />
                   <p className="text-xs text-gray-600 mt-1">
-                    US akcie v jakémkoliv ETF (<a href="/etf/cspx" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CSPX</a>, VTI, SPY)
+                    US akcie v jakémkoliv ETF - viz <a href="/srovnani-etf" className="text-blue-600 hover:underline">srovnání amerických ETF</a> (<a href="/etf/cspx" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CSPX</a>, VTI, SPY)
                   </p>
                 </div>
                 <div>
@@ -173,7 +173,7 @@ const CurrencyImpactAnalyzer: React.FC = () => {
                     max="100"
                   />
                   <p className="text-xs text-gray-600 mt-1">
-                    Evropské akcie (<a href="/etf/eunl" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">EUNL</a>, SX5E, EXSA)
+                    Evropské akcie - další možnosti v <a href="/nastroje" className="text-blue-600 hover:underline">investičních nástrojích</a> (<a href="/etf/eunl" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">EUNL</a>, SX5E, EXSA)
                   </p>
                 </div>
                 <div>

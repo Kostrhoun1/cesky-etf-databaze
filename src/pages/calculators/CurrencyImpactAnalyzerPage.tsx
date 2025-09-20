@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import Layout from '@/components/Layout';
-import CurrencyImpactAnalyzer from '@/components/tools/CurrencyImpactAnalyzer';
 import SEOHead from '@/components/SEO/SEOHead';
-import FAQSection from '@/components/SEO/FAQSection';
-import InternalLinking from '@/components/SEO/InternalLinking';
 import StructuredData from '@/components/SEO/StructuredData';
+
+// Lazy loading pro méně kritické komponenty (CWV optimalizace)
+const CurrencyImpactAnalyzer = lazy(() => import('@/components/tools/CurrencyImpactAnalyzer'));
+const FAQSection = lazy(() => import('@/components/SEO/FAQSection'));
+const InternalLinking = lazy(() => import('@/components/SEO/InternalLinking'));
 import { Card, CardContent } from '@/components/ui/card';
 import { DollarSign, TrendingUp, Shield, AlertTriangle } from 'lucide-react';
 
@@ -60,29 +62,82 @@ const CurrencyImpactAnalyzerPage: React.FC = () => {
   return (
     <Layout>
       <SEOHead
-        title="Analýza kurzového dopadu ETF 2025 - Currency Hedging | ETF průvodce.cz"
-        description="✅ Analyzujte vliv kurzových změn na ETF portfolio. Měnové riziko, hedging strategie a optimalizace pro české investory. Hedged vs unhedged ETF."
+        title="Kalkulačka kurzového dopadu ETF 2025 ⚡ Měnové riziko USD/EUR/CZK | ETF průvodce.cz"
+        description="🎯 Spočítejte kurzový dopad ETF za 2 min. CSPX má 100% USD riziko! EUR hedged ≠ CZK hedged. Monte Carlo analýza + 5 reálných scénářů. Optimalizace pro ČR."
         canonical="https://etfpruvodce.cz/kalkulacky/kurzovy-dopad-etf"
-        keywords="kurzový dopad, currency hedging, měnové riziko, USD CZK, EUR CZK, ETF hedging 2025, hedged ETF, unhedged ETF"
+        keywords="kalkulačka kurzový dopad ETF, měnové riziko CSPX VWCE, USD CZK kurz ETF, EUR hedged vs unhedged, currency hedging CZK 2025, ETF expozice USD EUR"
         schema={calculatorSchema}
         ogImage="https://etfpruvodce.cz/og-kurzovy-dopad-etf.jpg"
       />
+      
+      {/* CWV optimalizace - preload kritických zdrojů */}
+      <link rel="preload" as="style" href="/css/critical.css" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+      <link rel="dns-prefetch" href="//www.google-analytics.com" />
       <StructuredData data={breadcrumbSchema} />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        {/* Hero sekce */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Analýza kurzového dopadu ETF
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Spočítejte dopad kurzových změn na vaše ETF portfolio a analyzujte měnové riziko.
-          </p>
+        {/* SERP-first shrnutí s intent formulemi */}
+        <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-8">
+          <div className="max-w-5xl mx-auto">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">
+              Analýza kurzového dopadu ETF 2025 🎯
+            </h1>
+            <div className="bg-white p-4 rounded-lg border mb-4">
+              <h2 className="text-lg font-semibold text-green-800 mb-3">📊 5-bodové shrnutí pro rychlé rozhodnutí:</h2>
+              <div className="grid md:grid-cols-5 gap-3 text-sm">
+                <div className="bg-red-50 p-3 rounded text-center">
+                  <div className="font-bold text-red-700">⚠️ Klíčové</div>
+                  <div className="text-red-600">Měna fondu ≠ měna expozice</div>
+                </div>
+                <div className="bg-blue-50 p-3 rounded text-center">
+                  <div className="font-bold text-blue-700">💰 USD ETF</div>
+                  <div className="text-blue-600">CSPX má 100% USD riziko</div>
+                </div>
+                <div className="bg-orange-50 p-3 rounded text-center">
+                  <div className="font-bold text-orange-700">🛡️ Hedging</div>
+                  <div className="text-orange-600">EUR hedged ≠ CZK hedged</div>
+                </div>
+                <div className="bg-purple-50 p-3 rounded text-center">
+                  <div className="font-bold text-purple-700">📈 Dopad</div>
+                  <div className="text-purple-600">20% kurz = 20% portfolio</div>
+                </div>
+                <div className="bg-green-50 p-3 rounded text-center">
+                  <div className="font-bold text-green-700">🔧 Řešení</div>
+                  <div className="text-green-600">Analýza + optimalizace</div>
+                </div>
+              </div>
+            </div>
+            <p className="text-lg text-gray-700 text-center mb-6">
+              <strong>Výsledek za 2 minuty:</strong> Spočítejte kurzový dopad ETF portfolia a optimalizujte 
+              <a href="/srovnani-etf" className="text-blue-600 hover:underline font-semibold"> výběr nejlepších ETF fondů</a> podle měnové expozice.
+            </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
+              <p className="text-blue-800 mb-3">
+                <strong>Před analýzou doporučujeme:</strong> Seznamte se s <a href="/nastroje" className="text-blue-600 hover:underline font-semibold">kompletním portfoliem investičních nástrojů</a> a prostudujte si <a href="/tipy/nejlepsi-etf-na-americke-akcie" className="text-blue-600 hover:underline font-semibold">příručku pro výběr amerických ETF</a> s hedging strategiemi.
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Samotný analyzátor - hned na začátku */}
-        <CurrencyImpactAnalyzer />
+        {/* Samotný analyzátor - hned na začátku s Suspense (CWV optimalizace) */}
+        <Suspense 
+          fallback={
+            <div className="bg-white rounded-2xl border p-8 animate-pulse">
+              <div className="h-8 bg-gray-200 rounded mb-4"></div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="h-48 bg-gray-100 rounded"></div>
+                <div className="h-48 bg-gray-100 rounded"></div>
+              </div>
+              <div className="h-12 bg-blue-100 rounded mt-6"></div>
+            </div>
+          }
+        >
+          <CurrencyImpactAnalyzer />
+        </Suspense>
 
         {/* Klíčová informace o měnové expozici */}
         <div className="bg-red-50 border border-red-200 rounded-xl p-6 mt-12 mb-8">
@@ -122,6 +177,15 @@ const CurrencyImpactAnalyzerPage: React.FC = () => {
                 <div className="bg-green-50 p-3 rounded-lg">
                   <p className="font-semibold"><a href="/etf/eunl" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline">EUNL</a> (Amundi MSCI Europe EUR)</p>
                   <p className="text-sm text-green-700">Měna fondu: EUR | Expozice: 100% EUR</p>
+                </div>
+                <div className="mt-4 text-center">
+                  <a 
+                    href="/srovnani-etf" 
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+                  >
+                    <TrendingUp className="h-4 w-4" />
+                    Otevřít v porovnání ETF
+                  </a>
                 </div>
               </div>
             </div>
@@ -194,8 +258,21 @@ const CurrencyImpactAnalyzerPage: React.FC = () => {
           </div>
         </div>
 
-        {/* FAQ sekce */}
-        <FAQSection
+
+        {/* FAQ sekce s lazy loading */}
+        <Suspense 
+          fallback={
+            <div className="bg-white rounded-2xl border p-8 animate-pulse mt-16">
+              <div className="h-6 bg-gray-200 rounded mb-6 w-1/3"></div>
+              <div className="space-y-4">
+                {[1,2,3,4].map(i => (
+                  <div key={i} className="h-16 bg-gray-100 rounded"></div>
+                ))}
+              </div>
+            </div>
+          }
+        >
+          <FAQSection
           title="Často kladené otázky o kurzovém dopadu ETF"
           faqs={[
             {
@@ -229,34 +306,68 @@ const CurrencyImpactAnalyzerPage: React.FC = () => {
           ]}
           className="mt-16"
         />
+        </Suspense>
 
-        {/* Související nástroje */}
-        <InternalLinking
+        {/* Související nástroje s rozšířenými hub odkazy a lazy loading */}
+        <Suspense 
+          fallback={
+            <div className="bg-white rounded-2xl border p-8 animate-pulse mt-16">
+              <div className="h-6 bg-gray-200 rounded mb-6 w-1/4"></div>
+              <div className="grid md:grid-cols-2 gap-4">
+                {[1,2,3,4,5,6].map(i => (
+                  <div key={i} className="h-20 bg-gray-100 rounded"></div>
+                ))}
+              </div>
+            </div>
+          }
+        >
+          <InternalLinking
           relatedLinks={[
             {
-              title: "Srovnání ETF fondů",
+              title: "Srovnání ETF fondů - Hedged vs Unhedged",
               href: "/srovnani-etf",
-              description: "Najděte hedged a unhedged varianty ETF"
+              description: "Najděte hedged a unhedged varianty ETF s detailní analýzou TER a tracking error"
             },
             {
-              title: "Investiční kalkulačka",
+              title: "Investiční kalkulačka s kurzovými dopady",
               href: "/kalkulacky/investicni-kalkulacka",
-              description: "Spočítejte si celkové výnosy včetně kurzů"
+              description: "Spočítejte si celkové výnosy včetně kurzových změn a inflace"
             },
             {
-              title: "Monte Carlo simulátor",
+              title: "Monte Carlo simulátor portfoliových rizik",
               href: "/kalkulacky/monte-carlo-simulator",
-              description: "Analýza portfoliových rizik včetně měnových"
+              description: "Pokročilá analýza portfoliových rizik včetně měnových fluktuací"
             },
             {
-              title: "Nejlepší ETF na americké akcie",
+              title: "Nejlepší ETF na americké akcie 2025",
               href: "/tipy/nejlepsi-etf-na-americke-akcie",
-              description: "USD ETF a jejich hedging varianty"
+              description: "USD ETF a jejich hedging varianty - CSPX vs CSHG analýza"
+            },
+            {
+              title: "Kompletní přehled investičních nástrojů",
+              href: "/nastroje",
+              description: "Všechny kalkulačky, simulátory a analytické nástroje na jednom místě"
+            },
+            {
+              title: "ETF strategie pro české investory",
+              href: "/tipy",
+              description: "Praktické rady pro měnové zajištění a optimalizaci portfolia"
+            },
+            {
+              title: "Kalkulačka ETF poplatků a nákladů",
+              href: "/kalkulacky/etf-poplatky",
+              description: "Spočítejte si skutečné náklady ETF včetně skrytých poplatků"
+            },
+            {
+              title: "Portfolio rebalancing kalkulačka",
+              href: "/kalkulacky/portfolio-rebalancing",
+              description: "Optimalizujte rozložení portfolia s ohledem na měnové riziko"
             }
           ]}
           title="Související kalkulačky a nástroje"
           className="mt-16"
         />
+        </Suspense>
       </div>
     </Layout>
   );
