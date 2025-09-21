@@ -155,56 +155,86 @@ export const useETFComparison = () => {
 
   const addETFToComparison = useCallback(async (etf: ETFListItem) => {
     if (selectedETFs.length >= 3) {
-      toast({
+      const toastInstance = toast({
         title: "Maximum dosažen",
         description: "Můžete porovnat maximálně 3 ETF fondy současně.",
         variant: "destructive",
       });
+      
+      // Automatically dismiss after 3 seconds
+      setTimeout(() => {
+        toastInstance.dismiss();
+      }, 3000);
       return false;
     }
 
     if (selectedETFs.some(selected => selected.isin === etf.isin)) {
-      toast({
+      const toastInstance = toast({
         title: "Fond již vybrán",
         description: "Tento fond je již v porovnání.",
         variant: "destructive",
       });
+      
+      // Automatically dismiss after 3 seconds
+      setTimeout(() => {
+        toastInstance.dismiss();
+      }, 3000);
       return false;
     }
 
     // Fetch full ETF data with all fields needed for comparison
     const fullETFData = await fetchFullETFData(etf.isin);
     if (!fullETFData) {
-      toast({
+      const toastInstance = toast({
         title: "Chyba",
         description: "Nepodařilo se načíst kompletní data fondu.",
         variant: "destructive",
       });
+      
+      // Automatically dismiss after 3 seconds
+      setTimeout(() => {
+        toastInstance.dismiss();
+      }, 3000);
       return false;
     }
 
     setSelectedETFs(prev => [...prev, fullETFData]);
-    toast({
+    const toastInstance = toast({
       title: "Fond přidán",
       description: `${etf.name} byl přidán do porovnání.`,
     });
+    
+    // Automatically dismiss after 3 seconds
+    setTimeout(() => {
+      toastInstance.dismiss();
+    }, 3000);
     return true;
   }, [selectedETFs, toast]);
 
   const removeETFFromComparison = useCallback((isin: string) => {
     setSelectedETFs(prev => prev.filter(etf => etf.isin !== isin));
-    toast({
+    const toastInstance = toast({
       title: "Fond odebrán",
       description: "Fond byl odebrán z porovnání.",
     });
+    
+    // Automatically dismiss after 3 seconds
+    setTimeout(() => {
+      toastInstance.dismiss();
+    }, 3000);
   }, [toast]);
 
   const clearComparison = useCallback(() => {
     setSelectedETFs([]);
-    toast({
+    const toastInstance = toast({
       title: "Porovnání vymazáno",
       description: "Všechny fondy byly odebrány z porovnání.",
     });
+    
+    // Automatically dismiss after 3 seconds
+    setTimeout(() => {
+      toastInstance.dismiss();
+    }, 3000);
   }, [toast]);
 
   const isETFSelected = useCallback((isin: string) => {

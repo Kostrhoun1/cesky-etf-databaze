@@ -266,11 +266,24 @@ class ETFDataComplete:
         # Sectors
         self.sectors = []
         
-        # Performance
+        # Performance - krátká období
+        self.return_1m = None
+        self.return_3m = None
+        self.return_6m = None
+        self.return_ytd = None
         self.return_1y = None
         self.return_3y = None
         self.return_5y = None
-        self.return_ytd = None
+        
+        # Performance - roční výnosy
+        self.return_2021 = None
+        self.return_2022 = None
+        self.return_2023 = None
+        self.return_2024 = None
+        
+        # Performance - inception (celková životnost)
+        self.return_inception = None
+        self.performance_last_updated = None
         
         # Risk metriky
         self.volatility_1y = None
@@ -577,14 +590,17 @@ class CompleteProductionScraper:
         if AUTO_UPLOAD_TO_DB and SUPABASE_AVAILABLE:
             try:
                 supabase_url = os.getenv('VITE_SUPABASE_URL')
-                supabase_key = os.getenv('VITE_SUPABASE_PUBLISHABLE_KEY')
+                # Pro upload operations používáme SERVICE_ROLE klíč místo PUBLISHABLE klíče
+                # Service role bypasses RLS, což je potřebné pro batch uploads
+                supabase_key = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
                 
                 if not supabase_url or not supabase_key:
                     safe_log("warning", "WARNING: Supabase credentials nejsou nastavené v .env souboru")
+                    safe_log("warning", "       Zkontrolujte VITE_SUPABASE_URL a SUPABASE_SERVICE_ROLE_KEY")
                     self.supabase = None
                 else:
                     self.supabase = create_client(supabase_url, supabase_key)
-                    safe_log("info", "OK: Supabase klient inicializován")
+                    safe_log("info", "OK: Supabase klient inicializován s SERVICE_ROLE klíčem")
             except Exception as e:
                 safe_log("warning", f"WARNING: Supabase klient chyba: {e}")
                 self.supabase = None
@@ -2097,10 +2113,77 @@ class CompleteProductionScraper:
         text = soup.get_text()
         
         perf_patterns = {
-            'return_ytd': [r'YTD[:\s]*([+-]?\d+[.,]\d+)%'],
-            'return_1y': [r'1\s*(?:Year|Y)[:\s]*([+-]?\d+[.,]\d+)%'],
-            'return_3y': [r'3\s*(?:Years?|Y)[:\s]*([+-]?\d+[.,]\d+)%'],
-            'return_5y': [r'5\s*(?:Years?|Y)[:\s]*([+-]?\d+[.,]\d+)%']
+            # Krátká období
+            'return_1m': [
+                r'1\s*(?:Month|M|měsíc)[:\s]*([+-]?\d+[.,]\d+)%',
+                r'1M[:\s]*([+-]?\d+[.,]\d+)%',
+                r'1\s*month[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>1M</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
+                r'1\s*mth[:\s]*([+-]?\d+[.,]\d+)%'
+            ],
+            'return_3m': [
+                r'3\s*(?:Months?|M|měsíce)[:\s]*([+-]?\d+[.,]\d+)%',
+                r'3M[:\s]*([+-]?\d+[.,]\d+)%',
+                r'3\s*months?[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>3M</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
+                r'3\s*mth[:\s]*([+-]?\d+[.,]\d+)%'
+            ],
+            'return_6m': [
+                r'6\s*(?:Months?|M|měsíců)[:\s]*([+-]?\d+[.,]\d+)%',
+                r'6M[:\s]*([+-]?\d+[.,]\d+)%',
+                r'6\s*months?[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>6M</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
+                r'6\s*mth[:\s]*([+-]?\d+[.,]\d+)%'
+            ],
+            # Standardní období
+            'return_ytd': [
+                r'YTD[:\s]*([+-]?\d+[.,]\d+)%',
+                r'Year\s+to\s+date[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>YTD</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%'
+            ],
+            'return_1y': [
+                r'1\s*(?:Year|Y)[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>1Y</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
+                r'1\s*year[:\s]*([+-]?\d+[.,]\d+)%'
+            ],
+            'return_3y': [
+                r'3\s*(?:Years?|Y)[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>3Y</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
+                r'3\s*years?[:\s]*([+-]?\d+[.,]\d+)%'
+            ],
+            'return_5y': [
+                r'5\s*(?:Years?|Y)[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>5Y</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
+                r'5\s*years?[:\s]*([+-]?\d+[.,]\d+)%'
+            ],
+            # Roční výnosy
+            'return_2021': [
+                r'2021[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>2021</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
+                r'Year\s+2021[:\s]*([+-]?\d+[.,]\d+)%'
+            ],
+            'return_2022': [
+                r'2022[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>2022</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
+                r'Year\s+2022[:\s]*([+-]?\d+[.,]\d+)%'
+            ],
+            'return_2023': [
+                r'2023[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>2023</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
+                r'Year\s+2023[:\s]*([+-]?\d+[.,]\d+)%'
+            ],
+            'return_2024': [
+                r'2024[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>2024</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
+                r'Year\s+2024[:\s]*([+-]?\d+[.,]\d+)%'
+            ],
+            # Inception
+            'return_inception': [
+                r'Since\s+inception[:\s]*([+-]?\d+[.,]\d+)%',
+                r'Inception[:\s]*([+-]?\d+[.,]\d+)%',
+                r'Total\s+return[:\s]*([+-]?\d+[.,]\d+)%',
+                r'>Inception</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%'
+            ]
         }
         
         for field, pattern_list in perf_patterns.items():
@@ -3067,10 +3150,22 @@ class CompleteProductionScraper:
             'is_leveraged': etf.is_leveraged,
             'region': etf.region,
             'total_holdings': self.safe_integer(etf.total_holdings),
+            # Performance - krátká období
+            'return_1m': self.safe_numeric(etf.return_1m),
+            'return_3m': self.safe_numeric(etf.return_3m),
+            'return_6m': self.safe_numeric(etf.return_6m),
+            'return_ytd': self.safe_numeric(etf.return_ytd),
             'return_1y': self.safe_numeric(etf.return_1y),
             'return_3y': self.safe_numeric(etf.return_3y),
             'return_5y': self.safe_numeric(etf.return_5y),
-            'return_ytd': self.safe_numeric(etf.return_ytd),
+            # Performance - roční výnosy
+            'return_2021': self.safe_numeric(etf.return_2021),
+            'return_2022': self.safe_numeric(etf.return_2022),
+            'return_2023': self.safe_numeric(etf.return_2023),
+            'return_2024': self.safe_numeric(etf.return_2024),
+            # Performance - inception
+            'return_inception': self.safe_numeric(etf.return_inception),
+            'performance_last_updated': etf.performance_last_updated,
             'volatility_1y': self.safe_numeric(etf.volatility_1y),
             'volatility_3y': self.safe_numeric(etf.volatility_3y),
             'volatility_5y': self.safe_numeric(etf.volatility_5y),
@@ -3214,10 +3309,22 @@ class CompleteProductionScraper:
             'is_leveraged': etf_dict.get('is_leveraged', False),
             'region': etf_dict.get('region', ''),
             'total_holdings': etf_dict.get('total_holdings', 0) or 0,
+            # Performance - krátká období
+            'return_1m': etf_dict.get('return_1m', 0) or 0,
+            'return_3m': etf_dict.get('return_3m', 0) or 0,
+            'return_6m': etf_dict.get('return_6m', 0) or 0,
+            'return_ytd': etf_dict.get('return_ytd', 0) or 0,
             'return_1y': etf_dict.get('return_1y', 0) or 0,
             'return_3y': etf_dict.get('return_3y', 0) or 0,
             'return_5y': etf_dict.get('return_5y', 0) or 0,
-            'return_ytd': etf_dict.get('return_ytd', 0) or 0,
+            # Performance - roční výnosy
+            'return_2021': etf_dict.get('return_2021', 0) or 0,
+            'return_2022': etf_dict.get('return_2022', 0) or 0,
+            'return_2023': etf_dict.get('return_2023', 0) or 0,
+            'return_2024': etf_dict.get('return_2024', 0) or 0,
+            # Performance - inception
+            'return_inception': etf_dict.get('return_inception', 0) or 0,
+            'performance_last_updated': etf_dict.get('performance_last_updated', ''),
             'volatility_1y': etf_dict.get('volatility_1y', 0) or 0,
             'volatility_3y': etf_dict.get('volatility_3y', 0) or 0,
             'volatility_5y': etf_dict.get('volatility_5y', 0) or 0,

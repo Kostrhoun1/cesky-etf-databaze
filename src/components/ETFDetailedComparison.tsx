@@ -40,10 +40,20 @@ const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
   ];
 
   const performanceData = [
+    { label: 'Výnos 1 měsíc', key: 'return_1m', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+    { label: 'Výnos 3 měsíce', key: 'return_3m', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+    { label: 'Výnos 6 měsíců', key: 'return_6m', format: (value: number) => formatPercentage(value), className: 'font-mono' },
     { label: 'YTD výnos', key: 'return_ytd', format: (value: number) => formatPercentage(value), className: 'font-mono' },
     { label: 'Výnos 1 rok', key: 'return_1y', format: (value: number) => formatPercentage(value), className: 'font-mono' },
     { label: 'Výnos 3 roky', key: 'return_3y', format: (value: number) => formatPercentage(value), className: 'font-mono' },
     { label: 'Výnos 5 let', key: 'return_5y', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+  ];
+
+  const yearlyPerformanceData = [
+    { label: 'Výnos 2021', key: 'return_2021', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+    { label: 'Výnos 2022', key: 'return_2022', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+    { label: 'Výnos 2023', key: 'return_2023', format: (value: number) => formatPercentage(value), className: 'font-mono' },
+    { label: 'Výnos 2024', key: 'return_2024', format: (value: number) => formatPercentage(value), className: 'font-mono' },
   ];
 
   if (selectedETFs.length === 0) {
@@ -67,6 +77,7 @@ const ETFDetailedComparison: React.FC<ETFDetailedComparisonProps> = ({
         <ETFComparisonTable title="Základní informace" data={basicInfoData} selectedETFs={selectedETFs} />
         <ETFComparisonTable title="Poplatky a velikost fondu" data={feesAndSizeData} selectedETFs={selectedETFs} />
         <ETFComparisonTable title="Výkonnost" data={performanceData} selectedETFs={selectedETFs} />
+        <ETFComparisonTable title="Roční výkonnost" data={yearlyPerformanceData} selectedETFs={selectedETFs} />
         <ETFPerformanceMetricsTable selectedETFs={selectedETFs} />
         <ETFFundDetailsTable selectedETFs={selectedETFs} />
         <ETFHoldingsTable selectedETFs={selectedETFs} />

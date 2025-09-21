@@ -31,6 +31,62 @@ const ETFPerformanceMetricsTable: React.FC<ETFPerformanceMetricsTableProps> = ({
               </tr>
             </thead>
             <tbody>
+              <tr className="border-b bg-blue-50">
+                <td className="p-3 font-medium text-blue-800">Výnos 1 měsíc</td>
+                {selectedETFs.map((etf) => (
+                  <td key={etf.isin} className={`p-3 font-mono ${getReturnColor(etf.return_1m)}`}>
+                    {etf.return_1m ? formatPercentage(etf.return_1m) : '-'}
+                  </td>
+                ))}
+              </tr>
+              <tr className="border-b bg-blue-50">
+                <td className="p-3 font-medium text-blue-800">Výnos 3 měsíce</td>
+                {selectedETFs.map((etf) => (
+                  <td key={etf.isin} className={`p-3 font-mono ${getReturnColor(etf.return_3m)}`}>
+                    {etf.return_3m ? formatPercentage(etf.return_3m) : '-'}
+                  </td>
+                ))}
+              </tr>
+              <tr className="border-b bg-blue-50">
+                <td className="p-3 font-medium text-blue-800">Výnos 6 měsíců</td>
+                {selectedETFs.map((etf) => (
+                  <td key={etf.isin} className={`p-3 font-mono ${getReturnColor(etf.return_6m)}`}>
+                    {etf.return_6m ? formatPercentage(etf.return_6m) : '-'}
+                  </td>
+                ))}
+              </tr>
+              <tr className="border-b bg-gray-50">
+                <td className="p-3 font-medium text-gray-800">Výnos 2021</td>
+                {selectedETFs.map((etf) => (
+                  <td key={etf.isin} className={`p-3 font-mono ${getReturnColor(etf.return_2021)}`}>
+                    {etf.return_2021 ? formatPercentage(etf.return_2021) : '-'}
+                  </td>
+                ))}
+              </tr>
+              <tr className="border-b bg-gray-50">
+                <td className="p-3 font-medium text-gray-800">Výnos 2022</td>
+                {selectedETFs.map((etf) => (
+                  <td key={etf.isin} className={`p-3 font-mono ${getReturnColor(etf.return_2022)}`}>
+                    {etf.return_2022 ? formatPercentage(etf.return_2022) : '-'}
+                  </td>
+                ))}
+              </tr>
+              <tr className="border-b bg-gray-50">
+                <td className="p-3 font-medium text-gray-800">Výnos 2023</td>
+                {selectedETFs.map((etf) => (
+                  <td key={etf.isin} className={`p-3 font-mono ${getReturnColor(etf.return_2023)}`}>
+                    {etf.return_2023 ? formatPercentage(etf.return_2023) : '-'}
+                  </td>
+                ))}
+              </tr>
+              <tr className="border-b bg-gray-50">
+                <td className="p-3 font-medium text-gray-800">Výnos 2024</td>
+                {selectedETFs.map((etf) => (
+                  <td key={etf.isin} className={`p-3 font-mono ${getReturnColor(etf.return_2024)}`}>
+                    {etf.return_2024 ? formatPercentage(etf.return_2024) : '-'}
+                  </td>
+                ))}
+              </tr>
               <tr className="border-b">
                 <td className="p-3 font-medium">Volatilita 1 rok</td>
                 {selectedETFs.map((etf) => (
