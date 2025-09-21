@@ -10,6 +10,7 @@ import { useETFData } from '@/hooks/useETFData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Sparkles, TrendingUp, Shield, Bitcoin, Gem, Building } from 'lucide-react';
 import MarketHeatmap from '@/components/infographics/MarketHeatmap';
+import TwitterVariants from '@/components/infographics/TwitterVariants';
 
 interface InfographicProps {
   title: string;
@@ -157,6 +158,175 @@ const InfographicsGenerator: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   // Dynamicky generovaný selectedType na základě výběru
+  // Helper funkce pro titulky
+  const getTitle = () => {
+    if (infographicMode === 'performance') {
+      const categoryMap: { [key: string]: string } = {
+        'Akcie': 'AKCIOVÉ',
+        'Dluhopisy': 'DLUHOPISOVÉ', 
+        'Krypto': 'KRYPTO',
+        'Komodity': 'KOMODITNÍ',
+        'Nemovitosti': 'NEMOVITOSTNÍ'
+      };
+      return `NEJVÝKONNĚJŠÍ ${categoryMap[category] || category.toUpperCase()} ETF`;
+    } else if (infographicMode === 'ter') {
+      if (terMode === 'category') {
+        const categoryMap: { [key: string]: string } = {
+          'Akcie': 'AKCIOVÉ',
+          'Dluhopisy': 'DLUHOPISOVÉ', 
+          'Krypto': 'KRYPTO',
+          'Komodity': 'KOMODITNÍ',
+          'Nemovitosti': 'NEMOVITOSTNÍ'
+        };
+        return `NEJLEVNĚJŠÍ ${categoryMap[category] || category.toUpperCase()} ETF`;
+      } else {
+        return `NEJLEVNĚJŠÍ ${index.toUpperCase()} ETF`;
+      }
+    } else if (infographicMode === 'heatmap') {
+      return `MARKET HEATMAP`;
+    }
+    return 'ETF ANALÝZA';
+  };
+
+  const getSubtitle = () => {
+    if (infographicMode === 'performance') {
+      const currentYear = new Date().getFullYear();
+      const currentDate = new Date().toLocaleDateString('cs-CZ', { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+      });
+      
+      const periodText = 
+        period === 'ytd' ? `Od začátku roku ${currentYear}` : 
+        period === '3y' ? 'Za poslední 3 roky' : 
+        'Za posledních 5 let';
+      
+      return `${periodText} • Data k ${currentDate}`;
+    } else if (infographicMode === 'ter') {
+      const currentDate = new Date().toLocaleDateString('cs-CZ', { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+      });
+      return `Roční poplatky TER • Data k ${currentDate}`;
+    } else if (infographicMode === 'heatmap') {
+      const periodText = 
+        heatmapPeriod === '1d' ? 'Za poslední den' :
+        heatmapPeriod === 'wtd' ? 'Za poslední týden' :
+        heatmapPeriod === 'mtd' ? 'Za poslední měsíc' :
+        heatmapPeriod === 'ytd' ? 'Od začátku roku' :
+        heatmapPeriod === '1y' ? 'Za poslední rok' :
+        heatmapPeriod === '3y' ? 'Za poslední 3 roky' :
+        heatmapPeriod === '5y' ? 'Za posledních 5 let' :
+        heatmapPeriod === '10y' ? 'Za posledních 10 let' : heatmapPeriod;
+      return periodText;
+    }
+    return '';
+  };
+
+  // Helper funkce pro získání prvního dostupného tickeru
+  const getBestTicker = (etf: any): string => {
+    const tickers = [
+      etf.primary_ticker,
+      etf.exchange_1_ticker,
+      etf.exchange_2_ticker,
+      etf.exchange_3_ticker,
+      etf.exchange_4_ticker,
+      etf.exchange_5_ticker,
+      etf.exchange_6_ticker,
+      etf.exchange_7_ticker,
+      etf.exchange_8_ticker,
+      etf.exchange_9_ticker,
+      etf.exchange_10_ticker
+    ];
+    
+    // Najde první neprázdný ticker (ignoruje pomlčky a prázdné stringy)
+    const firstTicker = tickers.find(ticker => 
+      ticker && 
+      ticker.trim() !== '' && 
+      ticker.trim() !== '-'
+    );
+    return firstTicker || 'N/A';
+  };
+
+  // Helper funkce pro social media varianty
+  const getTopPerformingETFs = () => {
+    const returnField = period === 'ytd' ? 'return_ytd' : period === '3y' ? 'return_3y' : 'return_5y';
+    
+    return etfs
+      .filter(etf => 
+        !etf.is_leveraged &&
+        etf[returnField] && 
+        etf[returnField] !== 0 &&
+        etf.category === category
+      )
+      .sort((a, b) => b[returnField] - a[returnField])
+      .slice(0, 10)
+      .map((etf, index) => ({
+        name: etf.name,
+        performance: etf[returnField].toFixed(1),
+        ter_numeric: etf.ter_numeric ? etf.ter_numeric.toFixed(2) : 'N/A',
+        isin: etf.isin,
+        primary_ticker: getBestTicker(etf)
+      }));
+  };
+
+  const getLowestTerETFs = () => {
+    if (terMode === 'category') {
+      return etfs
+        .filter(etf => 
+          !etf.is_leveraged &&
+          etf.ter_numeric && 
+          etf.ter_numeric > 0 &&
+          etf.category === category
+        )
+        .sort((a, b) => a.ter_numeric - b.ter_numeric)
+        .slice(0, 10)
+        .map((etf, index) => ({
+          name: etf.name,
+          ter_numeric: etf.ter_numeric.toFixed(2),
+          isin: etf.isin,
+          primary_ticker: getBestTicker(etf)
+        }));
+    } else {
+      // Logic for index-based TER filtering
+      const indexKeywords = getIndexKeywords(index);
+      return etfs
+        .filter(etf => {
+          if (etf.is_leveraged || !etf.ter_numeric || etf.ter_numeric <= 0) return false;
+          
+          const name_lower = (etf.name || '').toLowerCase();
+          const index_lower = (etf.index_name || '').toLowerCase();
+          
+          return indexKeywords.some(keyword => 
+            name_lower.includes(keyword.toLowerCase()) || 
+            index_lower.includes(keyword.toLowerCase())
+          );
+        })
+        .sort((a, b) => a.ter_numeric - b.ter_numeric)
+        .slice(0, 10)
+        .map((etf, index) => ({
+          name: etf.name,
+          ter_numeric: etf.ter_numeric.toFixed(2),
+          isin: etf.isin,
+          primary_ticker: getBestTicker(etf)
+        }));
+    }
+  };
+
+  const getIndexKeywords = (indexType: string) => {
+    switch (indexType) {
+      case 'sp500': return ['S&P 500', 'SP500', 'Standard & Poor'];
+      case 'nasdaq': return ['NASDAQ', 'Nasdaq'];
+      case 'msci-world': return ['MSCI World', 'MSCI WORLD'];
+      case 'ftse': return ['FTSE', 'Financial Times'];
+      case 'stoxx': return ['STOXX', 'Euro Stoxx'];
+      default: return [];
+    }
+  };
+
+
   const selectedType = React.useMemo(() => {
     if (infographicMode === 'performance') {
       return `top-${category.toLowerCase()}-${period}`;
@@ -790,8 +960,27 @@ const InfographicsGenerator: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex justify-center">
-          {renderContent()}
+        {/* Nové Twitter/X infografiky */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold mb-6 text-center">🎨 Infografiky pro X/Twitter</h2>
+          {infographicMode !== 'heatmap' ? (
+            <TwitterVariants
+              title={getTitle()}
+              subtitle={getSubtitle()}
+              data={infographicMode === 'performance' ? getTopPerformingETFs() : getLowestTerETFs()}
+              mode={infographicMode === 'performance' ? 'performance' : 'ter'}
+            />
+          ) : (
+            <div className="flex justify-center">
+              <div className="w-[1200px] h-[675px] bg-gradient-to-br from-violet-100 to-purple-100 rounded-xl flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-8xl mb-6">📊</div>
+                  <div className="text-4xl font-bold text-gray-800 mb-4">Market Heatmap</div>
+                  <div className="text-xl text-gray-600">Pro X/Twitter použijte výkonnost nebo TER módy</div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
       </div>
