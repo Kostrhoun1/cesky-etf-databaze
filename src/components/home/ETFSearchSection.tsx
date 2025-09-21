@@ -67,7 +67,7 @@ const ETFSearchSection: React.FC = () => {
             Najděte perfektní ETF pro vaše portfolio
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-4">
-            Prohledejte přes {totalETFCount.toLocaleString()} ETF fondů
+            Prohledejte databázi {totalETFCount.toLocaleString()} ETF fondů
           </p>
         </div>
 
