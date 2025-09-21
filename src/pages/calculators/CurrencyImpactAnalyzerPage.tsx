@@ -5,6 +5,7 @@ import StructuredData from '@/components/SEO/StructuredData';
 
 // Lazy loading pro méně kritické komponenty (CWV optimalizace)
 const CurrencyImpactAnalyzer = lazy(() => import('@/components/tools/CurrencyImpactAnalyzer'));
+const HedgedVsUnhedgedComparison = lazy(() => import('@/components/tools/HedgedVsUnhedgedComparison'));
 const FAQSection = lazy(() => import('@/components/SEO/FAQSection'));
 const InternalLinking = lazy(() => import('@/components/SEO/InternalLinking'));
 import { Card, CardContent } from '@/components/ui/card';
@@ -71,7 +72,6 @@ const CurrencyImpactAnalyzerPage: React.FC = () => {
       />
       
       {/* CWV optimalizace - preload kritických zdrojů */}
-      <link rel="preload" as="style" href="/css/critical.css" />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link rel="dns-prefetch" href="//www.googletagmanager.com" />
@@ -158,52 +158,65 @@ const CurrencyImpactAnalyzerPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Praktické příklady měnové expozice */}
-        <div className="bg-white rounded-2xl border p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Praktické příklady měnové expozice ETF</h2>
-          
-          <div className="grid md:grid-cols-2 gap-8">
+        {/* Nová sekce: Analýza hedging nákladů */}
+        <div className="bg-orange-50 border border-orange-200 rounded-xl p-6 mb-8">
+          <div className="flex items-start gap-4">
+            <Shield className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-blue-800">Populární ETF a jejich skutečná expozice</h3>
-              <div className="space-y-3">
-                <div className="bg-blue-50 p-3 rounded-lg">
-                  <p className="font-semibold"><a href="/etf/cspx" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CSPX</a> (iShares S&P 500 EUR)</p>
-                  <p className="text-sm text-blue-700">Měna fondu: EUR | Expozice: 100% USD</p>
-                </div>
-                <div className="bg-purple-50 p-3 rounded-lg">
-                  <p className="font-semibold"><a href="/etf/vwce" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:underline">VWCE</a> (Vanguard All-World EUR)</p>
-                  <p className="text-sm text-purple-700">Měna fondu: EUR | Expozice: ~60% USD, ~30% EUR, ~10% ostatní</p>
-                </div>
-                <div className="bg-green-50 p-3 rounded-lg">
-                  <p className="font-semibold"><a href="/etf/eunl" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline">EUNL</a> (Amundi MSCI Europe EUR)</p>
-                  <p className="text-sm text-green-700">Měna fondu: EUR | Expozice: 100% EUR</p>
-                </div>
-                <div className="mt-4 text-center">
-                  <a 
-                    href="/srovnani-etf" 
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
-                  >
-                    <TrendingUp className="h-4 w-4" />
-                    Otevřít v porovnání ETF
-                  </a>
+              <h2 className="text-xl font-semibold text-orange-800 mb-4">💰 Skutečné náklady hedged ETF</h2>
+              <p className="text-orange-700 mb-4">
+                <strong>Hedging není zadarmo!</strong> U EUR-hedged fondů nejde jen o vyšší TER. 
+                Celkové náklady = <strong>TER + Carry Cost + Rollování forwardů</strong>
+              </p>
+              
+              <div className="bg-white rounded-lg p-4 mb-4">
+                <h3 className="font-semibold text-orange-800 mb-3">Carry Cost vysvětlení:</h3>
+                <div className="text-sm text-orange-700 space-y-2">
+                  <p><strong>Carry = rozdíl krátkých úrokových sazeb</strong></p>
+                  <p>• Když USD sazby &gt; EUR sazby → negativní carry (náklad)</p>
+                  <p>• Když EUR sazby &gt; USD sazby → pozitivní carry (příjem)</p>
+                  <p>• Aktuálně (2024/25): USD Fed ~5.5%, EUR ECB ~4.5% = -1% carry ročně</p>
                 </div>
               </div>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-orange-800">EUR Hedged varianty</h3>
-              <div className="space-y-3">
-                <div className="bg-orange-50 p-3 rounded-lg">
-                  <p className="font-semibold"><a href="/etf/cshg" target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:underline">CSHG</a> (S&P 500 EUR Hedged)</p>
-                  <p className="text-sm text-orange-700">Eliminuje EUR/USD riziko, zůstává EUR/CZK</p>
+
+              <div className="grid md:grid-cols-2 gap-4 text-sm">
+                <div className="bg-white p-3 rounded-lg border border-orange-200">
+                  <h4 className="font-semibold text-orange-800 mb-2">CSPX (Unhedged)</h4>
+                  <p className="text-orange-700">• TER: 0.07% ročně</p>
+                  <p className="text-orange-700">• Carry cost: 0%</p>
+                  <p className="text-orange-700">• <strong>Celkem: 0.07%</strong></p>
+                  <p className="text-orange-700">• Měnové riziko: plné USD/EUR</p>
                 </div>
-                <div className="bg-red-50 p-3 rounded-lg">
-                  <p className="font-semibold text-red-800">⚠️ CZK hedged ETF</p>
-                  <p className="text-sm text-red-700">NEEXISTUJÍ! Žádný ETF není zajištěn proti CZK</p>
+                <div className="bg-white p-3 rounded-lg border border-orange-200">
+                  <h4 className="font-semibold text-orange-800 mb-2">CSHG (EUR Hedged)</h4>
+                  <p className="text-orange-700">• TER: 0.10% ročně</p>
+                  <p className="text-orange-700">• Carry cost: ~-1.0% ročně*</p>
+                  <p className="text-orange-700">• <strong>Celkem: ~1.10%</strong></p>
+                  <p className="text-orange-700">• Měnové riziko: jen EUR/CZK</p>
                 </div>
               </div>
+
+              <p className="text-xs text-orange-600 mt-3">
+                *Carry cost se mění s úrokovými sazbami. Při zúžení spreadu USD-EUR se snižuje.
+              </p>
             </div>
           </div>
         </div>
+
+        {/* Live srovnání hedged vs unhedged ETF z databáze */}
+        <Suspense 
+          fallback={
+            <div className="bg-white rounded-2xl border p-8 mb-8 animate-pulse">
+              <div className="h-8 bg-gray-200 rounded mb-6 w-1/3"></div>
+              <div className="space-y-4">
+                <div className="h-32 bg-gray-100 rounded"></div>
+                <div className="h-32 bg-gray-100 rounded"></div>
+              </div>
+            </div>
+          }
+        >
+          <HedgedVsUnhedgedComparison />
+        </Suspense>
 
         {/* Pokročilé zajištění proti CZK */}
         <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-8">
@@ -289,7 +302,11 @@ const CurrencyImpactAnalyzerPage: React.FC = () => {
             },
             {
               question: "Jsou EUR zajištěné ETF dražší?",
-              answer: "Ano, mají mírně vyšší TER kvůli nákladům na hedging. Například CSPX (nezajištěný) má TER 0,07%, zatímco CSHG (EUR zajištěný) má TER 0,10%. Rozdíl ~0,03% ročně za eliminaci EUR/USD volatility."
+              answer: "Ano, a je to dražší než jen rozdíl v TER! CSPX má TER 0,07%, CSHG má 0,10%. ALE skutečné náklady hedgingu zahrnují i carry cost = rozdíl úrokových sazeb. Aktuálně USD sazby ~5.5%, EUR ~4.5% = další -1% ročně. Celkové náklady CSHG: ~1.10% vs 0.07% u CSPX."
+            },
+            {
+              question: "Co je to carry cost u hedged ETF?",
+              answer: "Carry cost = implicitní náklad/příjem z rozdílu úrokových sazeb měn. Hedged ETF používají forwardy, kde je automaticky zabudován rozdíl sazeb. Když USD sazby > EUR sazby (jako nyní), carry je negativní = dodatečný náklad ~1% ročně. Když se sazby obrátí, může být carry pozitivní."
             },
             {
               question: "Jak velký dopad má kurz na výnosy z ETF?",

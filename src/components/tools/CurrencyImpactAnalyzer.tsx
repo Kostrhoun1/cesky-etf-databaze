@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { DollarSign, Euro, TrendingUp, TrendingDown } from 'lucide-react';
+import { DollarSign, Euro, TrendingUp, TrendingDown, Shield, Calculator, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { calculateCurrencyImpact, CurrencyImpactData } from '@/utils/currencyImpactCalculations';
 import CurrencyImpactResults from './CurrencyImpactResults';
 
@@ -17,6 +17,13 @@ const CurrencyImpactAnalyzer: React.FC = () => {
   const [currentUsdCzk, setCurrentUsdCzk] = useState<number>(23.5);
   const [currentEurCzk, setCurrentEurCzk] = useState<number>(25.2);
   const [results, setResults] = useState<CurrencyImpactData | null>(null);
+  
+  // Nové stavy pro carry cost kalkulačku
+  const [usdInterestRate, setUsdInterestRate] = useState<number>(5.5);
+  const [eurInterestRate, setEurInterestRate] = useState<number>(4.5);
+  const [unhedgedTer, setUnhedgedTer] = useState<number>(0.07);
+  const [hedgedTer, setHedgedTer] = useState<number>(0.10);
+  const [showCarryCost, setShowCarryCost] = useState<boolean>(false);
 
   const handleCalculate = () => {
     // Normalizace alokace na 100%
@@ -213,6 +220,155 @@ const CurrencyImpactAnalyzer: React.FC = () => {
             </CardContent>
           </Card>
 
+          {/* Carry Cost rychlý přehled + rozbalitelná sekce */}
+          <Card className="bg-orange-50 border-orange-200">
+            <CardContent className="p-4">
+              {/* Základní přehled carry cost - vždy viditelný */}
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-orange-800 mb-3 flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Hedged ETF náklady
+                  <div className="flex items-center gap-1 text-sm text-orange-600 ml-auto">
+                    <Info className="h-4 w-4" />
+                    Carry + TER
+                  </div>
+                </h3>
+                
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div className="bg-white p-3 rounded-lg border border-orange-200">
+                    <p className="text-xs text-gray-600 mb-1">Unhedged (CSPX)</p>
+                    <p className="font-bold text-blue-600">{unhedgedTer.toFixed(2)}%</p>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-orange-200">
+                    <p className="text-xs text-gray-600 mb-1">Hedged (CSHG)</p>
+                    <p className="font-bold text-orange-600">
+                      {(hedgedTer + Math.max(0, usdInterestRate - eurInterestRate)).toFixed(2)}%
+                    </p>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-orange-200">
+                    <p className="text-xs text-gray-600 mb-1">Rozdíl</p>
+                    <p className="font-bold text-red-600">
+                      +{((hedgedTer + Math.max(0, usdInterestRate - eurInterestRate)) - unhedgedTer).toFixed(2)}%
+                    </p>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-orange-700 text-center mt-3">
+                  Na {portfolioValue.toLocaleString()} Kč = <strong>+{(portfolioValue * ((hedgedTer + Math.max(0, usdInterestRate - eurInterestRate)) - unhedgedTer) / 100).toLocaleString()} Kč</strong> ročně za hedging
+                </p>
+              </div>
+
+              {/* Rozbalitelná pokročilá sekce */}
+              <div className="border-t border-orange-200 pt-4">
+                <Button
+                  variant="ghost"
+                  onClick={() => setShowCarryCost(!showCarryCost)}
+                  className="w-full flex items-center justify-center gap-2 text-orange-700 hover:bg-orange-100"
+                >
+                  {showCarryCost ? (
+                    <>
+                      <ChevronUp className="h-4 w-4" />
+                      Skrýt pokročilé nastavení
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown className="h-4 w-4" />
+                      Upravit úrokové sazby a TER
+                    </>
+                  )}
+                </Button>
+
+                {showCarryCost && (
+                  <div className="mt-4 space-y-4">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="bg-white p-3 rounded-lg border border-orange-200">
+                        <h4 className="font-medium text-orange-800 mb-3">Úrokové sazby</h4>
+                        <div className="space-y-2">
+                          <div>
+                            <Label htmlFor="usdRate" className="text-sm">USD Fed ({usdInterestRate}%)</Label>
+                            <Input
+                              id="usdRate"
+                              type="range"
+                              min="0"
+                              max="10"
+                              step="0.25"
+                              value={usdInterestRate}
+                              onChange={(e) => setUsdInterestRate(Number(e.target.value))}
+                              className="w-full"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="eurRate" className="text-sm">EUR ECB ({eurInterestRate}%)</Label>
+                            <Input
+                              id="eurRate"
+                              type="range"
+                              min="0"
+                              max="10"
+                              step="0.25"
+                              value={eurInterestRate}
+                              onChange={(e) => setEurInterestRate(Number(e.target.value))}
+                              className="w-full"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-white p-3 rounded-lg border border-orange-200">
+                        <h4 className="font-medium text-orange-800 mb-3">TER porovnání</h4>
+                        <div className="space-y-2">
+                          <div>
+                            <Label htmlFor="unhedgedTer" className="text-sm">Unhedged TER ({unhedgedTer}%)</Label>
+                            <Input
+                              id="unhedgedTer"
+                              type="range"
+                              min="0"
+                              max="1"
+                              step="0.01"
+                              value={unhedgedTer}
+                              onChange={(e) => setUnhedgedTer(Number(e.target.value))}
+                              className="w-full"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="hedgedTer" className="text-sm">Hedged TER ({hedgedTer}%)</Label>
+                            <Input
+                              id="hedgedTer"
+                              type="range"
+                              min="0"
+                              max="1"
+                              step="0.01"
+                              value={hedgedTer}
+                              onChange={(e) => setHedgedTer(Number(e.target.value))}
+                              className="w-full"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-white p-3 rounded-lg border border-orange-200">
+                      <h4 className="font-medium text-orange-800 mb-2 flex items-center gap-2">
+                        <Calculator className="h-4 w-4" />
+                        Výpočet carry cost
+                      </h4>
+                      <p className="text-sm text-orange-700">
+                        Carry = USD sazba - EUR sazba = {usdInterestRate}% - {eurInterestRate}% = 
+                        <span className={`font-bold ml-1 ${(usdInterestRate - eurInterestRate) > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                          {(usdInterestRate - eurInterestRate) > 0 ? '-' : '+'}{Math.abs(usdInterestRate - eurInterestRate).toFixed(2)}%
+                        </span>
+                      </p>
+                      <p className="text-xs text-orange-600 mt-1">
+                        {(usdInterestRate - eurInterestRate) > 0 
+                          ? 'Negativní carry = dodatečný náklad' 
+                          : 'Pozitivní carry = dodatečný příjem'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
 
           <Button onClick={handleCalculate} className="w-full" size="lg">
             Analyzovat kurzový dopad
