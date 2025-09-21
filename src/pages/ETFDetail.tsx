@@ -29,7 +29,7 @@ const ETFDetail: React.FC = () => {
         return;
       }
       
-      console.log('🔍 Fetching ETF detail for ISIN:', isin);
+      console.log('🔍 Načítám ETF detail pro ISIN:', isin);
       setIsLoading(true);
       try {
         const { data, error } = await supabase
@@ -377,6 +377,42 @@ const ETFDetail: React.FC = () => {
                   <span className="text-gray-600">Sledovaný index:</span>
                   <span className="font-medium">{etf.index_name}</span>
                 </div>
+                {etf.legal_structure && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Právní struktura:</span>
+                    <span className="font-medium">{etf.legal_structure}</span>
+                  </div>
+                )}
+                {etf.fund_structure && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Struktura fondu:</span>
+                    <span className="font-medium">{etf.fund_structure}</span>
+                  </div>
+                )}
+                {etf.use_of_income && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Nakládání s příjmy:</span>
+                    <span className="font-medium">{etf.use_of_income}</span>
+                  </div>
+                )}
+                {etf.securities_lending && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Půjčování CP:</span>
+                    <span className="font-medium">{etf.securities_lending}</span>
+                  </div>
+                )}
+                {etf.swap_counterparty && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Swap protistrana:</span>
+                    <span className="font-medium">{etf.swap_counterparty}</span>
+                  </div>
+                )}
+                {etf.sustainability && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">ESG hodnocení:</span>
+                    <span className="font-medium">{etf.sustainability}</span>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -614,16 +650,36 @@ const ETFDetail: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Největší pozice</CardTitle>
-                <CardDescription>Top 10 největších pozic v fondu</CardDescription>
+                <CardDescription>Top 10 největších pozic v portfoliu</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {topHoldings.map((holding, index) => (
-                    <div key={index} className="flex justify-between">
-                      <span className="text-gray-700 text-sm">{holding.name}</span>
-                      <span className="font-medium">{formatPercentage(holding.weight)}</span>
-                    </div>
-                  ))}
+                <div className="space-y-4">
+                  {topHoldings.map((holding, index) => {
+                    const maxWeight = Math.max(...topHoldings.map(h => h.weight));
+                    const widthPercent = (holding.weight / maxWeight) * 100;
+                    
+                    return (
+                      <div key={index} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg flex items-center justify-center text-sm font-bold">
+                              {index + 1}
+                            </div>
+                            <span className="text-gray-800 font-medium">{holding.name}</span>
+                          </div>
+                          <span className="font-bold text-blue-600">{formatPercentage(holding.weight)}</span>
+                        </div>
+                        <div className="ml-11">
+                          <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                            <div 
+                              className="bg-gradient-to-r from-blue-500 to-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out"
+                              style={{ width: `${Math.min(widthPercent, 100)}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
@@ -637,13 +693,74 @@ const ETFDetail: React.FC = () => {
                 <CardDescription>Top 5 zemí podle váhy v portfoliu</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {topCountries.map((country, index) => (
-                    <div key={index} className="flex justify-between">
-                      <span className="text-gray-700">{country.name}</span>
-                      <span className="font-medium">{formatPercentage(country.weight)}</span>
-                    </div>
-                  ))}
+                <div className="space-y-4">
+                  {topCountries.map((country, index) => {
+                    const maxWeight = Math.max(...topCountries.map(c => c.weight));
+                    const widthPercent = (country.weight / maxWeight) * 100;
+                    
+                    // Barvy pro různé země/regiony
+                    const colorVariants = [
+                      'from-emerald-500 to-emerald-600',
+                      'from-blue-500 to-blue-600', 
+                      'from-purple-500 to-purple-600',
+                      'from-orange-500 to-orange-600',
+                      'from-teal-500 to-teal-600'
+                    ];
+                    
+                    // Mapování zemí na vlajky
+                    const getCountryFlag = (countryName: string): string => {
+                      const name = countryName.toLowerCase();
+                      if (name.includes('united states') || name.includes('usa') || name.includes('america')) return '🇺🇸';
+                      if (name.includes('germany') || name.includes('německo')) return '🇩🇪';
+                      if (name.includes('france') || name.includes('francie')) return '🇫🇷';
+                      if (name.includes('united kingdom') || name.includes('uk') || name.includes('britain') || name.includes('británie')) return '🇬🇧';
+                      if (name.includes('japan') || name.includes('japonsko')) return '🇯🇵';
+                      if (name.includes('china') || name.includes('čína')) return '🇨🇳';
+                      if (name.includes('switzerland') || name.includes('švýcarsko')) return '🇨🇭';
+                      if (name.includes('netherlands') || name.includes('nizozemsko') || name.includes('holandsko')) return '🇳🇱';
+                      if (name.includes('canada') || name.includes('kanada')) return '🇨🇦';
+                      if (name.includes('australia') || name.includes('austrálie')) return '🇦🇺';
+                      if (name.includes('ireland') || name.includes('irsko')) return '🇮🇪';
+                      if (name.includes('italy') || name.includes('itálie')) return '🇮🇹';
+                      if (name.includes('spain') || name.includes('španělsko')) return '🇪🇸';
+                      if (name.includes('sweden') || name.includes('švédsko')) return '🇸🇪';
+                      if (name.includes('denmark') || name.includes('dánsko')) return '🇩🇰';
+                      if (name.includes('norway') || name.includes('norsko')) return '🇳🇴';
+                      if (name.includes('finland') || name.includes('finsko')) return '🇫🇮';
+                      if (name.includes('belgium') || name.includes('belgie')) return '🇧🇪';
+                      if (name.includes('austria') || name.includes('rakousko')) return '🇦🇹';
+                      if (name.includes('taiwan') || name.includes('tchaj-wan')) return '🇹🇼';
+                      if (name.includes('south korea') || name.includes('korea') || name.includes('jižní korea')) return '🇰🇷';
+                      if (name.includes('hong kong')) return '🇭🇰';
+                      if (name.includes('singapore') || name.includes('singapur')) return '🇸🇬';
+                      if (name.includes('emerging') || name.includes('rozvíjející')) return '🌍';
+                      if (name.includes('europe') || name.includes('evropa')) return '🇪🇺';
+                      if (name.includes('world') || name.includes('global') || name.includes('svět')) return '🌎';
+                      if (name.includes('other') || name.includes('ostatní')) return '🏳️';
+                      return '🏳️'; // default flag
+                    };
+                    
+                    return (
+                      <div key={index} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-4 h-4 rounded-full bg-gradient-to-r ${colorVariants[index % colorVariants.length]} shadow-sm`}></div>
+                            <span className="text-gray-800 font-medium">{country.name}</span>
+                            <span className="text-lg">{getCountryFlag(country.name)}</span>
+                          </div>
+                          <span className="font-bold text-emerald-600">{formatPercentage(country.weight)}</span>
+                        </div>
+                        <div className="ml-7">
+                          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <div 
+                              className={`bg-gradient-to-r ${colorVariants[index % colorVariants.length]} h-3 rounded-full transition-all duration-500 ease-out shadow-sm`}
+                              style={{ width: `${Math.min(widthPercent, 100)}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
@@ -657,13 +774,45 @@ const ETFDetail: React.FC = () => {
                 <CardDescription>Top 5 sektorů podle váhy v portfoliu</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {topSectors.map((sector, index) => (
-                    <div key={index} className="flex justify-between">
-                      <span className="text-gray-700">{sector.name}</span>
-                      <span className="font-medium">{formatPercentage(sector.weight)}</span>
-                    </div>
-                  ))}
+                <div className="space-y-4">
+                  {topSectors.map((sector, index) => {
+                    const maxWeight = Math.max(...topSectors.map(s => s.weight));
+                    const widthPercent = (sector.weight / maxWeight) * 100;
+                    
+                    // Barvy pro různé sektory
+                    const sectorColors = [
+                      'from-indigo-500 to-indigo-600',
+                      'from-rose-500 to-rose-600',
+                      'from-amber-500 to-amber-600',
+                      'from-cyan-500 to-cyan-600',
+                      'from-violet-500 to-violet-600'
+                    ];
+                    
+                    // Ikony pro sektory
+                    const sectorIcons = ['💼', '🏭', '💡', '🏥', '🏦'];
+                    
+                    return (
+                      <div key={index} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg flex items-center justify-center text-lg">
+                              {sectorIcons[index % sectorIcons.length]}
+                            </div>
+                            <span className="text-gray-800 font-medium">{sector.name}</span>
+                          </div>
+                          <span className="font-bold text-indigo-600">{formatPercentage(sector.weight)}</span>
+                        </div>
+                        <div className="ml-11">
+                          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <div 
+                              className={`bg-gradient-to-r ${sectorColors[index % sectorColors.length]} h-3 rounded-full transition-all duration-700 ease-out shadow-sm`}
+                              style={{ width: `${Math.min(widthPercent, 100)}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
