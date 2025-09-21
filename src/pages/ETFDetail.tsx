@@ -840,20 +840,31 @@ const ETFDetail: React.FC = () => {
                 {etf.exchange_1_name && (
                   <>
                     <div className="pt-2 border-t">
-                      <h4 className="font-medium mb-2">Další burzy:</h4>
-                      <div className="text-sm space-y-1">
-                        {etf.exchange_1_name && (
-                          <div className="flex justify-between">
-                            <span>{etf.exchange_1_name}</span>
-                            <span>{etf.exchange_1_ticker} ({etf.exchange_1_currency})</span>
-                          </div>
-                        )}
-                        {etf.exchange_2_name && (
-                          <div className="flex justify-between">
-                            <span>{etf.exchange_2_name}</span>
-                            <span>{etf.exchange_2_ticker} ({etf.exchange_2_currency})</span>
-                          </div>
-                        )}
+                      <h4 className="font-medium mb-2">Všechny burzy:</h4>
+                      <div className="text-sm space-y-2">
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => {
+                          const exchangeName = etf[`exchange_${i}_name` as keyof ETF] as string;
+                          const exchangeTicker = etf[`exchange_${i}_ticker` as keyof ETF] as string;
+                          const exchangeCurrency = etf[`exchange_${i}_currency` as keyof ETF] as string;
+                          
+                          if (exchangeName && exchangeName.trim()) {
+                            return (
+                              <div key={i} className="flex justify-between items-center p-2 bg-gray-50 rounded-lg">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">
+                                    {i}
+                                  </div>
+                                  <span className="font-medium">{exchangeName}</span>
+                                </div>
+                                <div className="text-right">
+                                  <div className="font-mono text-sm">{exchangeTicker || '-'}</div>
+                                  <div className="text-xs text-gray-500">{exchangeCurrency || '-'}</div>
+                                </div>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
                       </div>
                     </div>
                   </>
