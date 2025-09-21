@@ -103,8 +103,8 @@ const ETFSearchSection: React.FC = () => {
                   {/* Statistiky */}
                   <div className="mb-4">
                     <div className="flex items-center gap-2 text-gray-600">
-                      <span className="bg-gradient-to-r from-violet-100 to-purple-100 text-violet-700 px-3 py-1 rounded-full text-sm font-medium">
-                        {Math.min(10, filteredETFs.length)}
+                      <span className="text-gray-700 font-medium">
+                        TOP {Math.min(10, filteredETFs.length)}
                       </span>
                       <span>ETF fondů v kategorii <strong>{category}</strong></span>
                       <span className="text-sm text-gray-500">({filteredETFs.length} celkem)</span>
@@ -134,7 +134,7 @@ const ETFSearchSection: React.FC = () => {
                         <h3 className="font-semibold text-gray-900 mb-1">
                           {selectedETFs.length > 0 
                             ? `Máte vybráno ${selectedETFs.length} ETF fondů k porovnání` 
-                            : `Chcete vidět více než ${Math.min(10, filteredETFs.length)} fondů?`
+                            : `Chcete vidět více než TOP ${Math.min(10, filteredETFs.length)}?`
                           }
                         </h3>
                         <p className="text-gray-600 text-sm">
