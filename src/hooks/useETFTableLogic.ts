@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ETFListItem } from '@/types/etf';
 import { calculateETFRating } from '@/utils/etfRating';
+import { detectHedging, filterByHedging } from '@/utils/hedgingDetection';
 
 type AdvancedFilterValue = string | number | boolean | [number, number];
 
@@ -17,6 +18,7 @@ export interface AdvancedFiltersState {
   dividendYieldRange: [number, number];
   includeLeveragedETFs: boolean;
   minRating: number;
+  hedgingType?: string;
 }
 
 export const useETFTableLogic = (etfs: ETFListItem[]) => {
@@ -53,6 +55,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
     dividendYieldRange: [0, 10],
     includeLeveragedETFs: false,
     minRating: 0,
+    hedgingType: 'all',
   });
 
   const categories = useMemo(() => {
@@ -90,13 +93,36 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
           etf.isin.toLowerCase().includes(searchLower) ||
           etf.fund_provider.toLowerCase().includes(searchLower);
         
-        const tickerFieldsMatch = 
+        // Rozšířené vyhledávání ve všech ticker polích s intelligent matching
+        const isTickerSearch = searchLower.length >= 3 && searchLower.match(/^[A-Z0-9]+$/i);
+        
+        const tickerFieldsMatch = isTickerSearch ? (
+          // Pro ticker search: přesná shoda nebo začátek tickeru (ROZŠÍŘENO na 10 exchanges)
+          (etf.primary_ticker && (etf.primary_ticker.toLowerCase() === searchLower || etf.primary_ticker.toLowerCase().startsWith(searchLower))) ||
+          (etf.exchange_1_ticker && (etf.exchange_1_ticker.toLowerCase() === searchLower || etf.exchange_1_ticker.toLowerCase().startsWith(searchLower))) ||
+          (etf.exchange_2_ticker && (etf.exchange_2_ticker.toLowerCase() === searchLower || etf.exchange_2_ticker.toLowerCase().startsWith(searchLower))) ||
+          (etf.exchange_3_ticker && (etf.exchange_3_ticker.toLowerCase() === searchLower || etf.exchange_3_ticker.toLowerCase().startsWith(searchLower))) ||
+          (etf.exchange_4_ticker && (etf.exchange_4_ticker.toLowerCase() === searchLower || etf.exchange_4_ticker.toLowerCase().startsWith(searchLower))) ||
+          (etf.exchange_5_ticker && (etf.exchange_5_ticker.toLowerCase() === searchLower || etf.exchange_5_ticker.toLowerCase().startsWith(searchLower))) ||
+          (etf.exchange_6_ticker && (etf.exchange_6_ticker.toLowerCase() === searchLower || etf.exchange_6_ticker.toLowerCase().startsWith(searchLower))) ||
+          (etf.exchange_7_ticker && (etf.exchange_7_ticker.toLowerCase() === searchLower || etf.exchange_7_ticker.toLowerCase().startsWith(searchLower))) ||
+          (etf.exchange_8_ticker && (etf.exchange_8_ticker.toLowerCase() === searchLower || etf.exchange_8_ticker.toLowerCase().startsWith(searchLower))) ||
+          (etf.exchange_9_ticker && (etf.exchange_9_ticker.toLowerCase() === searchLower || etf.exchange_9_ticker.toLowerCase().startsWith(searchLower))) ||
+          (etf.exchange_10_ticker && (etf.exchange_10_ticker.toLowerCase() === searchLower || etf.exchange_10_ticker.toLowerCase().startsWith(searchLower)))
+        ) : (
+          // Pro obyčejný text search: substring match (ROZŠÍŘENO na 10 exchanges)
           (etf.primary_ticker && etf.primary_ticker.toLowerCase().includes(searchLower)) ||
           (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase().includes(searchLower)) ||
           (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase().includes(searchLower)) ||
           (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().includes(searchLower)) ||
           (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().includes(searchLower)) ||
-          (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes(searchLower));
+          (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_6_ticker && etf.exchange_6_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_7_ticker && etf.exchange_7_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_8_ticker && etf.exchange_8_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_9_ticker && etf.exchange_9_ticker.toLowerCase().includes(searchLower)) ||
+          (etf.exchange_10_ticker && etf.exchange_10_ticker.toLowerCase().includes(searchLower))
+        );
         
         return basicFieldsMatch || tickerFieldsMatch;
       })
@@ -119,7 +145,7 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
         return true;
       })
       .filter(etf => {
-        const { distributionPolicy, indexName, fundCurrency, maxTer, replicationMethod, fundSizeRange, region, terRange, fundSizeRangeValues, dividendYieldRange } = advancedFilters;
+        const { distributionPolicy, indexName, fundCurrency, maxTer, replicationMethod, fundSizeRange, region, terRange, fundSizeRangeValues, dividendYieldRange, hedgingType } = advancedFilters;
         const distPolicyMatch = distributionPolicy === 'all' || etf.distribution_policy === distributionPolicy;
         const indexMatch = indexName === 'all' || etf.index_name === indexName;
         const currencyMatch = fundCurrency === 'all' || etf.fund_currency === fundCurrency;
@@ -154,9 +180,88 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
           }
         }
         
-        return distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch && regionMatch && terRangeMatch && fundSizeRangeMatch && dividendYieldRangeMatch;
+        // Hedging filter - VYLEPŠENO: používá currency_risk pole z databáze
+        let hedgingMatch = true;
+        if (hedgingType && hedgingType !== 'all') {
+          const hedgingInfo = detectHedging(etf.name, etf.currency_risk);
+          
+          switch (hedgingType) {
+            case 'unhedged':
+              hedgingMatch = !hedgingInfo.isHedged;
+              break;
+            case 'hedged':
+              hedgingMatch = hedgingInfo.isHedged;
+              break;
+            case 'eur_hedged':
+              hedgingMatch = hedgingInfo.hedgingType === 'eur_hedged';
+              break;
+            case 'usd_hedged':
+              hedgingMatch = hedgingInfo.hedgingType === 'usd_hedged';
+              break;
+            case 'gbp_hedged':
+              hedgingMatch = hedgingInfo.hedgingType === 'gbp_hedged';
+              break;
+            case 'chf_hedged':
+              hedgingMatch = hedgingInfo.hedgingType === 'chf_hedged';
+              break;
+            default:
+              hedgingMatch = true;
+          }
+        }
+        
+        return distPolicyMatch && indexMatch && currencyMatch && terMatch && replicationMatch && fundSizeMatch && regionMatch && terRangeMatch && fundSizeRangeMatch && dividendYieldRangeMatch && hedgingMatch;
       })
       .sort((a, b) => {
+        // Search relevance sorting - exact ticker matches first
+        if (searchTerm.length >= 3 && searchTerm.match(/^[A-Z0-9]+$/i)) {
+          const searchLower = searchTerm.toLowerCase();
+          
+          const getTickerRelevance = (etf: ETFListItem) => {
+            // Check for exact ticker match (highest relevance)
+            if (
+              (etf.primary_ticker && etf.primary_ticker.toLowerCase() === searchLower) ||
+              (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase() === searchLower) ||
+              (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase() === searchLower) ||
+              (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase() === searchLower) ||
+              (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase() === searchLower) ||
+              (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase() === searchLower) ||
+              (etf.exchange_6_ticker && etf.exchange_6_ticker.toLowerCase() === searchLower) ||
+              (etf.exchange_7_ticker && etf.exchange_7_ticker.toLowerCase() === searchLower) ||
+              (etf.exchange_8_ticker && etf.exchange_8_ticker.toLowerCase() === searchLower) ||
+              (etf.exchange_9_ticker && etf.exchange_9_ticker.toLowerCase() === searchLower) ||
+              (etf.exchange_10_ticker && etf.exchange_10_ticker.toLowerCase() === searchLower)
+            ) {
+              return 3; // Exact match
+            }
+            
+            // Check for prefix ticker match (medium relevance)
+            if (
+              (etf.primary_ticker && etf.primary_ticker.toLowerCase().startsWith(searchLower)) ||
+              (etf.exchange_1_ticker && etf.exchange_1_ticker.toLowerCase().startsWith(searchLower)) ||
+              (etf.exchange_2_ticker && etf.exchange_2_ticker.toLowerCase().startsWith(searchLower)) ||
+              (etf.exchange_3_ticker && etf.exchange_3_ticker.toLowerCase().startsWith(searchLower)) ||
+              (etf.exchange_4_ticker && etf.exchange_4_ticker.toLowerCase().startsWith(searchLower)) ||
+              (etf.exchange_5_ticker && etf.exchange_5_ticker.toLowerCase().startsWith(searchLower)) ||
+              (etf.exchange_6_ticker && etf.exchange_6_ticker.toLowerCase().startsWith(searchLower)) ||
+              (etf.exchange_7_ticker && etf.exchange_7_ticker.toLowerCase().startsWith(searchLower)) ||
+              (etf.exchange_8_ticker && etf.exchange_8_ticker.toLowerCase().startsWith(searchLower)) ||
+              (etf.exchange_9_ticker && etf.exchange_9_ticker.toLowerCase().startsWith(searchLower)) ||
+              (etf.exchange_10_ticker && etf.exchange_10_ticker.toLowerCase().startsWith(searchLower))
+            ) {
+              return 2; // Prefix match
+            }
+            
+            return 1; // Other matches (name, ISIN, etc.)
+          };
+          
+          const aRelevance = getTickerRelevance(a);
+          const bRelevance = getTickerRelevance(b);
+          
+          if (aRelevance !== bRelevance) {
+            return bRelevance - aRelevance; // Higher relevance first
+          }
+        }
+
         let aValue: any = a[sortBy as keyof ETFListItem];
         let bValue: any = b[sortBy as keyof ETFListItem];
         

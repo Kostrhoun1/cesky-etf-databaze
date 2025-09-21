@@ -20,6 +20,13 @@ export interface ETF {
   legal_structure: string;
   index_name: string;
   investment_focus: string;
+  currency_risk?: string;
+  strategy_risk?: string;
+  parsed_asset_class?: string;
+  parsed_region?: string;
+  parsed_sector?: string;
+  parsed_market_cap?: string;
+  parsed_investment_style?: string;
   sustainability: string;
   category: string;
   is_leveraged: boolean;
@@ -100,7 +107,7 @@ export interface ETF {
   sector_4_weight: number;
   sector_5_name: string;
   sector_5_weight: number;
-  // Exchanges (up to 5)
+  // Exchanges (up to 10 - ROZŠÍŘENO)
   exchange_1_name: string;
   exchange_1_currency: string;
   exchange_1_ticker: string;
@@ -131,6 +138,37 @@ export interface ETF {
   exchange_5_bloomberg: string;
   exchange_5_reuters: string;
   exchange_5_market_maker: string;
+  // NOVÁ POLE exchanges 6-10
+  exchange_6_name: string;
+  exchange_6_currency: string;
+  exchange_6_ticker: string;
+  exchange_6_bloomberg: string;
+  exchange_6_reuters: string;
+  exchange_6_market_maker: string;
+  exchange_7_name: string;
+  exchange_7_currency: string;
+  exchange_7_ticker: string;
+  exchange_7_bloomberg: string;
+  exchange_7_reuters: string;
+  exchange_7_market_maker: string;
+  exchange_8_name: string;
+  exchange_8_currency: string;
+  exchange_8_ticker: string;
+  exchange_8_bloomberg: string;
+  exchange_8_reuters: string;
+  exchange_8_market_maker: string;
+  exchange_9_name: string;
+  exchange_9_currency: string;
+  exchange_9_ticker: string;
+  exchange_9_bloomberg: string;
+  exchange_9_reuters: string;
+  exchange_9_market_maker: string;
+  exchange_10_name: string;
+  exchange_10_currency: string;
+  exchange_10_ticker: string;
+  exchange_10_bloomberg: string;
+  exchange_10_reuters: string;
+  exchange_10_market_maker: string;
   // Rating fields from database
   rating?: number;
   rating_score?: number;
