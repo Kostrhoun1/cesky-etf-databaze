@@ -16,11 +16,12 @@ interface MortgageData {
 
 const MortgageCalculator: React.FC = () => {
   const [propertyValue, setPropertyValue] = useState<number>(4500000);
-  const [downPayment, setDownPayment] = useState<number>(900000);
+  const [loanAmount, setLoanAmount] = useState<number>(3600000);
   const [interestRate, setInterestRate] = useState<number>(5.5);
   const [loanPeriod, setLoanPeriod] = useState<number>(25);
 
-  const loanAmount = propertyValue - downPayment;
+  const downPayment = propertyValue - loanAmount;
+  const ltv = (loanAmount / propertyValue) * 100;
   const downPaymentPercentage = (downPayment / propertyValue) * 100;
 
   const mortgageData = useMemo(() => {
@@ -70,7 +71,7 @@ const MortgageCalculator: React.FC = () => {
       totalPayments,
       totalInterest,
       interestPercentage: (totalInterest / loanAmount) * 100,
-      totalCost: propertyValue + totalInterest
+      totalCost: propertyValue
     };
   }, [mortgageData, loanAmount, propertyValue]);
 
@@ -117,19 +118,19 @@ const MortgageCalculator: React.FC = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-8">
-      <Card className="shadow-xl border-0 bg-gradient-to-br from-green-50 to-blue-50">
-        <CardHeader className="text-center pb-8">
-          <div className="flex justify-center mb-4">
-            <div className="p-4 bg-gradient-to-br from-green-500 to-blue-600 rounded-2xl shadow-lg">
-              <Home className="h-8 w-8 text-white" />
+      <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-2 shadow-xl">
+        <CardHeader className="bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 text-white rounded-t-lg">
+          <div className="flex items-center gap-3">
+            <Home className="h-8 w-8 text-orange-400" />
+            <div>
+              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-300 bg-clip-text text-transparent">
+                Hypoteční kalkulačka
+              </CardTitle>
+              <p className="text-slate-300 text-lg">
+                Spočítejte si měsíční splátky hypotéky a celkové náklady na bydlení až na 30 let
+              </p>
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold text-gray-900">
-            Hypoteční kalkulačka
-          </CardTitle>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Spočítejte si měsíční splátky hypotéky a celkové náklady na bydlení až na 30 let
-          </p>
         </CardHeader>
         
         <CardContent>
@@ -156,9 +157,9 @@ const MortgageCalculator: React.FC = () => {
                     onChange={(e) => {
                       const newValue = Number(e.target.value);
                       setPropertyValue(newValue);
-                      // Adjust down payment if it's more than 80% of property value
-                      if (downPayment > newValue * 0.8) {
-                        setDownPayment(Math.round(newValue * 0.2));
+                      // Ensure loan amount doesn't exceed property value
+                      if (loanAmount > newValue) {
+                        setLoanAmount(Math.round(newValue * 0.8));
                       }
                     }}
                     className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer slider"
@@ -173,8 +174,8 @@ const MortgageCalculator: React.FC = () => {
                     onChange={(e) => {
                       const newValue = Number(e.target.value) || 0;
                       setPropertyValue(newValue);
-                      if (downPayment > newValue * 0.8) {
-                        setDownPayment(Math.round(newValue * 0.2));
+                      if (loanAmount > newValue) {
+                        setLoanAmount(Math.round(newValue * 0.8));
                       }
                     }}
                     className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center"
@@ -186,38 +187,69 @@ const MortgageCalculator: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Vlastní kapitál: {downPayment?.toLocaleString()} Kč ({downPaymentPercentage.toFixed(1)}%)
+                    Výše úvěru: {loanAmount?.toLocaleString()} Kč (LTV: {ltv.toFixed(1)}%)
                   </label>
                   <input
                     type="range"
-                    min={Math.round(propertyValue * 0.1)}
-                    max={Math.round(propertyValue * 0.8)}
+                    min="0"
+                    max={propertyValue}
                     step="50000"
-                    value={downPayment || 0}
-                    onChange={(e) => setDownPayment(Number(e.target.value))}
-                    className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer slider"
+                    value={loanAmount || 0}
+                    onChange={(e) => setLoanAmount(Number(e.target.value))}
+                    className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
                   />
                   <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>10%</span>
-                    <span>80%</span>
+                    <span>0 Kč</span>
+                    <span>{(propertyValue / 1000000).toFixed(1)} mil. Kč</span>
                   </div>
                   <input
                     type="number"
-                    value={downPayment || ''}
+                    value={loanAmount || ''}
                     onChange={(e) => {
-                      const value = Number(e.target.value) || 0;
-                      const maxDown = Math.round(propertyValue * 0.8);
-                      const minDown = Math.round(propertyValue * 0.1);
-                      setDownPayment(Math.min(maxDown, Math.max(minDown, value)));
+                      const inputValue = e.target.value;
+                      if (inputValue === '') {
+                        setLoanAmount(0);
+                      } else {
+                        const value = Number(inputValue);
+                        setLoanAmount(Math.min(propertyValue, Math.max(0, value)));
+                      }
                     }}
                     className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center"
-                    placeholder="Zadejte vlastní kapitál"
-                    min={Math.round(propertyValue * 0.1)}
-                    max={Math.round(propertyValue * 0.8)}
+                    placeholder="Zadejte výši úvěru"
+                    min="0"
+                    max={propertyValue}
                   />
-                  <div className="mt-2 text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
-                    <strong>Výše úvěru: {loanAmount.toLocaleString()} Kč</strong>
+                  <div className={`mt-2 text-sm p-3 rounded-lg ${
+                    downPayment >= 0 
+                      ? 'text-gray-600 bg-green-50' 
+                      : 'text-red-600 bg-red-50 border border-red-200'
+                  }`}>
+                    <strong>
+                      Vlastní kapitál: {downPayment.toLocaleString()} Kč ({downPaymentPercentage.toFixed(1)}%)
+                      {downPayment < 0 && ' ⚠️'}
+                    </strong>
                   </div>
+                  
+                  {/* LTV upozornění */}
+                  {ltv > 90 && (
+                    <div className="mt-2 bg-red-50 border border-red-200 rounded-lg p-3">
+                      <div className="flex items-start gap-2">
+                        <div className="text-red-600 text-sm">
+                          <strong>⚠️ LTV nad 90%:</strong> Banky typicky nad 90% LTV nepůjčují. Zvažte navýšení vlastního kapitálu.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {ltv > 80 && ltv <= 90 && (
+                    <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                      <div className="flex items-start gap-2">
+                        <div className="text-yellow-700 text-sm">
+                          <strong>💡 LTV nad 80%:</strong> Banky typicky půjčují nad 80% pouze lidem mladším 35 let. Možné vyšší úroky.
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -297,51 +329,78 @@ const MortgageCalculator: React.FC = () => {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
                       <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                        <div className="text-sm text-blue-600 font-medium">Celkem za úvěr</div>
-                        <div className="text-xl font-bold text-blue-900">
+                        <div className="text-sm text-blue-600 font-medium">Celkem zaplatíte bance</div>
+                        <div className="text-2xl font-bold text-blue-900">
                           {Math.round(summary.totalPayments).toLocaleString()} Kč
                         </div>
-                      </div>
-                      <div className="bg-purple-50 p-4 rounded-xl border border-purple-200">
-                        <div className="text-sm text-purple-600 font-medium">Celková cena</div>
-                        <div className="text-xl font-bold text-purple-900">
-                          {Math.round(summary.totalCost).toLocaleString()} Kč
+                        <div className="text-xs text-blue-700 mt-1">
+                          Všechny splátky za celou dobu úvěru
                         </div>
                       </div>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-red-50 p-4 rounded-xl border border-red-200">
-                        <div className="text-sm text-red-600 font-medium">Celkové úroky</div>
+                        <div className="text-sm text-red-600 font-medium">Z toho úroky</div>
                         <div className="text-xl font-bold text-red-900">
                           {Math.round(summary.totalInterest).toLocaleString()} Kč
                         </div>
+                        <div className="text-xs text-red-700 mt-1">
+                          Náklady na půjčku
+                        </div>
                       </div>
                       <div className="bg-orange-50 p-4 rounded-xl border border-orange-200">
-                        <div className="text-sm text-orange-600 font-medium">Poměr úroků</div>
+                        <div className="text-sm text-orange-600 font-medium">Přeplatek úvěru</div>
                         <div className="text-xl font-bold text-orange-900">
                           {summary.interestPercentage.toFixed(1)}%
+                        </div>
+                        <div className="text-xs text-orange-700 mt-1">
+                          Navíc k půjčené částce
                         </div>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <div className="flex items-start gap-2">
-                      <Info className="h-5 w-5 text-yellow-600 mt-0.5 shrink-0" />
-                      <div className="text-sm">
-                        <p className="font-medium text-yellow-800 mb-1">Důležité informace:</p>
-                        <ul className="text-yellow-700 space-y-1 text-xs">
-                          <li>• Výpočet je orientační, skutečné podmínky se mohou lišit</li>
-                          <li>• Nezahrnuje pojištění nemovitosti a životní pojištění</li>
-                          <li>• Nezahrnuje poplatky za odhad a zpracování</li>
-                          <li>• Minimální vlastní kapitál je obvykle 20%</li>
-                        </ul>
+                  {/* Rozbalovací předpoklady */}
+                  <details className="mt-6 border border-orange-200 rounded-lg">
+                    <summary className="p-4 bg-orange-50 cursor-pointer hover:bg-orange-100 transition-colors rounded-lg">
+                      <span className="font-semibold text-orange-900">📋 Předpoklady hypoteční kalkulačky (klikněte pro rozbalení)</span>
+                    </summary>
+                    <div className="p-4 border-t border-orange-200">
+                      <div className="grid md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <h4 className="font-semibold mb-2 text-orange-900">Výpočet splátek:</h4>
+                          <ul className="space-y-1 text-gray-700">
+                            <li>• <strong>Anuita:</strong> Rovnoměrné měsíční splátky</li>
+                            <li>• <strong>Úročení:</strong> Měsíční kapitalizace úroků</li>
+                            <li>• <strong>Splátka:</strong> Úrok + umořování jistiny</li>
+                            <li>• <strong>Fixace:</strong> Stálá úroková sazba po celou dobu</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold mb-2 text-orange-900">Omezení a upozornění:</h4>
+                          <ul className="space-y-1 text-gray-700">
+                            <li>• <strong>Orientační výpočet:</strong> Reálné podmínky se liší</li>
+                            <li>• <strong>Schválení úvěru:</strong> Závisí na bonnitě klienta</li>
+                            <li>• <strong>Změny sazeb:</strong> Při refixaci se mění</li>
+                            <li>• <strong>Dodatečné náklady:</strong> Pojištění, poplatky, daně</li>
+                            <li>• <strong>Individuální nabídka:</strong> Každá banka má jiné podmínky</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold mb-2 text-orange-900">Předčasné splacení:</h4>
+                          <ul className="space-y-1 text-gray-700">
+                            <li>• <strong>Kdykoli možné:</strong> Hypotéku můžete doplatit kdykoli</li>
+                            <li>• <strong>Zdarma na konci fixace:</strong> Bez poplatků při refixaci</li>
+                            <li>• <strong>Zdarma v těžkých situacích:</strong> Nemoc, invalidita apod.</li>
+                            <li>• <strong>Jinak s poplatkem:</strong> Banka má nárok na úhradu nákladů</li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </details>
                 </CardContent>
               </Card>
             )}
@@ -429,13 +488,75 @@ const MortgageCalculator: React.FC = () => {
             </Card>
           </div>
 
+          {/* Amortizační tabulka */}
+          <Card className="shadow-lg border-0">
+            <CardContent>
+              <details className="border border-gray-200 rounded-lg">
+                <summary className="p-4 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
+                  <span className="font-semibold text-gray-900">📊 Detailní průběh splácení po měsících (klikněte pro rozbalení)</span>
+                </summary>
+                <div className="p-4 border-t border-gray-200 max-h-96 overflow-y-auto">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="bg-gray-50 sticky top-0">
+                        <tr>
+                          <th className="px-3 py-2 text-left font-semibold text-gray-900">Měsíc</th>
+                          <th className="px-3 py-2 text-right font-semibold text-gray-900">Splátka</th>
+                          <th className="px-3 py-2 text-right font-semibold text-gray-900">Úrok</th>
+                          <th className="px-3 py-2 text-right font-semibold text-gray-900">Jistina</th>
+                          <th className="px-3 py-2 text-right font-semibold text-gray-900">Zbývá dluh</th>
+                          <th className="px-3 py-2 text-right font-semibold text-gray-900">Celkem úroky</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {mortgageData.map((row, index) => (
+                          <tr key={index} className={index % 12 === 11 ? 'bg-blue-50 font-semibold' : 'hover:bg-gray-50'}>
+                            <td className="px-3 py-2 text-gray-900">
+                              {row.month} {index % 12 === 11 && `(rok ${row.year})`}
+                            </td>
+                            <td className="px-3 py-2 text-right text-gray-900">
+                              {Math.round(row.monthlyPayment).toLocaleString()} Kč
+                            </td>
+                            <td className="px-3 py-2 text-right text-red-600">
+                              {Math.round(row.interestPayment).toLocaleString()} Kč
+                            </td>
+                            <td className="px-3 py-2 text-right text-blue-600">
+                              {Math.round(row.principalPayment).toLocaleString()} Kč
+                            </td>
+                            <td className="px-3 py-2 text-right text-gray-900">
+                              {Math.round(row.remainingDebt).toLocaleString()} Kč
+                            </td>
+                            <td className="px-3 py-2 text-right text-orange-600">
+                              {Math.round(row.totalInterest).toLocaleString()} Kč
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt-4 text-xs text-gray-600 bg-blue-50 p-3 rounded">
+                    <p><strong>Vysvětlivky:</strong></p>
+                    <ul className="mt-2 space-y-1">
+                      <li>• <span className="text-red-600 font-semibold">Úrok</span> - měsíční úroky z aktuálního zůstatku</li>
+                      <li>• <span className="text-blue-600 font-semibold">Jistina</span> - část splátky snižující dluh</li>
+                      <li>• <span className="bg-blue-50 px-1 rounded">Modré řádky</span> - konec kalendářního roku</li>
+                    </ul>
+                  </div>
+                </div>
+              </details>
+            </CardContent>
+          </Card>
+
           {/* Yearly Payment Breakdown */}
           <Card className="shadow-lg border-0">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <BarChart className="h-5 w-5 text-purple-600" />
-                Struktura ročních splátek (každý 5. rok)
+                Roční struktura splátek - úroky vs. jistina
               </CardTitle>
+              <p className="text-gray-600 text-sm mt-2">
+                Zobrazeno každý 5. rok - ukazuje, jak se postupně snižují úroky a zvyšuje úmor jistiny
+              </p>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
@@ -443,20 +564,52 @@ const MortgageCalculator: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="year" 
-                    label={{ value: 'Rok', position: 'insideBottom', offset: -5 }}
+                    label={{ value: 'Rok splácení', position: 'insideBottom', offset: -5 }}
                   />
                   <YAxis 
-                    tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
-                    width={80}
+                    tickFormatter={(value) => `${(value / 1000).toFixed(0)}k Kč`}
+                    width={90}
                   />
                   <Tooltip 
-                    formatter={(value: number) => [`${Math.round(value).toLocaleString()} Kč`]}
-                    labelFormatter={(label) => `Rok ${label}`}
+                    formatter={(value: number, name: string) => [
+                      `${Math.round(value).toLocaleString()} Kč`,
+                      name === 'Úmor jistiny' ? 'Zaplaceno na jistině' : 'Zaplaceno na úrocích'
+                    ]}
+                    labelFormatter={(label) => `${label}. rok splácení`}
+                    separator=": "
                   />
-                  <Bar dataKey="Úmor jistiny" stackId="a" fill="#3B82F6" />
-                  <Bar dataKey="Úrok" stackId="a" fill="#EF4444" />
+                  <Bar 
+                    dataKey="Úmor jistiny" 
+                    stackId="a" 
+                    fill="#3B82F6" 
+                    name="Úmor jistiny"
+                  />
+                  <Bar 
+                    dataKey="Úrok" 
+                    stackId="a" 
+                    fill="#EF4444" 
+                    name="Úroky"
+                  />
                 </BarChart>
               </ResponsiveContainer>
+              
+              {/* Legenda s vysvětlením */}
+              <div className="mt-4 bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-semibold mb-2 text-gray-900">Vysvětlení grafu:</h4>
+                <div className="flex flex-wrap gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-red-400 rounded"></div>
+                    <span className="text-gray-700"><strong>Červená (úroky):</strong> Kolik zaplatíte bance za půjčku</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-blue-400 rounded"></div>
+                    <span className="text-gray-700"><strong>Modrá (jistina):</strong> Kolik skutečně splatíte z dluhu</span>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-600 mt-2">
+                  💡 Na začátku platíte více na úrocích, postupně se poměr obrací ve prospěch jistiny
+                </p>
+              </div>
             </CardContent>
           </Card>
         </>
@@ -469,10 +622,10 @@ const MortgageCalculator: React.FC = () => {
               <Info className="h-12 w-12 mx-auto" />
             </div>
             <h3 className="text-xl font-bold text-yellow-800 mb-2">
-              Vlastní kapitál je příliš vysoký
+              Neplatná výše úvěru
             </h3>
             <p className="text-yellow-700">
-              Snižte výši vlastního kapitálu nebo zvyšte hodnotu nemovitosti pro výpočet hypotéky.
+              Zadejte validní výši úvěru pro výpočet hypotéky.
             </p>
           </CardContent>
         </Card>

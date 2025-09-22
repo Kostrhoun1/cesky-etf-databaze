@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Shield, AlertTriangle, TrendingDown, Banknote } from 'lucide-react';
+import { Shield, AlertTriangle, TrendingDown, Banknote, CheckCircle, XCircle } from 'lucide-react';
 import { calculateEmergencyFund, EmergencyFundData } from '@/utils/emergencyFundCalculations';
 import EmergencyFundResults from './EmergencyFundResults';
 
@@ -268,43 +268,79 @@ const EmergencyFundCalculator: React.FC = () => {
 
           {/* VÝSLEDEK: Analýza rizika */}
           {results && (
-            <Card className="bg-purple-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">📊 Analýza vašich rizik</CardTitle>
+            <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border border-slate-200 shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-lg pb-4">
+                <CardTitle className="text-xl font-bold flex items-center gap-2">
+                  <Shield className="h-6 w-6" />
+                  Analýza vašeho rizikového profilu
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
+              <CardContent className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                   {riskFactors.map((risk, index) => (
-                    <div key={index} className="flex justify-between items-center">
-                      <span className="text-sm font-medium">{risk.factor}:</span>
-                      <span className={`text-sm ${risk.color}`}>{risk.impact}</span>
+                    <div key={index} className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium text-gray-700">{risk.factor}</span>
+                        <span className={`font-semibold px-3 py-1 rounded-full text-sm ${
+                          risk.color.includes('green') ? 'bg-green-100 text-green-700' :
+                          risk.color.includes('yellow') ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-red-100 text-red-700'
+                        }`}>
+                          {risk.impact}
+                        </span>
+                      </div>
                     </div>
                   ))}
-                  <div className="border-t pt-3 mt-3">
-                    <div className="flex justify-between items-center">
-                      <span className="font-semibold">Celkové riziko:</span>
-                      <span className="font-bold">
-                        {(() => {
-                          // Stejná logika jako v backend výpočtu
-                          let riskPoints = 0;
-                          
-                          if (jobStability === 'moderate') riskPoints += 1;
-                          if (jobStability === 'unstable') riskPoints += 2;
-                          if (contractType === 'fixed_term') riskPoints += 1;
-                          if (contractType === 'freelance') riskPoints += 2;
-                          if (ageGroup === 'senior') riskPoints += 1;
-                          if (ageGroup === 'young') riskPoints -= 1;
-                          if (education === 'basic') riskPoints += 1;
-                          if (education === 'university') riskPoints -= 1;
-                          if (!hasSecondIncome) riskPoints += 1;
-                          if (hasDebt) riskPoints += 1;
-                          if (familySize > 2) riskPoints += (familySize - 2);
-                          
-                          if (riskPoints <= 1) return <span className="text-green-600">🟢 Nízké</span>;
-                          if (riskPoints <= 4) return <span className="text-yellow-600">🟡 Střední</span>;
-                          return <span className="text-red-600">🔴 Vysoké</span>;
-                        })()}
-                      </span>
+                </div>
+                
+                <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-5 rounded-lg border border-purple-200">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500"></div>
+                      <span className="text-lg font-bold text-gray-800">Celkové hodnocení rizika</span>
+                    </div>
+                    <div className="text-right">
+                      {(() => {
+                        // Stejná logika jako v backend výpočtu
+                        let riskPoints = 0;
+                        
+                        if (jobStability === 'moderate') riskPoints += 1;
+                        if (jobStability === 'unstable') riskPoints += 2;
+                        if (contractType === 'fixed_term') riskPoints += 1;
+                        if (contractType === 'freelance') riskPoints += 2;
+                        if (ageGroup === 'senior') riskPoints += 1;
+                        if (ageGroup === 'young') riskPoints -= 1;
+                        if (education === 'basic') riskPoints += 1;
+                        if (education === 'university') riskPoints -= 1;
+                        if (!hasSecondIncome) riskPoints += 1;
+                        if (hasDebt) riskPoints += 1;
+                        if (familySize > 2) riskPoints += (familySize - 2);
+                        
+                        if (riskPoints <= 1) return (
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                              <CheckCircle className="h-5 w-5 text-white" />
+                            </div>
+                            <span className="text-xl font-bold text-green-600">Nízké riziko</span>
+                          </div>
+                        );
+                        if (riskPoints <= 4) return (
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                              <AlertTriangle className="h-5 w-5 text-white" />
+                            </div>
+                            <span className="text-xl font-bold text-yellow-600">Střední riziko</span>
+                          </div>
+                        );
+                        return (
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                              <XCircle className="h-5 w-5 text-white" />
+                            </div>
+                            <span className="text-xl font-bold text-red-600">Vysoké riziko</span>
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>

@@ -72,85 +72,10 @@ const MortgageCalculatorPage: React.FC = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        {/* Hero sekce */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <Home className="w-4 h-4" />
-            Hypoteční kalkulačka 2025
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Hypoteční kalkulačka 2025
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Spočítejte si měsíční splátky hypotéky, celkové náklady na bydlení a optimální vlastní kapitál. 
-            Bezplatný nástroj s aktuálními úrokovými sazbami pro rok 2025.
-          </p>
-        </div>
-
-        {/* Výhody kalkulačky */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <Card>
-            <CardContent className="p-6 text-center">
-              <Calculator className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Přesné výpočty</h3>
-              <p className="text-gray-600">
-                Výpočet měsíčních splátek podle aktuálních bankovních postupů a úrokových sazeb 2025.
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <TrendingUp className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Celkové náklady</h3>
-              <p className="text-gray-600">
-                Zjistěte si celkové náklady na hypotéku včetně úroků za celou dobu splatnosti.
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <Shield className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Vlastní kapitál</h3>
-              <p className="text-gray-600">
-                Optimalizujte výši vlastního kapitálu a najděte nejlepší poměr vlastních a cizích zdrojů.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Jak použít kalkulačku */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Jak použít hypoteční kalkulačku</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">1. Zadejte základní údaje</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li>• <strong>Výše úvěru:</strong> Kolik si chcete půjčit na hypotéku</li>
-                <li>• <strong>Úroková sazba:</strong> Aktuální sazba od banky (obvykle 5-7% v roce 2025)</li>
-                <li>• <strong>Doba splatnosti:</strong> Jak dlouho budete úvěr splácet (až 30 let)</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">2. Analyzujte výsledky</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li>• <strong>Měsíční splátka:</strong> Kolik budete platit každý měsíc</li>
-                <li>• <strong>Celkové náklady:</strong> Součet všech splátek za celou dobu</li>
-                <li>• <strong>Celkové úroky:</strong> Kolik zaplatíte bance navíc</li>
-              </ul>
-            </div>
-          </div>
-        </div>
 
         {/* Samotná kalkulačka */}
         <MortgageCalculator />
 
-        {/* Social sharing */}
-        <SocialSharing
-          url="https://etfpruvodce.cz/kalkulacky/hypotecni-kalkulacka"
-          title="Hypoteční kalkulačka 2025 - Výpočet hypotéky"
-          description="Bezplatná hypoteční kalkulačka pro výpočet měsíčních splátek. Spočítejte si celkové náklady na bydlení s aktuálními sazbami 2025."
-          className="mt-12"
-        />
 
         {/* FAQ sekce */}
         <FAQSection
@@ -166,7 +91,7 @@ const MortgageCalculatorPage: React.FC = () => {
             },
             {
               question: "Jaké jsou průměrné úrokové sazby hypotéky v roce 2025?",
-              answer: "V roce 2025 se úrokové sazby hypotéky pohybují okolo 5-7% ročně, v závislosti na bance, výši vlastního kapitálu a době fixace. Kratší fixace (3-5 let) mívají nižší sazby než dlouhé fixace (15-20 let)."
+              answer: "Úrokové sazby hypotéky se průběžně mění podle situace na trhu. Závisí na bance, výši vlastního kapitálu a době fixace. Kratší fixace (3-5 let) mívají obvykle nižší sazby než dlouhé fixace (15-20 let). Pro aktuální sazby doporučujeme oslovit více bank."
             },
             {
               question: "Jak dlouho by měla být doba splatnosti hypotéky?",
@@ -178,7 +103,7 @@ const MortgageCalculatorPage: React.FC = () => {
             },
             {
               question: "Lze hypotéku předčasně splatit?",
-              answer: "Ano, hypotéku lze předčasně splatit, ale banky obvykle účtují sankci za předčasné splacení (typicky 1-2% z předčasně splacené částky). Výše sankce závisí na konkrétní bance a typu hypotéky. Před předčasným splacením si spočítejte, zda se vyplatí."
+              answer: "Hypotéku můžete předčasně doplatit kdykoliv v průběhu trvání úvěru. Předčasné splacení je bez poplatku na konci fixačního období úrokové sazby nebo v případě vážných životních situací (úmrtí, invalidita, ztráta práce). V ostatních případech banka může účtovat sankci za předčasné splacení, obvykle 0,5-2% z předčasně splacené částky. Před předčasným splacením si spočítejte celkové náklady včetně poplatků."
             },
             {
               question: "Jaké dokumenty potřebuji k žádosti o hypotéku?",
@@ -213,6 +138,14 @@ const MortgageCalculatorPage: React.FC = () => {
             }
           ]}
           title="Související kalkulačky a nástroje"
+          className="mt-16"
+        />
+
+        {/* Social sharing */}
+        <SocialSharing
+          url="https://etfpruvodce.cz/kalkulacky/hypotecni-kalkulacka"
+          title="Hypoteční kalkulačka 2025 - Výpočet hypotéky"
+          description="Bezplatná hypoteční kalkulačka pro výpočet měsíčních splátek. Spočítejte si celkové náklady na bydlení s aktuálními sazbami 2025."
           className="mt-16"
         />
       </div>
