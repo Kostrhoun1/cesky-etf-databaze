@@ -38,14 +38,17 @@ export const calculateInvestment = (params: InvestmentParams): CalculationData[]
 
   for (let year = 1; year <= investmentPeriod; year++) {
     if (recurringFrequency === 'monthly') {
-      // Měsíční investování - přidáme všechny měsíční investice na začátku roku
-      // a pak aplikujeme roční výnos na celou částku
-      const yearlyRecurringAmount = recurringInvestment * 12;
-      currentValue += yearlyRecurringAmount;
-      totalInvested += yearlyRecurringAmount;
+      // Měsíční investování - simulujeme měsíc po měsíci pro přesný výpočet
+      const monthlyReturn = annualReturn / 12; // Převod na měsíční výnos
       
-      // Aplikuj roční výnos na celou částku
-      currentValue = currentValue * (1 + annualReturn);
+      for (let month = 1; month <= 12; month++) {
+        // Přidej měsíční investici
+        currentValue += recurringInvestment;
+        totalInvested += recurringInvestment;
+        
+        // Aplikuj měsíční výnos na celou aktuální hodnotu
+        currentValue = currentValue * (1 + monthlyReturn);
+      }
     } else {
       // Roční investování
       // Přidej roční investici na začátku roku
@@ -57,7 +60,12 @@ export const calculateInvestment = (params: InvestmentParams): CalculationData[]
     }
 
     const grossGain = currentValue - totalInvested;
-    const tax = grossGain > 0 ? grossGain * (taxRate / 100) : 0;
+    
+    // Daň z kapitálových výnosů v ČR:
+    // - 0% při držení 3+ roky (časový test) 
+    // - 15%/23% při aktivním obchodování (kratší držení)
+    // Pro aktivní obchodníky simulujeme roční zdanění realizovaných zisků
+    const tax = (taxRate > 0 && grossGain > 0) ? grossGain * (taxRate / 100) : 0;
     const netValue = currentValue - tax;
     const netGain = netValue - totalInvested;
 

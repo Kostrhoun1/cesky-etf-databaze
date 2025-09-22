@@ -108,6 +108,23 @@ const FeeCalculator: React.FC = () => {
               <FeeCalculatorResults finalResults={finalResults} />
             </div>
           )}
+
+          {/* Rozbalovací předpoklady */}
+          <details className="mt-6 border border-orange-200 rounded-lg">
+            <summary className="p-4 bg-orange-50 cursor-pointer hover:bg-orange-100 transition-colors rounded-lg">
+              <span className="font-semibold text-orange-900">📋 Předpoklady kalkulačky poplatků (klikněte pro rozbalení)</span>
+            </summary>
+            <div className="p-4 border-t border-orange-200">
+              <ul className="text-sm text-gray-700 space-y-2">
+                <li>• <strong>Vstupní poplatky:</strong> Účtují se při každé investici (měsíční nebo roční)</li>
+                <li>• <strong>TER (Total Expense Ratio):</strong> Roční poplatek fondu, odečítá se průběžně z hodnoty investice</li>
+                <li>• <strong>Výpočet TER:</strong> Aplikuje se na hodnotu po zisku, čímž lépe odráží skutečný dopad</li>
+                <li>• <strong>Složené úročení:</strong> TER poplatky ovlivňují i budoucí růst investice</li>
+                <li>• <strong>Porovnání:</strong> Hrubá hodnota = investice bez jakýchkoliv poplatků</li>
+                <li>• <strong>Poplatky se nesčítają:</strong> V realitě se jednotlivé poplatky kombinují komplexněji</li>
+              </ul>
+            </div>
+          </details>
         </CardContent>
       </Card>
 

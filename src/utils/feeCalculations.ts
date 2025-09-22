@@ -41,8 +41,8 @@ export function calculateFeeImpact(params: CalculationParams): FeeCalculationRes
     currentValue -= initialEntryFee;
     totalFeesPaid += initialEntryFee;
 
-    // Čistý roční výnos po TER poplatcích
-    const netAnnualReturn = grossAnnualReturn - (scenario.totalExpenseRatio / 100);
+    // Pro výpočet použijeme hrubý výnos a TER poplatky odečteme explicitně
+    // (nikoliv jako "čistý výnos" - to by bylo dvojité započítání)
 
     for (let year = 1; year <= investmentPeriod; year++) {
       let yearlyEntryFees = 0;
@@ -50,7 +50,6 @@ export function calculateFeeImpact(params: CalculationParams): FeeCalculationRes
 
       if (recurringFrequency === 'monthly') {
         // Měsíční investování s měsíčním compoundingem
-        const monthlyNetReturn = Math.pow(1 + netAnnualReturn, 1/12) - 1;
         const monthlyGrossReturn = Math.pow(1 + grossAnnualReturn, 1/12) - 1;
         
         for (let month = 1; month <= 12; month++) {
@@ -63,12 +62,13 @@ export function calculateFeeImpact(params: CalculationParams): FeeCalculationRes
           currentValue -= monthlyEntryFee;
           yearlyEntryFees += monthlyEntryFee;
           
-          // Vypočítej TER poplatek z aktuální hodnoty před výnosem
-          const monthlyTERFee = currentValue * (scenario.totalExpenseRatio / 100 / 12);
-          yearlyTERFees += monthlyTERFee;
+          // Aplikuj hrubý měsíční výnos
+          currentValue = currentValue * (1 + monthlyGrossReturn);
           
-          // Aplikuj čistý měsíční výnos (už zahrnuje TER)
-          currentValue = currentValue * (1 + monthlyNetReturn);
+          // Odečti TER poplatek z hodnoty po výnosu
+          const monthlyTERFee = currentValue * (scenario.totalExpenseRatio / 100 / 12);
+          currentValue -= monthlyTERFee;
+          yearlyTERFees += monthlyTERFee;
         }
       } else {
         // Roční investování
@@ -81,11 +81,12 @@ export function calculateFeeImpact(params: CalculationParams): FeeCalculationRes
         currentValue -= yearlyEntryFee;
         yearlyEntryFees += yearlyEntryFee;
         
-        // Vypočítej TER poplatek z aktuální hodnoty před výnosem
-        yearlyTERFees = currentValue * (scenario.totalExpenseRatio / 100);
+        // Aplikuj hrubý roční výnos
+        currentValue = currentValue * (1 + grossAnnualReturn);
         
-        // Aplikuj čistý roční výnos (už zahrnuje TER)
-        currentValue = currentValue * (1 + netAnnualReturn);
+        // Odečti TER poplatek z hodnoty po výnosu
+        yearlyTERFees = currentValue * (scenario.totalExpenseRatio / 100);
+        currentValue -= yearlyTERFees;
       }
 
       totalFeesPaid += yearlyEntryFees + yearlyTERFees;

@@ -104,11 +104,14 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="0">0% (žádná daň)</SelectItem>
-              <SelectItem value="15">15% (základní sazba)</SelectItem>
-              <SelectItem value="23">23% (vyšší sazba)</SelectItem>
+              <SelectItem value="0">0%</SelectItem>
+              <SelectItem value="15">15%</SelectItem>
+              <SelectItem value="23">23%</SelectItem>
             </SelectContent>
           </Select>
+          <p className="text-xs text-gray-600 mt-1">
+            💡 Při držení ETF déle než 3 roky se daň neplatí (časový test)
+          </p>
         </div>
       </div>
 

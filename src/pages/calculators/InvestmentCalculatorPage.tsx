@@ -73,63 +73,68 @@ const InvestmentCalculatorPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Hero sekce */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <TrendingUp className="w-4 h-4" />
             Investiční kalkulačka 2025
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Investiční kalkulačka 2025
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Spočítejte si výnosy z pravidelného měsíčního investování s efektem složeného úročení. 
-            Simulace růstu vašich investic do ETF fondů včetně daní a inflace.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
+            Spočítejte si výnosy z pravidelného měsíčního investování s efektem složeného úročení.
           </p>
         </div>
 
+        {/* Samotná kalkulačka */}
+        <InvestmentCalculator />
+
         {/* Výhody pravidelného investování */}
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
-          <Card>
-            <CardContent className="p-6 text-center">
-              <Calculator className="w-12 h-12 text-violet-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Compound Interest</h3>
-              <p className="text-gray-600 text-sm">
-                Složené úročení - nejsilnější síla v investování
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <PiggyBank className="w-12 h-12 text-violet-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Pravidelné investování</h3>
-              <p className="text-gray-600 text-sm">
-                Dollar Cost Averaging - snížení rizika časování trhu
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <Target className="w-12 h-12 text-violet-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Cílové plánování</h3>
-              <p className="text-gray-600 text-sm">
-                Naplánujte si cestu k finanční nezávislosti
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 text-center">
-              <TrendingUp className="w-12 h-12 text-violet-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Reálné výnosy</h3>
-              <p className="text-gray-600 text-sm">
-                Výpočty včetně daní a inflace pro ČR
-              </p>
-            </CardContent>
-          </Card>
+        <div className="mt-16">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">Proč pravidelné investování funguje?</h2>
+          <div className="grid md:grid-cols-4 gap-6 mb-12">
+            <Card>
+              <CardContent className="p-6 text-center">
+                <Calculator className="w-12 h-12 text-violet-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Compound Interest</h3>
+                <p className="text-gray-600 text-sm">
+                  Složené úročení - nejsilnější síla v investování
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6 text-center">
+                <PiggyBank className="w-12 h-12 text-violet-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Pravidelné investování</h3>
+                <p className="text-gray-600 text-sm">
+                  Dollar Cost Averaging - snížení rizika časování trhu
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6 text-center">
+                <Target className="w-12 h-12 text-violet-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Cílové plánování</h3>
+                <p className="text-gray-600 text-sm">
+                  Naplánujte si cestu k finanční nezávislosti
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6 text-center">
+                <TrendingUp className="w-12 h-12 text-violet-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Reálné výnosy</h3>
+                <p className="text-gray-600 text-sm">
+                  Výpočty včetně daní a inflace pro ČR
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Co je pravidelné investování a složené úročení */}
         <div className="bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl p-8 mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Co je pravidelné investování a složené úročení?</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Jak funguje pravidelné investování a složené úročení?</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold mb-4 text-violet-800">Pravidelné měsíční investování</h3>
@@ -138,7 +143,7 @@ const InvestmentCalculatorPage: React.FC = () => {
                 Například každý měsíc nakoupíte ETF za 5000 Kč.
               </p>
               <ul className="space-y-2 text-gray-700">
-                <li>• <strong>Snižuje riziko:</strong> Nekupujete vše najednou v špatné čas</li>
+                <li>• <strong>Snižuje riziko:</strong> Nekupujete vše najednou v špatný čas</li>
                 <li>• <strong>Jednoduchost:</strong> Nevyžaduje timing trhu</li>
                 <li>• <strong>Disciplína:</strong> Automatické investování bez emocí</li>
               </ul>
@@ -158,9 +163,6 @@ const InvestmentCalculatorPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Samotná kalkulačka */}
-        <InvestmentCalculator />
-
         {/* FAQ sekce */}
         <FAQSection
           title="Často kladené otázky o investiční kalkulačce"
@@ -171,7 +173,7 @@ const InvestmentCalculatorPage: React.FC = () => {
             },
             {
               question: "Jak funguje složené úročení (složené úročení)?",
-              answer: "Compound interest znamená, že získáváte výnosy nejen z původní investice, ale i z předchozích výnosů. Například: investice 100K s 7% ročním výnosem po roce = 107K. Druhý rok se počítá 7% z 107K = 114,5K. Efekt se zesiluje s časem."
+              answer: "Compound interest znamená, že získáváte výnosy nejen z původní investice, ale i z předchozích výnosů. Například: investice 100 tis. s 7% ročním výnosem po roce = 107 tis. Druhý rok se počítá 7% z 107 tis. = 114,5 tis. Efekt se zesiluje s časem."
             },
             {
               question: "Jaký je realistický výnos z ETF investic?",
@@ -179,7 +181,11 @@ const InvestmentCalculatorPage: React.FC = () => {
             },
             {
               question: "Jak se zdaňují výnosy z ETF v České republice?",
-              answer: "Zisky z prodeje ETF se zdaňují 15% daní z příjmů. Dividendy podléhají srážkové dani podle smlouvy o zamezení dvojího zdanění (obvykle 15%). ETF s akumulací dividend jsou daňově výhodnější - daň až při prodeji."
+              answer: "V ČR platí ČASOVÝ TEST: při držení ETF déle než 3 roky se daň z kapitálových výnosů NEPLATÍ (0%). Při kratším držení se zisky zdaňují 15% (základní sazba) nebo 23% (vyšší sazba). Dividendy podléhají srážkové dani 15% - proto jsou akumulační ETF daňově výhodnější."
+            },
+            {
+              question: "Co je časový test a jak funguje v praxi?",
+              answer: "Časový test znamená, že pokud držíte ETF déle než 3 roky, zisky z prodeje se nezdaňují vůbec (0% daň). Test se počítá od data nákupu do data prodeje. Příklad: koupíte ETF 1.1.2025, prodáte 2.1.2028 = 3 roky a 1 den = 0% daň. Prodáte 31.12.2027 = méně než 3 roky = 15% daň."
             },
             {
               question: "Kolik bych měl investovat měsíčně?",
