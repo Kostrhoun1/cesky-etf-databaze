@@ -17,14 +17,14 @@ const RayDalioAllWeatherPage: React.FC = () => {
       { asset: 'Akcie', percentage: 30, isin: 'IE00BK5BQT80' },
       { asset: 'Střednědobé dluhopisy', percentage: 15, isin: 'IE00B3DKXQ41' },
       { asset: 'Komodity', percentage: 7.5, isin: 'IE00BDFL4P12' },
-      { asset: 'TIPS (inflační dluhopisy)', percentage: 7.5, isin: 'IE00B6YX5D40' },
+      { asset: 'Zlato', percentage: 7.5, isin: 'IE00B4ND3602' },
     ],
     philosophy: `All-Weather portfolio bylo vytvořeno Rayem Daliem, zakladatelem největšího hedgeového fondu Bridgewater Associates. 
     Strategie je navržena tak, aby dobře fungovala ve všech ekonomických režimech - růst, pokles, inflace i deflace. 
     Klíčem je risk-parity přístup, kde každá třída aktiv přispívá stejným dílem k celkovému riziku portfolia.`,
     advantages: [
       'Stabilní výkonnost ve všech tržních podmínkách',
-      'Ochrana proti inflaci prostřednictvím TIPS a komodit',
+      'Ochrana proti inflaci prostřednictvím zlata a komodit',
       'Nízká korelace mezi aktivními třídami',
       'Založeno na vědeckém přístupu risk-parity',
       'Ověřeno během různých ekonomických cyklů'
@@ -32,7 +32,7 @@ const RayDalioAllWeatherPage: React.FC = () => {
     disadvantages: [
       'Nižší výnos v bull trzích',
       'Složitější rebalancování kvůli 5 komponentům',
-      'Vyšší náklady kvůli komoditám a TIPS',
+      'Vyšší náklady kvůli komoditám a zlatu',
       'Může zaostávat za akciovými portfolii dlouhodobě',
       'Citlivost na změny úrokových sazeb'
     ],
@@ -45,8 +45,8 @@ const RayDalioAllWeatherPage: React.FC = () => {
     ],
     implementation: {
       rebalancing: 'Kvůli vyšší složitosti doporučujeme čtvrtletní rebalancování. Sledujte zejména poměr dluhopisů různých splatností.',
-      monthlyInvesting: 'Při malých částkách začněte s hlavními komponentami (akcie, dlouhodobé dluhopisy) a postupně přidávejte komodity a TIPS.',
-      taxOptimization: 'TIPS mohou být v ČR daňově náročnější. Zvažte alternativy nebo držení v zahraničí.'
+      monthlyInvesting: 'Při malých částkách začněte s hlavními komponentami (akcie, dlouhodobé dluhopisy) a postupně přidávejte komodity a zlato.',
+      taxOptimization: 'Zlato ETF může být v ČR daňově výhodnější než fyzické zlato. Pozor na TER náklady u komoditních fondů.'
     }
   };
 
@@ -55,7 +55,7 @@ const RayDalioAllWeatherPage: React.FC = () => {
       <SEOHead 
         title="Ray Dalio All-Weather Portfolio - Stabilní ETF Strategie pro Všechna Období"
         description="Kompletní průvodce Ray Dalio All-Weather portfolio strategií. Risk-parity přístup, historická performance a implementace pro české investory."
-        keywords="Ray Dalio All Weather, risk parity, stabilní portfolio, diverzifikace, komodity, TIPS, Bridgewater Associates"
+        keywords="Ray Dalio All Weather, risk parity, stabilní portfolio, diverzifikace, komodity, zlato, Bridgewater Associates"
         canonical="https://etfpruvodce.cz/portfolio-strategie/ray-dalio-all-weather"
         schema={{
           "@context": "https://schema.org",

@@ -75,7 +75,7 @@ const ALL_WEATHER_ETF_RECOMMENDATIONS = [
   {
     name: "Xtrackers Physical Gold ETC",
     ticker: "4GLD",
-    isin: "DE000A1E0HR8",
+    isin: "IE00B4ND3602",
     ter: "0.19%",
     size: "3.2B €", 
     category: "Zlato",

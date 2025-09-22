@@ -117,7 +117,7 @@ export class PortfolioRecommendationEngine {
         { asset: 'Akcie', percentage: 30, isin: 'IE00BK5BQT80', etfName: 'Vanguard FTSE All-World' },
         { asset: 'Střednědobé dluhopisy', percentage: 15, isin: 'IE00B3DKXQ41', etfName: 'iShares Core Global Aggregate Bond' },
         { asset: 'Komodity', percentage: 7.5, isin: 'IE00BDFL4P12', etfName: 'iShares Diversified Commodity Swap' },
-        { asset: 'TIPS (inflační dluhopisy)', percentage: 7.5, isin: 'IE00B6YX5D40', etfName: 'iShares Global Inflation Linked Government Bond' },
+        { asset: 'Zlato', percentage: 7.5, isin: 'IE00B4ND3602', etfName: 'iShares Physical Gold ETC' },
       ],
       detailUrl: '/portfolio-strategie/ray-dalio-all-weather'
     }
@@ -309,7 +309,7 @@ export class PortfolioRecommendationEngine {
         strategy: "Risk-parity přístup navržený pro stabilní výkonnost ve všech ekonomických podmínkách podle Ray Dalia",
         pros: [
           "Stabilní výkonnost ve všech tržních podmínkách",
-          "Ochrana proti inflaci prostřednictvím TIPS",
+          "Ochrana proti inflaci prostřednictvím zlata a komodit",
           "Nízká korelace mezi třídami aktiv",
           "Vědecký risk-parity přístup"
         ],
