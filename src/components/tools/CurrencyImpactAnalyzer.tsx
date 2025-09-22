@@ -367,8 +367,8 @@ const CurrencyImpactAnalyzer: React.FC = () => {
                   </div>
                 )}
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           <Button onClick={handleCalculate} className="w-full mt-4 h-9 text-sm">
             Analyzovat kurzový dopad
