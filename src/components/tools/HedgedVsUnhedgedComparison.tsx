@@ -294,7 +294,9 @@ const HedgedVsUnhedgedComparison: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-        ))}
+          );
+        }
+        )}
 
         {comparisons.length === 0 && (
           <div className="text-center py-8">
