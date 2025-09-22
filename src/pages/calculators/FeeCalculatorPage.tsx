@@ -207,45 +207,25 @@ const FeeCalculatorPage: React.FC = () => {
         ogImage="https://etfpruvodce.cz/og-kalkulacka-poplatku.jpg"
       />
 
-      {/* Hero sekce */}
-      <div className="bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="inline-flex items-center bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-medium mb-8 border border-white/20">
-              <Calculator className="w-4 h-4 mr-2" />
-              Kalkulačka ETF poplatků 2025
-            </div>
-            
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
-              ETF <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">poplatky</span> kalkulačka
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed mb-12">
-              Spočítejte si skutečné náklady investování do ETF v českých korunách. Porovnejte TER poplatky, broker fees a najděte nejlevnější způsob investování.
-            </p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-3xl mb-3">📊</div>
-                <h3 className="font-semibold mb-2">TER kalkulačka</h3>
-                <p className="text-sm text-blue-200">Spočítejte dopad poplatků</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-3xl mb-3">💰</div>
-                <h3 className="font-semibold mb-2">Srovnání brokerů</h3>
-                <p className="text-sm text-blue-200">Najděte nejlevnější cestu</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-3xl mb-3">🔍</div>
-                <h3 className="font-semibold mb-2">Skryté náklady</h3>
-                <p className="text-sm text-blue-200">Na co si dát pozor</p>
-              </div>
-            </div>
+        {/* Hero sekce */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <Calculator className="w-4 h-4" />
+            Kalkulačka ETF poplatků 2025
           </div>
+          
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+            Kalkulačka ETF poplatků
+          </h1>
+          
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
+            Spočítejte si skutečné náklady investování do ETF. Porovnejte TER poplatky, broker fees a najděte nejlevnější způsob investování.
+          </p>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+        <div className="space-y-16">
         
         {/* Rychlé intro */}
         <section className="text-center mb-8">
@@ -636,6 +616,7 @@ const FeeCalculatorPage: React.FC = () => {
           className="mt-16"
         />
 
+        </div>
       </div>
     </Layout>
   );
