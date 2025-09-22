@@ -30,8 +30,31 @@ const ETFFiltersComponent: React.FC<ETFFiltersProps> = ({
   onFilterChange, 
   onResetFilters 
 }) => {
-  // Extract unique values for dropdowns
-  const uniqueIndexes = [...new Set(etfs.map(etf => etf.index_name).filter(Boolean))].sort();
+  // Extract unique values for dropdowns - group indexes by case insensitive version
+  const indexGroups = etfs.reduce((acc, etf) => {
+    if (etf.index_name) {
+      const lowerCase = etf.index_name.toLowerCase();
+      if (!acc[lowerCase]) {
+        acc[lowerCase] = [];
+      }
+      acc[lowerCase].push(etf.index_name);
+    }
+    return acc;
+  }, {} as Record<string, string[]>);
+  
+  const uniqueIndexes = Object.entries(indexGroups)
+    .map(([, variants]) => {
+      // Return the most common variant, or if tied, the first one alphabetically
+      const counts = variants.reduce((acc, variant) => {
+        acc[variant] = (acc[variant] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+      
+      return Object.entries(counts)
+        .sort(([a, countA], [b, countB]) => countB - countA || a.localeCompare(b))
+        [0][0];
+    })
+    .sort();
   const uniqueCurrencies = [...new Set(etfs.map(etf => etf.fund_currency).filter(Boolean))].sort();
   const uniqueReplications = [...new Set(etfs.map(etf => etf.replication).filter(Boolean))].sort();
   const uniqueRegions = [...new Set(etfs.map(etf => etf.region).filter(Boolean))].sort();

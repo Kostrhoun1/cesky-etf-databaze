@@ -151,8 +151,8 @@ export const useETFFiltering = (etfs: ETFListItem[], defaultCategory?: string) =
         // Region filter
         if (filters.region !== 'all' && etf.region !== filters.region) return false;
 
-        // Index name filter
-        if (filters.indexName !== 'all' && etf.index_name !== filters.indexName) return false;
+        // Index name filter (case insensitive)
+        if (filters.indexName !== 'all' && etf.index_name?.toLowerCase() !== filters.indexName.toLowerCase()) return false;
 
         // Fund currency filter
         if (filters.fundCurrency !== 'all' && etf.fund_currency !== filters.fundCurrency) return false;

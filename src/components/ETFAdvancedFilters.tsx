@@ -4,6 +4,7 @@ import { ETFListItem } from '@/types/etf';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { SearchableSelect } from '@/components/ui/searchable-select';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
@@ -29,7 +30,31 @@ interface ETFAdvancedFiltersProps {
 }
 
 const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, onFilterChange, ranges }) => {
-  const uniqueIndexes = [...new Set(etfs.map(etf => etf.index_name).filter(Boolean))].sort();
+  // Group indexes by lowercase version but keep the most common case
+  const indexGroups = etfs.reduce((acc, etf) => {
+    if (etf.index_name) {
+      const lowerCase = etf.index_name.toLowerCase();
+      if (!acc[lowerCase]) {
+        acc[lowerCase] = [];
+      }
+      acc[lowerCase].push(etf.index_name);
+    }
+    return acc;
+  }, {} as Record<string, string[]>);
+  
+  const uniqueIndexes = Object.entries(indexGroups)
+    .map(([, variants]) => {
+      // Return the most common variant, or if tied, the first one alphabetically
+      const counts = variants.reduce((acc, variant) => {
+        acc[variant] = (acc[variant] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+      
+      return Object.entries(counts)
+        .sort(([a, countA], [b, countB]) => countB - countA || a.localeCompare(b))
+        [0][0];
+    })
+    .sort();
   const uniqueCurrencies = [...new Set(etfs.map(etf => etf.fund_currency).filter(Boolean))].sort();
   const uniqueReplications = [...new Set(etfs.map(etf => etf.replication).filter(Boolean))].sort();
   const uniqueRegions = [...new Set(etfs.map(etf => etf.region).filter(Boolean))].sort();
@@ -198,20 +223,16 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
 
             <div>
               <Label htmlFor="index-filter-adv" className="font-semibold">Sledovaný index</Label>
-              <Select
+              <SearchableSelect
+                id="index-filter-adv"
+                className="mt-2"
+                options={uniqueIndexes}
                 value={filters.indexName}
                 onValueChange={(value) => onFilterChange('indexName', value)}
-              >
-                <SelectTrigger id="index-filter-adv" className="mt-2">
-                  <SelectValue placeholder="Všechny indexy" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Všechny indexy</SelectItem>
-                  {uniqueIndexes.map(index => (
-                    <SelectItem key={index} value={index}>{index}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder="Všechny indexy"
+                searchPlaceholder="Hledat index..."
+                emptyMessage="Nenalezen žádný index"
+              />
             </div>
 
             <div>
