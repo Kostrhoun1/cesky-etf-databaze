@@ -68,8 +68,8 @@ const ETFGuideDownload = () => {
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-violet-600 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">3 ověřené strategie</h3>
-                    <p className="text-gray-600 text-sm">Permanentní 4%, Nobel 6% a Akciové 8% portfolio</p>
+                    <h3 className="font-semibold text-gray-900">5 ověřených strategií</h3>
+                    <p className="text-gray-600 text-sm">Permanentní (4-6%), Nobel (6-8%), Akciové (8-12%), All-Weather (5-8%) a Three-Fund (6-9%)</p>
                   </div>
                 </div>
                 
