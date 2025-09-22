@@ -215,12 +215,17 @@ export interface ETFListItem {
   // Pole potřebná pro konzistentní rating
   inception_date?: string;
   tracking_error?: number;
-  // Přidání všech ticker polí pro rozšířené vyhledávání
+  // Přidání všech ticker polí pro rozšířené vyhledávání (až 10 exchanges)
   exchange_1_ticker?: string;
   exchange_2_ticker?: string;
   exchange_3_ticker?: string;
   exchange_4_ticker?: string;
   exchange_5_ticker?: string;
+  exchange_6_ticker?: string;
+  exchange_7_ticker?: string;
+  exchange_8_ticker?: string;
+  exchange_9_ticker?: string;
+  exchange_10_ticker?: string;
   // Rating z databáze
   rating?: number;
   rating_score?: number;
