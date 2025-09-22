@@ -3,11 +3,14 @@ export interface EmergencyFundParams {
   jobStability: 'stable' | 'moderate' | 'unstable';
   familySize: number;
   hasSecondIncome: boolean;
-  hasHealthInsurance: boolean;
   hasDebt: boolean;
-  industryRisk: 'low' | 'medium' | 'high';
   currentSavings: number;
   monthlySavingCapacity: number;
+  // Volitelné detailní rizikové faktory pro ČR
+  contractType?: 'permanent' | 'fixed_term' | 'freelance';
+  ageGroup?: 'young' | 'middle' | 'senior';
+  education?: 'basic' | 'high_school' | 'university';
+  region?: 'prague_brno' | 'industrial' | 'rural';
 }
 
 export interface EmergencyFundData {
@@ -63,11 +66,13 @@ export const calculateEmergencyFund = (params: EmergencyFundParams): EmergencyFu
     jobStability,
     familySize,
     hasSecondIncome,
-    hasHealthInsurance,
     hasDebt,
-    industryRisk,
     currentSavings,
-    monthlySavingCapacity
+    monthlySavingCapacity,
+    contractType,
+    ageGroup,
+    education,
+    region
   } = params;
 
   // Základní výpočet podle stability zaměstnání
@@ -84,25 +89,50 @@ export const calculateEmergencyFund = (params: EmergencyFundParams): EmergencyFu
       break;
   }
 
-  // Rizikové úpravy
-  let riskMultiplier = 1;
+  // Bodové hodnocení rizika místo multiplikátorů
+  let riskPoints = 0;
 
-  // Odvětví
-  if (industryRisk === 'medium') riskMultiplier += 0.5;
-  if (industryRisk === 'high') riskMultiplier += 1;
+  // Základní stabilita práce
+  if (jobStability === 'moderate') riskPoints += 1;
+  if (jobStability === 'unstable') riskPoints += 2;
 
-  // Druhý příjem snižuje riziko
-  if (!hasSecondIncome) riskMultiplier += 0.5;
+  // Typ zaměstnavatele odstraněn - duplicitní se stabilitou
 
-  // Zdravotní pojištění
-  if (!hasHealthInsurance) riskMultiplier += 1;
+  // Typ smlouvy
+  if (contractType === 'fixed_term') riskPoints += 1;
+  if (contractType === 'freelance') riskPoints += 2;
 
-  // Dluhy zvyšují potřebu
-  if (hasDebt) riskMultiplier += 0.5;
+  // Věk
+  if (ageGroup === 'senior') riskPoints += 1;
+  if (ageGroup === 'young') riskPoints -= 1;
 
-  // Velikost rodiny
+  // Vzdělání
+  if (education === 'basic') riskPoints += 1;
+  if (education === 'university') riskPoints -= 1;
+
+  // Druhý příjem a dluhy
+  if (!hasSecondIncome) riskPoints += 1;
+  if (hasDebt) riskPoints += 1;
+
+  // Velikost rodiny (každá osoba nad 2 = +1 bod)
+  if (familySize > 2) riskPoints += (familySize - 2);
+
+  // Kategorizace celkového rizika
+  let riskLevel: 'low' | 'medium' | 'high';
+  if (riskPoints <= 1) riskLevel = 'low';
+  else if (riskPoints <= 4) riskLevel = 'medium';
+  else riskLevel = 'high';
+
+  // Finální multiplikátor na základě kategorie rizika
+  let riskMultiplier: number;
+  switch (riskLevel) {
+    case 'low': riskMultiplier = 1.0; break;    // Bez změny
+    case 'medium': riskMultiplier = 1.3; break; // +30%
+    case 'high': riskMultiplier = 1.6; break;   // +60%
+  }
+
+  // Odstraňujeme samostatný rodinný multiplikátor
   let familyMultiplier = 1;
-  if (familySize > 2) familyMultiplier += (familySize - 2) * 0.25;
 
   // Finální výpočet
   const adjustedMonths = baseMonths * riskMultiplier * familyMultiplier;
@@ -110,40 +140,28 @@ export const calculateEmergencyFund = (params: EmergencyFundParams): EmergencyFu
   const recommendedAmount = monthlyExpenses * recommendedMonths;
 
   // Současné pokrytí
-  const currentCoverage = currentSavings / monthlyExpenses;
+  const currentCoverage = monthlyExpenses > 0 ? currentSavings / monthlyExpenses : 0;
   const shortfall = Math.max(0, recommendedAmount - currentSavings);
-  const monthsToTarget = monthlySavingCapacity > 0 ? Math.ceil(shortfall / monthlySavingCapacity) : 0;
+  const monthsToTarget = monthlySavingCapacity > 0 && shortfall > 0 ? Math.ceil(shortfall / monthlySavingCapacity) : 0;
 
-  // Určení rizikové úrovně
-  let riskLevel: 'low' | 'medium' | 'high';
-  if (adjustedMonths <= 4) riskLevel = 'low';
-  else if (adjustedMonths <= 7) riskLevel = 'medium';
-  else riskLevel = 'high';
+  // riskLevel už je definovaný výše podle bodového hodnocení
 
   // Kde držet peníze
   const whereToKeep: WhereToKeepOption[] = [
     {
-      option: 'Spořicí účet',
-      percentage: 60,
-      pros: ['Okamžitá dostupnost', 'Pojištěno do 100k€', 'Nulové riziko ztráty'],
-      cons: ['Nízký úrok', 'Reálná ztráta inflací'],
-      expectedReturn: 2.5,
+      option: 'Spořicí účet CZK',
+      percentage: 70,
+      pros: ['Okamžitá dostupnost', 'Pojištěno do 100k€', 'Žádné měnové riziko'],
+      cons: ['Nižší úrok než TD', 'Reálná ztráta inflací'],
+      expectedReturn: 3.8,
       liquidity: 'immediate'
     },
     {
-      option: 'Termínovaný vklad (kratší)',
-      percentage: 25,
-      pros: ['Vyšší úrok', 'Garance', 'Pojištěno'],
-      cons: ['Omezená dostupnost', 'Penále za předčasný výběr'],
-      expectedReturn: 4,
-      liquidity: 'within_days'
-    },
-    {
-      option: 'Money Market ETF',
-      percentage: 15,
-      pros: ['Vyšší výnos', 'Likvidita během 1-2 dní', 'Diverzifikace'],
-      cons: ['Mírné riziko', 'Možné fluktuace', 'Poplatky'],
-      expectedReturn: 3.5,
+      option: 'Termínovaný vklad CZK (3-6M)',
+      percentage: 30,
+      pros: ['Mírně vyšší úrok', 'Garance výnosu', 'Pojištěno do 100k€'],
+      cons: ['Omezená dostupnost', 'Penále za předčasný výběr', 'Nízký výnos'],
+      expectedReturn: 2.8,
       liquidity: 'within_days'
     }
   ];

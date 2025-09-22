@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calculator } from 'lucide-react';
 
 interface InvestmentCalculatorFormProps {
   initialInvestment: number;
@@ -115,7 +116,12 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
         </div>
       </div>
 
-      <Button onClick={onCalculate} className="w-full md:w-auto">
+      <Button 
+        onClick={onCalculate} 
+        className="w-full md:w-auto bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white font-bold py-3 px-6 text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover-scale"
+        size="lg"
+      >
+        <Calculator className="mr-2 h-5 w-5" />
         Vypočítat investici
       </Button>
     </div>

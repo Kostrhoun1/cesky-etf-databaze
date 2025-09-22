@@ -48,19 +48,39 @@ export interface WithdrawalProjection {
   isDepletion: boolean;
 }
 
-// Portfolio alokace podle věku a rizikového profilu
+// Portfolio alokace podle věku a rizikového profilu - upraveno pro český trh
 const getPortfolioAllocation = (age: number, riskProfile: 'conservative' | 'moderate' | 'aggressive' = 'moderate') => {
   let baseStockAllocation: number;
   
-  // Klasické pravidlo: 100 - věk = % akcií, ale upravené podle rizikového profilu
+  // Modernější přístup než klasické "100 - věk" - více akcií v mládí, postupný pokles
   if (riskProfile === 'conservative') {
-    baseStockAllocation = Math.max(20, 90 - age); // Konzervativnější
+    // Konzervativní: začíná na 60% akcií, klesá k 30%
+    if (age <= 30) baseStockAllocation = 60;
+    else if (age <= 40) baseStockAllocation = 55;
+    else if (age <= 50) baseStockAllocation = 50;
+    else if (age <= 60) baseStockAllocation = 45;
+    else if (age <= 70) baseStockAllocation = 40;
+    else baseStockAllocation = 30;
   } else if (riskProfile === 'aggressive') {
-    baseStockAllocation = Math.min(90, 110 - age); // Agresivnější  
+    // Agresivní: začíná na 90% akcií, klesá k 60%
+    if (age <= 30) baseStockAllocation = 90;
+    else if (age <= 40) baseStockAllocation = 85;
+    else if (age <= 50) baseStockAllocation = 80;
+    else if (age <= 60) baseStockAllocation = 75;
+    else if (age <= 70) baseStockAllocation = 70;
+    else baseStockAllocation = 60;
   } else {
-    baseStockAllocation = Math.max(30, 100 - age); // Klasické pravidlo
+    // Vyvážené: začíná na 80% akcií, klesá k 50%
+    if (age <= 30) baseStockAllocation = 80;
+    else if (age <= 40) baseStockAllocation = 75;
+    else if (age <= 50) baseStockAllocation = 70;
+    else if (age <= 60) baseStockAllocation = 65;
+    else if (age <= 70) baseStockAllocation = 55;
+    else baseStockAllocation = 50;
   }
   
+  // Zajištění minimálních a maximálních hodnot
+  baseStockAllocation = Math.max(20, Math.min(95, baseStockAllocation));
   const bondAllocation = 100 - baseStockAllocation;
   
   return {
@@ -69,19 +89,32 @@ const getPortfolioAllocation = (age: number, riskProfile: 'conservative' | 'mode
   };
 };
 
-// Zjednodušený, ale přesnější výpočet výnosu portfolia
+// Realističtější výpočet výnosu portfolia
 const getPortfolioReturn = (allocation: {stocks: number, bonds: number}, expectedReturn: number, year: number): number => {
-  // Zjednodušená volatilita - průměrný výnos s mírnou variabilitou
-  const baseReturn = expectedReturn;
+  // Základní výnos je průměr očekávaných výnosů akcií a dluhopisů
+  // Akcie historicky 7-8%, dluhopisy 3-4% v ČR
+  const stockReturn = 7.5; // Historický průměr pro světové akcie
+  const bondReturn = 3.5;  // Historický průměr pro české dluhopisy
   
-  // Mírná volatilita pro realističnost (+/- 20% od základního výnosu)
-  const volatilityFactor = Math.sin(year * 2.718) * 0.2; // -0.2 až +0.2
+  // Vážený průměr podle alokace
+  const portfolioBaseReturn = allocation.stocks * stockReturn + allocation.bonds * bondReturn;
   
-  // Aplikace volatility na celkové portfolio
-  const portfolioReturn = baseReturn * (1 + volatilityFactor);
+  // Přizpůsobení na uživatelem zadaný očekávaný výnos (zachová volatilitu)
+  const returnAdjustment = expectedReturn / portfolioBaseReturn;
+  const adjustedReturn = portfolioBaseReturn * returnAdjustment;
   
-  // Realistické limity
-  return Math.max(-30, Math.min(40, portfolioReturn)) / 100;
+  // Realistická volatilita: akcie ~15-20%, dluhopisy ~3-5%
+  const portfolioVolatility = allocation.stocks * 0.18 + allocation.bonds * 0.04;
+  
+  // Jednoduchá simulace volatility (pro konzistentní výsledky)
+  // Používáme deterministický pattern místo random pro reprodukovatelnost
+  const cycleFactor = Math.sin((year * 1.618) % (2 * Math.PI)); // Zlatý řez pro "náhodnost"
+  const volatilityFactor = cycleFactor * portfolioVolatility * 0.7; // 70% volatility
+  
+  const finalReturn = adjustedReturn + (adjustedReturn * volatilityFactor);
+  
+  // Realistické limity: -25% až +30% (historické extrémy)
+  return Math.max(-0.25, Math.min(0.30, finalReturn / 100));
 };
 
 export const calculateRetirement = (params: RetirementParams): RetirementData => {
@@ -288,52 +321,86 @@ export const calculateRetirement = (params: RetirementParams): RetirementData =>
     ? (additionalNeeded * monthlyReturn) / (Math.pow(1 + monthlyReturn, yearsToRetirement * 12) - 1)
     : 0;
 
-  // Pravděpodobnost úspěchu (na základě simulace Trinity Study)
+  // Realističtější pravděpodobnost úspěchu založená na Trinity Study a českých podmínkách
   let successProbability: number;
   
+  // Základní faktory ovlivňující úspěšnost
+  const portfolioBalance = totalSavingsAtRetirement / (adjustedYearlyExpenses * 25); // Poměr k 4% rule
+  const duration = Math.min(50, yearsMoneyWillLast); // Limit na 50 let
+  
   if (withdrawalStrategy === 'percentage') {
-    // Pro 4% pravidlo - založeno na Trinity Study
-    if (safeWithdrawalRate <= 3) {
-      successProbability = 95; // 3% má 95%+ úspěšnost na 30 let
-    } else if (safeWithdrawalRate <= 4) {
-      successProbability = 85; // 4% má ~85% úspěšnost na 30 let
-    } else if (safeWithdrawalRate <= 5) {
-      successProbability = 70; // 5% má ~70% úspěšnost na 30 let  
+    // Trinity Study data pro různé withdrawal rates a délky důchodu
+    if (safeWithdrawalRate <= 3.0) {
+      successProbability = duration >= 40 ? 94 : 98; // 3% rule je velmi bezpečná
+    } else if (safeWithdrawalRate <= 3.5) {
+      successProbability = duration >= 40 ? 88 : 95;
+    } else if (safeWithdrawalRate <= 4.0) {
+      successProbability = duration >= 40 ? 79 : 87; // Klasické 4% rule
+    } else if (safeWithdrawalRate <= 4.5) {
+      successProbability = duration >= 40 ? 68 : 78;
+    } else if (safeWithdrawalRate <= 5.0) {
+      successProbability = duration >= 40 ? 55 : 67;
+    } else if (safeWithdrawalRate <= 5.5) {
+      successProbability = duration >= 40 ? 43 : 55;
     } else {
-      successProbability = 50; // Nad 5% je rizikové
+      successProbability = 30; // Nad 5.5% je velmi rizikové
     }
     
-    // Upravit podle délky penze (více let = nižší pravděpodobnost)
-    if (yearsMoneyWillLast < 25) successProbability *= 0.7;
-    else if (yearsMoneyWillLast < 30) successProbability *= 0.8;
+    // Úprava podle kvality portfolia (poměr akcií/dluhopisů pomáhá)
+    const stockAllocation = getPortfolioAllocation(retirementAge, withdrawalPortfolioStrategy).stocks;
+    if (stockAllocation >= 0.6 && stockAllocation <= 0.8) {
+      successProbability += 3; // Optimální alokace 60-80% akcií
+    } else if (stockAllocation < 0.4 || stockAllocation > 0.9) {
+      successProbability -= 5; // Extrémní alokace snižuje úspěšnost
+    }
     
   } else if (withdrawalStrategy === 'fixed') {
-    // Pro fixed strategii - závisí na poměru portfolio vs potřeba
-    const portfolioToNeedRatio = totalSavingsAtRetirement / (adjustedYearlyExpenses * 25);
-    
-    if (portfolioToNeedRatio >= 1.5) {
-      successProbability = 90; // 150%+ požadované částky = velmi bezpečné
-    } else if (portfolioToNeedRatio >= 1.2) {
-      successProbability = 75; // 120%+ = docela bezpečné
-    } else if (portfolioToNeedRatio >= 1.0) {
-      successProbability = 60; // Přesně na hranici
-    } else if (portfolioToNeedRatio >= 0.8) {
-      successProbability = 40; // Pod požadavky
+    // Pro fixed strategii - závisí hlavně na velikosti portfolia
+    if (portfolioBalance >= 2.0) {
+      successProbability = 95; // Dvojnásobek potřeby = velmi bezpečné
+    } else if (portfolioBalance >= 1.5) {
+      successProbability = 85; // 150% potřeby = bezpečné
+    } else if (portfolioBalance >= 1.25) {
+      successProbability = 72; // 125% potřeby = docela bezpečné
+    } else if (portfolioBalance >= 1.0) {
+      successProbability = 55; // Přesně podle potřeby = riskantní
+    } else if (portfolioBalance >= 0.8) {
+      successProbability = 35; // Pod potřebami
     } else {
-      successProbability = 20; // Výrazně nedostatečné
+      successProbability = 15; // Výrazně nedostatečné
     }
     
-  } else { // dynamic
-    // Pro hybridní - kombinace obou přístupů = vyšší bezpečnost
-    const percentageProb = safeWithdrawalRate <= 4 ? 85 : 70;
-    const portfolioToNeedRatio = totalSavingsAtRetirement / (adjustedYearlyExpenses * 25);
-    const fixedProb = portfolioToNeedRatio >= 1.2 ? 75 : (portfolioToNeedRatio >= 1.0 ? 60 : 40);
+    // Úprava podle délky důchodu
+    if (duration > 35) successProbability -= 10; // Delší důchod = rizikovější
+    if (duration > 45) successProbability -= 5;
     
-    // Hybridní strategie je bezpečnější - bere vyšší z obou
-    successProbability = Math.min(95, Math.max(percentageProb, fixedProb) * 1.1);
+  } else { // dynamic
+    // Hybridní strategie kombinuje výhody obou přístupů
+    const baseRate = Math.min(safeWithdrawalRate, 4.5); // Omezíme rate na 4.5%
+    let hybridProb: number;
+    
+    if (baseRate <= 3.5 && portfolioBalance >= 1.2) {
+      hybridProb = 92; // Konzervativní rate + dostatek peněz
+    } else if (baseRate <= 4.0 && portfolioBalance >= 1.1) {
+      hybridProb = 84; // Standardní rate + trochu navíc
+    } else if (baseRate <= 4.5 && portfolioBalance >= 1.0) {
+      hybridProb = 74; // Vyšší rate ale dostatek peněz
+    } else if (portfolioBalance >= 0.9) {
+      hybridProb = 62; // Blízko k potřebě
+    } else {
+      hybridProb = 40; // Pod potřebami
+    }
+    
+    // Hybridní má bonus za flexibilitu (může snížit výběry v zlých letech)
+    successProbability = Math.min(97, hybridProb + 5);
   }
   
-  successProbability = Math.min(100, Math.max(0, successProbability));
+  // Aplikace českých specifik
+  // Nižší volatilita českého trhu ale také nižší výnosy
+  successProbability *= 0.95; // Mírná redukce kvůli menší historii českého trhu
+  
+  // Ochrana proti extrémním hodnotám
+  successProbability = Math.min(97, Math.max(10, successProbability));
 
   return {
     totalSavingsAtRetirement,

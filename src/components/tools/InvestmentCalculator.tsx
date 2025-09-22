@@ -35,13 +35,15 @@ const InvestmentCalculator: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      <Card>
-        <CardHeader>
+      <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-2 shadow-xl">
+        <CardHeader className="bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 text-white rounded-t-lg">
           <div className="flex items-center gap-3">
-            <Calculator className="h-8 w-8 text-blue-600" />
+            <Calculator className="h-8 w-8 text-blue-400" />
             <div>
-              <CardTitle className="text-2xl">Investiční kalkulačka</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                Investiční kalkulačka
+              </CardTitle>
+              <CardDescription className="text-slate-300 text-lg">
                 Spočítejte si růst vašich investic s pravidelným investováním a zohledněním daní
               </CardDescription>
             </div>

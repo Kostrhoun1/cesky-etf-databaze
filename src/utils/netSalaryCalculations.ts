@@ -30,11 +30,11 @@ export interface NetSalaryData {
 }
 
 // Konstanty pro rok 2025
-const SOCIAL_INSURANCE_RATE = 0.065; // 6.5%
+const SOCIAL_INSURANCE_RATE = 0.071; // 7.1% (6.5% důchodové + 0.6% nemocenské)
 const HEALTH_INSURANCE_RATE = 0.045; // 4.5%
-const PENSIONER_SOCIAL_INSURANCE_RATE = 0.0; // 0% pro důchodce
+const PENSIONER_SOCIAL_INSURANCE_RATE = 0.006; // 0.6% nemocenské pro důchodce (po slevě na důchodovém)
 const PENSIONER_HEALTH_INSURANCE_RATE = 0.045; // 4.5% pro důchodce (zůstává)
-const SICKNESS_INSURANCE_RATE = 0.006; // 0.6% pro nepracující důchodce
+const SICKNESS_INSURANCE_RATE = 0.006; // 0.6% nemocenské (součást sociálního pojištění)
 
 const INCOME_TAX_RATE_BASIC = 0.15; // 15%
 const INCOME_TAX_RATE_HIGH = 0.23; // 23%
@@ -42,10 +42,12 @@ const AVERAGE_SALARY_2025 = 46557; // Kč
 const HIGH_TAX_THRESHOLD_MONTHLY = AVERAGE_SALARY_2025 * 36; // 1,676,052 Kč ročně = 139,671 Kč měsíčně
 
 const MONTHLY_TAX_CREDIT = 2570; // Kč
-const CHILD_TAX_CREDIT_MONTHLY = 1267; // Kč na dítě
-const STUDENT_TAX_CREDIT_MONTHLY = 335; // Kč pro studenta
-const DISABILITY_TAX_CREDIT_1_2_MONTHLY = 210; // Kč pro ZTP 1. a 2. stupně
-const DISABILITY_TAX_CREDIT_3_MONTHLY = 420; // Kč pro ZTP/P 3. stupeň
+const CHILD_TAX_CREDIT_FIRST = 1267; // Kč za 1. dítě
+const CHILD_TAX_CREDIT_SECOND = 1860; // Kč za 2. dítě  
+const CHILD_TAX_CREDIT_THIRD_PLUS = 2320; // Kč za 3. a další dítě
+const DISABILITY_TAX_CREDIT_1_2_MONTHLY = 210; // Kč pro invaliditu 1./2. stupeň
+const DISABILITY_TAX_CREDIT_3_MONTHLY = 420; // Kč pro invaliditu 3. stupeň
+const ZTP_P_TAX_CREDIT_MONTHLY = 1345; // Kč pro držitele průkazu ZTP/P (16 140 Kč/rok)
 
 const EMPLOYER_SOCIAL_INSURANCE_RATE = 0.248; // 24.8%
 const EMPLOYER_HEALTH_INSURANCE_RATE = 0.09; // 9%
@@ -80,24 +82,43 @@ export const calculateNetSalary = (params: NetSalaryParams): NetSalaryData => {
 
   // Určení daňové sazby
   const annualGross = grossSalary * 12;
-  const taxRate = annualGross > HIGH_TAX_THRESHOLD_MONTHLY ? INCOME_TAX_RATE_HIGH : INCOME_TAX_RATE_BASIC;
+  const annualThreshold = HIGH_TAX_THRESHOLD_MONTHLY * 12; // Převod na roční limit
+  const taxRate = annualGross > annualThreshold ? INCOME_TAX_RATE_HIGH : INCOME_TAX_RATE_BASIC;
 
-  // Výpočet daně
+  // Výpočet daně z příjmu (počítá se z hrubé mzdy, ne z daňového základu)
   let incomeTax = 0;
-  if (annualGross > HIGH_TAX_THRESHOLD_MONTHLY) {
-    // Progresivní zdanění
-    const basicTaxBase = HIGH_TAX_THRESHOLD_MONTHLY;
-    const highTaxBase = annualGross - HIGH_TAX_THRESHOLD_MONTHLY;
-    incomeTax = (basicTaxBase * INCOME_TAX_RATE_BASIC + highTaxBase * INCOME_TAX_RATE_HIGH) / 12;
+  if (annualGross > annualThreshold) {
+    // Progresivní zdanění - 15% do limitu, 23% nad limit
+    const basicTaxBase = annualThreshold;
+    const highTaxBase = annualGross - annualThreshold;
+    const annualTax = basicTaxBase * INCOME_TAX_RATE_BASIC + highTaxBase * INCOME_TAX_RATE_HIGH;
+    incomeTax = annualTax / 12; // Převod na měsíční daň
   } else {
-    incomeTax = taxableBase * INCOME_TAX_RATE_BASIC;
+    // Základní sazba 15%
+    incomeTax = grossSalary * INCOME_TAX_RATE_BASIC;
   }
 
   // Slevy na dani
   let monthlyTaxCredit = MONTHLY_TAX_CREDIT;
-  let childTaxCredit = hasChildren ? numberOfChildren * CHILD_TAX_CREDIT_MONTHLY : 0;
-  let studentTaxCredit = isStudent ? STUDENT_TAX_CREDIT_MONTHLY : 0;
-  let disabilityTaxCredit = hasDisability ? DISABILITY_TAX_CREDIT_1_2_MONTHLY : 0; // Defaultně 1./2. stupeň
+  
+  // Výpočet slevy na děti (progresivní)
+  let childTaxCredit = 0;
+  if (hasChildren && numberOfChildren > 0) {
+    for (let i = 1; i <= numberOfChildren; i++) {
+      if (i === 1) {
+        childTaxCredit += CHILD_TAX_CREDIT_FIRST;
+      } else if (i === 2) {
+        childTaxCredit += CHILD_TAX_CREDIT_SECOND;
+      } else {
+        childTaxCredit += CHILD_TAX_CREDIT_THIRD_PLUS;
+      }
+    }
+  }
+  
+  // Studentská sleva byla zrušena od 1.1.2024
+  let studentTaxCredit = 0;
+  
+  let disabilityTaxCredit = hasDisability ? DISABILITY_TAX_CREDIT_1_2_MONTHLY : 0; // Defaultně invalidita 1./2. stupeň
 
   const totalTaxCredits = monthlyTaxCredit + childTaxCredit + studentTaxCredit + disabilityTaxCredit;
 

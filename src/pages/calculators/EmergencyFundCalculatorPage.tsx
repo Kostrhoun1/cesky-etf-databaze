@@ -86,6 +86,9 @@ const EmergencyFundCalculatorPage: React.FC = () => {
           </p>
         </div>
 
+        {/* Samotná kalkulačka */}
+        <EmergencyFundCalculator />
+
         {/* Proč je nouzová rezerva důležitá */}
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-8 mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Proč potřebujete nouzovou rezervu?</h2>
@@ -155,16 +158,16 @@ const EmergencyFundCalculatorPage: React.FC = () => {
               <h3 className="text-lg font-semibold mb-4 text-green-800">✅ Vhodné možnosti</h3>
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-semibold">Spořicí účty s vysokým úrokem</h4>
-                  <p className="text-sm text-gray-600">Banka: 2-4% p.a., okamžitá dostupnost, pojištěno do 100k EUR</p>
+                  <h4 className="font-semibold">Spořicí účty CZK s vysokým úrokem</h4>
+                  <p className="text-sm text-gray-600">mBank 4,01%, Raiffeisenbank 4,00% p.a., okamžitá dostupnost, pojištěno do 100k EUR</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold">Termínované vklady</h4>
-                  <p className="text-sm text-gray-600">3-6 měsíců, 3-5% p.a., nižší likvidita, ale vyšší úrok</p>
+                  <h4 className="font-semibold">Termínované vklady CZK</h4>
+                  <p className="text-sm text-gray-600">3-6 měsíců, Fio 2,70% p.a., nižší likvidita, garance výnosu</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold">Peněžní trh ETF</h4>
-                  <p className="text-sm text-gray-600">XEON, 3-4% p.a., vysoká likvidita, mírné riziko</p>
+                  <h4 className="font-semibold">Státní dluhopisy ČR</h4>
+                  <p className="text-sm text-gray-600">1-3 roky, CZK, vysoká bezpečnost, likvidita na sekundárním trhu</p>
                 </div>
               </div>
             </div>
@@ -233,9 +236,6 @@ const EmergencyFundCalculatorPage: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Samotná kalkulačka */}
-        <EmergencyFundCalculator />
 
         {/* FAQ sekce */}
         <FAQSection

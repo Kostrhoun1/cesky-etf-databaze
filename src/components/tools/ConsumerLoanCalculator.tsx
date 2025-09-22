@@ -36,7 +36,9 @@ const ConsumerLoanCalculator: React.FC = () => {
       const interestPayment = remainingDebt * monthlyRate;
       const principalPayment = monthlyPayment - interestPayment;
       
-      remainingDebt = Math.max(0, remainingDebt - principalPayment);
+      remainingDebt = remainingDebt - principalPayment;
+      // Handle rounding errors in final payment
+      if (remainingDebt < 0.01) remainingDebt = 0;
       totalInterest += interestPayment;
 
       data.push({
@@ -250,16 +252,20 @@ const ConsumerLoanCalculator: React.FC = () => {
                     </div>
                   </div>
                   
-                  <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4">
                     <div className="flex items-start gap-2">
-                      <Info className="h-5 w-5 text-yellow-600 mt-0.5 shrink-0" />
+                      <Info className="h-5 w-5 text-red-600 mt-0.5 shrink-0" />
                       <div className="text-sm">
-                        <p className="font-medium text-yellow-800 mb-1">Důležité informace:</p>
-                        <ul className="text-yellow-700 space-y-1 text-xs">
-                          <li>• Výpočet je orientační, skutečné podmínky se mohou lišit</li>
-                          <li>• Nezahrnuje poplatky za zpracování a vedení úvěru</li>
-                          <li>• Doporučujeme porovnat nabídky více bank</li>
+                        <p className="font-medium text-red-800 mb-2">⚠️ POZOR - Dodatečné náklady:</p>
+                        <ul className="text-red-700 space-y-1 text-xs">
+                          <li>• <strong>Poplatek za zpracování:</strong> 1-3% z výše úvěru (5-60k Kč)</li>
+                          <li>• <strong>Vedení úvěru:</strong> 100-300 Kč měsíčně</li>
+                          <li>• <strong>Pojištění úvěru:</strong> 0,5-1% ročně (dobrovolné)</li>
+                          <li>• <strong>RPSN:</strong> Skutečné náklady bývají o 1-3% vyšší</li>
                         </ul>
+                        <p className="text-red-800 font-medium mt-2 text-xs">
+                          Celkové náklady mohou být až o 20-50k Kč vyšší než tento výpočet!
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -267,6 +273,73 @@ const ConsumerLoanCalculator: React.FC = () => {
               </Card>
             )}
           </div>
+          
+          {/* Rozbalovací předpoklady */}
+          <details className="mt-6 border border-blue-200 rounded-lg">
+            <summary className="p-4 bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors rounded-lg">
+              <span className="font-semibold text-blue-900">📋 Předpoklady kalkulačky úvěru (klikněte pro rozbalení)</span>
+            </summary>
+            <div className="p-4 border-t border-blue-200">
+              <h4 className="font-semibold mb-3 text-blue-900">📊 Výpočetní metodika</h4>
+              <div className="grid md:grid-cols-2 gap-4 mb-4 text-sm">
+                <div>
+                  <h5 className="font-semibold mb-2">Anuitní splácení:</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Konstantní měsíční splátka</li>
+                    <li>• Zpočátku více úroků, méně jistiny</li>
+                    <li>• Postupně více jistiny, méně úroků</li>
+                    <li>• Formula: PMT = PV × [r(1+r)^n] / [(1+r)^n-1]</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="font-semibold mb-2">Parametry výpočtu:</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Výše úvěru: 50k - 2M Kč</li>
+                    <li>• Úroková sazba: 3% - 25% p.a.</li>
+                    <li>• Doba splatnosti: 1 - 10 let</li>
+                    <li>• Měsíční úročení</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4 className="font-semibold mb-3 text-blue-900">💰 Typické úrokové sazby 2025</h4>
+              <div className="grid md:grid-cols-3 gap-4 mb-4 text-sm">
+                <div>
+                  <h5 className="font-semibold mb-2">Bankovní úvěry:</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Nejnižší: 6-10% p.a.</li>
+                    <li>• Závisí na bonita klienta</li>
+                    <li>• Vyžadují příjmy + zajištění</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="font-semibold mb-2">Nebankovní společnosti:</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Běžné: 12-20% p.a.</li>
+                    <li>• Rychlejší schválení</li>
+                    <li>• Nižší nároky na bonitu</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="font-semibold mb-2">Rizikoví klienti:</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Vysoké: 20-25% p.a.</li>
+                    <li>• Negativní registr</li>
+                    <li>• Nejisté příjmy</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4 className="font-semibold mb-3 text-blue-900">⚙️ Zjednodušení a omezení</h4>
+              <ul className="text-sm text-gray-700 space-y-2">
+                <li>• <strong>Nezahrnuje:</strong> Poplatky za zpracování, vedení úvěru, pojištění</li>
+                <li>• <strong>Konstantní sazba:</strong> Předpokládá fixní úrok po celou dobu</li>
+                <li>• <strong>Bez mimořádných splátek:</strong> Nezohledňuje předčasné splácení</li>
+                <li>• <strong>RPSN:</strong> Reálná roční procento nákladovost bude vyšší</li>
+                <li>• <strong>Daňové dopady:</strong> Nezohledňuje daňové aspekty úroků</li>
+              </ul>
+            </div>
+          </details>
         </CardContent>
       </Card>
 

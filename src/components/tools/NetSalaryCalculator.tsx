@@ -69,6 +69,18 @@ const NetSalaryCalculator: React.FC = () => {
                     Minimální mzda v roce 2025: 20 800 Kč
                   </p>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Slevy na dani a pojištění */}
+            <Card className="bg-green-50">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Slevy na dani a pojištění
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -82,44 +94,12 @@ const NetSalaryCalculator: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
-                    id="isStudent"
-                    checked={isStudent}
-                    onChange={(e) => setIsStudent(e.target.checked)}
-                    className="rounded"
-                  />
-                  <Label htmlFor="isStudent">Student (sleva na dani)</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="hasDisability"
-                    checked={hasDisability}
-                    onChange={(e) => setHasDisability(e.target.checked)}
-                    className="rounded"
-                  />
-                  <Label htmlFor="hasDisability">ZTP/ZTP-P (sleva na dani)</Label>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Rodinná situace */}
-            <Card className="bg-green-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Rodinná situace
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
                     id="hasChildren"
                     checked={hasChildren}
                     onChange={(e) => setHasChildren(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="hasChildren">Mám děti (sleva na dani)</Label>
+                  <Label htmlFor="hasChildren">Mám děti</Label>
                 </div>
                 {hasChildren && (
                   <div>
@@ -133,34 +113,47 @@ const NetSalaryCalculator: React.FC = () => {
                       max="10"
                     />
                     <p className="text-xs text-gray-600 mt-1">
-                      Sleva na dani: 1 267 Kč/měsíc za každé dítě
+                      Sleva: 1. dítě 1 267 Kč, 2. dítě 1 860 Kč, 3.+ dítě 2 320 Kč/měsíc
                     </p>
                   </div>
                 )}
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="hasDisability"
+                    checked={hasDisability}
+                    onChange={(e) => setHasDisability(e.target.checked)}
+                    className="rounded"
+                  />
+                  <Label htmlFor="hasDisability">Invalidita/ZTP</Label>
+                </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Informace o sazbách */}
-          <Card className="bg-yellow-50 border-yellow-200">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <GraduationCap className="h-5 w-5" />
-                Aktuální sazby pro rok 2025
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-4 text-sm">
+
+          <Button onClick={handleCalculate} className="w-full" size="lg">
+            Vypočítat čistou mzdu
+          </Button>
+
+          {/* Rozbalovací předpoklady */}
+          <details className="mt-6 border border-green-200 rounded-lg">
+            <summary className="p-4 bg-green-50 cursor-pointer hover:bg-green-100 transition-colors rounded-lg">
+              <span className="font-semibold text-green-900">📋 Předpoklady kalkulačky mzdy (klikněte pro rozbalení)</span>
+            </summary>
+            <div className="p-4 border-t border-green-200">
+              <h4 className="font-semibold mb-3 text-green-900">📊 Aktuální sazby pro rok 2025</h4>
+              <div className="grid md:grid-cols-2 gap-4 mb-4 text-sm">
                 <div>
-                  <h4 className="font-semibold mb-2">Pojistné zaměstnance:</h4>
+                  <h5 className="font-semibold mb-2">Pojistné zaměstnance:</h5>
                   <ul className="space-y-1 text-gray-700">
-                    <li>• Sociální pojištění: 6,5%</li>
+                    <li>• Sociální pojištění: 7,1%</li>
                     <li>• Zdravotní pojištění: 4,5%</li>
-                    <li>• Celkem: 11,0%</li>
+                    <li>• Celkem: 11,6%</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-2">Daň z příjmů:</h4>
+                  <h5 className="font-semibold mb-2">Daň z příjmů:</h5>
                   <ul className="space-y-1 text-gray-700">
                     <li>• Základní sazba: 15%</li>
                     <li>• Nad 139 671 Kč/měsíc: 23%</li>
@@ -168,18 +161,17 @@ const NetSalaryCalculator: React.FC = () => {
                   </ul>
                 </div>
               </div>
-              <div className="mt-4 p-3 bg-yellow-100 rounded-lg">
-                <p className="text-sm text-yellow-800">
-                  <strong>Důchodci:</strong> Neplatí sociální pojištění (0%), 
-                  pouze zdravotní pojištění (4,5%).
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Button onClick={handleCalculate} className="w-full" size="lg">
-            Vypočítat čistou mzdu
-          </Button>
+              
+              <h4 className="font-semibold mb-3 text-green-900">⚙️ Předpoklady výpočtu</h4>
+              <ul className="text-sm text-gray-700 space-y-2">
+                <li>• <strong>Daň z příjmu:</strong> Počítá se z hrubé mzdy, progresivní zdanění od 139 671 Kč/měsíc</li>
+                <li>• <strong>Důchodci:</strong> Sleva na důchodovém (6,5%), platí nemocenské (0,6%) + zdravotní (4,5%)</li>
+                <li>• <strong>Slevy na děti:</strong> Progresivní - 1. dítě 1 267 Kč, 2. dítě 1 860 Kč, 3.+ dítě 2 320 Kč</li>
+                <li>• <strong>Superhrubá mzda:</strong> Zrušena od roku 2021, daň se počítá z hrubé mzdy</li>
+                <li>• <strong>Nezahrnuje:</strong> Stravenky, benefity, nadpracovna</li>
+              </ul>
+            </div>
+          </details>
         </CardContent>
       </Card>
 

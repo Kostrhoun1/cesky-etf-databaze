@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PiggyBank, TrendingUp, Calendar, AlertTriangle, Calculator, Target, Info, Zap } from 'lucide-react';
 import { calculateRetirement, RetirementData } from '@/utils/retirementCalculations';
 import RetirementChart from './RetirementChart';
@@ -25,7 +24,6 @@ const RetirementPlanner: React.FC = () => {
   const [accumulationStrategy, setAccumulationStrategy] = useState<'conservative' | 'moderate' | 'aggressive'>('moderate');
   const [withdrawalPortfolioStrategy, setWithdrawalPortfolioStrategy] = useState<'conservative' | 'moderate' | 'aggressive'>('conservative');
   const [results, setResults] = useState<RetirementData | null>(null);
-  const [activeTab, setActiveTab] = useState<string>('basic');
 
   const handleCalculate = () => {
     const params = {
@@ -53,47 +51,38 @@ const RetirementPlanner: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      <Card className="bg-gradient-to-br from-green-50 to-blue-50 border-2">
-        <CardHeader>
+      <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-2 shadow-xl">
+        <CardHeader className="bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 text-white rounded-t-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <PiggyBank className="h-10 w-10 text-green-600" />
+              <PiggyBank className="h-10 w-10 text-violet-400" />
               <div>
-                <CardTitle className="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+                <CardTitle className="text-3xl font-bold bg-gradient-to-r from-violet-400 to-purple-300 bg-clip-text text-transparent">
                   Penzijní plánovač
                 </CardTitle>
-                <CardDescription className="text-lg">
+                <CardDescription className="text-slate-300 text-lg">
                   Moderní kalkulačka pro plánování vaší finanční nezávislosti
                 </CardDescription>
               </div>
             </div>
             <div className="text-right">
-              <div className="text-sm text-gray-600">Rychlý odhad</div>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-sm text-slate-300">Rychlý odhad</div>
+              <div className="text-2xl font-bold text-violet-300">
                 {Math.round(monthlyPension).toLocaleString()} Kč/měsíc
               </div>
-              <div className="text-xs text-gray-500">při odchodu do penze</div>
+              <div className="text-xs text-slate-400">při odchodu do penze</div>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-8">
-              <TabsTrigger value="basic" className="flex items-center gap-2">
-                <Calculator className="h-4 w-4" />
-                Základní údaje
-              </TabsTrigger>
-              <TabsTrigger value="strategy" className="flex items-center gap-2">
-                <Target className="h-4 w-4" />
-                Investice & Strategie
-              </TabsTrigger>
-              <TabsTrigger value="advanced" className="flex items-center gap-2">
-                <Zap className="h-4 w-4" />
-                Pokročilé
-              </TabsTrigger>
-            </TabsList>
+          <div className="space-y-8">
 
-            <TabsContent value="basic" className="space-y-6">
+            {/* Základní údaje */}
+            <div>
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Calculator className="h-5 w-5 text-blue-600" />
+                1. Základní údaje
+              </h3>
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Základní údaje o věku */}
                 <Card className="bg-gradient-to-br from-blue-50 to-indigo-50">
@@ -314,9 +303,14 @@ const RetirementPlanner: React.FC = () => {
                   </CardContent>
                 </Card>
               </div>
-            </TabsContent>
+            </div>
 
-            <TabsContent value="strategy" className="space-y-6">
+            {/* Strategie výnosů */}
+            <div>
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Target className="h-5 w-5 text-green-600" />
+                2. Strategie výnosů
+              </h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <Card>
                   <CardHeader>
@@ -366,9 +360,14 @@ const RetirementPlanner: React.FC = () => {
                   </CardContent>
                 </Card>
               </div>
-            </TabsContent>
+            </div>
 
-            <TabsContent value="advanced" className="space-y-6">
+            {/* Pokročilé nastavení */}
+            <div>
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Zap className="h-5 w-5 text-purple-600" />
+                3. Pokročilé nastavení
+              </h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <Card>
                   <CardHeader>
@@ -412,14 +411,81 @@ const RetirementPlanner: React.FC = () => {
                   </CardContent>
                 </Card>
               </div>
-            </TabsContent>
-          </Tabs>
+            </div>
 
+          {/* Předpoklady kalkulačky */}
+          <details className="mt-6 border border-purple-200 rounded-lg">
+            <summary className="p-4 bg-purple-50 cursor-pointer hover:bg-purple-100 transition-colors rounded-lg">
+              <span className="font-semibold text-purple-900">📋 Předpoklady penzijního plánovače (klikněte pro rozbalení)</span>
+            </summary>
+            <div className="p-4 border-t border-purple-200">
+              <h4 className="font-semibold mb-3 text-purple-900">💰 Finanční předpoklady</h4>
+              <div className="grid md:grid-cols-2 gap-4 mb-4 text-sm">
+                <div>
+                  <h5 className="font-semibold mb-2">Portfolio allocation:</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• <strong>Vyvážené:</strong> 80% akcií v 30 letech → 50% v 70+</li>
+                    <li>• <strong>Konzervativní:</strong> 60% akcií v 30 letech → 30% v 70+</li>
+                    <li>• <strong>Agresivní:</strong> 90% akcií v 30 letech → 60% v 70+</li>
+                    <li>• Postupné snižování rizika s věkem</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="font-semibold mb-2">Očekávané výnosy:</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• <strong>Světové ETF:</strong> 7-8% ročně (historický průměr)</li>
+                    <li>• <strong>České dluhopisy:</strong> 3-4% ročně</li>
+                    <li>• <strong>Inflace:</strong> 2-3% ročně (ČR dlouhodobý průměr)</li>
+                    <li>• Výnosy v penzi: 75% akumulačních výnosů</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4 className="font-semibold mb-3 text-purple-900">🎯 Withdrawal strategies</h4>
+              <div className="grid md:grid-cols-3 gap-4 mb-4 text-sm">
+                <div>
+                  <h5 className="font-semibold mb-2">4% Rule (Percentage):</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Vybírá 4% z portfolia ročně</li>
+                    <li>• Trinity Study: 87% úspěšnost na 30 let</li>
+                    <li>• Nejjednodušší strategie</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="font-semibold mb-2">Fixed Amount:</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Pevná měsíční částka</li>
+                    <li>• Upravená o inflaci</li>
+                    <li>• Vyšší riziko vyčerpání</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="font-semibold mb-2">Dynamic (Hybridní):</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Kombinuje oba přístupy</li>
+                    <li>• Nejbezpečnější strategie</li>
+                    <li>• Flexibilní podle trhu</li>
+                  </ul>
+                </div>
+              </div>
+
+              <h4 className="font-semibold mb-3 text-purple-900">⚠️ Omezení a rizika</h4>
+              <ul className="text-sm text-gray-700 space-y-2">
+                <li>• <strong>Historické výnosy:</strong> Minulé výkony nezaručují budoucí výsledky</li>
+                <li>• <strong>Inflace:</strong> Může být vyšší než očekávaná 2-3%</li>
+                <li>• <strong>Daně:</strong> Nezahrnuje daň z kapitálových výnosů (15% v ČR od 2025)</li>
+                <li>• <strong>Zdravotní náklady:</strong> Ve stáří často rostou nad průměr</li>
+                <li>• <strong>Státní penze:</strong> Nezahrnuje I. a II. pilíř (počítejte jako bonus)</li>
+                <li>• <strong>Sequence of returns risk:</strong> Špatné výnosy na začátku penze jsou nejrizikovější</li>
+              </ul>
+            </div>
+          </details>
+          </div>
           
           <div className="mt-8">
             <Button 
               onClick={handleCalculate} 
-              className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-bold py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+              className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-bold py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover-scale"
               size="lg"
             >
               <Calculator className="mr-2 h-5 w-5" />

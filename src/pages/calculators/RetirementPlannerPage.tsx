@@ -86,6 +86,9 @@ const RetirementPlannerPage: React.FC = () => {
           </p>
         </div>
 
+        {/* Samotná kalkulačka - přesunuta na začátek pro lepší UX */}
+        <RetirementPlanner />
+
         {/* Co je FIRE a 4% rule */}
         <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Co je FIRE a 4% withdrawal rule?</h2>
@@ -206,9 +209,6 @@ const RetirementPlannerPage: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Samotná kalkulačka */}
-        <RetirementPlanner />
 
         {/* FAQ sekce */}
         <FAQSection

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle, AlertTriangle, XCircle, Clock, Shield, Banknote, TrendingUp } from 'lucide-react';
+import { CheckCircle, AlertTriangle, XCircle, Clock, Shield, TrendingUp, Lightbulb } from 'lucide-react';
 import { EmergencyFundData } from '@/utils/emergencyFundCalculations';
 
 interface EmergencyFundResultsProps {
@@ -25,33 +25,25 @@ const EmergencyFundResults: React.FC<EmergencyFundResultsProps> = ({ results }) 
         return {
           icon: <XCircle className="h-5 w-5 text-red-500" />,
           text: "Kritická priorita",
-          color: "bg-red-50 border-red-200",
-          textColor: "text-red-800",
-          description: "Nouzová rezerva je kriticky nízká. Okamžitě začněte spořit!"
+          description: "Okamžitě začněte spořit!"
         };
       case 'high':
         return {
           icon: <AlertTriangle className="h-5 w-5 text-orange-500" />,
-          text: "Vysoká priorita",
-          color: "bg-orange-50 border-orange-200",
-          textColor: "text-orange-800",
-          description: "Vaše rezerva pokryje základní potřeby, ale měla by být vyšší."
+          text: "Vysoká priorita", 
+          description: "Rezerva by měla být vyšší"
         };
       case 'moderate':
         return {
           icon: <Clock className="h-5 w-5 text-yellow-500" />,
           text: "Střední priorita",
-          color: "bg-yellow-50 border-yellow-200",
-          textColor: "text-yellow-800",
-          description: "Jste na dobré cestě. Dokončete budování optimální rezervy."
+          description: "Jste na dobré cestě"
         };
       case 'sufficient':
         return {
           icon: <CheckCircle className="h-5 w-5 text-green-500" />,
           text: "Dostatečná rezerva",
-          color: "bg-green-50 border-green-200",
-          textColor: "text-green-800",
-          description: "Gratulujeme! Máte dobře budovanou nouzovou rezervu."
+          description: "Máte dobře budovanou rezervu!"
         };
     }
   };
@@ -59,262 +51,156 @@ const EmergencyFundResults: React.FC<EmergencyFundResultsProps> = ({ results }) 
   const priorityStatus = getPriorityStatus();
   const progressPercentage = Math.min(100, (results.currentCoverage / results.recommendedMonths) * 100);
 
-  const getRiskBadgeVariant = (level: string) => {
-    switch (level) {
-      case 'low': return 'default';
-      case 'medium': return 'secondary';
-      case 'high': return 'destructive';
-      default: return 'outline';
-    }
-  };
-
   return (
     <div className="space-y-6">
-      {/* Hlavní výsledek */}
-      <Card className={`${priorityStatus.color} border-2`}>
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            {priorityStatus.icon}
-            <div>
-              <CardTitle className={`text-xl ${priorityStatus.textColor}`}>
-                {priorityStatus.text}
-              </CardTitle>
-              <p className="text-sm text-gray-600 mt-1">{priorityStatus.description}</p>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <p className="text-sm text-gray-600">Doporučená rezerva</p>
-              <p className="text-3xl font-bold">{formatCurrency(results.recommendedAmount)}</p>
-              <p className="text-sm text-gray-500">
-                {results.recommendedMonths.toFixed(1)} měsíců výdajů
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Současné pokrytí</p>
-              <div className="flex items-center gap-3 mb-2">
-                <Progress value={progressPercentage} className="flex-1" />
-                <span className="text-sm font-medium">{progressPercentage.toFixed(0)}%</span>
-              </div>
-              <p className="text-lg font-semibold">
-                {results.currentCoverage.toFixed(1)} měsíců pokryto
-              </p>
-              {results.shortfall > 0 && (
-                <p className="text-sm text-red-600">
-                  Chybí: {formatCurrency(results.shortfall)}
-                </p>
-              )}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      
+      {/* Status header */}
+      <div className="text-center space-y-3">
+        <div className="flex items-center justify-center">
+          {priorityStatus.icon}
+        </div>
+        <div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-1">
+            Výsledek analýzy nouzové rezervy
+          </h3>
+          <p className="text-lg text-gray-700">
+            {priorityStatus.text} - {priorityStatus.description}
+          </p>
+        </div>
+      </div>
 
-      {/* Detailní rozpis */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5" />
-            Rozpis doporučení
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-4 gap-4 mb-6">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-blue-600">{formatCurrency(results.breakdown.baseAmount)}</p>
-              <p className="text-xs text-gray-600">Základní částka</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-orange-600">+{formatCurrency(results.breakdown.riskAdjustment)}</p>
-              <p className="text-xs text-gray-600">Rizikové úpravy</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-purple-600">+{formatCurrency(results.breakdown.familyAdjustment)}</p>
-              <p className="text-xs text-gray-600">Rodinná úprava</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-green-600">{formatCurrency(results.breakdown.finalAmount)}</p>
-              <p className="text-xs text-gray-600">Celková rezerva</p>
-            </div>
+      {/* Main results grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-blue-50 p-4 rounded-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <Shield className="h-5 w-5 text-blue-600" />
+            <h4 className="font-semibold text-blue-900">Aktuální rezerva</h4>
           </div>
-          <div className="flex items-center gap-4">
-            <Badge variant={getRiskBadgeVariant(results.riskLevel)}>
-              Rizikový profil: {results.riskLevel === 'low' ? 'Nízký' : results.riskLevel === 'medium' ? 'Střední' : 'Vysoký'}
-            </Badge>
-            {results.monthsToTarget > 0 && (
-              <p className="text-sm text-gray-600">
-                <Clock className="h-4 w-4 inline mr-1" />
-                Dosažení cíle za {results.monthsToTarget} měsíců
-              </p>
-            )}
+          <p className="text-2xl font-bold text-blue-600">
+            {formatCurrency(results.currentCoverage * (results.recommendedAmount / results.recommendedMonths))}
+          </p>
+          <p className="text-sm text-blue-700">{results.currentCoverage.toFixed(1)} měsíců pokryto</p>
+        </div>
+
+        <div className="bg-green-50 p-4 rounded-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingUp className="h-5 w-5 text-green-600" />
+            <h4 className="font-semibold text-green-900">Doporučená rezerva</h4>
           </div>
-        </CardContent>
-      </Card>
+          <p className="text-2xl font-bold text-green-600">
+            {formatCurrency(results.recommendedAmount)}
+          </p>
+          <p className="text-sm text-green-700">{results.recommendedMonths.toFixed(1)} měsíců výdajů</p>
+        </div>
 
-      {/* Strategie spoření */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5" />
-            Strategie budování rezervy
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-3 gap-4">
-            <Card className="bg-blue-50">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">1</span>
-                  <h4 className="font-semibold">Nouzová základna</h4>
-                </div>
-                <p className="text-2xl font-bold text-blue-600 mb-2">
-                  {formatCurrency(results.recommendations.savingStrategy.phase1.target)}
-                </p>
-                <p className="text-sm text-gray-700 mb-2">
-                  {results.recommendations.savingStrategy.phase1.description}
-                </p>
-                <p className="text-xs text-gray-600">
-                  ⏱️ {results.recommendations.savingStrategy.phase1.timeline}
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-green-50">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">2</span>
-                  <h4 className="font-semibold">Základní rezerva</h4>
-                </div>
-                <p className="text-2xl font-bold text-green-600 mb-2">
-                  {formatCurrency(results.recommendations.savingStrategy.phase2.target)}
-                </p>
-                <p className="text-sm text-gray-700 mb-2">
-                  {results.recommendations.savingStrategy.phase2.description}
-                </p>
-                <p className="text-xs text-gray-600">
-                  ⏱️ {results.recommendations.savingStrategy.phase2.timeline}
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-purple-50">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">3</span>
-                  <h4 className="font-semibold">Plná rezerva</h4>
-                </div>
-                <p className="text-2xl font-bold text-purple-600 mb-2">
-                  {formatCurrency(results.recommendations.savingStrategy.phase3.target)}
-                </p>
-                <p className="text-sm text-gray-700 mb-2">
-                  {results.recommendations.savingStrategy.phase3.description}
-                </p>
-                <p className="text-xs text-gray-600">
-                  ⏱️ {results.recommendations.savingStrategy.phase3.timeline}
-                </p>
-              </CardContent>
-            </Card>
+        <div className="bg-purple-50 p-4 rounded-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <Clock className="h-5 w-5 text-purple-600" />
+            <h4 className="font-semibold text-purple-900">Čas do cíle</h4>
           </div>
-        </CardContent>
-      </Card>
+          {results.monthsToTarget > 0 ? (
+            <>
+              <p className="text-2xl font-bold text-purple-600">{results.monthsToTarget} měsíců</p>
+              <p className="text-sm text-purple-700">při současném spoření</p>
+            </>
+          ) : (
+            <>
+              <p className="text-2xl font-bold text-green-600">Hotovo!</p>
+              <p className="text-sm text-green-700">Cíl je splněn</p>
+            </>
+          )}
+        </div>
+      </div>
 
-      {/* Kde držet peníze */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Banknote className="h-5 w-5" />
-            Kde držet nouzovou rezervu
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {results.recommendations.whereToKeep.map((option, index) => (
-              <Card key={index} className="border border-gray-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <h4 className="font-semibold">{option.option}</h4>
-                      <Badge variant="outline">{option.percentage}% alokace</Badge>
-                      <Badge variant={option.liquidity === 'immediate' ? 'default' : 'secondary'}>
-                        {option.liquidity === 'immediate' ? 'Okamžitě' : 
-                         option.liquidity === 'within_days' ? 'Během dnů' : 'Během týdne'}
-                      </Badge>
-                    </div>
-                    <p className="font-semibold text-green-600">{option.expectedReturn}% p.a.</p>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <h5 className="text-sm font-semibold text-green-700 mb-1">✅ Výhody:</h5>
-                      <ul className="text-sm text-gray-700">
-                        {option.pros.map((pro, idx) => (
-                          <li key={idx}>• {pro}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h5 className="text-sm font-semibold text-red-700 mb-1">❌ Nevýhody:</h5>
-                      <ul className="text-sm text-gray-700">
-                        {option.cons.map((con, idx) => (
-                          <li key={idx}>• {con}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <h4 className="font-semibold text-blue-800 mb-2">💡 Tip pro optimalizaci</h4>
-            <p className="text-sm text-blue-700">
-              Rozdělte rezervu podle doporučených procent. Většinu držte na spořicím účtu pro okamžitou dostupnost, 
-              menší část můžete investovat do bezpečnějších nástrojů s vyšším výnosem.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Progress bar */}
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="flex justify-between items-center mb-2">
+          <span className="font-semibold text-gray-900">Pokrok k cíli</span>
+          <span className="font-semibold text-gray-900">{progressPercentage.toFixed(0)}%</span>
+        </div>
+        <Progress value={progressPercentage} className="h-3" />
+      </div>
 
-      {/* Akční plán */}
+      {/* Nedostatek */}
       {results.shortfall > 0 && (
-        <Card className="bg-gradient-to-r from-blue-50 to-green-50 border-blue-200">
-          <CardHeader>
-            <CardTitle className="text-blue-800">🎯 Váš akční plán</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-semibold text-blue-800 mb-2">Okamžité kroky:</h4>
-                  <ul className="text-sm text-blue-700 space-y-1">
-                    <li>• Otevřete si spořicí účet s nejlepším úrokem</li>
-                    <li>• Nastavte si automatický převod</li>
-                    <li>• Identifikujte zbytečné výdaje</li>
-                    <li>• Zvažte dodatečný příjem</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-blue-800 mb-2">Dlouhodobé cíle:</h4>
-                  <ul className="text-sm text-blue-700 space-y-1">
-                    <li>• Dosáhněte nejdříve fáze 1 ({formatCurrency(results.recommendations.savingStrategy.phase1.target)})</li>
-                    <li>• Postupně budujte až k plné rezervě</li>
-                    <li>• Pravidelně revidujte podle změn v životě</li>
-                    <li>• Po dosažení cíle začněte investovat přebytky</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="bg-white p-4 rounded-lg border-l-4 border-blue-500">
-                <p className="font-semibold text-gray-800">
-                  Při současné kapacitě spoření dosáhnete cíle za {results.monthsToTarget} měsíců
-                </p>
-                <p className="text-sm text-gray-600">
-                  Zvýšením měsíční úspory můžete tento čas zkrátit
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="bg-red-50 p-4 rounded-lg">
+          <h4 className="font-semibold text-red-900 mb-2">Potřebujete ještě</h4>
+          <p className="text-2xl font-bold text-red-600">{formatCurrency(results.shortfall)}</p>
+        </div>
       )}
+
+      {/* Upozornění pro dlouhé spoření */}
+      {results.monthsToTarget > 24 && (
+        <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-400">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-red-500 mt-0.5" />
+            <div>
+              <h4 className="font-semibold text-red-900 mb-2">Spoření bude trvat více než 2 roky!</h4>
+              <p className="text-sm text-red-800 mb-2">Zvažte tyto možnosti:</p>
+              <ul className="text-sm text-red-800 space-y-1">
+                <li>• Snižte měsíční výdaje</li>
+                <li>• Zvyšte měsíční spoření</li>
+                <li>• Hledejte dodatečný příjem</li>
+                <li>• Začněte menší rezervou (3 měsíce)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Individualizované tipy */}
+      <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
+        <div className="flex items-start gap-3">
+          <Lightbulb className="h-5 w-5 text-blue-500 mt-0.5" />
+          <div>
+            <h4 className="font-semibold text-blue-900 mb-2">Doporučení pro vás</h4>
+            <ul className="text-sm text-blue-800 space-y-1">
+              {results.recommendations.priorityLevel === 'critical' && (
+                <>
+                  <li>• <strong>Okamžitě:</strong> Otevřete spořicí účet s nejlepším úrokem</li>
+                  <li>• <strong>Cíl:</strong> Nejdříve naspořte alespoň {formatCurrency(results.breakdown.baseAmount / 3)} (1 měsíc)</li>
+                  <li>• <strong>Automatizace:</strong> Převádějte peníze hned po výplatě</li>
+                </>
+              )}
+              {results.recommendations.priorityLevel === 'high' && (
+                <>
+                  <li>• <strong>Pokračujte:</strong> Jste na dobré cestě, zvyšte tempo spoření</li>
+                  <li>• <strong>Cíl:</strong> Dostavte do {formatCurrency(results.breakdown.baseAmount)} (3 měsíce)</li>
+                  <li>• <strong>Optimalizace:</strong> Rozdělte 70% spořicí účet, 30% termínovaný vklad</li>
+                </>
+              )}
+              {results.recommendations.priorityLevel === 'moderate' && (
+                <>
+                  <li>• <strong>Dokončení:</strong> Dostavte do plné rezervy {formatCurrency(results.recommendedAmount)}</li>
+                  <li>• <strong>Diverzifikace:</strong> 70% spořicí účet, 30% termínovaný vklad</li>
+                  <li>• <strong>Připravte se:</strong> Až dosáhnete cíle, začněte investovat přebytky</li>
+                </>
+              )}
+              {results.recommendations.priorityLevel === 'sufficient' && (
+                <>
+                  <li>• <strong>Gratulujeme!</strong> Máte dostatečnou rezervu</li>
+                  <li>• <strong>Údržba:</strong> Pravidelně revidujte podle změn v životě</li>
+                  <li>• <strong>Další krok:</strong> Investujte přebytečné peníze do ETF či akcií</li>
+                </>
+              )}
+              {results.monthsToTarget > 12 && results.recommendations.priorityLevel !== 'sufficient' && (
+                <li>• <strong>Zrychlení:</strong> Zvažte snížení výdajů nebo zvýšení příjmů</li>
+              )}
+              {results.riskLevel === 'high' && (
+                <li>• <strong>Vysoké riziko:</strong> Prioritou je rychlé vytvoření základní rezervy</li>
+              )}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Rizikový profil */}
+      <div className="text-center">
+        <Badge variant={results.riskLevel === 'low' ? 'default' : results.riskLevel === 'medium' ? 'secondary' : 'destructive'}>
+          Rizikový profil: {results.riskLevel === 'low' ? 'Nízký' : results.riskLevel === 'medium' ? 'Střední' : 'Vysoký'}
+        </Badge>
+      </div>
+
     </div>
   );
 };

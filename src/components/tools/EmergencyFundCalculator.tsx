@@ -13,9 +13,13 @@ const EmergencyFundCalculator: React.FC = () => {
   const [jobStability, setJobStability] = useState<'stable' | 'moderate' | 'unstable'>('stable');
   const [familySize, setFamilySize] = useState<number>(2);
   const [hasSecondIncome, setHasSecondIncome] = useState<boolean>(false);
-  const [hasHealthInsurance, setHasHealthInsurance] = useState<boolean>(true);
   const [hasDebt, setHasDebt] = useState<boolean>(false);
-  const [industryRisk, setIndustryRisk] = useState<'low' | 'medium' | 'high'>('low');
+  
+  // Rizikové faktory - nyní povinné s rozumnými defaulty
+  const [contractType, setContractType] = useState<'permanent' | 'fixed_term' | 'freelance'>('permanent');
+  const [ageGroup, setAgeGroup] = useState<'young' | 'middle' | 'senior'>('middle');
+  const [education, setEducation] = useState<'basic' | 'high_school' | 'university'>('high_school');
+  const [region, setRegion] = useState<'prague_brno' | 'industrial' | 'rural'>('industrial');
   const [currentSavings, setCurrentSavings] = useState<number>(100000);
   const [savingsGoal, setSavingsGoal] = useState<number>(0);
   const [monthlySavingCapacity, setMonthlySavingCapacity] = useState<number>(5000);
@@ -27,11 +31,13 @@ const EmergencyFundCalculator: React.FC = () => {
       jobStability,
       familySize,
       hasSecondIncome,
-      hasHealthInsurance,
       hasDebt,
-      industryRisk,
       currentSavings,
-      monthlySavingCapacity
+      monthlySavingCapacity,
+      contractType,
+      ageGroup,
+      education,
+      region
     };
     
     const calculatedResults = calculateEmergencyFund(params);
@@ -42,114 +48,191 @@ const EmergencyFundCalculator: React.FC = () => {
   const riskFactors = [
     { 
       factor: 'Stabilita zaměstnání', 
-      value: jobStability, 
-      impact: jobStability === 'stable' ? 'Nízké riziko' : jobStability === 'moderate' ? 'Střední riziko' : 'Vysoké riziko',
+      impact: jobStability === 'stable' ? '🟢 Nízké riziko' : jobStability === 'moderate' ? '🟡 Střední riziko' : '🔴 Vysoké riziko',
       color: jobStability === 'stable' ? 'text-green-600' : jobStability === 'moderate' ? 'text-yellow-600' : 'text-red-600'
     },
     { 
-      factor: 'Průmysl', 
-      value: industryRisk, 
-      impact: industryRisk === 'low' ? 'Stabilní odvětví' : industryRisk === 'medium' ? 'Střední riziko' : 'Nestabilní odvětví',
-      color: industryRisk === 'low' ? 'text-green-600' : industryRisk === 'medium' ? 'text-yellow-600' : 'text-red-600'
+      factor: 'Typ smlouvy', 
+      impact: contractType === 'permanent' ? '✅ Trvalá smlouva' : contractType === 'fixed_term' ? '⏰ Na dobu určitou' : '📝 Dohody/OSVČ',
+      color: contractType === 'permanent' ? 'text-green-600' : contractType === 'fixed_term' ? 'text-yellow-600' : 'text-red-600'
+    },
+    { 
+      factor: 'Věková skupina', 
+      impact: ageGroup === 'young' ? '👶 Snadnější hledání práce' : ageGroup === 'middle' ? '👨 Standardní pozice' : '👴 Může trvat déle najít práci',
+      color: ageGroup === 'young' ? 'text-green-600' : ageGroup === 'middle' ? 'text-blue-600' : 'text-yellow-600'
+    },
+    { 
+      factor: 'Vzdělání', 
+      impact: education === 'university' ? '🎓 Lepší uplatnitelnost' : education === 'high_school' ? '📚 Standardní' : '📝 Horší pozice na trhu',
+      color: education === 'university' ? 'text-green-600' : education === 'high_school' ? 'text-blue-600' : 'text-yellow-600'
     },
     { 
       factor: 'Druhý příjem', 
-      value: hasSecondIncome, 
-      impact: hasSecondIncome ? 'Snižuje riziko' : 'Zvyšuje riziko',
+      impact: hasSecondIncome ? '💰 Máte druhý příjem' : '⚠️ Jediný zdroj příjmu',
       color: hasSecondIncome ? 'text-green-600' : 'text-red-600'
     },
     { 
-      factor: 'Zdravotní pojištění', 
-      value: hasHealthInsurance, 
-      impact: hasHealthInsurance ? 'Pokryto' : 'Riziko vysokých výdajů',
-      color: hasHealthInsurance ? 'text-green-600' : 'text-red-600'
+      factor: 'Dluhy', 
+      impact: hasDebt ? '🏠 Máte dluhy' : '✅ Bez dluhů',
+      color: hasDebt ? 'text-red-600' : 'text-green-600'
+    },
+    { 
+      factor: 'Počet závislých', 
+      impact: familySize <= 2 ? '👥 Malá domácnost' : familySize <= 4 ? '👨‍👩‍👧‍👦 Střední domácnost' : '👨‍👩‍👧‍👦👶 Velká domácnost',
+      color: familySize <= 2 ? 'text-green-600' : familySize <= 4 ? 'text-yellow-600' : 'text-red-600'
     }
   ];
 
   return (
     <div className="space-y-8">
-      <Card>
-        <CardHeader>
+      <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-2 shadow-xl">
+        <CardHeader className="bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 text-white rounded-t-lg">
           <div className="flex items-center gap-3">
-            <Shield className="h-8 w-8 text-green-600" />
+            <Shield className="h-8 w-8 text-emerald-400" />
             <div>
-              <CardTitle className="text-2xl">Kalkulačka nouzové rezervy</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+                Kalkulačka nouzové rezervy
+              </CardTitle>
+              <CardDescription className="text-slate-300 text-lg">
                 Spočítejte si optimální velikost nouzové rezervy podle vaší situace
               </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Základní údaje */}
-            <Card className="bg-blue-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Banknote className="h-5 w-5" />
-                  Finanční základna
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="monthlyExpenses">Měsíční výdaje (Kč)</Label>
-                  <Input
-                    id="monthlyExpenses"
-                    type="number"
-                    value={monthlyExpenses || ''}
-                    onChange={(e) => setMonthlyExpenses(Number(e.target.value) || 0)}
-                    min="10000"
-                    step="5000"
-                  />
-                  <p className="text-xs text-gray-600 mt-1">
-                    Zahrnuje nájem, jídlo, transport, pojištění a ostatní nezbytné výdaje
-                  </p>
-                </div>
-                <div>
-                  <Label htmlFor="currentSavings">Současné úspory (Kč)</Label>
-                  <Input
-                    id="currentSavings"
-                    type="number"
-                    value={currentSavings || ''}
-                    onChange={(e) => setCurrentSavings(Number(e.target.value) || 0)}
-                    min="0"
-                    step="10000"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="monthlySavingCapacity">Měsíční kapacita spoření (Kč)</Label>
-                  <Input
-                    id="monthlySavingCapacity"
-                    type="number"
-                    value={monthlySavingCapacity || ''}
-                    onChange={(e) => setMonthlySavingCapacity(Number(e.target.value) || 0)}
-                    min="0"
-                    step="1000"
-                  />
-                  <p className="text-xs text-gray-600 mt-1">
-                    Kolik si můžete měsíčně odložit na nouzovou rezervu
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Základní finanční údaje */}
+          <Card className="bg-blue-50">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Banknote className="h-5 w-5" />
+                Finanční situace
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="grid md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="monthlyExpenses">Měsíční nezbytné výdaje (Kč)</Label>
+                <Input
+                  id="monthlyExpenses"
+                  type="number"
+                  value={monthlyExpenses || ''}
+                  onChange={(e) => setMonthlyExpenses(Number(e.target.value) || 0)}
+                  min="10000"
+                  step="5000"
+                />
+                <p className="text-xs text-gray-600 mt-1">
+                  Nájem, jídlo, doprava, pojištění - jen nutné výdaje
+                </p>
+              </div>
+              <div>
+                <Label htmlFor="familySize">Kolik lidí finančně podporujete</Label>
+                <Input
+                  id="familySize"
+                  type="number"
+                  value={familySize || ''}
+                  onChange={(e) => setFamilySize(Number(e.target.value) || 0)}
+                  min="1"
+                  max="10"
+                />
+                <p className="text-xs text-gray-600 mt-1">
+                  Kolik lidí závisí na vašem příjmu
+                </p>
+              </div>
+              <div>
+                <Label htmlFor="currentSavings">Současné úspory (Kč)</Label>
+                <Input
+                  id="currentSavings"
+                  type="number"
+                  value={currentSavings || ''}
+                  onChange={(e) => setCurrentSavings(Number(e.target.value) || 0)}
+                  min="0"
+                  step="10000"
+                />
+              </div>
+              <div>
+                <Label htmlFor="monthlySavingCapacity">Měsíční kapacita spoření (Kč)</Label>
+                <Input
+                  id="monthlySavingCapacity"
+                  type="number"
+                  value={monthlySavingCapacity || ''}
+                  onChange={(e) => setMonthlySavingCapacity(Number(e.target.value) || 0)}
+                  min="0"
+                  step="1000"
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Osobní situace */}
-            <Card className="bg-green-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">Osobní situace</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+          {/* Rizikové faktory */}
+          <Card className="bg-orange-50">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5" />
+                Vaše riziková situace
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Základní faktory v řadě */}
+              <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="familySize">Velikost domácnosti</Label>
-                  <Input
-                    id="familySize"
-                    type="number"
-                    value={familySize || ''}
-                    onChange={(e) => setFamilySize(Number(e.target.value) || 0)}
-                    min="1"
-                    max="10"
-                  />
+                  <Label htmlFor="jobStability">Stabilita zaměstnání</Label>
+                  <Select value={jobStability} onValueChange={(value: 'stable' | 'moderate' | 'unstable') => setJobStability(value)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="stable">🟢 Stabilní (státní, velké firmy)</SelectItem>
+                      <SelectItem value="moderate">🟡 Střední (běžné zaměstnání)</SelectItem>
+                      <SelectItem value="unstable">🔴 Rizikové (OSVČ, startup)</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
+
+
+                <div>
+                  <Label>Typ smlouvy</Label>
+                  <Select value={contractType} onValueChange={(value) => setContractType(value as any)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="permanent">✅ Na dobu neurčitou</SelectItem>
+                      <SelectItem value="fixed_term">⏰ Na dobu určitou</SelectItem>
+                      <SelectItem value="freelance">📝 Dohody (DPP/DPČ)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Věk</Label>
+                  <Select value={ageGroup} onValueChange={(value) => setAgeGroup(value as any)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="young">👶 20-35 let</SelectItem>
+                      <SelectItem value="middle">👨 36-50 let</SelectItem>
+                      <SelectItem value="senior">👴 50+ let</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Vzdělání</Label>
+                  <Select value={education} onValueChange={(value) => setEducation(value as any)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="university">🎓 Vysokoškolské</SelectItem>
+                      <SelectItem value="high_school">📚 Středoškolské</SelectItem>
+                      <SelectItem value="basic">📝 Základní</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Checkboxy */}
+              <div className="grid md:grid-cols-2 gap-4 pt-4 border-t">
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -158,17 +241,7 @@ const EmergencyFundCalculator: React.FC = () => {
                     onChange={(e) => setHasSecondIncome(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="hasSecondIncome">Druhý příjem v domácnosti</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="hasHealthInsurance"
-                    checked={hasHealthInsurance}
-                    onChange={(e) => setHasHealthInsurance(e.target.checked)}
-                    className="rounded"
-                  />
-                  <Label htmlFor="hasHealthInsurance">Komplexní zdravotní pojištění</Label>
+                  <Label htmlFor="hasSecondIncome">💰 Druhý příjem v domácnosti</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <input
@@ -178,55 +251,26 @@ const EmergencyFundCalculator: React.FC = () => {
                     onChange={(e) => setHasDebt(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="hasDebt">Máte dluhy (hypotéka, úvěry)</Label>
+                  <Label htmlFor="hasDebt">🏠 Mám dluhy (hypotéka, úvěry)</Label>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Rizikové faktory */}
-            <Card className="bg-orange-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5" />
-                  Rizikové faktory
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="jobStability">Stabilita zaměstnání</Label>
-                  <Select value={jobStability} onValueChange={(value: 'stable' | 'moderate' | 'unstable') => setJobStability(value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="stable">Stabilní (státní sektor, velké korporace)</SelectItem>
-                      <SelectItem value="moderate">Střední (běžné zaměstnání)</SelectItem>
-                      <SelectItem value="unstable">Nestabilní (sezónní, startup, freelance)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="industryRisk">Riziko odvětví</Label>
-                  <Select value={industryRisk} onValueChange={(value: 'low' | 'medium' | 'high') => setIndustryRisk(value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="low">Nízké (healthcare, vzdělání, utilities)</SelectItem>
-                      <SelectItem value="medium">Střední (většina odvětví)</SelectItem>
-                      <SelectItem value="high">Vysoké (tech startupy, luxury goods)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </CardContent>
-            </Card>
+          <Button 
+            onClick={handleCalculate} 
+            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover-scale" 
+            size="lg"
+          >
+            <Shield className="mr-2 h-5 w-5" />
+            Vypočítat nouzovou rezervu
+          </Button>
 
-            {/* Aktuální analýza rizika */}
+          {/* VÝSLEDEK: Analýza rizika */}
+          {results && (
             <Card className="bg-purple-50">
               <CardHeader className="pb-4">
-                <CardTitle className="text-lg">Analýza vašich rizik</CardTitle>
+                <CardTitle className="text-lg">📊 Analýza vašich rizik</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -241,16 +285,24 @@ const EmergencyFundCalculator: React.FC = () => {
                       <span className="font-semibold">Celkové riziko:</span>
                       <span className="font-bold">
                         {(() => {
-                          const riskScore = 
-                            (jobStability === 'stable' ? 1 : jobStability === 'moderate' ? 2 : 3) +
-                            (industryRisk === 'low' ? 1 : industryRisk === 'medium' ? 2 : 3) +
-                            (hasSecondIncome ? 0 : 1) +
-                            (hasHealthInsurance ? 0 : 1) +
-                            (hasDebt ? 1 : 0);
+                          // Stejná logika jako v backend výpočtu
+                          let riskPoints = 0;
                           
-                          if (riskScore <= 3) return <span className="text-green-600">Nízké</span>;
-                          if (riskScore <= 6) return <span className="text-yellow-600">Střední</span>;
-                          return <span className="text-red-600">Vysoké</span>;
+                          if (jobStability === 'moderate') riskPoints += 1;
+                          if (jobStability === 'unstable') riskPoints += 2;
+                          if (contractType === 'fixed_term') riskPoints += 1;
+                          if (contractType === 'freelance') riskPoints += 2;
+                          if (ageGroup === 'senior') riskPoints += 1;
+                          if (ageGroup === 'young') riskPoints -= 1;
+                          if (education === 'basic') riskPoints += 1;
+                          if (education === 'university') riskPoints -= 1;
+                          if (!hasSecondIncome) riskPoints += 1;
+                          if (hasDebt) riskPoints += 1;
+                          if (familySize > 2) riskPoints += (familySize - 2);
+                          
+                          if (riskPoints <= 1) return <span className="text-green-600">🟢 Nízké</span>;
+                          if (riskPoints <= 4) return <span className="text-yellow-600">🟡 Střední</span>;
+                          return <span className="text-red-600">🔴 Vysoké</span>;
                         })()}
                       </span>
                     </div>
@@ -258,11 +310,67 @@ const EmergencyFundCalculator: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          )}
 
-          <Button onClick={handleCalculate} className="w-full" size="lg">
-            Vypočítat nouzovou rezervu
-          </Button>
+          {/* Rozbalovací předpoklady */}
+          <details className="mt-6 border border-green-200 rounded-lg">
+            <summary className="p-4 bg-green-50 cursor-pointer hover:bg-green-100 transition-colors rounded-lg">
+              <span className="font-semibold text-green-900">📋 Předpoklady kalkulačky nouzové rezervy (klikněte pro rozbalení)</span>
+            </summary>
+            <div className="p-4 border-t border-green-200">
+              <h4 className="font-semibold mb-3 text-green-900">📊 Výpočet velikosti rezervy</h4>
+              <div className="grid md:grid-cols-2 gap-4 mb-4 text-sm">
+                <div>
+                  <h5 className="font-semibold mb-2">Základní velikost podle stability:</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Stabilní zaměstnání: 3 měsíce</li>
+                    <li>• Středně stabilní: 6 měsíců</li>
+                    <li>• Nestabilní (OSVČ, startup): 9 měsíců</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="font-semibold mb-2">Rizikové úpravy:</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Bez druhého příjmu: +50%</li>
+                    <li>• Bez zdravotního pojištění: +100%</li>
+                    <li>• Dluhy (hypotéka): +50%</li>
+                    <li>• Velká rodina: +25% za osobu nad 2</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4 className="font-semibold mb-3 text-green-900">💰 Doporučené umístění rezervy (2025)</h4>
+              <div className="grid md:grid-cols-2 gap-4 mb-4 text-sm">
+                <div>
+                  <h5 className="font-semibold mb-2">Spořicí účty CZK (70%):</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Výnos: ~3,8% p.a. (mBank 4,01%)</li>
+                    <li>• Okamžitá dostupnost</li>
+                    <li>• Pojištěno do 100k€</li>
+                    <li>• Žádné měnové riziko</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="font-semibold mb-2">Termínované vklady CZK (30%):</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• Výnos: ~2,8% p.a. (Fio 3M 2,70%)</li>
+                    <li>• Splatnost 3-6 měsíců</li>
+                    <li>• Garance + pojištění</li>
+                    <li>• Nízká likvidita</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4 className="font-semibold mb-3 text-green-900">⚙️ Zjednodušení a omezení</h4>
+              <ul className="text-sm text-gray-700 space-y-2">
+                <li>• <strong>Maximální rezerva:</strong> Omezeno na 12 měsíců (i když výpočet dává více)</li>
+                <li>• <strong>Minimální rezerva:</strong> Minimálně 3 měsíce ve všech případech</li>
+                <li>• <strong>Výnosy:</strong> Aktuální sazby k roku 2025, mohou se měnit</li>
+                <li>• <strong>Nezahrnuje:</strong> Inflaci, daně z výnosů, specifické životní situace</li>
+                <li>• <strong>Měsíční výdaje:</strong> Pouze nezbytné výdaje, ne luxus nebo spoření</li>
+              </ul>
+            </div>
+          </details>
         </CardContent>
       </Card>
 
