@@ -1,0 +1,39 @@
+{
+  "timestamp": 1758438848.682702,
+  "tests": [
+    {
+      "test": "Všechna ETF",
+      "duration": 0.9336080551147461,
+      "count": 1000
+    },
+    {
+      "test": "TER filtr",
+      "duration": 1.95558500289917,
+      "count": 1000
+    },
+    {
+      "test": "Top ETF",
+      "duration": 0.1383812427520752,
+      "count": 50
+    },
+    {
+      "test": "Performance filtr",
+      "error": "{'message': '\"failed to parse filter (is.success)\" (line 1, column 4)', 'code': 'PGRST100', 'hint': None, 'details': 'unexpected \"s\" expecting null or trilean value (unknown, true, false)'}"
+    },
+    {
+      "test": "ISIN lookup",
+      "duration": 0.3185160160064697,
+      "avg_per_lookup": 0.10617200533548991
+    },
+    {
+      "test": "Text search",
+      "duration": 0.12409210205078125,
+      "count": 231
+    }
+  ],
+  "summary": {
+    "successful_count": 5,
+    "failed_count": 1,
+    "avg_duration": 0.6940364837646484
+  }
+}

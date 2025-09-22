@@ -1,6 +1,7 @@
 
 import { ETF } from '@/types/etf';
 import { ETF_ISIN_TO_TICKER } from './etfTickerMapping';
+import { parseInvestmentFocus, matchesAssetClass } from './investmentFocusParser';
 
 // Function to map categories based on ETF properties
 const mapETFCategory = (etf: any): string => {
@@ -8,6 +9,22 @@ const mapETFCategory = (etf: any): string => {
   const investmentFocus = (etf.investment_focus || '').toLowerCase();
   const indexName = (etf.index_name || '').toLowerCase();
   const description = (etf.description_en || '').toLowerCase();
+  
+  // Nejdříve zkusíme přesné mapování z investment_focus
+  if (etf.investment_focus) {
+    const focusInfo = parseInvestmentFocus(etf.investment_focus);
+    
+    // Pokud je to páková ETF, prioritně to označíme
+    if (name.includes('leveraged') || name.includes('2x') || name.includes('3x') || 
+        name.includes('ultra') || name.includes('leverage')) {
+      return 'Páková ETF';
+    }
+    
+    // Jinak použijeme kategorizaci z investment_focus
+    if (focusInfo.assetClass !== 'Unknown' && focusInfo.assetClass !== 'Ostatní') {
+      return focusInfo.assetClass;
+    }
+  }
   
   // Páková ETF - MUSÍ BÝT PRVNÍ!
   if (
@@ -211,6 +228,24 @@ export const parseCSV = (csvContent: string): ETF[] => {
     
     // Apply smart categorization
     etf.category = mapETFCategory(etf);
+    
+    // Parsovat investment_focus do nových polí
+    if (etf.investment_focus) {
+      const focusInfo = parseInvestmentFocus(etf.investment_focus);
+      
+      etf.parsed_asset_class = focusInfo.assetClass !== 'Unknown' ? focusInfo.assetClass : null;
+      etf.parsed_region = focusInfo.region !== 'Unknown' ? focusInfo.region : null;
+      etf.parsed_sector = focusInfo.sector || null;
+      etf.parsed_market_cap = focusInfo.marketCap || null;
+      etf.parsed_investment_style = focusInfo.investmentStyle || null;
+      
+      // Vylepšit region mapping z investment_focus (fallback)
+      if (!etf.region || etf.region === '') {
+        if (focusInfo.region !== 'Unknown') {
+          etf.region = focusInfo.region;
+        }
+      }
+    }
     
     // Fix known ticker issues
     if (etf.isin === 'IE00B5BMR087' && etf.primary_ticker === 'SXR8') {

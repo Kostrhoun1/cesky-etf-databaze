@@ -136,7 +136,15 @@ export const useETFComparison = () => {
           exchange_5_ticker,
           exchange_5_bloomberg,
           exchange_5_reuters,
-          exchange_5_market_maker
+          exchange_5_market_maker,
+          return_1m,
+          return_3m,
+          return_6m,
+          return_2021,
+          return_2022,
+          return_2023,
+          return_2024,
+          return_inception
         `)
         .eq('isin', isin)
         .single();

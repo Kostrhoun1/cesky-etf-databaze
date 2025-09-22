@@ -159,6 +159,13 @@ export type Database = {
           index_name: string | null
           information_ratio: number | null
           investment_focus: string | null
+          currency_risk: string | null
+          strategy_risk: string | null
+          parsed_asset_class: string | null
+          parsed_region: string | null
+          parsed_sector: string | null
+          parsed_market_cap: string | null
+          parsed_investment_style: string | null
           is_leveraged: boolean | null
           isin: string
           last_price_update: string | null
@@ -313,6 +320,13 @@ export type Database = {
           index_name?: string | null
           information_ratio?: number | null
           investment_focus?: string | null
+          currency_risk?: string | null
+          strategy_risk?: string | null
+          parsed_asset_class?: string | null
+          parsed_region?: string | null
+          parsed_sector?: string | null
+          parsed_market_cap?: string | null
+          parsed_investment_style?: string | null
           is_leveraged?: boolean | null
           isin: string
           last_price_update?: string | null
@@ -467,6 +481,13 @@ export type Database = {
           index_name?: string | null
           information_ratio?: number | null
           investment_focus?: string | null
+          currency_risk?: string | null
+          strategy_risk?: string | null
+          parsed_asset_class?: string | null
+          parsed_region?: string | null
+          parsed_sector?: string | null
+          parsed_market_cap?: string | null
+          parsed_investment_style?: string | null
           is_leveraged?: boolean | null
           isin?: string
           last_price_update?: string | null

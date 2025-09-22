@@ -247,6 +247,10 @@ class ETFDataComplete:
         self.investment_focus = ""
         self.sustainability = ""
         
+        # Risk information - NOVÉ POLE PRO 100% PŘESNOU HEDGING DETEKCI
+        self.currency_risk = ""
+        self.strategy_risk = ""
+        
         # Category
         self.category = ""
         
@@ -394,6 +398,8 @@ class ETFDataComplete:
             'index_name': self.index_name,
             'investment_focus': self.investment_focus,
             'sustainability': self.sustainability,
+            'currency_risk': self.currency_risk,
+            'strategy_risk': self.strategy_risk,
             'category': self.category,
             'is_leveraged': self.is_leveraged,
             'region': self.region,
@@ -402,6 +408,15 @@ class ETFDataComplete:
             'return_3y': self.return_3y,
             'return_5y': self.return_5y,
             'return_ytd': self.return_ytd,
+            # NOVÁ POLE - kratší období a roční data
+            'return_1m': self.return_1m,
+            'return_3m': self.return_3m,
+            'return_6m': self.return_6m,
+            'return_2021': self.return_2021,
+            'return_2022': self.return_2022,
+            'return_2023': self.return_2023,
+            'return_2024': self.return_2024,
+            'return_inception': self.return_inception,
             'volatility_1y': self.volatility_1y,
             'volatility_3y': self.volatility_3y,
             'volatility_5y': self.volatility_5y,
@@ -450,8 +465,8 @@ class ETFDataComplete:
             base_dict[f'sector_{i+1}_name'] = self.sectors[i][0] if i < len(self.sectors) else ""
             base_dict[f'sector_{i+1}_weight'] = self.sectors[i][1] if i < len(self.sectors) else None
         
-        # Exchange Listings (top 5)
-        for i in range(5):
+        # Exchange Listings (top 10 - ROZŠÍŘENO)
+        for i in range(10):
             if i < len(self.exchange_listings):
                 listing = self.exchange_listings[i]
                 base_dict[f'exchange_{i+1}_name'] = listing.exchange_name
@@ -646,9 +661,9 @@ class CompleteProductionScraper:
                         if hasattr(etf, key):
                             setattr(etf, key, value)
                     
-                    # Restore exchange listings
+                    # Restore exchange listings (ROZŠÍŘENO na 10)
                     etf.exchange_listings = []
-                    for i in range(1, 6):
+                    for i in range(1, 11):
                         exchange_name = item.get(f'exchange_{i}_name', '')
                         if exchange_name:
                             listing = ExchangeListing()
@@ -1466,99 +1481,40 @@ class CompleteProductionScraper:
     # ========================================
     
     def _determine_region(self, etf: ETFDataComplete):
-        """Určení regionu na základě názvu, indexu a geografického rozložení"""
+        """ZJEDNODUŠENÉ určení regionu - prioritně z investment_focus"""
         name_lower = (etf.name or '').lower()
-        index_lower = (etf.index_name or '').lower()
+        investment_focus_lower = (etf.investment_focus or '').lower()
         
-        # 1. SPECIFICKÉ INDEXY A NÁZVY - OPRAVENÁ LOGIKA
-        # Nejprve kontroluj specifické US indexy a názvy - OPRAVA pro false positives
-        us_patterns = [
-            's&p 500', 'nasdaq', 'russell', 'dow jones', 'united states',
-            'america', 'american', 'usa', 'nyse', 'wilshire', 'us equity', 'us stocks',
-            'msci usa', 'ftse usa', ' us ', ' us stock', ' us bond', ' us real'
-        ]
-        
-        # Kontrola US patterns PRVNÍ - má prioritu
-        for pattern in us_patterns:
-            if pattern in name_lower or pattern in index_lower:
-                etf.region = 'US'
+        # 1. PRIORITNÍ REGION Z INVESTMENT_FOCUS (nejpřesnější)
+        if investment_focus_lower:
+            if 'united states' in investment_focus_lower or 'usa' in investment_focus_lower:
+                etf.region = 'Severní Amerika'
                 return
-        
-        # Poté kontroluj ostatní regiony
-        other_patterns = {
-            'Evropa': [
-                'europe', 'european', 'stoxx', 'euro ', 'ftse europe', 'msci europe',
-                'eurozone', 'emu', 'european monetary', 'euro stoxx', 'ftse 100',
-                'dax', 'cac 40', 'ibex', 'ftse mib', 'ats', 'omx', 'bel'
-            ],
-            'Čína': [
-                'china', 'chinese', 'csi ', 'msci china', 'ftse china', 'hang seng',
-                'shanghai', 'shenzhen', 'h-shares', 'a-shares', 'hong kong'
-            ],
-            'Japonsko': [
-                'japan', 'japanese', 'nikkei', 'topix', 'msci japan', 'ftse japan',
-                'tsx', 'mothers'
-            ],
-            'Rozvíjející se země': [
-                'emerging', 'emerging markets', 'em ', 'msci em', 'ftse em',
-                'developing', 'frontier', 'emerging market', 'bric', 'latin america',
-                'africa', 'middle east'
-            ],
-            'Globální': [
-                'developed', 'developed markets', 'msci world', 'ftse developed',
-                'world ', 'global ', 'international', 'msci acwi', 'all world',
-                'all-world', 'worldwide', 'msci world', 'ftse all-world'
-            ],
-            'Asie': [
-                'asia pacific ex japan', 'asia ex japan', 'apac ex japan',  # Specificke patterns prvni
-                'asia', 'asian', 'asia pacific', 'apac', 'far east',
-                'korea', 'taiwan', 'singapore', 'thailand', 'malaysia', 'india'
-            ],
-            'Pacifik': [
-                'pacific', 'australia', 'australian', 'new zealand', 'asx'
-            ]
-        }
-        
-        # Zkontroluj ostatní patterns
-        for region, patterns in other_patterns.items():
-            if any(pattern in name_lower for pattern in patterns) or \
-               any(pattern in index_lower for pattern in patterns):
-                etf.region = region
-                return
-        
-        # 2. ANALÝZA GEOGRAFICKÉHO ROZLOŽENÍ
-        if etf.countries:
-            top_countries = dict(etf.countries[:3])
-            
-            usa_weight = top_countries.get('United States', 0) + top_countries.get('USA', 0)
-            if usa_weight > 50:
-                etf.region = 'US'
-                return
-            
-            china_weight = top_countries.get('China', 0)
-            if china_weight > 40:
-                etf.region = 'Čína'
-                return
-            
-            european_countries = ['Germany', 'France', 'United Kingdom', 'UK', 'Switzerland', 
-                                'Netherlands', 'Italy', 'Spain', 'Sweden', 'Denmark']
-            europe_weight = sum(top_countries.get(country, 0) for country in european_countries)
-            if europe_weight > 50:
+            elif 'europe' in investment_focus_lower or 'european' in investment_focus_lower:
                 etf.region = 'Evropa'
                 return
+            elif 'asia' in investment_focus_lower or 'pacific' in investment_focus_lower:
+                etf.region = 'Asie a Pacifik'
+                return
+            elif 'emerging' in investment_focus_lower:
+                etf.region = 'Rozvíjející se trhy'
+                return
+            elif 'global' in investment_focus_lower or 'world' in investment_focus_lower:
+                etf.region = 'Celosvětově'
+                return
         
-        # 3. PODLE KATEGORIE
-        if etf.category in ['Krypto', 'Komodity', 'Dluhopisy']:
-            etf.region = 'Globální'
-            return
-        
-        # 4. FALLBACK - lepší defaulty podle názvu
-        if any(word in name_lower for word in ['bond', 'government', 'treasury']):
-            etf.region = 'Globální'
-        elif any(word in name_lower for word in ['equity', 'stock', 'shares']):
-            etf.region = 'Globální'  # Pravděpodobně diversifikovaný akciový ETF
+        # 2. FALLBACK NA NÁZEV (základní detekce)
+        if any(word in name_lower for word in ['s&p 500', 'nasdaq', 'usa', 'america']):
+            etf.region = 'Severní Amerika'
+        elif any(word in name_lower for word in ['europe', 'stoxx', 'ftse']):
+            etf.region = 'Evropa'
+        elif any(word in name_lower for word in ['emerging', 'em ']):
+            etf.region = 'Rozvíjející se trhy'
+        elif any(word in name_lower for word in ['world', 'global', 'international']):
+            etf.region = 'Celosvětově'
         else:
-            etf.region = 'Ostatní'
+            # Default pro většinu ETF
+            etf.region = 'Celosvětově'
     
     def _extract_stock_exchange_data(self, soup: BeautifulSoup, etf: ETFDataComplete):
         """Rychlá extrakce stock exchange dat s opravami"""
@@ -1805,8 +1761,33 @@ class CompleteProductionScraper:
         """Extrakce informací o fondu"""
         text = soup.get_text()
         
-        # Provider z názvu
-        if etf.name:
+        # NOVÉ: Provider ze strukturovaných dat (priortně)
+        provider_selectors = [
+            'div[class*="provider"] span',
+            'div[class*="issuer"] span', 
+            'div[class*="company"] span',
+            'span[class*="provider"]',
+            'span[class*="issuer"]',
+            'div.fund-company',
+            'div.provider-name',
+            'td:contains("Provider") + td',
+            'td:contains("Issuer") + td',
+            'td:contains("Company") + td'
+        ]
+        
+        for selector in provider_selectors:
+            try:
+                provider_element = soup.select_one(selector)
+                if provider_element and provider_element.get_text(strip=True):
+                    provider_text = provider_element.get_text(strip=True)
+                    if len(provider_text) > 2 and len(provider_text) < 50:
+                        etf.fund_provider = provider_text
+                        break
+            except:
+                continue
+        
+        # Fallback: Provider z názvu (pokud structural selector selhala)
+        if not etf.fund_provider and etf.name:
             providers = ['iShares', 'Vanguard', 'Xtrackers', 'Amundi', 'HSBC', 'UBS', 'SPDR', 'Invesco', 'SSGA', 'Lyxor', '21Shares', 'AMINA', 'WisdomTree', 'VanEck', 'Franklin', 'Fidelity', 'JPMorgan', 'BNP Paribas', 'State Street']
             for provider in providers:
                 if provider in etf.name:
@@ -1854,7 +1835,36 @@ class CompleteProductionScraper:
                         return
     
     def _extract_detailed_table_data(self, soup: BeautifulSoup, etf: ETFDataComplete):
-        """Extrahuje detailní data z tabulek"""
+        """Extrahuje detailní data z tabulek + CSS selektory pro strategy_risk"""
+        
+        # NOVÉ: CSS selektory pro strategy_risk (před regex)
+        if not etf.strategy_risk:
+            strategy_risk_selectors = [
+                'td:contains("Risk") + td',
+                'td:contains("SRRI") + td', 
+                'td:contains("Risk level") + td',
+                'td:contains("Risk rating") + td',
+                'span[class*="risk"]',
+                'div[class*="risk"] span',
+                'div[class*="srri"] span',
+                '.risk-indicator',
+                '.risk-level'
+            ]
+            
+            for selector in strategy_risk_selectors:
+                try:
+                    element = soup.select_one(selector)
+                    if element:
+                        text_value = element.get_text(strip=True)
+                        # Hledej číselnou hodnotu nebo kategorie
+                        risk_match = re.search(r'(\d+(?:[/-]\d+)?|Low|Medium|High|Conservative|Moderate|Aggressive)', text_value, re.I)
+                        if risk_match and len(risk_match.group(1)) <= 20:
+                            etf.strategy_risk = risk_match.group(1)
+                            break
+                except:
+                    continue
+        
+        # Původní logika
         data_tables = []
         
         tables = soup.find_all('table')
@@ -1898,12 +1908,15 @@ class CompleteProductionScraper:
                 r'Replication\s*(Physical|Synthetic|Sampling)',
             ],
             'legal_structure': [
-                r'Legal structure\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
-                r'Structure\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
-                r'Legal form\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
-                r'Fund structure\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
-                r'UCITS\s*(UCITS[^a-zA-Z]*[^\n]*)',
-                r'SICAV\s*(SICAV[^a-zA-Z]*[^\n]*)',
+                r'Legal structure\s*([A-Za-z\s,/\(\)]+?)(?:\s*Fund|$|\n)',
+                r'Structure\s*([A-Za-z\s,/\(\)]+?)(?:\s*Fund|$|\n)',
+                r'Legal form\s*([A-Za-z\s,/\(\)]+?)(?:\s*Fund|$|\n)',
+                r'Fund structure\s*([A-Za-z\s,/\(\)]+?)(?:\s*Fund|$|\n)',
+                r'(UCITS[^a-zA-Z\n]*)',
+                r'(SICAV[^a-zA-Z\n]*)',
+                r'(?:^|\s)(UCITS|SICAV|AIF|OEIC)(?:\s|$)',
+                r'Fund type\s*([A-Za-z\s,/\(\)]+?)(?:\s*Fund|$|\n)',
+                r'Investment vehicle\s*([A-Za-z\s,/\(\)]+?)(?:\s*Fund|$|\n)',
             ],
             'distribution_frequency': [
                 r'Distribution frequency\s*([A-Za-z\s]+?)(?:\s*Fund|$|\n)',
@@ -1913,11 +1926,15 @@ class CompleteProductionScraper:
                 r'Frequency\s*([A-Za-z\s]+?)(?:\s*Fund|$|\n)',
             ],
             'investment_focus': [
-                r'Investment focus\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
-                r'Focus\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
-                r'Investment strategy\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
-                r'Strategy\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
-                r'Investment objective\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
+                r'Investment focus\s*([A-Za-z\s,\./-]+?)(?:\s*Fund|$|\n)',
+                r'Focus\s*([A-Za-z\s,\./-]+?)(?:\s*Fund|$|\n)',
+                r'Investment strategy\s*([A-Za-z\s,\./-]+?)(?:\s*Fund|$|\n)',
+                r'Strategy\s*([A-Za-z\s,\./-]+?)(?:\s*Fund|$|\n)',
+                r'Investment objective\s*([A-Za-z\s,\./-]+?)(?:\s*Fund|$|\n)',
+                r'Investment approach\s*([A-Za-z\s,\./-]+?)(?:\s*Fund|$|\n)',
+                r'Asset class\s*([A-Za-z\s,\./-]+?)(?:\s*Fund|$|\n)',
+                r'Index focus\s*([A-Za-z\s,\./-]+?)(?:\s*Fund|$|\n)',
+                r'Geographic focus\s*([A-Za-z\s,\./-]+?)(?:\s*Fund|$|\n)',
             ],
             'sustainability': [
                 r'Sustainability\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
@@ -1925,6 +1942,24 @@ class CompleteProductionScraper:
                 r'Social responsibility\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
                 r'SRI\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
                 r'Sustainable\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
+            ],
+            'currency_risk': [
+                r'Currency risk\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
+                r'Currency\s*([A-Za-z\s,]+?)(?:\s*hedged|unhedged|$|\n)',
+                r'Hedging\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
+                r'Exchange rate risk\s*([A-Za-z\s,]+?)(?:\s*Fund|$|\n)',
+            ],
+            'strategy_risk': [
+                r'Strategy risk\s*([A-Za-z\s,\d]+?)(?:\s*Fund|$|\n)',
+                r'Risk level\s*([A-Za-z\s,\d]+?)(?:\s*Fund|$|\n)',
+                r'Investment risk\s*([A-Za-z\s,\d]+?)(?:\s*Fund|$|\n)',
+                r'Risk category\s*([A-Za-z\s,\d]+?)(?:\s*Fund|$|\n)',
+                r'Risk rating\s*([A-Za-z\s,\d]+?)(?:\s*Fund|$|\n)',
+                r'Risk profile\s*([A-Za-z\s,\d]+?)(?:\s*Fund|$|\n)',
+                r'SRRI\s*([A-Za-z\s,\d]+?)(?:\s*Fund|$|\n)',
+                r'Risk indicator\s*([A-Za-z\s,\d]+?)(?:\s*Fund|$|\n)',
+                r'Risk\s*(\d+[/-]\d+|\d+)',  # Číselné hodnocení rizika
+                r'(?:Risk|SRRI).*?(\d+)',   # Obecné hledání čísla u rizika
             ],
         }
         
@@ -1969,15 +2004,28 @@ class CompleteProductionScraper:
                         if value:
                             etf.distribution_frequency = value
                             break
-                    elif field == 'investment_focus' and 3 <= len(value) <= 100:
+                    elif field == 'investment_focus' and 3 <= len(value) <= 200:
                         value = re.sub(r'(Fund|Investment|ETF)', '', value, flags=re.I).strip()
-                        if value:
+                        # Odstraň duplicitní slova a vyčistí
+                        value = re.sub(r'\b(\w+)\s+\1\b', r'\1', value, flags=re.I)
+                        if value and len(value.split()) >= 2:  # Aspoň 2 slova
                             etf.investment_focus = value
                             break
                     elif field == 'sustainability' and 3 <= len(value) <= 50:
                         value = re.sub(r'(Fund|Investment)', '', value, flags=re.I).strip()
                         if value:
                             etf.sustainability = value
+                            break
+                    elif field == 'currency_risk' and 3 <= len(value) <= 50:
+                        # Důležité pro přesnou hedging detekci
+                        value = re.sub(r'(Fund|Investment)', '', value, flags=re.I).strip()
+                        if value:
+                            etf.currency_risk = value
+                            break
+                    elif field == 'strategy_risk' and 1 <= len(value) <= 50:
+                        value = re.sub(r'(Fund|Investment)', '', value, flags=re.I).strip()
+                        if value:
+                            etf.strategy_risk = value
                             break
     
     def _extract_total_holdings_improved(self, soup: BeautifulSoup, etf: ETFDataComplete):
@@ -2019,183 +2067,108 @@ class CompleteProductionScraper:
                     continue
     
     def _categorize_etf(self, etf: ETFDataComplete):
-        """Kategorizace ETF podle typu"""
+        """ZJEDNODUŠENÁ kategorizace ETF - prioritně z investment_focus"""
         name_lower = (etf.name or '').lower()
         index_lower = (etf.index_name or '').lower()
-        description_lower = (etf.description_en or '').lower()
         investment_focus_lower = (etf.investment_focus or '').lower()
         
-        # 0. PÁKOVÁ ETF DETEKCE - NASTAVUJE FLAG, NEZASTAVUJE KATEGORIZACI
-        leveraged_keywords = [
-            'leveraged', '2x', '3x', 'ultra', 'leverage', 'daily 2x', 'daily 3x',
-            '2x leveraged', '3x leveraged', 'double', 'triple', 'geared'
-        ]
+        # 0. PÁKOVÁ ETF DETEKCE - jen z názvu (nejpřesnější)
+        leveraged_keywords = ['leveraged', '2x', '3x', 'ultra', 'leverage']
         
-        if any(keyword in name_lower for keyword in leveraged_keywords) or \
-           any(keyword in index_lower for keyword in leveraged_keywords) or \
-           any(keyword in description_lower for keyword in leveraged_keywords) or \
-           any(keyword in investment_focus_lower for keyword in leveraged_keywords):
+        if any(keyword in name_lower for keyword in leveraged_keywords):
             etf.is_leveraged = True
-            # POKRAČUJEME s další kategorizací místo return
         
-        # 1. KRYPTO ETF
-        crypto_keywords = [
-            'crypto', 'bitcoin', 'ethereum', 'blockchain', 'digital assets',
-            'cryptocurrency', 'btc', 'eth', 'digital currency', 'polkadot',
-            'chainlink', 'cardano', 'stellar', 'xrp', 'binance', 'solana',
-            'polygon', 'matic', 'avalanche', 'avax', 'uniswap', 'algorand'
-        ]
+        # 1. PRIORITNÍ KATEGORIZACE Z INVESTMENT_FOCUS (nejpřesnější)
+        if investment_focus_lower:
+            if 'equity' in investment_focus_lower or 'stock' in investment_focus_lower:
+                etf.category = 'Akcie'
+                return
+            elif 'bond' in investment_focus_lower or 'fixed income' in investment_focus_lower:
+                etf.category = 'Dluhopisy'
+                return
+            elif 'real estate' in investment_focus_lower or 'reit' in investment_focus_lower:
+                etf.category = 'Nemovitosti'
+                return
+            elif 'commodity' in investment_focus_lower or 'commodities' in investment_focus_lower:
+                etf.category = 'Komodity'
+                return
+            elif 'crypto' in investment_focus_lower or 'bitcoin' in investment_focus_lower:
+                etf.category = 'Krypto'
+                return
         
-        if any(keyword in name_lower for keyword in crypto_keywords) or \
-           any(keyword in index_lower for keyword in crypto_keywords):
+        # 2. FALLBACK NA NÁZEV (pouze pro základní kategorie)
+        if 'crypto' in name_lower or 'bitcoin' in name_lower:
             etf.category = 'Krypto'
-            return
-        
-        # 2. NEMOVITOSTI (REIT) - MUSÍ BÝT PŘED DLUHOPISY KVŮLI "YIELD"!
-        real_estate_keywords = [
-            'real estate', 'reit', 'property', 'infrastructure',
-            'immobilien', 'immobilier', 'prop', 'properties', 'realestate',
-            'real est', 'propiedades', 'biens immobiliers', 'listed property',
-            'listed real estate', 'commercial property', 'residential property',
-            'property securities', 'property companies', 'property investment',
-            'property index', 'european property', 'global property', 'us property',
-            'asia property', 'developed property', 'international property',
-            'ftse epra', 'epra nareit', 'epra', 'nareit'
-        ]
-        
-        # Kontroluj i v index_name pro real estate ETF
-        if any(keyword in name_lower for keyword in real_estate_keywords) or \
-           any(keyword in index_lower for keyword in real_estate_keywords):
+        elif 'reit' in name_lower or 'real estate' in name_lower:
             etf.category = 'Nemovitosti'
-            return
-        
-        # 3. DLUHOPISOVÉ ETF
-        bond_keywords = [
-            'bond', 'bonds', 'government', 'corporate', 'treasury', 'gilt',
-            'bund', 'sovereign', 'credit', 'fixed income', 'duration',
-            'maturity', 'yield', 'bloomberg', 'barclays', 'aggregate'
-        ]
-        
-        if any(keyword in name_lower for keyword in bond_keywords) or \
-           any(keyword in index_lower for keyword in bond_keywords):
+        elif 'bond' in name_lower or 'treasury' in name_lower:
             etf.category = 'Dluhopisy'
-            return
-
-        # 4. AKCIOVÉ ETF
-        equity_keywords = [
-            'equity', 'stock', 'stocks', 'shares', 'msci', 'ftse', 's&p',
-            'nasdaq', 'dow', 'russell', 'stoxx', 'emerging', 'developed',
-            'world', 'europe', 'asia', 'dividend', 'growth', 'value',
-            'large cap', 'small cap', 'mid cap', 'sofix', 'crobex', 'bux'
-        ]
-        
-        if any(keyword in name_lower for keyword in equity_keywords) or \
-           any(keyword in index_lower for keyword in equity_keywords):
-            etf.category = 'Akcie'
-            return
-        
-        # 4. KOMODITNÍ ETF
-        commodity_keywords = [
-            'commodity', 'commodities', 'gold', 'silver', 'oil', 'energy',
-            'metals', 'precious', 'agriculture', 'wheat', 'corn', 'natural gas',
-            'copper', 'platinum', 'palladium', 'crude', 'brent'
-        ]
-        
-        if any(keyword in name_lower for keyword in commodity_keywords):
+        elif 'gold' in name_lower or 'commodity' in name_lower:
             etf.category = 'Komodity'
-            return
-        
-        # 5. FALLBACK
-        etf.category = 'Ostatní'
+        else:
+            # Default pro většinu ETF
+            etf.category = 'Akcie'
     
     def _extract_performance_robust(self, soup: BeautifulSoup, etf: ETFDataComplete):
-        """Extrakce performance dat"""
-        text = soup.get_text()
+        """OPRAVENÁ extrakce performance dat - používá tabulkovou strukturu"""
         
-        perf_patterns = {
-            # Krátká období
-            'return_1m': [
-                r'1\s*(?:Month|M|měsíc)[:\s]*([+-]?\d+[.,]\d+)%',
-                r'1M[:\s]*([+-]?\d+[.,]\d+)%',
-                r'1\s*month[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>1M</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
-                r'1\s*mth[:\s]*([+-]?\d+[.,]\d+)%'
-            ],
-            'return_3m': [
-                r'3\s*(?:Months?|M|měsíce)[:\s]*([+-]?\d+[.,]\d+)%',
-                r'3M[:\s]*([+-]?\d+[.,]\d+)%',
-                r'3\s*months?[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>3M</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
-                r'3\s*mth[:\s]*([+-]?\d+[.,]\d+)%'
-            ],
-            'return_6m': [
-                r'6\s*(?:Months?|M|měsíců)[:\s]*([+-]?\d+[.,]\d+)%',
-                r'6M[:\s]*([+-]?\d+[.,]\d+)%',
-                r'6\s*months?[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>6M</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
-                r'6\s*mth[:\s]*([+-]?\d+[.,]\d+)%'
-            ],
-            # Standardní období
-            'return_ytd': [
-                r'YTD[:\s]*([+-]?\d+[.,]\d+)%',
-                r'Year\s+to\s+date[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>YTD</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%'
-            ],
-            'return_1y': [
-                r'1\s*(?:Year|Y)[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>1Y</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
-                r'1\s*year[:\s]*([+-]?\d+[.,]\d+)%'
-            ],
-            'return_3y': [
-                r'3\s*(?:Years?|Y)[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>3Y</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
-                r'3\s*years?[:\s]*([+-]?\d+[.,]\d+)%'
-            ],
-            'return_5y': [
-                r'5\s*(?:Years?|Y)[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>5Y</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
-                r'5\s*years?[:\s]*([+-]?\d+[.,]\d+)%'
-            ],
-            # Roční výnosy
-            'return_2021': [
-                r'2021[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>2021</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
-                r'Year\s+2021[:\s]*([+-]?\d+[.,]\d+)%'
-            ],
-            'return_2022': [
-                r'2022[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>2022</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
-                r'Year\s+2022[:\s]*([+-]?\d+[.,]\d+)%'
-            ],
-            'return_2023': [
-                r'2023[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>2023</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
-                r'Year\s+2023[:\s]*([+-]?\d+[.,]\d+)%'
-            ],
-            'return_2024': [
-                r'2024[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>2024</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%',
-                r'Year\s+2024[:\s]*([+-]?\d+[.,]\d+)%'
-            ],
-            # Inception
-            'return_inception': [
-                r'Since\s+inception[:\s]*([+-]?\d+[.,]\d+)%',
-                r'Inception[:\s]*([+-]?\d+[.,]\d+)%',
-                r'Total\s+return[:\s]*([+-]?\d+[.,]\d+)%',
-                r'>Inception</td>\s*<td[^>]*>([+-]?\d+[.,]\d+)%'
-            ]
-        }
+        # Najdi performance tabulku
+        perf_table = None
+        tables = soup.find_all('table', class_='table etf-data-table')
         
-        for field, pattern_list in perf_patterns.items():
-            for pattern in pattern_list:
-                match = re.search(pattern, text, re.I)
-                if match:
+        for table in tables:
+            text = table.get_text()
+            if '1 month' in text and '3 months' in text and 'YTD' in text:
+                perf_table = table
+                break
+        
+        if not perf_table:
+            safe_log("warning", f"Performance tabulka nenalezena pro {etf.isin}")
+            return
+        
+        # Extrakce pomocí tabulkové struktury
+        rows = perf_table.find_all('tr')
+        for row in rows:
+            label_cell = row.find('td', class_='vallabel')
+            value_cell = row.find('td', class_=['val', 'val green', 'val red'])
+            
+            if label_cell and value_cell:
+                label = label_cell.get_text(strip=True).lower()
+                value_text = value_cell.get_text(strip=True)
+                
+                # Extraktuj číslo z hodnoty
+                value_match = re.search(r'([+-]?\d+[.,]\d+)', value_text)
+                if value_match:
                     try:
-                        value = float(match.group(1).replace(',', '.'))
-                        if -95 <= value <= 1000:
-                            setattr(etf, field, value)
-                            break
-                    except:
+                        value = float(value_match.group(1).replace(',', '.'))
+                        
+                        # Mapování labelů na pole
+                        if '1 month' in label:
+                            etf.return_1m = value
+                        elif '3 months' in label:
+                            etf.return_3m = value
+                        elif '6 months' in label:
+                            etf.return_6m = value
+                        elif label == '2021':
+                            etf.return_2021 = value
+                        elif label == '2022':
+                            etf.return_2022 = value
+                        elif label == '2023':
+                            etf.return_2023 = value
+                        elif label == '2024':
+                            etf.return_2024 = value
+                        elif 'since inception' in label or label == 'max':
+                            etf.return_inception = value
+                        elif label == 'ytd':
+                            etf.return_ytd = value
+                        elif '1 year' in label:
+                            etf.return_1y = value
+                        elif '3 years' in label:
+                            etf.return_3y = value  
+                        elif '5 years' in label:
+                            etf.return_5y = value
+                            
+                    except ValueError:
                         continue
     
     def _extract_comprehensive_risk_metrics_improved(self, soup: BeautifulSoup, etf: ETFDataComplete):
@@ -2270,8 +2243,60 @@ class CompleteProductionScraper:
             ]
         }
         
-        # Extract advanced risk metrics
+        # Extract advanced risk metrics - ENHANCED CSS approach
+        # Try CSS selectors first (more reliable)
+        css_risk_selectors = {
+            'tracking_error': [
+                'td:contains("Tracking error") + td',
+                'td:contains("TE") + td', 
+                'span[class*="tracking"]',
+                'div[class*="tracking"] span',
+                'td:contains("Tracking difference") + td'
+            ],
+            'information_ratio': [
+                'td:contains("Information ratio") + td',
+                'td:contains("IR") + td',
+                'span[class*="information"]',
+                'div[class*="info-ratio"] span'
+            ],
+            'beta': [
+                'td:contains("Beta") + td',
+                'span[class*="beta"]',
+                'div[class*="beta"] span'
+            ]
+        }
+        
+        for metric, selectors in css_risk_selectors.items():
+            for selector in selectors:
+                try:
+                    element = soup.select_one(selector)
+                    if element:
+                        text_value = element.get_text(strip=True)
+                        # Extract numeric value
+                        numeric_match = re.search(r'(-?\d+[.,]\d+)', text_value)
+                        if numeric_match:
+                            value = float(numeric_match.group(1).replace(',', '.'))
+                            
+                            # Apply validation ranges
+                            if metric == 'tracking_error' and 0.01 <= value <= 5.0:
+                                etf.tracking_error = value
+                                break
+                            elif metric == 'beta' and 0.1 <= value <= 3.0:
+                                etf.beta = value
+                                break
+                            elif metric == 'information_ratio' and -2.0 <= value <= 2.0:
+                                etf.information_ratio = value
+                                break
+                except:
+                    continue
+        
+        # Fallback to regex patterns
         for metric, pattern_list in advanced_risk_patterns.items():
+            # Skip if already found via CSS
+            current_value = getattr(etf, metric, None)
+            if current_value is not None:
+                continue
+                
             for pattern in pattern_list:
                 match = re.search(pattern, text, re.I | re.S)
                 if match:
@@ -3146,6 +3171,8 @@ class CompleteProductionScraper:
             'index_name': etf.index_name,
             'investment_focus': etf.investment_focus,
             'sustainability': etf.sustainability,
+            'currency_risk': etf.currency_risk,
+            'strategy_risk': etf.strategy_risk,
             'category': etf.category,
             'is_leveraged': etf.is_leveraged,
             'region': etf.region,
@@ -3277,6 +3304,37 @@ class CompleteProductionScraper:
             'exchange_5_bloomberg': etf_dict.get('exchange_5_bloomberg', ''),
             'exchange_5_reuters': etf_dict.get('exchange_5_reuters', ''),
             'exchange_5_market_maker': etf_dict.get('exchange_5_market_maker', ''),
+            # NOVÁ POLE exchanges 6-10
+            'exchange_6_name': etf_dict.get('exchange_6_name', ''),
+            'exchange_6_currency': etf_dict.get('exchange_6_currency', ''),
+            'exchange_6_ticker': etf_dict.get('exchange_6_ticker', ''),
+            'exchange_6_bloomberg': etf_dict.get('exchange_6_bloomberg', ''),
+            'exchange_6_reuters': etf_dict.get('exchange_6_reuters', ''),
+            'exchange_6_market_maker': etf_dict.get('exchange_6_market_maker', ''),
+            'exchange_7_name': etf_dict.get('exchange_7_name', ''),
+            'exchange_7_currency': etf_dict.get('exchange_7_currency', ''),
+            'exchange_7_ticker': etf_dict.get('exchange_7_ticker', ''),
+            'exchange_7_bloomberg': etf_dict.get('exchange_7_bloomberg', ''),
+            'exchange_7_reuters': etf_dict.get('exchange_7_reuters', ''),
+            'exchange_7_market_maker': etf_dict.get('exchange_7_market_maker', ''),
+            'exchange_8_name': etf_dict.get('exchange_8_name', ''),
+            'exchange_8_currency': etf_dict.get('exchange_8_currency', ''),
+            'exchange_8_ticker': etf_dict.get('exchange_8_ticker', ''),
+            'exchange_8_bloomberg': etf_dict.get('exchange_8_bloomberg', ''),
+            'exchange_8_reuters': etf_dict.get('exchange_8_reuters', ''),
+            'exchange_8_market_maker': etf_dict.get('exchange_8_market_maker', ''),
+            'exchange_9_name': etf_dict.get('exchange_9_name', ''),
+            'exchange_9_currency': etf_dict.get('exchange_9_currency', ''),
+            'exchange_9_ticker': etf_dict.get('exchange_9_ticker', ''),
+            'exchange_9_bloomberg': etf_dict.get('exchange_9_bloomberg', ''),
+            'exchange_9_reuters': etf_dict.get('exchange_9_reuters', ''),
+            'exchange_9_market_maker': etf_dict.get('exchange_9_market_maker', ''),
+            'exchange_10_name': etf_dict.get('exchange_10_name', ''),
+            'exchange_10_currency': etf_dict.get('exchange_10_currency', ''),
+            'exchange_10_ticker': etf_dict.get('exchange_10_ticker', ''),
+            'exchange_10_bloomberg': etf_dict.get('exchange_10_bloomberg', ''),
+            'exchange_10_reuters': etf_dict.get('exchange_10_reuters', ''),
+            'exchange_10_market_maker': etf_dict.get('exchange_10_market_maker', ''),
         }
 
     def transform_etf_for_database_no_rating(self, etf: ETFDataComplete):
@@ -3425,7 +3483,38 @@ class CompleteProductionScraper:
             'exchange_5_ticker': etf_dict.get('exchange_5_ticker', ''),
             'exchange_5_bloomberg': etf_dict.get('exchange_5_bloomberg', ''),
             'exchange_5_reuters': etf_dict.get('exchange_5_reuters', ''),
-            'exchange_5_market_maker': etf_dict.get('exchange_5_market_maker', '')
+            'exchange_5_market_maker': etf_dict.get('exchange_5_market_maker', ''),
+            # NOVÁ POLE exchanges 6-10 (no_rating version)
+            'exchange_6_name': etf_dict.get('exchange_6_name', ''),
+            'exchange_6_currency': etf_dict.get('exchange_6_currency', ''),
+            'exchange_6_ticker': etf_dict.get('exchange_6_ticker', ''),
+            'exchange_6_bloomberg': etf_dict.get('exchange_6_bloomberg', ''),
+            'exchange_6_reuters': etf_dict.get('exchange_6_reuters', ''),
+            'exchange_6_market_maker': etf_dict.get('exchange_6_market_maker', ''),
+            'exchange_7_name': etf_dict.get('exchange_7_name', ''),
+            'exchange_7_currency': etf_dict.get('exchange_7_currency', ''),
+            'exchange_7_ticker': etf_dict.get('exchange_7_ticker', ''),
+            'exchange_7_bloomberg': etf_dict.get('exchange_7_bloomberg', ''),
+            'exchange_7_reuters': etf_dict.get('exchange_7_reuters', ''),
+            'exchange_7_market_maker': etf_dict.get('exchange_7_market_maker', ''),
+            'exchange_8_name': etf_dict.get('exchange_8_name', ''),
+            'exchange_8_currency': etf_dict.get('exchange_8_currency', ''),
+            'exchange_8_ticker': etf_dict.get('exchange_8_ticker', ''),
+            'exchange_8_bloomberg': etf_dict.get('exchange_8_bloomberg', ''),
+            'exchange_8_reuters': etf_dict.get('exchange_8_reuters', ''),
+            'exchange_8_market_maker': etf_dict.get('exchange_8_market_maker', ''),
+            'exchange_9_name': etf_dict.get('exchange_9_name', ''),
+            'exchange_9_currency': etf_dict.get('exchange_9_currency', ''),
+            'exchange_9_ticker': etf_dict.get('exchange_9_ticker', ''),
+            'exchange_9_bloomberg': etf_dict.get('exchange_9_bloomberg', ''),
+            'exchange_9_reuters': etf_dict.get('exchange_9_reuters', ''),
+            'exchange_9_market_maker': etf_dict.get('exchange_9_market_maker', ''),
+            'exchange_10_name': etf_dict.get('exchange_10_name', ''),
+            'exchange_10_currency': etf_dict.get('exchange_10_currency', ''),
+            'exchange_10_ticker': etf_dict.get('exchange_10_ticker', ''),
+            'exchange_10_bloomberg': etf_dict.get('exchange_10_bloomberg', ''),
+            'exchange_10_reuters': etf_dict.get('exchange_10_reuters', ''),
+            'exchange_10_market_maker': etf_dict.get('exchange_10_market_maker', '')
             # NO rating fields here intentionally
         }
 

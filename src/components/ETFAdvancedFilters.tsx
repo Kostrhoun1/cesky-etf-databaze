@@ -43,6 +43,7 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
     if (filters.region !== 'all') count++;
     if (filters.indexName !== 'all') count++;
     if (filters.fundCurrency !== 'all') count++;
+    if (filters.hedgingType && filters.hedgingType !== 'all') count++;
     if (filters.minRating > 0) count++;
     if (filters.maxTer < ranges.ter.max) count++;
     if (filters.terRange[0] > ranges.ter.min || filters.terRange[1] < ranges.ter.max) count++;
@@ -59,6 +60,7 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
     onFilterChange('region', 'all');
     onFilterChange('indexName', 'all');
     onFilterChange('fundCurrency', 'all');
+    onFilterChange('hedgingType', 'all');
     onFilterChange('minRating', 0);
     onFilterChange('maxTer', ranges.ter.max);
     onFilterChange('terRange', [ranges.ter.min, ranges.ter.max]);
@@ -226,6 +228,27 @@ const ETFAdvancedFilters: React.FC<ETFAdvancedFiltersProps> = ({ etfs, filters, 
                   {uniqueCurrencies.map(currency => (
                     <SelectItem key={currency} value={currency}>{currency}</SelectItem>
                   ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="hedging-filter-adv" className="font-semibold">Měnové zajištění</Label>
+              <Select
+                value={filters.hedgingType || 'all'}
+                onValueChange={(value) => onFilterChange('hedgingType', value)}
+              >
+                <SelectTrigger id="hedging-filter-adv" className="mt-2">
+                  <SelectValue placeholder="Všechny typy" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Všechny typy</SelectItem>
+                  <SelectItem value="unhedged">Nezajištěné</SelectItem>
+                  <SelectItem value="hedged">Zajištěné (všechny)</SelectItem>
+                  <SelectItem value="eur_hedged">EUR zajištěné</SelectItem>
+                  <SelectItem value="usd_hedged">USD zajištěné</SelectItem>
+                  <SelectItem value="gbp_hedged">GBP zajištěné</SelectItem>
+                  <SelectItem value="chf_hedged">CHF zajištěné</SelectItem>
                 </SelectContent>
               </Select>
             </div>
