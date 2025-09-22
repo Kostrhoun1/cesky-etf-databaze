@@ -384,20 +384,20 @@ const ConsumerLoanCalculator: React.FC = () => {
           </Card>
 
           {/* Umořovací tabulka */}
-          <details className="border border-gray-200 rounded-lg bg-white shadow-lg">
-            <summary className="p-4 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
-              <span className="font-semibold text-gray-900">📊 Detailní umořovací tabulka (klikněte pro rozbalení)</span>
+          <details className="border border-gray-200 rounded-lg bg-white">
+            <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
+              <span className="font-semibold text-gray-900 text-sm">📊 Detailní umořovací tabulka (klikněte pro rozbalení)</span>
             </summary>
-            <div className="p-4 border-t border-gray-200 max-h-96 overflow-y-auto">
+            <div className="p-3 border-t border-gray-200 max-h-96 overflow-y-auto">
               <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+                <table className="w-full text-xs">
                   <thead className="bg-gray-100 sticky top-0">
                     <tr>
-                      <th className="p-2 text-left font-semibold">Měsíc</th>
-                      <th className="p-2 text-right font-semibold">Splátka</th>
-                      <th className="p-2 text-right font-semibold">Úrok</th>
-                      <th className="p-2 text-right font-semibold">Jistina</th>
-                      <th className="p-2 text-right font-semibold">Zůstatek</th>
+                      <th className="p-2 text-left font-semibold text-xs">Měsíc</th>
+                      <th className="p-2 text-right font-semibold text-xs">Splátka</th>
+                      <th className="p-2 text-right font-semibold text-xs">Úrok</th>
+                      <th className="p-2 text-right font-semibold text-xs">Jistina</th>
+                      <th className="p-2 text-right font-semibold text-xs">Zůstatek</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -424,8 +424,8 @@ const ConsumerLoanCalculator: React.FC = () => {
                   </tbody>
                 </table>
               </div>
-              <div className="mt-4 p-3 bg-blue-50 rounded-lg text-sm">
-                <p className="text-blue-800">
+              <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                <p className="text-blue-800 text-xs">
                   <strong>💡 Jak číst tabulku:</strong> Modře označené řádky jsou začátky nových roků. 
                   Vidíte jak se postupně snižuje podíl úroků (červeně) a zvyšuje úmor jistiny (zeleně) při konstantní splátce.
                 </p>

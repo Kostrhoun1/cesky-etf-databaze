@@ -122,7 +122,7 @@ const NetSalaryCalculator: React.FC = () => {
             </div>
           </div>
 
-          <Button onClick={handleCalculate} className="w-full mb-4" size="sm">
+          <Button onClick={handleCalculate} className="w-full mb-4 h-9 text-sm">
             Vypočítat čistou mzdu
           </Button>
 

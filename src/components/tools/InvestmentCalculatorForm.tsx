@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calculator } from 'lucide-react';
+import { Calculator, TrendingUp, Percent } from 'lucide-react';
 
 interface InvestmentCalculatorFormProps {
   initialInvestment: number;
@@ -38,91 +37,105 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
   onCalculate
 }) => {
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="space-y-2">
-          <Label htmlFor="initial">Jednorázová investice (Kč)</Label>
-          <Input
-            id="initial"
-            type="number"
-            value={initialInvestment || ''}
-            onChange={(e) => setInitialInvestment(Number(e.target.value) || 0)}
-            placeholder="0"
-          />
+    <div className="space-y-4">
+      <div className="grid md:grid-cols-2 gap-4">
+        {/* Investiční parametry */}
+        <div className="border rounded-lg p-4 bg-violet-25">
+          <div className="flex items-center gap-2 mb-3">
+            <TrendingUp className="h-4 w-4 text-violet-600" />
+            <h3 className="font-semibold text-sm">Investiční parametry</h3>
+          </div>
+          <div className="space-y-3">
+            <div>
+              <Label htmlFor="initial" className="text-sm">Jednorázová investice (Kč)</Label>
+              <Input
+                id="initial"
+                type="number"
+                value={initialInvestment || ''}
+                onChange={(e) => setInitialInvestment(Number(e.target.value) || 0)}
+                placeholder="0"
+                className="h-9 text-sm"
+              />
+            </div>
+            <div>
+              <Label htmlFor="recurring" className="text-sm">Pravidelná investice (Kč)</Label>
+              <Input
+                id="recurring"
+                type="number"
+                value={recurringInvestment || ''}
+                onChange={(e) => setRecurringInvestment(Number(e.target.value) || 0)}
+                placeholder="5000"
+                className="h-9 text-sm"
+              />
+            </div>
+            <div>
+              <Label htmlFor="frequency" className="text-sm">Frekvence investování</Label>
+              <Select value={recurringFrequency} onValueChange={setRecurringFrequency}>
+                <SelectTrigger id="frequency" className="h-9 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="monthly">Měsíčně</SelectItem>
+                  <SelectItem value="yearly">Ročně</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="recurring">Pravidelná investice (Kč)</Label>
-          <Input
-            id="recurring"
-            type="number"
-            value={recurringInvestment || ''}
-            onChange={(e) => setRecurringInvestment(Number(e.target.value) || 0)}
-            placeholder="0"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="frequency">Frekvence pravidelné investice</Label>
-          <Select value={recurringFrequency} onValueChange={(value: 'monthly' | 'yearly') => setRecurringFrequency(value)}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="monthly">Měsíčně</SelectItem>
-              <SelectItem value="yearly">Ročně</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="return">Průměrný roční výnos (%)</Label>
-          <Input
-            id="return"
-            type="number"
-            step="0.1"
-            value={averageReturn || ''}
-            onChange={(e) => setAverageReturn(Number(e.target.value) || 0)}
-            placeholder="7"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="period">Doba investice (roky)</Label>
-          <Input
-            id="period"
-            type="number"
-            value={investmentPeriod || ''}
-            onChange={(e) => setInvestmentPeriod(Number(e.target.value) || 0)}
-            placeholder="20"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="tax">Daň z kapitálových výnosů (%)</Label>
-          <Select value={taxRate.toString()} onValueChange={(value) => setTaxRate(Number(value))}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="0">0%</SelectItem>
-              <SelectItem value="15">15%</SelectItem>
-              <SelectItem value="23">23%</SelectItem>
-            </SelectContent>
-          </Select>
-          <p className="text-xs text-gray-600 mt-1">
-            💡 Při držení ETF déle než 3 roky se daň neplatí (časový test)
-          </p>
+        
+        {/* Parametry výnosu a času */}
+        <div className="border rounded-lg p-4 bg-gray-25">
+          <div className="flex items-center gap-2 mb-3">
+            <Percent className="h-4 w-4 text-violet-600" />
+            <h3 className="font-semibold text-sm">Parametry výnosu a času</h3>
+          </div>
+          <div className="space-y-3">
+            <div>
+              <Label htmlFor="return" className="text-sm">Průměrný roční výnos (%)</Label>
+              <Input
+                id="return"
+                type="number"
+                value={averageReturn || ''}
+                onChange={(e) => setAverageReturn(Number(e.target.value) || 0)}
+                placeholder="7"
+                step="0.1"
+                className="h-9 text-sm"
+              />
+            </div>
+            <div>
+              <Label htmlFor="period" className="text-sm">Investiční horizont (roky)</Label>
+              <Input
+                id="period"
+                type="number"
+                value={investmentPeriod || ''}
+                onChange={(e) => setInvestmentPeriod(Number(e.target.value) || 0)}
+                placeholder="20"
+                min="1"
+                max="50"
+                className="h-9 text-sm"
+              />
+            </div>
+            <div>
+              <Label htmlFor="tax" className="text-sm">Daňová sazba (%)</Label>
+              <Input
+                id="tax"
+                type="number"
+                value={taxRate || ''}
+                onChange={(e) => setTaxRate(Number(e.target.value) || 0)}
+                placeholder="0"
+                min="0"
+                max="50"
+                step="0.1"
+                className="h-9 text-sm"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
-      <Button 
-        onClick={onCalculate} 
-        className="w-full md:w-auto bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white font-bold py-3 px-6 text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover-scale"
-        size="lg"
-      >
-        <Calculator className="mr-2 h-5 w-5" />
-        Vypočítat investici
+      <Button onClick={onCalculate} className="w-full h-9 text-sm">
+        <Calculator className="mr-2 h-4 w-4" />
+        Vypočítat investiční růst
       </Button>
     </div>
   );

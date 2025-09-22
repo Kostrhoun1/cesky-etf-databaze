@@ -128,82 +128,80 @@ const CurrencyImpactResults: React.FC<CurrencyImpactResultsProps> = ({ results }
         <CardContent>
           <div className="space-y-4">
             {results.scenarios.map((scenario, index) => (
-              <Card key={index} className="border border-gray-200">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <h4 className="font-semibold text-lg">{scenario.name}</h4>
-                      <p className="text-sm text-gray-600">{scenario.description}</p>
-                    </div>
-                    <div className="text-right">
-                      <Badge variant="outline">
-                        {scenario.probability}% pravděpodobnost
-                      </Badge>
-                    </div>
+              <div key={index} className="border border-gray-200 rounded-lg p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <h4 className="font-semibold text-sm">{scenario.name}</h4>
+                    <p className="text-xs text-gray-600">{scenario.description}</p>
                   </div>
-                  
-                  <div className="grid md:grid-cols-4 gap-4">
-                    <div className="text-center">
-                      <p className="text-sm text-gray-600">USD/CZK změna</p>
-                      <p className={`font-bold ${scenario.usdCzkChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                        {formatPercentage(scenario.usdCzkChange)}
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm text-gray-600">EUR/CZK změna</p>
-                      <p className={`font-bold ${scenario.eurCzkChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                        {formatPercentage(scenario.eurCzkChange)}
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm text-gray-600">Dopad na portfolio</p>
-                      <p className={`font-bold ${getImpactColor(scenario.portfolioImpact)}`}>
-                        {formatPercentage(scenario.portfolioImpact)}
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm text-gray-600">Nová hodnota</p>
-                      <p className="font-bold">
-                        {formatCurrency(scenario.portfolioValueCzk)}
-                      </p>
-                    </div>
+                  <div className="text-right">
+                    <Badge variant="outline" className="text-xs">
+                      {scenario.probability}% pravděpodobnost
+                    </Badge>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+                
+                <div className="grid md:grid-cols-4 gap-3">
+                  <div className="text-center">
+                    <p className="text-xs text-gray-600">USD/CZK změna</p>
+                    <p className={`font-bold text-sm ${scenario.usdCzkChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {formatPercentage(scenario.usdCzkChange)}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-600">EUR/CZK změna</p>
+                    <p className={`font-bold text-sm ${scenario.eurCzkChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {formatPercentage(scenario.eurCzkChange)}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-600">Dopad na portfolio</p>
+                    <p className={`font-bold text-sm ${getImpactColor(scenario.portfolioImpact)}`}>
+                      {formatPercentage(scenario.portfolioImpact)}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-600">Nová hodnota</p>
+                    <p className="font-bold text-sm">
+                      {formatCurrency(scenario.portfolioValueCzk)}
+                    </p>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </CardContent>
       </Card>
 
       {/* Stručné shrnutí výsledků */}
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-        <CardHeader>
-          <CardTitle className="text-blue-800">📊 Shrnutí analýzy</CardTitle>
+      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200 mb-4">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-blue-800 text-lg">📊 Shrnutí analýzy</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-3">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 mb-1">
+              <div className="text-lg font-bold text-blue-600 mb-1">
                 {((totalExposure / totalPortfolio) * 100).toFixed(1)}%
               </div>
-              <div className="text-sm text-blue-700">Kurzová expozice</div>
+              <div className="text-xs text-blue-700">Kurzová expozice</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-orange-600 mb-1">
+              <div className="text-lg font-bold text-orange-600 mb-1">
                 {results.riskMetrics.portfolioVolatility.toFixed(1)}%
               </div>
-              <div className="text-sm text-orange-700">Celková volatilita</div>
+              <div className="text-xs text-orange-700">Celková volatilita</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-red-600 mb-1">
+              <div className="text-lg font-bold text-red-600 mb-1">
                 {formatCurrency(results.riskMetrics.valueAtRisk)}
               </div>
-              <div className="text-sm text-red-700">Value at Risk (95%)</div>
+              <div className="text-xs text-red-700">Value at Risk (95%)</div>
             </div>
           </div>
           
-          <div className="mt-4 p-3 bg-white rounded-lg border">
-            <p className="text-sm text-gray-700">
+          <div className="mt-3 p-3 bg-white rounded-lg border">
+            <p className="text-xs text-gray-700">
               <strong>Klíčové pozorování:</strong> {
                 totalExposure / totalPortfolio > 0.7 
                   ? "Vysoká kurzová expozice - zvažte EUR hedged ETF pro snížení volatility"

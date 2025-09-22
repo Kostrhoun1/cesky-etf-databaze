@@ -367,12 +367,29 @@ const CurrencyImpactAnalyzer: React.FC = () => {
                   </div>
                 )}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Button onClick={handleCalculate} className="w-full" size="lg">
+          <Button onClick={handleCalculate} className="w-full mt-4 h-9 text-sm">
             Analyzovat kurzový dopad
           </Button>
+          
+          {/* Rozbalovací předpoklady */}
+          <details className="mt-4 border border-gray-200 rounded-lg">
+            <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
+              <span className="font-semibold text-gray-900 text-sm">📋 Předpoklady analýzy měnového dopadu</span>
+            </summary>
+            <div className="p-3 border-t border-gray-200">
+              <ul className="text-xs text-gray-700 space-y-1">
+                <li>• <strong>Měnová expozice:</strong> Počítána podle podkladových aktiv, ne podle měny fondu</li>
+                <li>• <strong>Hedging náklady:</strong> TER rozdíl + carry cost (úrokové diferenciály)</li>
+                <li>• <strong>Kurzy:</strong> Použity pro analýzu volatility a dopadů na portfolio</li>
+                <li>• <strong>Carry cost:</strong> Dynamický, mění se s úrokovými sazbami centrálních bank</li>
+                <li>• <strong>Volatilita:</strong> Historická data negarantují budoucí výkonnost</li>
+              </ul>
+            </div>
+          </details>
+          
         </CardContent>
       </Card>
 

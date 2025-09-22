@@ -154,9 +154,7 @@ const FeeCalculatorPage: React.FC = () => {
         isin: etf.isin,
         ter: etf.ter_numeric,
         ter_percent: (etf.ter_numeric).toFixed(2) + "%",
-        category: etf.ter_numeric <= 0.15 ? "Ultra nízké" : 
-                 etf.ter_numeric <= 0.35 ? "Nízké" : 
-                 etf.ter_numeric <= 0.75 ? "Střední" : "Vysoké",
+        region: etf.region || etf.parsed_region || "N/A",
         color: etf.ter_numeric <= 0.15 ? "green" : 
                etf.ter_numeric <= 0.35 ? "green" : 
                etf.ter_numeric <= 0.75 ? "yellow" : "red"
@@ -165,7 +163,7 @@ const FeeCalculatorPage: React.FC = () => {
 
 
   const brokerFees = [
-    { broker: "DEGIRO", buyFee: "0 Kč*", custody: "2,5€/rok", notes: "Core Selection ETF zdarma, zahraniční burza 2,5€/rok", highlight: true },
+    { broker: "DEGIRO", buyFee: "1€ (Core), 3€ (ostatní)", custody: "2,5€/rok", notes: "Core Selection ETF zdarma, zahraniční burza 2,5€/rok", highlight: true },
     { broker: "XTB", buyFee: "0 Kč*", custody: "0 Kč", notes: "Do 100k€ měsíčně zdarma", highlight: true },
     { broker: "Trading 212", buyFee: "0 Kč", custody: "0 Kč", notes: "Všechny ETF úplně zdarma", highlight: true },
     { broker: "Interactive Brokers", buyFee: "0,35%", custody: "0 Kč", notes: "Min. 35 Kč, max. 1% z hodnoty", highlight: false },
@@ -210,7 +208,7 @@ const FeeCalculatorPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Hero sekce */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Calculator className="w-4 h-4" />
             Kalkulačka poplatků 2025
@@ -229,18 +227,19 @@ const FeeCalculatorPage: React.FC = () => {
 
         {/* Hlavní kalkulačka */}
         <section>
-          {/* Parametry investice */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+          {/* Kompaktní kalkulačka */}
+          <Card className="mb-4">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
                 <Info className="w-5 h-5" />
-                Parametry investice
+                Parametry srovnání
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Parametry investice - kompaktní */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div>
-                  <Label htmlFor="initial">Počáteční investice (Kč)</Label>
+                  <Label htmlFor="initial" className="text-sm">Počáteční investice (Kč)</Label>
                   <Input
                     id="initial"
                     type="number"
@@ -248,12 +247,11 @@ const FeeCalculatorPage: React.FC = () => {
                     max="50000000"
                     value={investedAmount}
                     onChange={(e) => setInvestedAmount(Math.max(0, Number(e.target.value)))}
-                    className="mt-2"
+                    className="mt-1 h-9"
                   />
-                  <p className="text-xs text-gray-500 mt-1">0 - 50 mil. Kč</p>
                 </div>
                 <div>
-                  <Label htmlFor="monthly">Měsíční příspěvek (Kč)</Label>
+                  <Label htmlFor="monthly" className="text-sm">Měsíční příspěvek (Kč)</Label>
                   <Input
                     id="monthly"
                     type="number"
@@ -261,12 +259,11 @@ const FeeCalculatorPage: React.FC = () => {
                     max="1000000"
                     value={monthlyContribution}
                     onChange={(e) => setMonthlyContribution(Math.max(0, Number(e.target.value)))}
-                    className="mt-2"
+                    className="mt-1 h-9"
                   />
-                  <p className="text-xs text-gray-500 mt-1">0 - 1 mil. Kč měsíčně</p>
                 </div>
                 <div>
-                  <Label htmlFor="period">Doba investování (roky)</Label>
+                  <Label htmlFor="period" className="text-sm">Doba (roky)</Label>
                   <Input
                     id="period"
                     type="number"
@@ -274,12 +271,11 @@ const FeeCalculatorPage: React.FC = () => {
                     max="50"
                     value={investmentPeriod}
                     onChange={(e) => setInvestmentPeriod(Math.max(1, Math.min(50, Number(e.target.value))))}
-                    className="mt-2"
+                    className="mt-1 h-9"
                   />
-                  <p className="text-xs text-gray-500 mt-1">1 - 50 let</p>
                 </div>
                 <div>
-                  <Label htmlFor="return">Očekávaný výnos (%)</Label>
+                  <Label htmlFor="return" className="text-sm">Očekávaný výnos (%)</Label>
                   <Input
                     id="return"
                     type="number"
@@ -288,104 +284,85 @@ const FeeCalculatorPage: React.FC = () => {
                     max="30"
                     value={expectedReturn}
                     onChange={(e) => setExpectedReturn(Math.max(0, Math.min(30, Number(e.target.value))))}
-                    className="mt-2"
+                    className="mt-1 h-9"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Roční výnos před poplatky (0-30%)</p>
+                </div>
+              </div>
+
+              {/* Srovnání fondů - kompaktní */}
+              <div className="grid lg:grid-cols-2 gap-4">
+                {/* ETF fond */}
+                <div className="border rounded-lg p-4 bg-violet-25">
+                  <div className="flex items-center gap-2 mb-3">
+                    <TrendingDown className="w-4 h-4 text-violet-600" />
+                    <h3 className="font-semibold">ETF fond</h3>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="etf-ter" className="text-sm">TER poplatek (%)</Label>
+                      <Input
+                        id="etf-ter"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="5"
+                        value={etfTER}
+                        onChange={(e) => setEtfTER(Math.max(0, Math.min(5, Number(e.target.value))))}
+                        className="mt-1 h-9"
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="p-2 bg-white rounded border">
+                        <p className="text-xs text-gray-600">Finální hodnota</p>
+                        <p className="font-bold">{formatCurrency(etfFinalValue)}</p>
+                      </div>
+                      <div className="p-2 bg-white rounded border">
+                        <p className="text-xs text-gray-600">Poplatky</p>
+                        <p className="font-semibold">{formatCurrency(etfTotalFees)}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bankovní fond */}
+                <div className="border rounded-lg p-4 bg-gray-25">
+                  <div className="flex items-center gap-2 mb-3">
+                    <DollarSign className="w-4 h-4 text-violet-600" />
+                    <h3 className="font-semibold">Bankovní fond</h3>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <Label htmlFor="active-ter" className="text-sm">TER poplatek (%)</Label>
+                      <Input
+                        id="active-ter"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        max="5"
+                        value={activeTER}
+                        onChange={(e) => setActiveTER(Math.max(0, Math.min(5, Number(e.target.value))))}
+                        className="mt-1 h-9"
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="p-2 bg-white rounded border">
+                        <p className="text-xs text-gray-600">Finální hodnota</p>
+                        <p className="font-bold">{formatCurrency(activeFinalValue)}</p>
+                      </div>
+                      <div className="p-2 bg-white rounded border">
+                        <p className="text-xs text-gray-600">Poplatky</p>
+                        <p className="font-semibold">{formatCurrency(activeTotalFees)}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
-
-          {/* Srovnání fondů */}
-          <div className="grid lg:grid-cols-2 gap-6 mb-6">
-            {/* ETF fond */}
-            <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingDown className="w-5 h-5 text-violet-600" />
-                  ETF fond
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <Label htmlFor="etf-ter">TER poplatek (%)</Label>
-                  <Input
-                    id="etf-ter"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max="5"
-                    value={etfTER}
-                    onChange={(e) => setEtfTER(Math.max(0, Math.min(5, Number(e.target.value))))}
-                    className="mt-2"
-                  />
-                  <p className="text-sm text-gray-500 mt-1">Typicky 0.1% - 0.3%</p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600">Finální hodnota</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(etfFinalValue)}</p>
-                  </div>
-                  
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600">Celkové poplatky</p>
-                    <p className="text-xl font-semibold text-gray-900">{formatCurrency(etfTotalFees)}</p>
-                  </div>
-                </div>
-
-                <div className="text-xs text-gray-500 space-y-1 pt-2 border-t">
-                  <p>• Investováno: {formatCurrency(etfTotalInvested)}</p>
-                  <p>• Výnos: {formatCurrency(etfFinalValue - etfTotalInvested)}</p>
-                  <p>• Poplatky: {((etfTotalFees / etfTotalInvested) * 100).toFixed(2)}% z investice</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Aktivní fond */}
-            <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2">
-                  <DollarSign className="w-5 h-5 text-violet-600" />
-                  Bankovní fond
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <Label htmlFor="active-ter">TER poplatek (%)</Label>
-                  <Input
-                    id="active-ter"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max="5"
-                    value={activeTER}
-                    onChange={(e) => setActiveTER(Math.max(0, Math.min(5, Number(e.target.value))))}
-                    className="mt-2"
-                  />
-                  <p className="text-sm text-gray-500 mt-1">Typicky 1.5% - 2.5%</p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600">Finální hodnota</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(activeFinalValue)}</p>
-                  </div>
-                  
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm font-medium text-gray-600">Celkové poplatky</p>
-                    <p className="text-xl font-semibold text-gray-900">{formatCurrency(activeTotalFees)}</p>
-                  </div>
-                </div>
-
-                <div className="text-xs text-gray-500 space-y-1 pt-2 border-t">
-                  <p>• Investováno: {formatCurrency(activeTotalInvested)}</p>
-                  <p>• Výnos: {formatCurrency(activeFinalValue - activeTotalInvested)}</p>
-                  <p>• Poplatky: {((activeTotalFees / activeTotalInvested) * 100).toFixed(2)}% z investice</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
 
           {/* Varování */}
           {(etfTER >= activeTER || expectedReturn < 3 || expectedReturn > 15) && (
@@ -404,34 +381,66 @@ const FeeCalculatorPage: React.FC = () => {
             </div>
           )}
 
-          {/* Výsledek srovnání */}
+          {/* Výsledek srovnání - kompaktní */}
           <Card>
-            <CardHeader>
-              <CardTitle className="text-center">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-center text-lg">
                 Rozdíl za {investmentPeriod} let
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <div className="text-center p-6 bg-violet-50 rounded-lg">
-                  <h4 className="text-lg font-semibold text-violet-800 mb-2">Více peněz v kapse</h4>
-                  <p className="text-3xl font-bold text-violet-900">{formatCurrency(valueDifference)}</p>
-                  <p className="text-sm text-violet-700 mt-1">S ETF budete mít více o tolik</p>
+              {etfTER >= activeTER ? (
+                // Scénář kdy má ETF vyšší nebo stejný TER jako bankovní fond
+                <div className="text-center p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                  <div className="flex items-center justify-center gap-2 mb-3">
+                    <AlertTriangle className="w-5 h-5 text-amber-600" />
+                    <h4 className="text-lg font-semibold text-amber-800">Neobvyklá situace</h4>
+                  </div>
+                  <p className="text-sm text-amber-700 mb-3">
+                    Bankovní fond má nižší poplatky než ETF. Zkontrolujte zadané hodnoty TER.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-3 bg-white rounded border">
+                      <p className="text-xs font-medium text-gray-600">Rozdíl portfolia</p>
+                      <p className="text-lg font-bold text-gray-900">{formatCurrency(Math.abs(valueDifference))}</p>
+                      <p className="text-xs text-gray-700">
+                        {valueDifference >= 0 ? "ETF lepší" : "Fond lepší"}
+                      </p>
+                    </div>
+                    <div className="p-3 bg-white rounded border">
+                      <p className="text-xs font-medium text-gray-600">Rozdíl poplatků</p>
+                      <p className="text-lg font-bold text-gray-900">{formatCurrency(Math.abs(feeDifference))}</p>
+                      <p className="text-xs text-gray-700">
+                        {feeDifference >= 0 ? "ETF levnější" : "Fond levnější"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                
-                <div className="text-center p-6 bg-violet-50 rounded-lg">
-                  <h4 className="text-lg font-semibold text-violet-800 mb-2">Ušetřené poplatky</h4>
-                  <p className="text-3xl font-bold text-violet-900">{formatCurrency(feeDifference)}</p>
-                  <p className="text-sm text-violet-700 mt-1">Méně zaplatíte na poplatcích</p>
-                </div>
-              </div>
+              ) : (
+                // Normální scénář kdy ETF má nižší TER
+                <>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="text-center p-4 bg-violet-50 rounded-lg">
+                      <h4 className="text-sm font-semibold text-violet-800 mb-1">Více peněz v kapse</h4>
+                      <p className="text-2xl font-bold text-violet-900">{formatCurrency(valueDifference)}</p>
+                      <p className="text-xs text-violet-700 mt-1">S ETF budete mít více</p>
+                    </div>
+                    
+                    <div className="text-center p-4 bg-violet-50 rounded-lg">
+                      <h4 className="text-sm font-semibold text-violet-800 mb-1">Ušetřené poplatky</h4>
+                      <p className="text-2xl font-bold text-violet-900">{formatCurrency(feeDifference)}</p>
+                      <p className="text-xs text-violet-700 mt-1">Méně na poplatcích</p>
+                    </div>
+                  </div>
 
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <p className="text-lg text-gray-700">
-                  ETF vám za <strong>{investmentPeriod} let</strong> ušetří <strong className="text-violet-600">{formatCurrency(feeDifference)}</strong> na poplatcích 
-                  a vaše portfolio bude větší o <strong className="text-violet-600">{formatCurrency(valueDifference)}</strong>!
-                </p>
-              </div>
+                  <div className="text-center p-3 bg-gray-50 rounded-lg">
+                    <p className="text-sm text-gray-700">
+                      ETF ušetří <strong className="text-violet-600">{formatCurrency(feeDifference)}</strong> na poplatcích 
+                      a portfolio bude větší o <strong className="text-violet-600">{formatCurrency(valueDifference)}</strong>
+                    </p>
+                  </div>
+                </>
+              )}
             </CardContent>
           </Card>
         </section>
@@ -469,8 +478,7 @@ const FeeCalculatorPage: React.FC = () => {
                     <th className="border border-gray-200 p-4 text-left font-semibold">ETF</th>
                     <th className="border border-gray-200 p-4 text-center font-semibold">Ticker</th>
                     <th className="border border-gray-200 p-4 text-center font-semibold">TER</th>
-                    <th className="border border-gray-200 p-4 text-center font-semibold">Kategorie</th>
-                    <th className="border border-gray-200 p-4 text-center font-semibold">Akce</th>
+                    <th className="border border-gray-200 p-4 text-center font-semibold">Region</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -491,24 +499,9 @@ const FeeCalculatorPage: React.FC = () => {
                         </span>
                       </td>
                       <td className="border border-gray-200 p-4 text-center">
-                        <Badge 
-                          className={
-                            etf.color === 'green' ? 'bg-green-100 text-green-800' :
-                            etf.color === 'yellow' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }
-                        >
-                          {etf.category}
-                        </Badge>
-                      </td>
-                      <td className="border border-gray-200 p-4 text-center">
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => setEtfTER(etf.ter)}
-                        >
-                          Použít
-                        </Button>
+                        <span className="text-gray-700 text-sm">
+                          {etf.region}
+                        </span>
                       </td>
                     </tr>
                   ))}
@@ -516,6 +509,16 @@ const FeeCalculatorPage: React.FC = () => {
               </table>
             </div>
           )}
+          
+          <div className="mt-6 text-center">
+            <Link 
+              to="/srovnani-etf"
+              className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              <ArrowRight className="w-4 h-4" />
+              Zobrazit kompletní srovnání všech {etfs?.length || 3500}+ ETF fondů
+            </Link>
+          </div>
             </CardContent>
           </Card>
         </section>
@@ -560,6 +563,16 @@ const FeeCalculatorPage: React.FC = () => {
                   </div>
                 ))}
               </div>
+              
+              <div className="mt-6 text-center">
+                <Link 
+                  to="/kde-koupit-etf"
+                  className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                  Podrobné srovnání všech brokerů
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </section>
@@ -570,19 +583,31 @@ const FeeCalculatorPage: React.FC = () => {
           faqs={[
             {
               question: "Co je TER poplatek u ETF?",
-              answer: "TER (Total Expense Ratio) je roční poplatek ETF fondu vyjádřený v procentech z hodnoty investice. Zahrnuje všechny náklady na správu fondu. TER 0.2% znamená, že ročně zaplatíte 500 Kč z každých 250 000 Kč investice."
+              answer: "TER (Total Expense Ratio) je roční poplatek ETF fondu vyjádřený v procentech z hodnoty investice. Zahrnuje všechny náklady na správu fondu včetně poplatků za správu, administrativních nákladů a obchodních nákladů. TER 0.2% znamená, že ročně zaplatíte 500 Kč z každých 250 000 Kč investice."
             },
             {
               question: "Kde najdu nejlevnější ETF s nejnižším TER?",
-              answer: "Nejlevnější ETF mají TER pod 0.15%. Nejlepší volby: CSPX (0.07%), SX5E (0.10%), SPY5 (0.09%). Použijte naše srovnání ETF pro nalezení fondů s nejnižšími poplatky."
+              answer: "Nejlevnější ETF mají TER již od 0.03%. Nejlepší volby pro rok 2025: SPDR Core S&P 500 (0.03%), Vanguard S&P 500 (0.07%), iShares Core EURO STOXX 50 (0.10%). Použijte naše srovnání ETF pro nalezení fondů s nejnižšími poplatky seřazených podle TER."
             },
             {
               question: "Který broker má nejnižší poplatky za ETF?",
-              answer: "Trading 212 má všechny ETF zcela zdarma. XTB nabízí 0% poplatky do 2,4M Kč měsíčně. DEGIRO účtuje 24 Kč za Core Selection ETF (200+ fondů) + 61 Kč ročně za zahraniční burzu."
+              answer: "Trading 212 má všechny ETF zcela zdarma bez omezení. XTB nabízí 0% poplatky do 100 000€ měsíčně, pak 0.2%. DEGIRO účtuje 1€ za Core Selection ETF (200+ fondů) a 3€ za ostatní ETF, plus 2.5€ ročně za zahraniční burzu."
+            },
+            {
+              question: "Jak se počítají poplatky TER u ETF?",
+              answer: "TER se počítá automaticky a průběžně se strhává z hodnoty fondu. Není to přímý poplatek z vašeho účtu, ale snižuje se o něj každodenní hodnota NAV (Net Asset Value). Proto se TER projeví jako nižší výnos fondu oproti jeho indexu."
+            },
+            {
+              question: "Jaký je rozdíl mezi TER a skutečnými náklady ETF?",
+              answer: "TER nezahrnuje transakční náklady (poplatky brokerům), spread (rozdíl mezi nákupní a prodejní cenou) ani daně. Celkové náklady na investování = TER + broker poplatky + spread + daně. Proto je důležité vybrat jak levný ETF, tak levného brokera."
             },
             {
               question: "Jak moc ovlivňují poplatky dlouhodobé výnosy?",
-              answer: "Poplatky významně ovlivňují výnosy. Rozdíl mezi 0.1% a 0.5% TER může za 20 let představovat ztrátu 10-15% celkových výnosů. Proto je důležité vybírat ETF s nízkými poplatky."
+              answer: "Poplatky mají dramatický dopad na dlouhodobé výnosy kvůli složenému úročení. Rozdíl mezi 0.03% a 0.5% TER může za 30 let představovat ztrátu 12-15% celkových výnosů. U investice 500 000 Kč za 30 let to může být rozdíl více než 400 000 Kč!"
+            },
+            {
+              question: "Jsou levnější ETF také horší kvalitou?",
+              answer: "Ne, levnější ETF nejsou nutně horší. Naopak, pasivní ETF s nejnižšími TER často sledují stejné indexy jako dražší fondy. Klíčové je sledovat tracking error (odchylku od indexu), likviditu a velikost fondu, ne jen TER."
             }
           ]}
           className="mt-16"
