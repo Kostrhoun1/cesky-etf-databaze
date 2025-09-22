@@ -221,7 +221,7 @@ const FeeCalculatorPage: React.FC = () => {
           </h1>
           
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Zjistěte, kolik vám ušetří levný ETF oproti drahému bankovnímu fondu za {investmentPeriod} let.
+            Zjistěte, kolik vám ušetří levný ETF oproti drahému bankovnímu fondu.
           </p>
         </div>
 
