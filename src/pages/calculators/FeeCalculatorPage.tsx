@@ -225,84 +225,88 @@ const FeeCalculatorPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="space-y-16">
+        <div className="space-y-8">
 
-        {/* Srovnávací kalkulačka */}
-        <section className="bg-gradient-to-br from-violet-50 to-blue-50 rounded-3xl p-8 shadow-lg">
+        {/* Hlavní kalkulačka */}
+        <section>
+          {/* Parametry investice */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Info className="w-5 h-5" />
+                Parametry investice
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div>
+                  <Label htmlFor="initial">Počáteční investice (Kč)</Label>
+                  <Input
+                    id="initial"
+                    type="number"
+                    min="0"
+                    max="50000000"
+                    value={investedAmount}
+                    onChange={(e) => setInvestedAmount(Math.max(0, Number(e.target.value)))}
+                    className="mt-2"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">0 - 50 mil. Kč</p>
+                </div>
+                <div>
+                  <Label htmlFor="monthly">Měsíční příspěvek (Kč)</Label>
+                  <Input
+                    id="monthly"
+                    type="number"
+                    min="0"
+                    max="1000000"
+                    value={monthlyContribution}
+                    onChange={(e) => setMonthlyContribution(Math.max(0, Number(e.target.value)))}
+                    className="mt-2"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">0 - 1 mil. Kč měsíčně</p>
+                </div>
+                <div>
+                  <Label htmlFor="period">Doba investování (roky)</Label>
+                  <Input
+                    id="period"
+                    type="number"
+                    min="1"
+                    max="50"
+                    value={investmentPeriod}
+                    onChange={(e) => setInvestmentPeriod(Math.max(1, Math.min(50, Number(e.target.value))))}
+                    className="mt-2"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">1 - 50 let</p>
+                </div>
+                <div>
+                  <Label htmlFor="return">Očekávaný výnos (%)</Label>
+                  <Input
+                    id="return"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="30"
+                    value={expectedReturn}
+                    onChange={(e) => setExpectedReturn(Math.max(0, Math.min(30, Number(e.target.value))))}
+                    className="mt-2"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Roční výnos před poplatky (0-30%)</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Společné parametry */}
-          <div className="mb-8 bg-white rounded-2xl p-6 border border-gray-200">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Info className="w-5 h-5" />
-              Parametry investice
-            </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div>
-                <Label htmlFor="initial">Počáteční investice (Kč)</Label>
-                <Input
-                  id="initial"
-                  type="number"
-                  min="0"
-                  max="50000000"
-                  value={investedAmount}
-                  onChange={(e) => setInvestedAmount(Math.max(0, Number(e.target.value)))}
-                  className="mt-2"
-                />
-                <p className="text-xs text-gray-500 mt-1">0 - 50 mil. Kč</p>
-              </div>
-              <div>
-                <Label htmlFor="monthly">Měsíční příspěvek (Kč)</Label>
-                <Input
-                  id="monthly"
-                  type="number"
-                  min="0"
-                  max="1000000"
-                  value={monthlyContribution}
-                  onChange={(e) => setMonthlyContribution(Math.max(0, Number(e.target.value)))}
-                  className="mt-2"
-                />
-                <p className="text-xs text-gray-500 mt-1">0 - 1 mil. Kč měsíčně</p>
-              </div>
-              <div>
-                <Label htmlFor="period">Doba investování (roky)</Label>
-                <Input
-                  id="period"
-                  type="number"
-                  min="1"
-                  max="50"
-                  value={investmentPeriod}
-                  onChange={(e) => setInvestmentPeriod(Math.max(1, Math.min(50, Number(e.target.value))))}
-                  className="mt-2"
-                />
-                <p className="text-xs text-gray-500 mt-1">1 - 50 let</p>
-              </div>
-              <div>
-                <Label htmlFor="return">Očekávaný výnos (%)</Label>
-                <Input
-                  id="return"
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="30"
-                  value={expectedReturn}
-                  onChange={(e) => setExpectedReturn(Math.max(0, Math.min(30, Number(e.target.value))))}
-                  className="mt-2"
-                />
-                <p className="text-xs text-gray-500 mt-1">Roční výnos před poplatky (0-30%)</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-8">
+          {/* Srovnání fondů */}
+          <div className="grid lg:grid-cols-2 gap-6 mb-6">
             {/* ETF fond */}
-            <Card className="border-green-200 shadow-sm">
-              <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50">
-                <CardTitle className="flex items-center gap-2 text-green-800">
-                  <TrendingDown className="w-5 h-5" />
-                  💚 Levný ETF fond
+            <Card>
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingDown className="w-5 h-5 text-violet-600" />
+                  ETF fond
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6 mt-6">
+              <CardContent className="space-y-6">
                 <div>
                   <Label htmlFor="etf-ter">TER poplatek (%)</Label>
                   <Input
@@ -318,20 +322,20 @@ const FeeCalculatorPage: React.FC = () => {
                   <p className="text-sm text-gray-500 mt-1">Typicky 0.1% - 0.3%</p>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <p className="text-sm text-green-600 font-medium">Finální hodnota</p>
-                    <p className="text-2xl font-bold text-green-900">{formatCurrency(etfFinalValue)}</p>
+                <div className="space-y-3">
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium text-gray-600">Finální hodnota</p>
+                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(etfFinalValue)}</p>
                   </div>
                   
-                  <div className="bg-red-50 p-4 rounded-lg">
-                    <p className="text-sm text-red-600 font-medium">Celkové poplatky</p>
-                    <p className="text-xl font-bold text-red-900">{formatCurrency(etfTotalFees)}</p>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium text-gray-600">Celkové poplatky</p>
+                    <p className="text-xl font-semibold text-gray-900">{formatCurrency(etfTotalFees)}</p>
                   </div>
                 </div>
 
-                <div className="text-xs text-gray-500 space-y-1">
-                  <p>• Investováno celkem: {formatCurrency(etfTotalInvested)}</p>
+                <div className="text-xs text-gray-500 space-y-1 pt-2 border-t">
+                  <p>• Investováno: {formatCurrency(etfTotalInvested)}</p>
                   <p>• Výnos: {formatCurrency(etfFinalValue - etfTotalInvested)}</p>
                   <p>• Poplatky: {((etfTotalFees / etfTotalInvested) * 100).toFixed(2)}% z investice</p>
                 </div>
@@ -339,14 +343,14 @@ const FeeCalculatorPage: React.FC = () => {
             </Card>
 
             {/* Aktivní fond */}
-            <Card className="border-red-200 shadow-sm">
-              <CardHeader className="bg-gradient-to-r from-red-50 to-pink-50">
-                <CardTitle className="flex items-center gap-2 text-red-800">
-                  <DollarSign className="w-5 h-5" />
-                  💸 Bankovní/aktivní fond
+            <Card>
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2">
+                  <DollarSign className="w-5 h-5 text-violet-600" />
+                  Bankovní fond
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6 mt-6">
+              <CardContent className="space-y-6">
                 <div>
                   <Label htmlFor="active-ter">TER poplatek (%)</Label>
                   <Input
@@ -362,20 +366,20 @@ const FeeCalculatorPage: React.FC = () => {
                   <p className="text-sm text-gray-500 mt-1">Typicky 1.5% - 2.5%</p>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <p className="text-sm text-green-600 font-medium">Finální hodnota</p>
-                    <p className="text-2xl font-bold text-green-900">{formatCurrency(activeFinalValue)}</p>
+                <div className="space-y-3">
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium text-gray-600">Finální hodnota</p>
+                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(activeFinalValue)}</p>
                   </div>
                   
-                  <div className="bg-red-50 p-4 rounded-lg">
-                    <p className="text-sm text-red-600 font-medium">Celkové poplatky</p>
-                    <p className="text-xl font-bold text-red-900">{formatCurrency(activeTotalFees)}</p>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium text-gray-600">Celkové poplatky</p>
+                    <p className="text-xl font-semibold text-gray-900">{formatCurrency(activeTotalFees)}</p>
                   </div>
                 </div>
 
-                <div className="text-xs text-gray-500 space-y-1">
-                  <p>• Investováno celkem: {formatCurrency(activeTotalInvested)}</p>
+                <div className="text-xs text-gray-500 space-y-1 pt-2 border-t">
+                  <p>• Investováno: {formatCurrency(activeTotalInvested)}</p>
                   <p>• Výnos: {formatCurrency(activeFinalValue - activeTotalInvested)}</p>
                   <p>• Poplatky: {((activeTotalFees / activeTotalInvested) * 100).toFixed(2)}% z investice</p>
                 </div>
@@ -383,14 +387,14 @@ const FeeCalculatorPage: React.FC = () => {
             </Card>
           </div>
 
-          {/* Varování pro extrémní hodnoty */}
+          {/* Varování */}
           {(etfTER >= activeTER || expectedReturn < 3 || expectedReturn > 15) && (
-            <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+                <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-yellow-800">Kontrola parametrů</h4>
-                  <ul className="text-sm text-yellow-700 mt-1 space-y-1">
+                  <h4 className="font-semibold text-amber-800">Kontrola parametrů</h4>
+                  <ul className="text-sm text-amber-700 mt-1 space-y-1">
                     {etfTER >= activeTER && <li>• ETF má stejný nebo vyšší TER než aktivní fond</li>}
                     {expectedReturn < 3 && <li>• Velmi nízký očekávaný výnos (pod 3%)</li>}
                     {expectedReturn > 15 && <li>• Velmi vysoký očekávaný výnos (nad 15%)</li>}
@@ -400,50 +404,53 @@ const FeeCalculatorPage: React.FC = () => {
             </div>
           )}
 
-          {/* Velký srovnávací výsledek */}
-          <div className="mt-8 bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200 rounded-2xl p-8">
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                💰 Rozdíl za {investmentPeriod} let
-              </h3>
-              
-              <div className="grid md:grid-cols-2 gap-8 mb-6">
-                <div className="bg-green-100 rounded-xl p-6">
-                  <h4 className="text-lg font-semibold text-green-800 mb-2">Více peněz v kapse</h4>
-                  <p className="text-3xl font-bold text-green-900">{formatCurrency(valueDifference)}</p>
-                  <p className="text-sm text-green-700 mt-1">S ETF budete mít více o tolik</p>
+          {/* Výsledek srovnání */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center">
+                Rozdíl za {investmentPeriod} let
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div className="text-center p-6 bg-violet-50 rounded-lg">
+                  <h4 className="text-lg font-semibold text-violet-800 mb-2">Více peněz v kapse</h4>
+                  <p className="text-3xl font-bold text-violet-900">{formatCurrency(valueDifference)}</p>
+                  <p className="text-sm text-violet-700 mt-1">S ETF budete mít více o tolik</p>
                 </div>
                 
-                <div className="bg-red-100 rounded-xl p-6">
-                  <h4 className="text-lg font-semibold text-red-800 mb-2">Ušetřené poplatky</h4>
-                  <p className="text-3xl font-bold text-red-900">{formatCurrency(feeDifference)}</p>
-                  <p className="text-sm text-red-700 mt-1">Méně zaplatíte na poplatcích</p>
+                <div className="text-center p-6 bg-violet-50 rounded-lg">
+                  <h4 className="text-lg font-semibold text-violet-800 mb-2">Ušetřené poplatky</h4>
+                  <p className="text-3xl font-bold text-violet-900">{formatCurrency(feeDifference)}</p>
+                  <p className="text-sm text-violet-700 mt-1">Méně zaplatíte na poplatcích</p>
                 </div>
               </div>
 
-              <div className="bg-white/50 rounded-lg p-4">
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
                 <p className="text-lg text-gray-700">
-                  ETF vám za <strong>{investmentPeriod} let</strong> ušetří <strong className="text-orange-600">{formatCurrency(feeDifference)}</strong> na poplatcích 
-                  a vaše portfolio bude větší o <strong className="text-green-600">{formatCurrency(valueDifference)}</strong>!
+                  ETF vám za <strong>{investmentPeriod} let</strong> ušetří <strong className="text-violet-600">{formatCurrency(feeDifference)}</strong> na poplatcích 
+                  a vaše portfolio bude větší o <strong className="text-violet-600">{formatCurrency(valueDifference)}</strong>!
                 </p>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </section>
 
         {/* Nejlevnější ETF z databáze */}
-        <section className="bg-white rounded-2xl p-8 shadow-sm border">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              📋 Aktuální nejlevnější ETF
-            </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Top 20 nejlevnějších ETF z naší databáze
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Aktuální seznam nejlevnějších ETF fondů seřazených podle TER poplatků
-            </p>
-          </div>
+        <section>
+          <Card>
+            <CardHeader className="text-center">
+              <div className="inline-flex items-center bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                📋 Aktuální nejlevnější ETF
+              </div>
+              <CardTitle className="text-2xl">
+                Top 20 nejlevnějších ETF z naší databáze
+              </CardTitle>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Aktuální seznam nejlevnějších ETF fondů seřazených podle TER poplatků
+              </p>
+            </CardHeader>
+            <CardContent>
           
           {isLoading ? (
             <div className="flex justify-center items-center py-12">
@@ -509,51 +516,52 @@ const FeeCalculatorPage: React.FC = () => {
               </table>
             </div>
           )}
+            </CardContent>
+          </Card>
         </section>
 
         {/* Srovnání broker poplatků */}
-        <section className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              🏦 Broker poplatky
-            </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Poplatky brokerů za nákup ETF
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Správný výběr brokera vám může ušetřit stovky eur ročně na poplatcích
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {brokerFees.map((broker, index) => (
-              <Card key={index} className={broker.highlight ? "ring-2 ring-blue-500" : ""}>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    {broker.broker}
-                    {broker.highlight && (
-                      <Badge className="bg-blue-100 text-blue-800">Doporučeno</Badge>
-                    )}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Poplatek za nákup:</span>
-                      <span className="font-semibold">{broker.buyFee}</span>
+        <section>
+          <Card>
+            <CardHeader className="text-center">
+              <div className="inline-flex items-center bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                🏦 Broker poplatky
+              </div>
+              <CardTitle className="text-2xl">
+                Poplatky brokerů za nákup ETF
+              </CardTitle>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Správný výběr brokera vám může ušetřit stovky eur ročně na poplatcích
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {brokerFees.map((broker, index) => (
+                  <div key={index} className={`p-4 border rounded-lg ${broker.highlight ? "border-violet-300 bg-violet-50" : "border-gray-200"}`}>
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="font-semibold">{broker.broker}</h3>
+                      {broker.highlight && (
+                        <Badge className="bg-violet-100 text-violet-800">Doporučeno</Badge>
+                      )}
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Poplatek za držení:</span>
-                      <span className="font-semibold">{broker.custody}</span>
-                    </div>
-                    <div className="text-sm text-gray-500 pt-2 border-t">
-                      {broker.notes}
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Poplatek za nákup:</span>
+                        <span className="font-medium">{broker.buyFee}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Poplatek za držení:</span>
+                        <span className="font-medium">{broker.custody}</span>
+                      </div>
+                      <div className="text-xs text-gray-500 pt-2 border-t">
+                        {broker.notes}
+                      </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </section>
 
         {/* FAQ sekce */}
