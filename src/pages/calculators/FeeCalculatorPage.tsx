@@ -221,7 +221,7 @@ const FeeCalculatorPage: React.FC = () => {
           </h1>
           
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Porovnejte skutečné náklady investování. Zjistěte, kolik vám ušetří levný ETF oproti drahému bankovnímu fondu za {investmentPeriod} let.
+            Zjistěte, kolik vám ušetří levný ETF oproti drahému bankovnímu fondu za {investmentPeriod} let.
           </p>
         </div>
 
@@ -229,18 +229,6 @@ const FeeCalculatorPage: React.FC = () => {
 
         {/* Srovnávací kalkulačka */}
         <section className="bg-gradient-to-br from-violet-50 to-blue-50 rounded-3xl p-8 shadow-lg">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Calculator className="w-4 h-4 mr-2" />
-              Kalkulačka poplatků
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Zadejte parametry investice
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Porovnejte dopad poplatků na váš majetek a najděte nejlevnější cestu k investování
-            </p>
-          </div>
 
           {/* Společné parametry */}
           <div className="mb-8 bg-white rounded-2xl p-6 border border-gray-200">
