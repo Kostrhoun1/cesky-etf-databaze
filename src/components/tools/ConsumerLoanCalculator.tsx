@@ -102,25 +102,25 @@ const ConsumerLoanCalculator: React.FC = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-8">
-      <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-50 to-indigo-50">
-        <CardHeader className="text-center pb-8">
-          <div className="flex justify-center mb-4">
-            <div className="p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg">
-              <Calculator className="h-8 w-8 text-white" />
+      <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-2 shadow-xl">
+        <CardHeader className="bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 text-white rounded-t-lg">
+          <div className="flex items-center gap-3">
+            <Calculator className="h-8 w-8 text-orange-400" />
+            <div>
+              <CardTitle className="text-3xl font-bold text-white">
+                Kalkulačka spotřebitelského úvěru
+              </CardTitle>
+              <p className="text-slate-300 text-lg">
+                Spočítejte si měsíční splátky a celkové náklady úvěru
+              </p>
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold text-gray-900">
-            Kalkulačka spotřebitelského úvěru
-          </CardTitle>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Spočítejte si měsíční splátky a celkové náklady spotřebitelského úvěru až na 10 let
-          </p>
         </CardHeader>
         
         <CardContent>
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Input Section */}
-            <Card className="bg-white shadow-lg border-0">
+            <Card className="bg-white shadow-lg border border-gray-200">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl">
                   <DollarSign className="h-5 w-5 text-blue-600" />
@@ -217,7 +217,7 @@ const ConsumerLoanCalculator: React.FC = () => {
 
             {/* Results Section */}
             {summary && (
-              <Card className="bg-white shadow-lg border-0">
+              <Card className="bg-white shadow-lg border border-gray-200">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
                     <TrendingUp className="h-5 w-5 text-green-600" />
@@ -231,115 +231,36 @@ const ConsumerLoanCalculator: React.FC = () => {
                       <div className="text-2xl font-bold text-blue-900">
                         {Math.round(summary.monthlyPayment).toLocaleString()} Kč
                       </div>
+                      <div className="text-xs text-blue-700 mt-1">Konstantní splátka každý měsíc</div>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <div className="text-sm text-gray-600 font-medium">Celkem zaplatíte</div>
                       <div className="text-2xl font-bold text-gray-900">
                         {Math.round(summary.totalPayments).toLocaleString()} Kč
                       </div>
+                      <div className="text-xs text-gray-700 mt-1">Součet všech měsíčních splátek</div>
                     </div>
                     <div className="bg-red-50 p-4 rounded-xl border border-red-200">
-                      <div className="text-sm text-red-600 font-medium">Celkové úroky</div>
+                      <div className="text-sm text-red-600 font-medium">Přeplatek úvěru</div>
                       <div className="text-2xl font-bold text-red-900">
                         {Math.round(summary.totalInterest).toLocaleString()} Kč
                       </div>
+                      <div className="text-xs text-red-700 mt-1">Kolik zaplatíte bance navíc</div>
                     </div>
                     <div className="bg-orange-50 p-4 rounded-xl border border-orange-200">
-                      <div className="text-sm text-orange-600 font-medium">Poměr úroků</div>
+                      <div className="text-sm text-orange-600 font-medium">Poměr přeplatku</div>
                       <div className="text-2xl font-bold text-orange-900">
                         {summary.interestPercentage.toFixed(1)}%
                       </div>
+                      <div className="text-xs text-orange-700 mt-1">% z výše úvěru navíc</div>
                     </div>
                   </div>
                   
-                  <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4">
-                    <div className="flex items-start gap-2">
-                      <Info className="h-5 w-5 text-red-600 mt-0.5 shrink-0" />
-                      <div className="text-sm">
-                        <p className="font-medium text-red-800 mb-2">⚠️ POZOR - Dodatečné náklady:</p>
-                        <ul className="text-red-700 space-y-1 text-xs">
-                          <li>• <strong>Poplatek za zpracování:</strong> 1-3% z výše úvěru (5-60k Kč)</li>
-                          <li>• <strong>Vedení úvěru:</strong> 100-300 Kč měsíčně</li>
-                          <li>• <strong>Pojištění úvěru:</strong> 0,5-1% ročně (dobrovolné)</li>
-                          <li>• <strong>RPSN:</strong> Skutečné náklady bývají o 1-3% vyšší</li>
-                        </ul>
-                        <p className="text-red-800 font-medium mt-2 text-xs">
-                          Celkové náklady mohou být až o 20-50k Kč vyšší než tento výpočet!
-                        </p>
-                      </div>
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
             )}
           </div>
           
-          {/* Rozbalovací předpoklady */}
-          <details className="mt-6 border border-blue-200 rounded-lg">
-            <summary className="p-4 bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors rounded-lg">
-              <span className="font-semibold text-blue-900">📋 Předpoklady kalkulačky úvěru (klikněte pro rozbalení)</span>
-            </summary>
-            <div className="p-4 border-t border-blue-200">
-              <h4 className="font-semibold mb-3 text-blue-900">📊 Výpočetní metodika</h4>
-              <div className="grid md:grid-cols-2 gap-4 mb-4 text-sm">
-                <div>
-                  <h5 className="font-semibold mb-2">Anuitní splácení:</h5>
-                  <ul className="space-y-1 text-gray-700">
-                    <li>• Konstantní měsíční splátka</li>
-                    <li>• Zpočátku více úroků, méně jistiny</li>
-                    <li>• Postupně více jistiny, méně úroků</li>
-                    <li>• Formula: PMT = PV × [r(1+r)^n] / [(1+r)^n-1]</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 className="font-semibold mb-2">Parametry výpočtu:</h5>
-                  <ul className="space-y-1 text-gray-700">
-                    <li>• Výše úvěru: 50k - 2M Kč</li>
-                    <li>• Úroková sazba: 3% - 25% p.a.</li>
-                    <li>• Doba splatnosti: 1 - 10 let</li>
-                    <li>• Měsíční úročení</li>
-                  </ul>
-                </div>
-              </div>
-              
-              <h4 className="font-semibold mb-3 text-blue-900">💰 Typické úrokové sazby 2025</h4>
-              <div className="grid md:grid-cols-3 gap-4 mb-4 text-sm">
-                <div>
-                  <h5 className="font-semibold mb-2">Bankovní úvěry:</h5>
-                  <ul className="space-y-1 text-gray-700">
-                    <li>• Nejnižší: 6-10% p.a.</li>
-                    <li>• Závisí na bonita klienta</li>
-                    <li>• Vyžadují příjmy + zajištění</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 className="font-semibold mb-2">Nebankovní společnosti:</h5>
-                  <ul className="space-y-1 text-gray-700">
-                    <li>• Běžné: 12-20% p.a.</li>
-                    <li>• Rychlejší schválení</li>
-                    <li>• Nižší nároky na bonitu</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 className="font-semibold mb-2">Rizikoví klienti:</h5>
-                  <ul className="space-y-1 text-gray-700">
-                    <li>• Vysoké: 20-25% p.a.</li>
-                    <li>• Negativní registr</li>
-                    <li>• Nejisté příjmy</li>
-                  </ul>
-                </div>
-              </div>
-              
-              <h4 className="font-semibold mb-3 text-blue-900">⚙️ Zjednodušení a omezení</h4>
-              <ul className="text-sm text-gray-700 space-y-2">
-                <li>• <strong>Nezahrnuje:</strong> Poplatky za zpracování, vedení úvěru, pojištění</li>
-                <li>• <strong>Konstantní sazba:</strong> Předpokládá fixní úrok po celou dobu</li>
-                <li>• <strong>Bez mimořádných splátek:</strong> Nezohledňuje předčasné splácení</li>
-                <li>• <strong>RPSN:</strong> Reálná roční procento nákladovost bude vyšší</li>
-                <li>• <strong>Daňové dopady:</strong> Nezohledňuje daňové aspekty úroků</li>
-              </ul>
-            </div>
-          </details>
         </CardContent>
       </Card>
 
@@ -453,6 +374,56 @@ const ConsumerLoanCalculator: React.FC = () => {
               </ResponsiveContainer>
             </CardContent>
           </Card>
+
+          {/* Umořovací tabulka */}
+          <details className="border border-gray-200 rounded-lg bg-white shadow-lg">
+            <summary className="p-4 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
+              <span className="font-semibold text-gray-900">📊 Detailní umořovací tabulka (klikněte pro rozbalení)</span>
+            </summary>
+            <div className="p-4 border-t border-gray-200 max-h-96 overflow-y-auto">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-100 sticky top-0">
+                    <tr>
+                      <th className="p-2 text-left font-semibold">Měsíc</th>
+                      <th className="p-2 text-right font-semibold">Splátka</th>
+                      <th className="p-2 text-right font-semibold">Úrok</th>
+                      <th className="p-2 text-right font-semibold">Jistina</th>
+                      <th className="p-2 text-right font-semibold">Zůstatek</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {loanData.map((item, index) => (
+                      <tr key={index} className={index % 12 === 0 ? "bg-blue-50" : "hover:bg-gray-50"}>
+                        <td className="p-2 font-medium">
+                          {index % 12 === 0 && <span className="text-blue-600 font-bold">Rok {Math.floor(index / 12) + 1}</span>}
+                          <div className="text-xs text-gray-500">Měsíc {item.month}</div>
+                        </td>
+                        <td className="p-2 text-right font-medium">
+                          {Math.round(item.monthlyPayment).toLocaleString()} Kč
+                        </td>
+                        <td className="p-2 text-right text-red-600">
+                          {Math.round(item.interestPayment).toLocaleString()} Kč
+                        </td>
+                        <td className="p-2 text-right text-green-600">
+                          {Math.round(item.principalPayment).toLocaleString()} Kč
+                        </td>
+                        <td className="p-2 text-right font-medium">
+                          {Math.round(item.remainingDebt).toLocaleString()} Kč
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg text-sm">
+                <p className="text-blue-800">
+                  <strong>💡 Jak číst tabulku:</strong> Modře označené řádky jsou začátky nových roků. 
+                  Vidíte jak se postupně snižuje podíl úroků (červeně) a zvyšuje úmor jistiny (zeleně) při konstantní splátce.
+                </p>
+              </div>
+            </div>
+          </details>
         </>
       )}
     </div>
