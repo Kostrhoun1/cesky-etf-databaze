@@ -210,47 +210,35 @@ const FeeCalculatorPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Hero sekce */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <Calculator className="w-4 h-4" />
-            Kalkulačka ETF poplatků 2025
+            Kalkulačka poplatků 2025
           </div>
           
           <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
-            Kalkulačka ETF poplatků
+            ETF vs. bankovní fond
           </h1>
           
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
-            Spočítejte si skutečné náklady investování do ETF. Porovnejte TER poplatky, broker fees a najděte nejlevnější způsob investování.
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Porovnejte skutečné náklady investování. Zjistěte, kolik vám ušetří levný ETF oproti drahému bankovnímu fondu za {investmentPeriod} let.
           </p>
         </div>
 
         <div className="space-y-16">
-        
-        {/* Rychlé intro */}
-        <section className="text-center mb-8">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              ETF vs. bankovní fond: Porovnejte náklady
-            </h2>
-            <p className="text-lg text-gray-600">
-              Zjistěte, kolik peněz vám ušetří levný ETF oproti drahému bankovnímu fondu za {investmentPeriod} let investování.
-            </p>
-          </div>
-        </section>
 
         {/* Srovnávací kalkulačka */}
         <section className="bg-gradient-to-br from-violet-50 to-blue-50 rounded-3xl p-8 shadow-lg">
           <div className="text-center mb-8">
             <div className="inline-flex items-center bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
               <Calculator className="w-4 h-4 mr-2" />
-              Srovnání ETF vs. Bankovní fond
+              Kalkulačka poplatků
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              🆚 Porovnání nákladů investování
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Zadejte parametry investice
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Zadejte parametry investice a porovnejte dopad poplatků na váš majetek
+              Porovnejte dopad poplatků na váš majetek a najděte nejlevnější cestu k investování
             </p>
           </div>
 
