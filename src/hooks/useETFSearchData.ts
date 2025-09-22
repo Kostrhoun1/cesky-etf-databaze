@@ -3,13 +3,11 @@ import { useState, useEffect } from 'react';
 import { useETFData } from './useETFData';
 import { ETFListItem } from '@/types/etf';
 
-// Helper function to sort categories with "Ostatní" at the end
+// Helper function to filter out 'Ostatní' category and sort remaining
 const sortCategories = (categories: string[]): string[] => {
-  return categories.sort((a, b) => {
-    if (a === 'Ostatní') return 1;  // Move "Ostatní" to end
-    if (b === 'Ostatní') return -1; // Move "Ostatní" to end
-    return a.localeCompare(b); // Regular alphabetical sort for others
-  });
+  return categories
+    .filter(category => category !== 'Ostatní') // Filter out 'Ostatní' as it only contains 1 ETF
+    .sort((a, b) => a.localeCompare(b)); // Regular alphabetical sort
 };
 
 export const useETFSearchData = () => {

@@ -89,7 +89,7 @@ const ETFSearchSection: React.FC = () => {
           <div>
             <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full">
               {/* Taby pro kategorie */}
-              <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-6 mb-4">
+              <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-5 mb-4">
                 {categories.map(category => (
                   <TabsTrigger key={category} value={category} className="text-xs md:text-sm px-2 py-1">
                     {category}

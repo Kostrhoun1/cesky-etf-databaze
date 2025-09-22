@@ -57,11 +57,10 @@ export const useETFFiltering = (etfs: ETFListItem[], defaultCategory?: string) =
   // Categories from data
   const categories = useMemo(() => {
     const uniqueCategories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
-    return uniqueCategories.sort((a, b) => {
-      if (a === 'Ostatní') return 1;
-      if (b === 'Ostatní') return -1;
-      return a.localeCompare(b);
-    });
+    // Filter out 'Ostatní' category as it only contains 1 ETF
+    return uniqueCategories
+      .filter(category => category !== 'Ostatní')
+      .sort((a, b) => a.localeCompare(b));
   }, [etfs]);
 
   // Initialize filters with global leveraged ETF state

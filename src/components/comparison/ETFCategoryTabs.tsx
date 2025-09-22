@@ -16,7 +16,7 @@ const ETFCategoryTabs: React.FC<ETFCategoryTabsProps> = ({
   return (
     <div className="mb-6">
       <Tabs value={activeCategory} onValueChange={onCategoryChange}>
-        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-6">
+        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-5">
           {categories.map((category) => (
             <TabsTrigger
               key={category}

@@ -61,12 +61,10 @@ export const useETFTableLogic = (etfs: ETFListItem[]) => {
   const categories = useMemo(() => {
     const uniqueCategories = [...new Set(etfs.map(etf => etf.category).filter(Boolean))];
     
-    // Custom sort: "Ostatní" should be at the end
-    return uniqueCategories.sort((a, b) => {
-      if (a === 'Ostatní') return 1;  // Move "Ostatní" to end
-      if (b === 'Ostatní') return -1; // Move "Ostatní" to end
-      return a.localeCompare(b); // Regular alphabetical sort for others
-    });
+    // Filter out 'Ostatní' category as it only contains 1 ETF
+    return uniqueCategories
+      .filter(category => category !== 'Ostatní')
+      .sort((a, b) => a.localeCompare(b));
   }, [etfs]);
 
   const activeCategory = selectedCategory ?? (categories.includes('Akciové') ? 'Akciové' : categories[0] ?? '');
