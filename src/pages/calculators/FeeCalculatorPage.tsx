@@ -20,6 +20,7 @@ const FeeCalculatorPage: React.FC = () => {
   const [investedAmount, setInvestedAmount] = useState<number>(250000);
   const [monthlyContribution, setMonthlyContribution] = useState<number>(12500);
   const [investmentPeriod, setInvestmentPeriod] = useState<number>(20);
+  const [expectedReturn, setExpectedReturn] = useState<number>(7);
   
   // TER pro oba typy fondů
   const [etfTER, setEtfTER] = useState<number>(0.2);
@@ -40,57 +41,88 @@ const FeeCalculatorPage: React.FC = () => {
   const [feeDifference, setFeeDifference] = useState<number>(0);
 
   const calculateComparison = () => {
-    const annualReturn = 0.07; // 7% roční výnos
+    const annualReturn = expectedReturn / 100;
     const months = investmentPeriod * 12;
-    const monthlyReturn = (1 + annualReturn) ** (1/12) - 1;
+    
+    // Ochrana proti edge cases
+    if (months <= 0 || investedAmount < 0 || monthlyContribution < 0) {
+      setEtfFinalValue(0);
+      setEtfTotalFees(0);
+      setActiveFinalValue(0);
+      setActiveTotalFees(0);
+      setValueDifference(0);
+      setFeeDifference(0);
+      return;
+    }
+    
+    // Přesnější model: poplatky se strhávají průběžně během růstu
+    // Proto snížíme efektivní výnos o poplatky
+    const annualETFReturn = Math.max(-0.99, annualReturn - (etfTER / 100)); // Min -99% loss
+    const annualActiveReturn = Math.max(-0.99, annualReturn - (activeTER / 100)); // Min -99% loss
+    
+    const monthlyETFReturn = Math.pow(1 + annualETFReturn, 1/12) - 1;
+    const monthlyActiveReturn = Math.pow(1 + annualActiveReturn, 1/12) - 1;
     
     // Výpočet pro ETF
-    const monthlyETFTER = etfTER / 100 / 12;
     let etfTotalInvestedCalc = investedAmount;
     let etfPortfolioValue = investedAmount;
     let etfTotalFeesCalc = 0;
 
     for (let month = 1; month <= months; month++) {
+      // 1. Aplikovat růst na stávající hodnotu (už s odečtenými poplatky)
+      etfPortfolioValue *= (1 + monthlyETFReturn);
+      
+      // 2. Přidat měsíční příspěvek
       etfPortfolioValue += monthlyContribution;
       etfTotalInvestedCalc += monthlyContribution;
-      etfPortfolioValue *= (1 + monthlyReturn);
-      const monthlyFee = etfPortfolioValue * monthlyETFTER;
-      etfPortfolioValue -= monthlyFee;
+      
+      // 3. Spočítat teoretický poplatek pro zobrazení
+      // (ve skutečnosti už je zahrnut v nižším výnosu)
+      const monthlyFee = etfPortfolioValue * (etfTER / 100 / 12);
       etfTotalFeesCalc += monthlyFee;
     }
 
-    // Výpočet pro aktivní fond
-    const monthlyActiveTER = activeTER / 100 / 12;
+    // Výpočet pro aktivní fond - stejná logika
     let activeTotalInvestedCalc = investedAmount;
     let activePortfolioValue = investedAmount;
     let activeTotalFeesCalc = 0;
 
     for (let month = 1; month <= months; month++) {
+      // 1. Aplikovat růst na stávající hodnotu (už s odečtenými poplatky)
+      activePortfolioValue *= (1 + monthlyActiveReturn);
+      
+      // 2. Přidat měsíční příspěvek
       activePortfolioValue += monthlyContribution;
       activeTotalInvestedCalc += monthlyContribution;
-      activePortfolioValue *= (1 + monthlyReturn);
-      const monthlyFee = activePortfolioValue * monthlyActiveTER;
-      activePortfolioValue -= monthlyFee;
+      
+      // 3. Spočítat teoretický poplatek pro zobrazení
+      const monthlyFee = activePortfolioValue * (activeTER / 100 / 12);
       activeTotalFeesCalc += monthlyFee;
     }
 
-    // Nastavení výsledků
+    // Kontrola na nekonečné hodnoty a NaN
+    const safeETFValue = isFinite(etfPortfolioValue) ? etfPortfolioValue : 0;
+    const safeActiveValue = isFinite(activePortfolioValue) ? activePortfolioValue : 0;
+    const safeETFFees = isFinite(etfTotalFeesCalc) ? etfTotalFeesCalc : 0;
+    const safeActiveFees = isFinite(activeTotalFeesCalc) ? activeTotalFeesCalc : 0;
+
+    // Nastavení výsledků s ochranou proti edge cases
     setEtfTotalInvested(etfTotalInvestedCalc);
-    setEtfFinalValue(etfPortfolioValue);
-    setEtfTotalFees(etfTotalFeesCalc);
+    setEtfFinalValue(Math.max(0, safeETFValue)); // Minimálně 0
+    setEtfTotalFees(Math.max(0, safeETFFees));
     
     setActiveTotalInvested(activeTotalInvestedCalc);
-    setActiveFinalValue(activePortfolioValue);
-    setActiveTotalFees(activeTotalFeesCalc);
+    setActiveFinalValue(Math.max(0, safeActiveValue)); // Minimálně 0 
+    setActiveTotalFees(Math.max(0, safeActiveFees));
     
     // Rozdíly
-    setValueDifference(etfPortfolioValue - activePortfolioValue);
-    setFeeDifference(activeTotalFeesCalc - etfTotalFeesCalc);
+    setValueDifference(safeETFValue - safeActiveValue);
+    setFeeDifference(safeActiveFees - safeETFFees);
   };
 
   useEffect(() => {
     calculateComparison();
-  }, [investedAmount, monthlyContribution, investmentPeriod, etfTER, activeTER]);
+  }, [investedAmount, monthlyContribution, investmentPeriod, expectedReturn, etfTER, activeTER]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('cs-CZ', {
@@ -133,11 +165,11 @@ const FeeCalculatorPage: React.FC = () => {
 
 
   const brokerFees = [
-    { broker: "DEGIRO", buyFee: "24 Kč", custody: "61 Kč/rok", notes: "Core Selection ETF, 2,5€/zahraniční burza", highlight: true },
-    { broker: "XTB", buyFee: "0 Kč*", custody: "0 Kč", notes: "Do 2,4M Kč měsíčně", highlight: true },
-    { broker: "Trading 212", buyFee: "0 Kč", custody: "0 Kč", notes: "Všechny ETF zdarma", highlight: true },
-    { broker: "Interactive Brokers", buyFee: "0,05%", custody: "0 Kč", notes: "Min. 73 Kč za transakci", highlight: false },
-    { broker: "Fio e-Broker", buyFee: "200-250 Kč", custody: "0 Kč", notes: "Podle burzy a objemu", highlight: false },
+    { broker: "DEGIRO", buyFee: "0 Kč*", custody: "2,5€/rok", notes: "Core Selection ETF zdarma, zahraniční burza 2,5€/rok", highlight: true },
+    { broker: "XTB", buyFee: "0 Kč*", custody: "0 Kč", notes: "Do 100k€ měsíčně zdarma", highlight: true },
+    { broker: "Trading 212", buyFee: "0 Kč", custody: "0 Kč", notes: "Všechny ETF úplně zdarma", highlight: true },
+    { broker: "Interactive Brokers", buyFee: "0,35%", custody: "0 Kč", notes: "Min. 35 Kč, max. 1% z hodnoty", highlight: false },
+    { broker: "Fio e-Broker", buyFee: "190-390 Kč", custody: "0 Kč", notes: "Podle burzy (Frankfurt 190 Kč)", highlight: false },
     { broker: "Česká spořitelna", buyFee: "0,6%", custody: "1500 Kč/rok", notes: "Min. 242 Kč za transakci", highlight: false }
   ];
 
@@ -248,36 +280,59 @@ const FeeCalculatorPage: React.FC = () => {
               <Info className="w-5 h-5" />
               Parametry investice
             </h3>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div>
                 <Label htmlFor="initial">Počáteční investice (Kč)</Label>
                 <Input
                   id="initial"
                   type="number"
+                  min="0"
+                  max="50000000"
                   value={investedAmount}
-                  onChange={(e) => setInvestedAmount(Number(e.target.value))}
+                  onChange={(e) => setInvestedAmount(Math.max(0, Number(e.target.value)))}
                   className="mt-2"
                 />
+                <p className="text-xs text-gray-500 mt-1">0 - 50 mil. Kč</p>
               </div>
               <div>
                 <Label htmlFor="monthly">Měsíční příspěvek (Kč)</Label>
                 <Input
                   id="monthly"
                   type="number"
+                  min="0"
+                  max="1000000"
                   value={monthlyContribution}
-                  onChange={(e) => setMonthlyContribution(Number(e.target.value))}
+                  onChange={(e) => setMonthlyContribution(Math.max(0, Number(e.target.value)))}
                   className="mt-2"
                 />
+                <p className="text-xs text-gray-500 mt-1">0 - 1 mil. Kč měsíčně</p>
               </div>
               <div>
                 <Label htmlFor="period">Doba investování (roky)</Label>
                 <Input
                   id="period"
                   type="number"
+                  min="1"
+                  max="50"
                   value={investmentPeriod}
-                  onChange={(e) => setInvestmentPeriod(Number(e.target.value))}
+                  onChange={(e) => setInvestmentPeriod(Math.max(1, Math.min(50, Number(e.target.value))))}
                   className="mt-2"
                 />
+                <p className="text-xs text-gray-500 mt-1">1 - 50 let</p>
+              </div>
+              <div>
+                <Label htmlFor="return">Očekávaný výnos (%)</Label>
+                <Input
+                  id="return"
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="30"
+                  value={expectedReturn}
+                  onChange={(e) => setExpectedReturn(Math.max(0, Math.min(30, Number(e.target.value))))}
+                  className="mt-2"
+                />
+                <p className="text-xs text-gray-500 mt-1">Roční výnos před poplatky (0-30%)</p>
               </div>
             </div>
           </div>
@@ -298,8 +353,10 @@ const FeeCalculatorPage: React.FC = () => {
                     id="etf-ter"
                     type="number"
                     step="0.01"
+                    min="0"
+                    max="5"
                     value={etfTER}
-                    onChange={(e) => setEtfTER(Number(e.target.value))}
+                    onChange={(e) => setEtfTER(Math.max(0, Math.min(5, Number(e.target.value))))}
                     className="mt-2"
                   />
                   <p className="text-sm text-gray-500 mt-1">Typicky 0.1% - 0.3%</p>
@@ -340,8 +397,10 @@ const FeeCalculatorPage: React.FC = () => {
                     id="active-ter"
                     type="number"
                     step="0.01"
+                    min="0"
+                    max="5"
                     value={activeTER}
-                    onChange={(e) => setActiveTER(Number(e.target.value))}
+                    onChange={(e) => setActiveTER(Math.max(0, Math.min(5, Number(e.target.value))))}
                     className="mt-2"
                   />
                   <p className="text-sm text-gray-500 mt-1">Typicky 1.5% - 2.5%</p>
@@ -367,6 +426,23 @@ const FeeCalculatorPage: React.FC = () => {
               </CardContent>
             </Card>
           </div>
+
+          {/* Varování pro extrémní hodnoty */}
+          {(etfTER >= activeTER || expectedReturn < 3 || expectedReturn > 15) && (
+            <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+                <div>
+                  <h4 className="font-semibold text-yellow-800">Kontrola parametrů</h4>
+                  <ul className="text-sm text-yellow-700 mt-1 space-y-1">
+                    {etfTER >= activeTER && <li>• ETF má stejný nebo vyšší TER než aktivní fond</li>}
+                    {expectedReturn < 3 && <li>• Velmi nízký očekávaný výnos (pod 3%)</li>}
+                    {expectedReturn > 15 && <li>• Velmi vysoký očekávaný výnos (nad 15%)</li>}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Velký srovnávací výsledek */}
           <div className="mt-8 bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200 rounded-2xl p-8">
