@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calculator, TrendingUp, DollarSign, Calendar, Info } from 'lucide-react';
+import { Calculator, TrendingUp, DollarSign, Calendar, Info, BarChart3 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
 interface LoanData {
@@ -101,35 +101,31 @@ const ConsumerLoanCalculator: React.FC = () => {
   }, [loanData]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8">
-      <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-2 shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 text-white rounded-t-lg">
-          <div className="flex items-center gap-3">
-            <Calculator className="h-8 w-8 text-orange-400" />
-            <div>
-              <CardTitle className="text-3xl font-bold text-white">
-                Kalkulačka spotřebitelského úvěru
-              </CardTitle>
-              <p className="text-slate-300 text-lg">
-                Spočítejte si měsíční splátky a celkové náklady úvěru
-              </p>
-            </div>
+    <div className="w-full max-w-7xl mx-auto space-y-6">
+      <Card className="mb-4">
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-2">
+            <Calculator className="h-5 w-5 text-violet-600" />
+            <CardTitle className="text-lg">
+              Kalkulačka spotřebitelského úvěru
+            </CardTitle>
           </div>
+          <p className="text-sm text-gray-600">
+            Spočítejte si měsíční splátky a celkové náklady úvěru
+          </p>
         </CardHeader>
         
         <CardContent>
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-4">
             {/* Input Section */}
-            <Card className="bg-white shadow-lg border border-gray-200">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl">
-                  <DollarSign className="h-5 w-5 text-blue-600" />
-                  Parametry úvěru
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
+            <div className="border rounded-lg p-4 bg-violet-25">
+              <div className="flex items-center gap-2 mb-3">
+                <DollarSign className="h-4 w-4 text-violet-600" />
+                <h3 className="font-semibold text-sm">Parametry úvěru</h3>
+              </div>
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Výše úvěru: {loanAmount?.toLocaleString()} Kč
                   </label>
                   <input
@@ -139,7 +135,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                     step="10000"
                     value={loanAmount || 0}
                     onChange={(e) => setLoanAmount(Number(e.target.value))}
-                    className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
+                    className="w-full h-2 bg-violet-200 rounded-lg appearance-none cursor-pointer slider"
                   />
                   <div className="flex justify-between text-xs text-gray-500 mt-1">
                     <span>50 000 Kč</span>
@@ -149,7 +145,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                     type="number"
                     value={loanAmount || ''}
                     onChange={(e) => setLoanAmount(Number(e.target.value) || 0)}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center"
+                    className="mt-2 w-full px-3 py-1 border border-gray-300 rounded-md text-center h-9 text-sm"
                     placeholder="Zadejte výši úvěru"
                     min="50000"
                     max="2000000"
@@ -157,7 +153,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Úroková sazba: {interestRate}% p.a.
                   </label>
                   <input
@@ -167,7 +163,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                     step="0.1"
                     value={interestRate || 0}
                     onChange={(e) => setInterestRate(Number(e.target.value))}
-                    className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
+                    className="w-full h-2 bg-violet-200 rounded-lg appearance-none cursor-pointer slider"
                   />
                   <div className="flex justify-between text-xs text-gray-500 mt-1">
                     <span>3%</span>
@@ -177,7 +173,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                     type="number"
                     value={interestRate || ''}
                     onChange={(e) => setInterestRate(Number(e.target.value) || 0)}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center"
+                    className="mt-2 w-full px-3 py-1 border border-gray-300 rounded-md text-center h-9 text-sm"
                     placeholder="Zadejte úrokovou sazbu"
                     min="3"
                     max="25"
@@ -186,7 +182,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Doba splatnosti: {loanPeriod} let
                   </label>
                   <input
@@ -196,7 +192,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                     step="1"
                     value={loanPeriod || 0}
                     onChange={(e) => setLoanPeriod(Number(e.target.value))}
-                    className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
+                    className="w-full h-2 bg-violet-200 rounded-lg appearance-none cursor-pointer slider"
                   />
                   <div className="flex justify-between text-xs text-gray-500 mt-1">
                     <span>1 rok</span>
@@ -206,60 +202,72 @@ const ConsumerLoanCalculator: React.FC = () => {
                     type="number"
                     value={loanPeriod || ''}
                     onChange={(e) => setLoanPeriod(Math.min(10, Math.max(1, Number(e.target.value) || 0)))}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center"
+                    className="mt-2 w-full px-3 py-1 border border-gray-300 rounded-md text-center h-9 text-sm"
                     placeholder="Zadejte dobu splatnosti"
                     min="1"
                     max="10"
                   />
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Results Section */}
             {summary && (
-              <Card className="bg-white shadow-lg border border-gray-200">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-xl">
-                    <TrendingUp className="h-5 w-5 text-green-600" />
-                    Výsledky výpočtu
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                      <div className="text-sm text-blue-600 font-medium">Měsíční splátka</div>
-                      <div className="text-2xl font-bold text-blue-900">
-                        {Math.round(summary.monthlyPayment).toLocaleString()} Kč
-                      </div>
-                      <div className="text-xs text-blue-700 mt-1">Konstantní splátka každý měsíc</div>
+              <div className="border rounded-lg p-4 bg-gray-25">
+                <div className="flex items-center gap-2 mb-3">
+                  <TrendingUp className="h-4 w-4 text-violet-600" />
+                  <h3 className="font-semibold text-sm">Výsledky výpočtu</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                    <div className="text-xs text-blue-600 font-medium">Měsíční splátka</div>
+                    <div className="text-lg font-bold text-blue-900">
+                      {Math.round(summary.monthlyPayment).toLocaleString()} Kč
                     </div>
-                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                      <div className="text-sm text-gray-600 font-medium">Celkem zaplatíte</div>
-                      <div className="text-2xl font-bold text-gray-900">
-                        {Math.round(summary.totalPayments).toLocaleString()} Kč
-                      </div>
-                      <div className="text-xs text-gray-700 mt-1">Součet všech měsíčních splátek</div>
-                    </div>
-                    <div className="bg-red-50 p-4 rounded-xl border border-red-200">
-                      <div className="text-sm text-red-600 font-medium">Přeplatek úvěru</div>
-                      <div className="text-2xl font-bold text-red-900">
-                        {Math.round(summary.totalInterest).toLocaleString()} Kč
-                      </div>
-                      <div className="text-xs text-red-700 mt-1">Kolik zaplatíte bance navíc</div>
-                    </div>
-                    <div className="bg-orange-50 p-4 rounded-xl border border-orange-200">
-                      <div className="text-sm text-orange-600 font-medium">Poměr přeplatku</div>
-                      <div className="text-2xl font-bold text-orange-900">
-                        {summary.interestPercentage.toFixed(1)}%
-                      </div>
-                      <div className="text-xs text-orange-700 mt-1">% z výše úvěru navíc</div>
-                    </div>
+                    <div className="text-xs text-blue-700 mt-1">Konstantní splátka každý měsíc</div>
                   </div>
-                  
-                </CardContent>
-              </Card>
+                  <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <div className="text-xs text-gray-600 font-medium">Celkem zaplatíte</div>
+                    <div className="text-lg font-bold text-gray-900">
+                      {Math.round(summary.totalPayments).toLocaleString()} Kč
+                    </div>
+                    <div className="text-xs text-gray-700 mt-1">Součet všech měsíčních splátek</div>
+                  </div>
+                  <div className="bg-red-50 p-3 rounded-lg border border-red-200">
+                    <div className="text-xs text-red-600 font-medium">Přeplatek úvěru</div>
+                    <div className="text-lg font-bold text-red-900">
+                      {Math.round(summary.totalInterest).toLocaleString()} Kč
+                    </div>
+                    <div className="text-xs text-red-700 mt-1">Kolik zaplatíte bance navíc</div>
+                  </div>
+                  <div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
+                    <div className="text-xs text-orange-600 font-medium">Poměr přeplatku</div>
+                    <div className="text-lg font-bold text-orange-900">
+                      {summary.interestPercentage.toFixed(1)}%
+                    </div>
+                    <div className="text-xs text-orange-700 mt-1">% z výše úvěru navíc</div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
+          
+          {/* Rozbalovací předpoklady */}
+          <details className="mt-4 border border-gray-200 rounded-lg">
+            <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
+              <span className="font-semibold text-gray-900 text-sm">📋 Předpoklady kalkulačky úvěru</span>
+            </summary>
+            <div className="p-3 border-t border-gray-200">
+              <ul className="text-xs text-gray-700 space-y-1">
+                <li>• <strong>Anuitní splácení:</strong> Konstantní měsíční splátka po celou dobu úvěru</li>
+                <li>• <strong>Úroky:</strong> Počítány z aktuálního zůstatku dluhu každý měsíc</li>
+                <li>• <strong>Úmor jistiny:</strong> Postupně roste, zatímco úroky klesají</li>
+                <li>• <strong>Poplatky:</strong> Nejsou v kalkulaci zahrnuty (jednorázové i průběžné)</li>
+                <li>• <strong>Předčasné splacení:</strong> Není uvažováno v tomto výpočtu</li>
+                <li>• <strong>Bonita klienta:</strong> Ovlivňuje skutečnou úrokovou sazbu u bank</li>
+              </ul>
+            </div>
+          </details>
           
         </CardContent>
       </Card>
@@ -348,7 +356,7 @@ const ConsumerLoanCalculator: React.FC = () => {
           <Card className="shadow-lg border-0">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BarChart className="h-5 w-5 text-purple-600" />
+                <BarChart3 className="h-5 w-5 text-purple-600" />
                 Struktura měsíčních splátek
               </CardTitle>
             </CardHeader>

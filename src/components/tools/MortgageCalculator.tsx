@@ -117,33 +117,29 @@ const MortgageCalculator: React.FC = () => {
   }, [mortgageData, loanPeriod]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8">
-      <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-2 shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 text-white rounded-t-lg">
-          <div className="flex items-center gap-3">
-            <Home className="h-8 w-8 text-orange-400" />
-            <div>
-              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-300 bg-clip-text text-transparent">
-                Hypoteční kalkulačka
-              </CardTitle>
-              <p className="text-slate-300 text-lg">
-                Spočítejte si měsíční splátky hypotéky a celkové náklady na bydlení až na 30 let
-              </p>
-            </div>
+    <div className="w-full max-w-7xl mx-auto space-y-6">
+      <Card className="mb-4">
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-2">
+            <Home className="h-5 w-5 text-violet-600" />
+            <CardTitle className="text-lg">
+              Hypoteční kalkulačka
+            </CardTitle>
           </div>
+          <p className="text-sm text-gray-600">
+            Spočítejte si měsíční splátky hypotéky a celkové náklady na bydlení
+          </p>
         </CardHeader>
         
         <CardContent>
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-4">
             {/* Input Section */}
-            <Card className="bg-white shadow-lg border-0">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl">
-                  <Home className="h-5 w-5 text-green-600" />
-                  Parametry hypotéky
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
+            <div className="border rounded-lg p-4 bg-violet-25">
+              <div className="flex items-center gap-2 mb-3">
+                <Home className="h-4 w-4 text-violet-600" />
+                <h3 className="font-semibold text-sm">Parametry hypotéky</h3>
+              </div>
+              <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Hodnota nemovitosti: {propertyValue?.toLocaleString()} Kč
@@ -308,8 +304,8 @@ const MortgageCalculator: React.FC = () => {
                     max="30"
                   />
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Results Section */}
             {summary && loanAmount > 0 && (

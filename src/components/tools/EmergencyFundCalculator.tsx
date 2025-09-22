@@ -84,33 +84,29 @@ const EmergencyFundCalculator: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-8">
-      <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-2 shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 text-white rounded-t-lg">
-          <div className="flex items-center gap-3">
-            <Shield className="h-8 w-8 text-emerald-400" />
-            <div>
-              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
-                Kalkulačka nouzové rezervy
-              </CardTitle>
-              <CardDescription className="text-slate-300 text-lg">
-                Spočítejte si optimální velikost nouzové rezervy podle vaší situace
-              </CardDescription>
-            </div>
+    <div className="space-y-6">
+      <Card className="mb-4">
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-2">
+            <Shield className="h-5 w-5 text-violet-600" />
+            <CardTitle className="text-lg">
+              Kalkulačka nouzové rezervy
+            </CardTitle>
           </div>
+          <CardDescription className="text-sm">
+            Spočítejte si optimální velikost nouzové rezervy podle vaší situace
+          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent>
           {/* Základní finanční údaje */}
-          <Card className="bg-blue-50">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Banknote className="h-5 w-5" />
-                Finanční situace
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid md:grid-cols-2 gap-4">
+          <div className="border rounded-lg p-4 bg-violet-25 mb-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Banknote className="h-4 w-4 text-violet-600" />
+              <h3 className="font-semibold text-sm">Finanční situace</h3>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
-                <Label htmlFor="monthlyExpenses">Měsíční nezbytné výdaje (Kč)</Label>
+                <Label htmlFor="monthlyExpenses" className="text-sm">Měsíční výdaje (Kč)</Label>
                 <Input
                   id="monthlyExpenses"
                   type="number"
@@ -118,13 +114,11 @@ const EmergencyFundCalculator: React.FC = () => {
                   onChange={(e) => setMonthlyExpenses(Number(e.target.value) || 0)}
                   min="10000"
                   step="5000"
+                  className="mt-1 h-9"
                 />
-                <p className="text-xs text-gray-600 mt-1">
-                  Nájem, jídlo, doprava, pojištění - jen nutné výdaje
-                </p>
               </div>
               <div>
-                <Label htmlFor="familySize">Kolik lidí finančně podporujete</Label>
+                <Label htmlFor="familySize" className="text-sm">Počet závislých</Label>
                 <Input
                   id="familySize"
                   type="number"
@@ -132,13 +126,11 @@ const EmergencyFundCalculator: React.FC = () => {
                   onChange={(e) => setFamilySize(Number(e.target.value) || 0)}
                   min="1"
                   max="10"
+                  className="mt-1 h-9"
                 />
-                <p className="text-xs text-gray-600 mt-1">
-                  Kolik lidí závisí na vašem příjmu
-                </p>
               </div>
               <div>
-                <Label htmlFor="currentSavings">Současné úspory (Kč)</Label>
+                <Label htmlFor="currentSavings" className="text-sm">Současné úspory (Kč)</Label>
                 <Input
                   id="currentSavings"
                   type="number"
@@ -146,10 +138,11 @@ const EmergencyFundCalculator: React.FC = () => {
                   onChange={(e) => setCurrentSavings(Number(e.target.value) || 0)}
                   min="0"
                   step="10000"
+                  className="mt-1 h-9"
                 />
               </div>
               <div>
-                <Label htmlFor="monthlySavingCapacity">Měsíční kapacita spoření (Kč)</Label>
+                <Label htmlFor="monthlySavingCapacity" className="text-sm">Měsíční spoření (Kč)</Label>
                 <Input
                   id="monthlySavingCapacity"
                   type="number"
@@ -157,82 +150,80 @@ const EmergencyFundCalculator: React.FC = () => {
                   onChange={(e) => setMonthlySavingCapacity(Number(e.target.value) || 0)}
                   min="0"
                   step="1000"
+                  className="mt-1 h-9"
                 />
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Rizikové faktory */}
-          <Card className="bg-orange-50">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5" />
-                Vaše riziková situace
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="border rounded-lg p-4 bg-gray-25 mb-4">
+            <div className="flex items-center gap-2 mb-3">
+              <AlertTriangle className="h-4 w-4 text-violet-600" />
+              <h3 className="font-semibold text-sm">Riziková situace</h3>
+            </div>
+            <div className="space-y-3">
               {/* Základní faktory v řadě */}
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 <div>
-                  <Label htmlFor="jobStability">Stabilita zaměstnání</Label>
+                  <Label htmlFor="jobStability" className="text-sm">Stabilita zaměstnání</Label>
                   <Select value={jobStability} onValueChange={(value: 'stable' | 'moderate' | 'unstable') => setJobStability(value)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-9">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="stable">🟢 Stabilní (státní, velké firmy)</SelectItem>
-                      <SelectItem value="moderate">🟡 Střední (běžné zaměstnání)</SelectItem>
-                      <SelectItem value="unstable">🔴 Rizikové (OSVČ, startup)</SelectItem>
+                      <SelectItem value="stable">🟢 Stabilní</SelectItem>
+                      <SelectItem value="moderate">🟡 Střední</SelectItem>
+                      <SelectItem value="unstable">🔴 Rizikové</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-
                 <div>
-                  <Label>Typ smlouvy</Label>
+                  <Label className="text-sm">Typ smlouvy</Label>
                   <Select value={contractType} onValueChange={(value) => setContractType(value as any)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-9">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="permanent">✅ Na dobu neurčitou</SelectItem>
-                      <SelectItem value="fixed_term">⏰ Na dobu určitou</SelectItem>
-                      <SelectItem value="freelance">📝 Dohody (DPP/DPČ)</SelectItem>
+                      <SelectItem value="permanent">✅ Neurčitou</SelectItem>
+                      <SelectItem value="fixed_term">⏰ Určitou</SelectItem>
+                      <SelectItem value="freelance">📝 Dohody</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <Label>Věk</Label>
+                  <Label className="text-sm">Věk</Label>
                   <Select value={ageGroup} onValueChange={(value) => setAgeGroup(value as any)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-9">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="young">👶 20-35 let</SelectItem>
-                      <SelectItem value="middle">👨 36-50 let</SelectItem>
-                      <SelectItem value="senior">👴 50+ let</SelectItem>
+                      <SelectItem value="young">👶 20-35</SelectItem>
+                      <SelectItem value="middle">👨 36-50</SelectItem>
+                      <SelectItem value="senior">👴 50+</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <Label>Vzdělání</Label>
+                  <Label className="text-sm">Vzdělání</Label>
                   <Select value={education} onValueChange={(value) => setEducation(value as any)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-9">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="university">🎓 Vysokoškolské</SelectItem>
-                      <SelectItem value="high_school">📚 Středoškolské</SelectItem>
-                      <SelectItem value="basic">📝 Základní</SelectItem>
+                      <SelectItem value="university">🎓 VŠ</SelectItem>
+                      <SelectItem value="high_school">📚 SŠ</SelectItem>
+                      <SelectItem value="basic">📝 ZŠ</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               {/* Checkboxy */}
-              <div className="grid md:grid-cols-2 gap-4 pt-4 border-t">
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t">
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -241,7 +232,7 @@ const EmergencyFundCalculator: React.FC = () => {
                     onChange={(e) => setHasSecondIncome(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="hasSecondIncome">💰 Druhý příjem v domácnosti</Label>
+                  <Label htmlFor="hasSecondIncome" className="text-sm">💰 Druhý příjem</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <input
@@ -251,18 +242,18 @@ const EmergencyFundCalculator: React.FC = () => {
                     onChange={(e) => setHasDebt(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="hasDebt">🏠 Mám dluhy (hypotéka, úvěry)</Label>
+                  <Label htmlFor="hasDebt" className="text-sm">🏠 Mám dluhy</Label>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           <Button 
             onClick={handleCalculate} 
-            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover-scale" 
-            size="lg"
+            className="w-full mb-4" 
+            size="sm"
           >
-            <Shield className="mr-2 h-5 w-5" />
+            <Shield className="mr-2 h-4 w-4" />
             Vypočítat nouzovou rezervu
           </Button>
 
@@ -349,24 +340,24 @@ const EmergencyFundCalculator: React.FC = () => {
           )}
 
           {/* Rozbalovací předpoklady */}
-          <details className="mt-6 border border-green-200 rounded-lg">
-            <summary className="p-4 bg-green-50 cursor-pointer hover:bg-green-100 transition-colors rounded-lg">
-              <span className="font-semibold text-green-900">📋 Předpoklady kalkulačky nouzové rezervy (klikněte pro rozbalení)</span>
+          <details className="border border-gray-200 rounded-lg">
+            <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
+              <span className="font-semibold text-gray-900 text-sm">📋 Předpoklady kalkulačky nouzové rezervy</span>
             </summary>
-            <div className="p-4 border-t border-green-200">
-              <h4 className="font-semibold mb-3 text-green-900">📊 Výpočet velikosti rezervy</h4>
-              <div className="grid md:grid-cols-2 gap-4 mb-4 text-sm">
+            <div className="p-3 border-t border-gray-200">
+              <h4 className="font-semibold mb-2 text-gray-900 text-sm">📊 Výpočet velikosti rezervy</h4>
+              <div className="grid md:grid-cols-2 gap-3 mb-3 text-xs">
                 <div>
-                  <h5 className="font-semibold mb-2">Základní velikost podle stability:</h5>
-                  <ul className="space-y-1 text-gray-700">
+                  <h5 className="font-semibold mb-1">Základní velikost podle stability:</h5>
+                  <ul className="space-y-0.5 text-gray-700">
                     <li>• Stabilní zaměstnání: 3 měsíce</li>
                     <li>• Středně stabilní: 6 měsíců</li>
                     <li>• Nestabilní (OSVČ, startup): 9 měsíců</li>
                   </ul>
                 </div>
                 <div>
-                  <h5 className="font-semibold mb-2">Rizikové úpravy:</h5>
-                  <ul className="space-y-1 text-gray-700">
+                  <h5 className="font-semibold mb-1">Rizikové úpravy:</h5>
+                  <ul className="space-y-0.5 text-gray-700">
                     <li>• Bez druhého příjmu: +50%</li>
                     <li>• Bez zdravotního pojištění: +100%</li>
                     <li>• Dluhy (hypotéka): +50%</li>
@@ -375,11 +366,11 @@ const EmergencyFundCalculator: React.FC = () => {
                 </div>
               </div>
               
-              <h4 className="font-semibold mb-3 text-green-900">💰 Doporučené umístění rezervy (2025)</h4>
-              <div className="grid md:grid-cols-2 gap-4 mb-4 text-sm">
+              <h4 className="font-semibold mb-2 text-gray-900 text-sm">💰 Doporučené umístění rezervy (2025)</h4>
+              <div className="grid md:grid-cols-2 gap-3 mb-3 text-xs">
                 <div>
-                  <h5 className="font-semibold mb-2">Spořicí účty CZK (70%):</h5>
-                  <ul className="space-y-1 text-gray-700">
+                  <h5 className="font-semibold mb-1">Spořicí účty CZK (70%):</h5>
+                  <ul className="space-y-0.5 text-gray-700">
                     <li>• Výnos: ~3,8% p.a. (mBank 4,01%)</li>
                     <li>• Okamžitá dostupnost</li>
                     <li>• Pojištěno do 100k€</li>
@@ -387,8 +378,8 @@ const EmergencyFundCalculator: React.FC = () => {
                   </ul>
                 </div>
                 <div>
-                  <h5 className="font-semibold mb-2">Termínované vklady CZK (30%):</h5>
-                  <ul className="space-y-1 text-gray-700">
+                  <h5 className="font-semibold mb-1">Termínované vklady CZK (30%):</h5>
+                  <ul className="space-y-0.5 text-gray-700">
                     <li>• Výnos: ~2,8% p.a. (Fio 3M 2,70%)</li>
                     <li>• Splatnost 3-6 měsíců</li>
                     <li>• Garance + pojištění</li>
@@ -397,8 +388,8 @@ const EmergencyFundCalculator: React.FC = () => {
                 </div>
               </div>
               
-              <h4 className="font-semibold mb-3 text-green-900">⚙️ Zjednodušení a omezení</h4>
-              <ul className="text-sm text-gray-700 space-y-2">
+              <h4 className="font-semibold mb-2 text-gray-900 text-sm">⚙️ Zjednodušení a omezení</h4>
+              <ul className="text-xs text-gray-700 space-y-1">
                 <li>• <strong>Maximální rezerva:</strong> Omezeno na 12 měsíců (i když výpočet dává více)</li>
                 <li>• <strong>Minimální rezerva:</strong> Minimálně 3 měsíce ve všech případech</li>
                 <li>• <strong>Výnosy:</strong> Aktuální sazby k roku 2025, mohou se měnit</li>

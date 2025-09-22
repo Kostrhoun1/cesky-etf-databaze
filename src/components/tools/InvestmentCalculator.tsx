@@ -34,20 +34,18 @@ const InvestmentCalculator: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8">
-      <Card className="bg-gradient-to-br from-slate-50 to-gray-100 border-2 shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 text-white rounded-t-lg">
-          <div className="flex items-center gap-3">
-            <Calculator className="h-8 w-8 text-blue-400" />
-            <div>
-              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
-                Investiční kalkulačka
-              </CardTitle>
-              <CardDescription className="text-slate-300 text-lg">
-                Spočítejte si růst vašich investic s pravidelným investováním a zohledněním daní
-              </CardDescription>
-            </div>
+    <div className="space-y-6">
+      <Card className="mb-4">
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-2">
+            <Calculator className="h-5 w-5 text-violet-600" />
+            <CardTitle className="text-lg">
+              Investiční kalkulačka
+            </CardTitle>
           </div>
+          <CardDescription className="text-sm">
+            Spočítejte si růst vašich investic s pravidelným investováním a zohledněním daní
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <InvestmentCalculatorForm
@@ -71,12 +69,12 @@ const InvestmentCalculator: React.FC = () => {
           )}
 
           {/* Rozbalovací předpoklady */}
-          <details className="mt-6 border border-blue-200 rounded-lg">
-            <summary className="p-4 bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors rounded-lg">
-              <span className="font-semibold text-blue-900">📋 Předpoklady kalkulačky (klikněte pro rozbalení)</span>
+          <details className="mt-4 border border-gray-200 rounded-lg">
+            <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
+              <span className="font-semibold text-gray-900 text-sm">📋 Předpoklady kalkulačky</span>
             </summary>
-            <div className="p-4 border-t border-blue-200">
-              <ul className="text-sm text-gray-700 space-y-2">
+            <div className="p-3 border-t border-gray-200">
+              <ul className="text-xs text-gray-700 space-y-1">
                 <li>• <strong>Měsíční investice:</strong> Investice probíhá vždy 1. den měsíce s okamžitou aplikací výnosu</li>
                 <li>• <strong>Roční investice:</strong> Investice probíhá vždy 1. ledna s aplikací výnosu po celý rok</li>
                 <li>• <strong>Složené úročení:</strong> Výnosy se reinvestují a dále zhodnocují</li>
