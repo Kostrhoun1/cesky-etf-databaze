@@ -45,10 +45,12 @@ const NetSalaryCalculator: React.FC = () => {
         <CardContent>
           <div className="grid md:grid-cols-2 gap-4 mb-4">
             {/* Základní údaje */}
-            <div className="border rounded-lg p-4 bg-violet-25">
-              <div className="flex items-center gap-2 mb-3">
-                <Banknote className="h-4 w-4 text-violet-600" />
-                <h3 className="font-semibold text-sm">Základní údaje</h3>
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.2s]">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
+                  <Banknote className="h-5 w-5 text-violet-700" />
+                </div>
+                <h3 className="text-base font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Základní údaje</h3>
               </div>
               <div>
                 <Label htmlFor="grossSalary" className="text-sm">Hrubá mzda (Kč/měsíc)</Label>
@@ -68,10 +70,12 @@ const NetSalaryCalculator: React.FC = () => {
             </div>
 
             {/* Slevy na dani a pojištění */}
-            <div className="border rounded-lg p-4 bg-gray-25">
-              <div className="flex items-center gap-2 mb-3">
-                <Users className="h-4 w-4 text-violet-600" />
-                <h3 className="font-semibold text-sm">Slevy a pojištění</h3>
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.4s]">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
+                  <Users className="h-5 w-5 text-emerald-700" />
+                </div>
+                <h3 className="text-base font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Slevy a pojištění</h3>
               </div>
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
@@ -122,7 +126,8 @@ const NetSalaryCalculator: React.FC = () => {
             </div>
           </div>
 
-          <Button onClick={handleCalculate} className="w-full mb-4">
+          <Button onClick={handleCalculate} className="w-full hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 mb-4 animate-fade-in [animation-delay:0.6s]">
+            <Calculator className="mr-2 h-5 w-5" />
             Vypočítat čistou mzdu
           </Button>
 
