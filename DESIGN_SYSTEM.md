@@ -409,6 +409,54 @@ margin={{ top: 10, right: 20, left: 100, bottom: 60 }}
 </defs>
 ```
 
+### Interaktivní LineChart komponenty
+**Kdy použít:** Pro optimalizační grafy, trendy, simulace
+```tsx
+<div className="border-transparent shadow-none hover:shadow-xl transition-all duration-300 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.4s]">
+  <div className="flex items-center gap-3 mb-6">
+    <div className="flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 group-hover:bg-emerald-200 transition-colors hover-scale">
+      <span className="text-2xl">📈</span>
+    </div>
+    <h2 className="text-2xl font-bold text-gray-900 group-hover:text-emerald-800 transition-colors">
+      Interaktivní optimalizace
+    </h2>
+  </div>
+  <div className="rounded-xl p-4">
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={data} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" strokeOpacity={0.6} />
+        <XAxis 
+          dataKey="savings" 
+          tick={{ fontSize: 12, fill: '#64748b' }}
+          axisLine={{ stroke: '#cbd5e1', strokeWidth: 2 }}
+        />
+        <YAxis 
+          tick={{ fontSize: 12, fill: '#64748b' }}
+          axisLine={{ stroke: '#cbd5e1', strokeWidth: 2 }}
+        />
+        <Tooltip 
+          contentStyle={{
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            border: 'none',
+            borderRadius: '12px',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+            fontSize: '14px'
+          }}
+        />
+        <Line 
+          type="monotone" 
+          dataKey="fireAge" 
+          stroke="#10b981" 
+          strokeWidth={3}
+          dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+          activeDot={{ r: 6, stroke: '#10b981', strokeWidth: 2 }}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  </div>
+</div>
+```
+
 ---
 
 **🎯 Cíl:** Každá stránka by měla vypadat jako součást jedné konzistentní aplikace používající tento design system.
@@ -424,3 +472,5 @@ Pro novou stránku/komponentu zkontroluj:
 - [ ] Ikony jsou v kruhu s hover efekty?
 - [ ] Grafy mají správné margins a legendu?
 - [ ] Tooltip má moderní styling?
+- [ ] Interaktivní LineChart grafy mají emerald barvy?
+- [ ] Používáš height={300} pro optimalizační grafy?
