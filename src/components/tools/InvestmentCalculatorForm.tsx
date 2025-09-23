@@ -45,7 +45,7 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
             <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
               <TrendingUp className="h-5 w-5 text-violet-700" />
             </div>
-            <h3 className="text-base font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Investiční parametry</h3>
+            <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Investiční parametry</h3>
           </div>
           <div className="space-y-3">
             <div>
@@ -91,7 +91,7 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
             <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
               <Percent className="h-5 w-5 text-emerald-700" />
             </div>
-            <h3 className="text-base font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Parametry výnosu a času</h3>
+            <h3 className="text-xl font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Parametry výnosu a času</h3>
           </div>
           <div className="space-y-3">
             <div>

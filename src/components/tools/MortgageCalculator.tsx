@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Home, TrendingUp, DollarSign, Calendar, Info, PiggyBank } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Home, TrendingUp, DollarSign, Calendar, Info, PiggyBank, Calculator, Percent } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
 interface MortgageData {
@@ -122,7 +124,7 @@ const MortgageCalculator: React.FC = () => {
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <Home className="h-5 w-5 text-violet-600" />
-            <CardTitle className="text-lg">
+            <CardTitle className="text-2xl">
               Hypoteční kalkulačka
             </CardTitle>
           </div>
@@ -139,275 +141,182 @@ const MortgageCalculator: React.FC = () => {
                 <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
                   <Home className="h-5 w-5 text-violet-700" />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Parametry hypotéky</h3>
+                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Parametry hypotéky</h3>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div>
-                  <label className="block font-medium text-gray-700 mb-2">
-                    Hodnota nemovitosti: {propertyValue?.toLocaleString()} Kč
-                  </label>
-                  <input
-                    type="range"
-                    min="1000000"
-                    max="15000000"
-                    step="100000"
-                    value={propertyValue || 0}
+                  <Label htmlFor="propertyValue">Hodnota nemovitosti (Kč)</Label>
+                  <Input
+                    id="propertyValue"
+                    type="number"
+                    value={propertyValue || ''}
                     onChange={(e) => {
-                      const newValue = Number(e.target.value);
+                      const newValue = Number(e.target.value) || 0;
                       setPropertyValue(newValue);
                       // Ensure loan amount doesn't exceed property value
                       if (loanAmount > newValue) {
                         setLoanAmount(Math.round(newValue * 0.8));
                       }
                     }}
-                    className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer slider"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>1 mil. Kč</span>
-                    <span>15 mil. Kč</span>
-                  </div>
-                  <input
-                    type="number"
-                    value={propertyValue || ''}
-                    onChange={(e) => {
-                      const newValue = Number(e.target.value) || 0;
-                      setPropertyValue(newValue);
-                      if (loanAmount > newValue) {
-                        setLoanAmount(Math.round(newValue * 0.8));
-                      }
-                    }}
-                    className="mt-2 w-full px-3 py-2 h-10 border border-gray-300 rounded-md text-center"
-                    placeholder="Zadejte hodnotu nemovitosti"
+                    placeholder="4 500 000"
                     min="1000000"
-                    max="15000000"
+                    max="20000000"
+                    step="100000"
+                    className="h-10"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-gray-700 mb-2">
-                    Výše úvěru: {loanAmount?.toLocaleString()} Kč (LTV: {ltv.toFixed(1)}%)
-                  </label>
-                  <input
-                    type="range"
+                  <Label htmlFor="loanAmount">Výše úvěru (Kč)</Label>
+                  <Input
+                    id="loanAmount"
+                    type="number"
+                    value={loanAmount || ''}
+                    onChange={(e) => setLoanAmount(Number(e.target.value) || 0)}
+                    placeholder="3 600 000"
                     min="0"
                     max={propertyValue}
                     step="50000"
-                    value={loanAmount || 0}
-                    onChange={(e) => setLoanAmount(Number(e.target.value))}
-                    className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
+                    className="h-10"
                   />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>0 Kč</span>
-                    <span>{(propertyValue / 1000000).toFixed(1)} mil. Kč</span>
-                  </div>
-                  <input
-                    type="number"
-                    value={loanAmount || ''}
-                    onChange={(e) => {
-                      const inputValue = e.target.value;
-                      if (inputValue === '') {
-                        setLoanAmount(0);
-                      } else {
-                        const value = Number(inputValue);
-                        setLoanAmount(Math.min(propertyValue, Math.max(0, value)));
-                      }
-                    }}
-                    className="mt-2 w-full px-3 py-2 h-10 border border-gray-300 rounded-md text-center"
-                    placeholder="Zadejte výši úvěru"
-                    min="0"
-                    max={propertyValue}
-                  />
-                  <div className={`mt-2 text-sm p-3 rounded-lg ${
-                    downPayment >= 0 
-                      ? 'text-gray-600 bg-green-50' 
-                      : 'text-red-600 bg-red-50 border border-red-200'
-                  }`}>
-                    <strong>
-                      Vlastní kapitál: {downPayment.toLocaleString()} Kč ({downPaymentPercentage.toFixed(1)}%)
-                      {downPayment < 0 && ' ⚠️'}
-                    </strong>
-                  </div>
-                  
-                  {/* LTV upozornění */}
-                  {ltv > 90 && (
-                    <div className="mt-2 bg-red-50 border border-red-200 rounded-lg p-3">
-                      <div className="flex items-start gap-2">
-                        <div className="text-red-600 text-sm">
-                          <strong>⚠️ LTV nad 90%:</strong> Banky typicky nad 90% LTV nepůjčují. Zvažte navýšení vlastního kapitálu.
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {ltv > 80 && ltv <= 90 && (
-                    <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                      <div className="flex items-start gap-2">
-                        <div className="text-yellow-700 text-sm">
-                          <strong>💡 LTV nad 80%:</strong> Banky typicky půjčují nad 80% pouze lidem mladším 35 let. Možné vyšší úroky.
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block font-medium text-gray-700 mb-2">
-                    Úroková sazba: {interestRate}% p.a.
-                  </label>
-                  <input
-                    type="range"
-                    min="2"
-                    max="12"
-                    step="0.1"
-                    value={interestRate || 0}
-                    onChange={(e) => setInterestRate(Number(e.target.value))}
-                    className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer slider"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>2%</span>
-                    <span>12%</span>
-                  </div>
-                  <input
-                    type="number"
-                    value={interestRate || ''}
-                    onChange={(e) => setInterestRate(Number(e.target.value) || 0)}
-                    className="mt-2 w-full px-3 py-2 h-10 border border-gray-300 rounded-md text-center"
-                    placeholder="Zadejte úrokovou sazbu"
-                    min="2"
-                    max="12"
-                    step="0.1"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-medium text-gray-700 mb-2">
-                    Doba splatnosti: {loanPeriod} let
-                  </label>
-                  <input
-                    type="range"
-                    min="5"
-                    max="30"
-                    step="1"
-                    value={loanPeriod || 0}
-                    onChange={(e) => setLoanPeriod(Number(e.target.value))}
-                    className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer slider"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>5 let</span>
-                    <span>30 let</span>
-                  </div>
-                  <input
-                    type="number"
-                    value={loanPeriod || ''}
-                    onChange={(e) => setLoanPeriod(Math.min(30, Math.max(5, Number(e.target.value) || 0)))}
-                    className="mt-2 w-full px-3 py-2 h-10 border border-gray-300 rounded-md text-center"
-                    placeholder="Zadejte dobu splatnosti"
-                    min="5"
-                    max="30"
-                  />
+                  <p className="text-xs text-gray-600 mt-1">
+                    LTV: {ltv.toFixed(1)}% | Vlastní kapitál: {downPayment.toLocaleString()} Kč
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Results Section */}
-            {summary && loanAmount > 0 && (
-              <Card className="bg-white shadow-lg border-0">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-xl">
-                    <TrendingUp className="h-5 w-5 text-blue-600" />
-                    Výsledky výpočtu
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div className="bg-green-50 p-4 rounded-xl border border-green-200">
-                      <div className="text-sm text-green-600 font-medium">Měsíční splátka</div>
-                      <div className="text-3xl font-bold text-green-900">
-                        {Math.round(summary.monthlyPayment).toLocaleString()} Kč
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 gap-4">
-                      <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                        <div className="text-sm text-blue-600 font-medium">Celkem zaplatíte bance</div>
-                        <div className="text-2xl font-bold text-blue-900">
-                          {Math.round(summary.totalPayments).toLocaleString()} Kč
-                        </div>
-                        <div className="text-xs text-blue-700 mt-1">
-                          Všechny splátky za celou dobu úvěru
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-red-50 p-4 rounded-xl border border-red-200">
-                        <div className="text-sm text-red-600 font-medium">Z toho úroky</div>
-                        <div className="text-xl font-bold text-red-900">
-                          {Math.round(summary.totalInterest).toLocaleString()} Kč
-                        </div>
-                        <div className="text-xs text-red-700 mt-1">
-                          Náklady na půjčku
-                        </div>
-                      </div>
-                      <div className="bg-orange-50 p-4 rounded-xl border border-orange-200">
-                        <div className="text-sm text-orange-600 font-medium">Přeplatek úvěru</div>
-                        <div className="text-xl font-bold text-orange-900">
-                          {summary.interestPercentage.toFixed(1)}%
-                        </div>
-                        <div className="text-xs text-orange-700 mt-1">
-                          Navíc k půjčené částce
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Rozbalovací předpoklady */}
-                  <details className="mt-6 border border-orange-200 rounded-lg">
-                    <summary className="p-4 bg-orange-50 cursor-pointer hover:bg-orange-100 transition-colors rounded-lg">
-                      <span className="font-semibold text-orange-900">📋 Předpoklady hypoteční kalkulačky (klikněte pro rozbalení)</span>
-                    </summary>
-                    <div className="p-4 border-t border-orange-200">
-                      <div className="grid md:grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <h4 className="font-semibold mb-2 text-orange-900">Výpočet splátek:</h4>
-                          <ul className="space-y-1 text-gray-700">
-                            <li>• <strong>Anuita:</strong> Rovnoměrné měsíční splátky</li>
-                            <li>• <strong>Úročení:</strong> Měsíční kapitalizace úroků</li>
-                            <li>• <strong>Splátka:</strong> Úrok + umořování jistiny</li>
-                            <li>• <strong>Fixace:</strong> Stálá úroková sazba po celou dobu</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold mb-2 text-orange-900">Omezení a upozornění:</h4>
-                          <ul className="space-y-1 text-gray-700">
-                            <li>• <strong>Orientační výpočet:</strong> Reálné podmínky se liší</li>
-                            <li>• <strong>Schválení úvěru:</strong> Závisí na bonnitě klienta</li>
-                            <li>• <strong>Změny sazeb:</strong> Při refixaci se mění</li>
-                            <li>• <strong>Dodatečné náklady:</strong> Pojištění, poplatky, daně</li>
-                            <li>• <strong>Individuální nabídka:</strong> Každá banka má jiné podmínky</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold mb-2 text-orange-900">Předčasné splacení:</h4>
-                          <ul className="space-y-1 text-gray-700">
-                            <li>• <strong>Kdykoli možné:</strong> Hypotéku můžete doplatit kdykoli</li>
-                            <li>• <strong>Zdarma na konci fixace:</strong> Bez poplatků při refixaci</li>
-                            <li>• <strong>Zdarma v těžkých situacích:</strong> Nemoc, invalidita apod.</li>
-                            <li>• <strong>Jinak s poplatkem:</strong> Banka má nárok na úhradu nákladů</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </details>
-                </CardContent>
-              </Card>
-            )}
+            {/* Parametry úvěru */}
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.4s]">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
+                  <Percent className="h-5 w-5 text-emerald-700" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Parametry úvěru</h3>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <Label htmlFor="interestRate">Úroková sazba (%)</Label>
+                  <Input
+                    id="interestRate"
+                    type="number"
+                    value={interestRate || ''}
+                    onChange={(e) => setInterestRate(Number(e.target.value) || 0)}
+                    placeholder="5.5"
+                    min="1"
+                    max="15"
+                    step="0.1"
+                    className="h-10"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="loanPeriod">Doba splatnosti (roky)</Label>
+                  <Input
+                    id="loanPeriod"
+                    type="number"
+                    value={loanPeriod || ''}
+                    onChange={(e) => setLoanPeriod(Number(e.target.value) || 0)}
+                    placeholder="25"
+                    min="5"
+                    max="40"
+                    step="1"
+                    className="h-10"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
+
+          <Button 
+            onClick={() => {}} 
+            className="w-full hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 mt-4 animate-fade-in [animation-delay:0.6s]"
+          >
+            <Calculator className="mr-2 h-5 w-5" />
+            Spočítat hypotéku
+          </Button>
+          
+          {/* Rozbalovací předpoklady */}
+          <details className="mt-6 border border-orange-200 rounded-lg">
+            <summary className="p-4 bg-orange-50 cursor-pointer hover:bg-orange-100 transition-colors rounded-lg">
+              <span className="font-semibold text-orange-900">📋 Předpoklady hypoteční kalkulačky (klikněte pro rozbalení)</span>
+            </summary>
+            <div className="p-4 border-t border-orange-200">
+              <div className="grid md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <h4 className="font-semibold mb-2 text-orange-900">Výpočet splátek:</h4>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• <strong>Anuita:</strong> Rovnoměrné měsíční splátky</li>
+                    <li>• <strong>Úročení:</strong> Měsíční kapitalizace úroků</li>
+                    <li>• <strong>Splátka:</strong> Úrok + umořování jistiny</li>
+                    <li>• <strong>Fixace:</strong> Stálá úroková sazba po celou dobu</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2 text-orange-900">Omezení a upozornění:</h4>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• <strong>Orientační výpočet:</strong> Reálné podmínky se liší</li>
+                    <li>• <strong>Schválení úvěru:</strong> Závisí na bonnitě klienta</li>
+                    <li>• <strong>Změny sazeb:</strong> Při refixaci se mění</li>
+                    <li>• <strong>Dodatečné náklady:</strong> Pojištění, poplatky, daně</li>
+                    <li>• <strong>Individuální nabídka:</strong> Každá banka má jiné podmínky</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2 text-orange-900">Předčasné splacení:</h4>
+                  <ul className="space-y-1 text-gray-700">
+                    <li>• <strong>Kdykoli možné:</strong> Hypotéku můžete doplatit kdykoli</li>
+                    <li>• <strong>Zdarma na konci fixace:</strong> Bez poplatků při refixaci</li>
+                    <li>• <strong>Zdarma v těžkých situacích:</strong> Nemoc, invalidita apod.</li>
+                    <li>• <strong>Jinak s poplatkem:</strong> Banka má nárok na úhradu nákladů</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </details>
         </CardContent>
       </Card>
 
       {summary && loanAmount > 0 && (
         <>
+          {/* Results Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white">
+              <CardContent className="p-6 text-center">
+                <div className="mb-4 flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 mx-auto group-hover:bg-emerald-200 transition-colors hover-scale">
+                  <DollarSign className="h-6 w-6 text-emerald-700" />
+                </div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-emerald-800 transition-colors">Měsíční splátka</h4>
+                <p className="text-2xl font-bold text-emerald-600">
+                  {Math.round(summary.monthlyPayment).toLocaleString()} Kč
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white">
+              <CardContent className="p-6 text-center">
+                <div className="mb-4 flex items-center justify-center rounded-full bg-blue-100 w-12 h-12 mx-auto group-hover:bg-blue-200 transition-colors hover-scale">
+                  <Calculator className="h-6 w-6 text-blue-700" />
+                </div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-800 transition-colors">Celkem zaplatíte</h4>
+                <p className="text-2xl font-bold text-blue-600">
+                  {Math.round(summary.totalPayments).toLocaleString()} Kč
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white">
+              <CardContent className="p-6 text-center">
+                <div className="mb-4 flex items-center justify-center rounded-full bg-red-100 w-12 h-12 mx-auto group-hover:bg-red-200 transition-colors hover-scale">
+                  <Percent className="h-6 w-6 text-red-700" />
+                </div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-red-800 transition-colors">Celkem úroky</h4>
+                <p className="text-2xl font-bold text-red-600">
+                  {Math.round(summary.totalInterest).toLocaleString()} Kč
+                </p>
+              </CardContent>
+            </Card>
+          </div>
           {/* Charts Section */}
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Debt Progress Chart */}

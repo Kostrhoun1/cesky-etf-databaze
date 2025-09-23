@@ -39,7 +39,7 @@ const InvestmentCalculator: React.FC = () => {
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <Calculator className="h-5 w-5 text-violet-600" />
-            <CardTitle className="text-lg">
+            <CardTitle className="text-2xl">
               Investiční kalkulačka
             </CardTitle>
           </div>

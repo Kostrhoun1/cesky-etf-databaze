@@ -233,9 +233,9 @@ const InvestmentCalculatorPage: React.FC = () => {
               description: "Najděte si nejlepší ETF pro pravidelné investování investování"
             },
             {
-              title: "Penzijní plánovač",
-              href: "/kalkulacky/penzijni-planovac",
-              description: "Naplánujte si dlouhodobé spoření na penzi"
+              title: "FIRE kalkulačka",
+              href: "/kalkulacky/fire-kalkulacka",
+              description: "Naplánujte si cestu k finanční nezávislosti"
             },
             {
               title: "Monte Carlo simulátor",

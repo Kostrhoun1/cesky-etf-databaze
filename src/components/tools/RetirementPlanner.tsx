@@ -8,7 +8,7 @@ import { calculateFire, FireData, FireCalculationParams, getPortfolioParameters 
 import RetirementChart from './RetirementChart';
 import RetirementResultsSummary from './RetirementResultsSummary';
 
-const RetirementPlanner: React.FC = () => {
+const FireCalculator: React.FC = () => {
   const [currentAge, setCurrentAge] = useState<number>(30);
   const [currentSavings, setCurrentSavings] = useState<number>(500000);
   const [monthlySavings, setMonthlySavings] = useState<number>(15000);
@@ -60,7 +60,7 @@ const RetirementPlanner: React.FC = () => {
             <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
               <Calendar className="h-5 w-5 text-violet-700" />
             </div>
-            <h3 className="text-base font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Věk a FIRE cíl</h3>
+            <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Věk a FIRE cíl</h3>
           </div>
           <div className="space-y-3">
             <div>
@@ -96,7 +96,7 @@ const RetirementPlanner: React.FC = () => {
             <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
               <TrendingUp className="h-5 w-5 text-emerald-700" />
             </div>
-            <h3 className="text-base font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Úspory a spoření</h3>
+            <h3 className="text-xl font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Úspory a spoření</h3>
           </div>
           <div className="space-y-3">
             <div>
@@ -132,7 +132,7 @@ const RetirementPlanner: React.FC = () => {
             <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
               <Target className="h-5 w-5 text-violet-700" />
             </div>
-            <h3 className="text-base font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Investiční strategie</h3>
+            <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Investiční strategie</h3>
           </div>
           <div className="space-y-3">
             <div>
@@ -213,4 +213,4 @@ const RetirementPlanner: React.FC = () => {
   );
 };
 
-export default RetirementPlanner;
+export default FireCalculator;

@@ -287,9 +287,9 @@ const EmergencyFundCalculatorPage: React.FC = () => {
               description: "Po vytvoření rezervy začněte investovat"
             },
             {
-              title: "Penzijní plánovač",
-              href: "/kalkulacky/penzijni-planovac",
-              description: "Plánování dlouhodobých úspor na penzi"
+              title: "FIRE kalkulačka",
+              href: "/kalkulacky/fire-kalkulacka",
+              description: "Plánování finanční nezávislosti a předčasného odchodu do důchodu"
             },
             {
               title: "Srovnání brokerů",

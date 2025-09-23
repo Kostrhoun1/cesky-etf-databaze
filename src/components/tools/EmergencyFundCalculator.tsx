@@ -89,160 +89,164 @@ const EmergencyFundCalculator: React.FC = () => {
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-violet-600" />
-            <CardTitle className="text-lg">
+            <CardTitle className="text-2xl">
               Kalkulačka nouzové rezervy
             </CardTitle>
           </div>
-          <CardDescription className="text-sm">
+          <CardDescription className="">
             Spočítejte si optimální velikost nouzové rezervy podle vaší situace
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Základní finanční údaje */}
-          <div className="border rounded-lg p-4 bg-violet-25 mb-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Banknote className="h-4 w-4 text-violet-600" />
-              <h3 className="font-semibold">Finanční situace</h3>
-            </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              <div>
-                <Label htmlFor="monthlyExpenses">Měsíční výdaje (Kč)</Label>
-                <Input
-                  id="monthlyExpenses"
-                  type="number"
-                  value={monthlyExpenses || ''}
-                  onChange={(e) => setMonthlyExpenses(Number(e.target.value) || 0)}
-                  min="10000"
-                  step="5000"
-                  className="mt-1 h-10"
-                />
-              </div>
-              <div>
-                <Label htmlFor="familySize">Počet závislých</Label>
-                <Input
-                  id="familySize"
-                  type="number"
-                  value={familySize || ''}
-                  onChange={(e) => setFamilySize(Number(e.target.value) || 0)}
-                  min="1"
-                  max="10"
-                  className="mt-1 h-10"
-                />
-              </div>
-              <div>
-                <Label htmlFor="currentSavings">Současné úspory (Kč)</Label>
-                <Input
-                  id="currentSavings"
-                  type="number"
-                  value={currentSavings || ''}
-                  onChange={(e) => setCurrentSavings(Number(e.target.value) || 0)}
-                  min="0"
-                  step="10000"
-                  className="mt-1 h-10"
-                />
-              </div>
-              <div>
-                <Label htmlFor="monthlySavingCapacity">Měsíční spoření (Kč)</Label>
-                <Input
-                  id="monthlySavingCapacity"
-                  type="number"
-                  value={monthlySavingCapacity || ''}
-                  onChange={(e) => setMonthlySavingCapacity(Number(e.target.value) || 0)}
-                  min="0"
-                  step="1000"
-                  className="mt-1 h-10"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Rizikové faktory */}
-          <div className="border rounded-lg p-4 bg-gray-25 mb-4">
-            <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle className="h-4 w-4 text-violet-600" />
-              <h3 className="font-semibold">Riziková situace</h3>
-            </div>
-            <div className="space-y-3">
-              {/* Základní faktory v řadě */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                <div>
-                  <Label htmlFor="jobStability">Stabilita zaměstnání</Label>
-                  <Select value={jobStability} onValueChange={(value: 'stable' | 'moderate' | 'unstable') => setJobStability(value)}>
-                    <SelectTrigger className="h-10">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="stable">🟢 Stabilní</SelectItem>
-                      <SelectItem value="moderate">🟡 Střední</SelectItem>
-                      <SelectItem value="unstable">🔴 Rizikové</SelectItem>
-                    </SelectContent>
-                  </Select>
+          <div className="grid md:grid-cols-2 gap-4 mb-4">
+            {/* Základní finanční údaje */}
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.2s]">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
+                  <Banknote className="h-5 w-5 text-violet-700" />
                 </div>
-
-                <div>
-                  <Label>Typ smlouvy</Label>
-                  <Select value={contractType} onValueChange={(value) => setContractType(value as any)}>
-                    <SelectTrigger className="h-10">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="permanent">✅ Neurčitou</SelectItem>
-                      <SelectItem value="fixed_term">⏰ Určitou</SelectItem>
-                      <SelectItem value="freelance">📝 Dohody</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label>Věk</Label>
-                  <Select value={ageGroup} onValueChange={(value) => setAgeGroup(value as any)}>
-                    <SelectTrigger className="h-10">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="young">👶 20-35</SelectItem>
-                      <SelectItem value="middle">👨 36-50</SelectItem>
-                      <SelectItem value="senior">👴 50+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label>Vzdělání</Label>
-                  <Select value={education} onValueChange={(value) => setEducation(value as any)}>
-                    <SelectTrigger className="h-10">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="university">🎓 VŠ</SelectItem>
-                      <SelectItem value="high_school">📚 SŠ</SelectItem>
-                      <SelectItem value="basic">📝 ZŠ</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Finanční situace</h3>
               </div>
-
-              {/* Checkboxy */}
-              <div className="grid grid-cols-2 gap-3 pt-3 border-t">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="hasSecondIncome"
-                    checked={hasSecondIncome}
-                    onChange={(e) => setHasSecondIncome(e.target.checked)}
-                    className="rounded"
+              <div className="space-y-3">
+                <div>
+                  <Label htmlFor="monthlyExpenses" className="">Měsíční výdaje (Kč)</Label>
+                  <Input
+                    id="monthlyExpenses"
+                    type="number"
+                    value={monthlyExpenses || ''}
+                    onChange={(e) => setMonthlyExpenses(Number(e.target.value) || 0)}
+                    min="10000"
+                    step="5000"
+                    className="mt-1 h-10"
                   />
-                  <Label htmlFor="hasSecondIncome">💰 Druhý příjem</Label>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="hasDebt"
-                    checked={hasDebt}
-                    onChange={(e) => setHasDebt(e.target.checked)}
-                    className="rounded"
+                <div>
+                  <Label htmlFor="familySize" className="">Počet závislých</Label>
+                  <Input
+                    id="familySize"
+                    type="number"
+                    value={familySize || ''}
+                    onChange={(e) => setFamilySize(Number(e.target.value) || 0)}
+                    min="1"
+                    max="10"
+                    className="mt-1 h-10"
                   />
-                  <Label htmlFor="hasDebt">🏠 Mám dluhy</Label>
+                </div>
+                <div>
+                  <Label htmlFor="currentSavings" className="">Současné úspory (Kč)</Label>
+                  <Input
+                    id="currentSavings"
+                    type="number"
+                    value={currentSavings || ''}
+                    onChange={(e) => setCurrentSavings(Number(e.target.value) || 0)}
+                    min="0"
+                    step="10000"
+                    className="mt-1 h-10"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="monthlySavingCapacity" className="">Měsíční spoření (Kč)</Label>
+                  <Input
+                    id="monthlySavingCapacity"
+                    type="number"
+                    value={monthlySavingCapacity || ''}
+                    onChange={(e) => setMonthlySavingCapacity(Number(e.target.value) || 0)}
+                    min="0"
+                    step="1000"
+                    className="mt-1 h-10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Rizikové faktory */}
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.4s]">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
+                  <AlertTriangle className="h-5 w-5 text-emerald-700" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Riziková situace</h3>
+              </div>
+              <div className="space-y-3">
+                <div className="grid grid-cols-1 gap-3">
+                  <div>
+                    <Label htmlFor="jobStability" className="">Stabilita zaměstnání</Label>
+                    <Select value={jobStability} onValueChange={(value: 'stable' | 'moderate' | 'unstable') => setJobStability(value)}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="stable">🟢 Stabilní</SelectItem>
+                        <SelectItem value="moderate">🟡 Střední</SelectItem>
+                        <SelectItem value="unstable">🔴 Rizikové</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label className="">Typ smlouvy</Label>
+                    <Select value={contractType} onValueChange={(value) => setContractType(value as any)}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="permanent">✅ Neurčitou</SelectItem>
+                        <SelectItem value="fixed_term">⏰ Určitou</SelectItem>
+                        <SelectItem value="freelance">📝 Dohody</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label className="">Věk</Label>
+                    <Select value={ageGroup} onValueChange={(value) => setAgeGroup(value as any)}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="young">👶 20-35</SelectItem>
+                        <SelectItem value="middle">👨 36-50</SelectItem>
+                        <SelectItem value="senior">👴 50+</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label className="">Vzdělání</Label>
+                    <Select value={education} onValueChange={(value) => setEducation(value as any)}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="university">🎓 VŠ</SelectItem>
+                        <SelectItem value="high_school">📚 SŠ</SelectItem>
+                        <SelectItem value="basic">📝 ZŠ</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="hasSecondIncome"
+                        checked={hasSecondIncome}
+                        onChange={(e) => setHasSecondIncome(e.target.checked)}
+                        className="rounded"
+                      />
+                      <Label htmlFor="hasSecondIncome" className="">💰 Druhý příjem</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="hasDebt"
+                        checked={hasDebt}
+                        onChange={(e) => setHasDebt(e.target.checked)}
+                        className="rounded"
+                      />
+                      <Label htmlFor="hasDebt" className="">🏠 Mám dluhy</Label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -250,10 +254,9 @@ const EmergencyFundCalculator: React.FC = () => {
 
           <Button 
             onClick={handleCalculate} 
-            className="w-full mb-4" 
-            className="h-10"
+            className="w-full hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 mb-4 animate-fade-in [animation-delay:0.6s]"
           >
-            <Shield className="mr-2 h-4 w-4" />
+            <Shield className="mr-2 h-5 w-5" />
             Vypočítat nouzovou rezervu
           </Button>
 
@@ -340,13 +343,13 @@ const EmergencyFundCalculator: React.FC = () => {
           )}
 
           {/* Rozbalovací předpoklady */}
-          <details className="border border-gray-200 rounded-lg">
-            <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
-              <span className="font-semibold text-gray-900">📋 Předpoklady kalkulačky nouzové rezervy</span>
+          <details className="border border-orange-200 rounded-lg">
+            <summary className="p-4 bg-orange-50 cursor-pointer hover:bg-orange-100 transition-colors rounded-lg">
+              <span className="font-semibold text-orange-900">📋 Předpoklady kalkulačky nouzové rezervy (klikněte pro rozbalení)</span>
             </summary>
-            <div className="p-3 border-t border-gray-200">
-              <h4 className="font-semibold mb-2 text-gray-900">📊 Výpočet velikosti rezervy</h4>
-              <div className="grid md:grid-cols-2 gap-3 mb-3 text-xs">
+            <div className="p-4 border-t border-orange-200">
+              <h4 className="font-semibold mb-2 text-orange-900">📊 Výpočet velikosti rezervy</h4>
+              <div className="grid md:grid-cols-2 gap-3 mb-3 text-sm">
                 <div>
                   <h5 className="font-semibold mb-1">Základní velikost podle stability:</h5>
                   <ul className="space-y-0.5 text-gray-700">
@@ -366,8 +369,8 @@ const EmergencyFundCalculator: React.FC = () => {
                 </div>
               </div>
               
-              <h4 className="font-semibold mb-2 text-gray-900">💰 Doporučené umístění rezervy (2025)</h4>
-              <div className="grid md:grid-cols-2 gap-3 mb-3 text-xs">
+              <h4 className="font-semibold mb-2 text-orange-900">💰 Doporučené umístění rezervy (2025)</h4>
+              <div className="grid md:grid-cols-2 gap-3 mb-3 text-sm">
                 <div>
                   <h5 className="font-semibold mb-1">Spořicí účty CZK (70%):</h5>
                   <ul className="space-y-0.5 text-gray-700">
@@ -388,8 +391,8 @@ const EmergencyFundCalculator: React.FC = () => {
                 </div>
               </div>
               
-              <h4 className="font-semibold mb-2 text-gray-900">⚙️ Zjednodušení a omezení</h4>
-              <ul className="text-xs text-gray-700 space-y-1">
+              <h4 className="font-semibold mb-2 text-orange-900">⚙️ Zjednodušení a omezení</h4>
+              <ul className="text-sm text-gray-700 space-y-1">
                 <li>• <strong>Maximální rezerva:</strong> Omezeno na 12 měsíců (i když výpočet dává více)</li>
                 <li>• <strong>Minimální rezerva:</strong> Minimálně 3 měsíce ve všech případech</li>
                 <li>• <strong>Výnosy:</strong> Aktuální sazby k roku 2025, mohou se měnit</li>

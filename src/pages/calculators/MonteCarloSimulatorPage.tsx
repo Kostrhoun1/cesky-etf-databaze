@@ -266,8 +266,8 @@ const MonteCarloSimulatorPage: React.FC = () => {
               description: "Základní výpočty compound interest"
             },
             {
-              title: "Penzijní plánovač",
-              href: "/kalkulacky/penzijni-planovac",
+              title: "FIRE kalkulačka",
+              href: "/kalkulacky/fire-kalkulacka",
               description: "4% withdrawal rule s Monte Carlo analýzou"
             },
             {

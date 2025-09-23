@@ -194,9 +194,9 @@ const NetSalaryCalculatorPage: React.FC = () => {
               description: "Zjistěte si dostupnost hypotéky podle příjmu"
             },
             {
-              title: "Penzijní plánovač",
-              href: "/kalkulacky/penzijni-planovac",
-              description: "Plánování dlouhodobých úspor na penzi"
+              title: "FIRE kalkulačka",
+              href: "/kalkulacky/fire-kalkulacka",
+              description: "Plánování finanční nezávislosti"
             }
           ]}
           title="Související kalkulačky a nástroje"

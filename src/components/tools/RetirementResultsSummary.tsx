@@ -48,7 +48,7 @@ const RetirementResultsSummary: React.FC<RetirementResultsSummaryProps> = ({ res
             <div className="mb-4 flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 mx-auto group-hover:bg-emerald-200 transition-all duration-300 hover-scale">
               <TrendingUp className="h-6 w-6 text-emerald-700 transition-transform duration-300 group-hover:scale-110" />
             </div>
-            <h3 className="text-base font-semibold text-gray-900 mb-2 transition-colors group-hover:text-emerald-800">Optimistický scénář</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2 transition-colors group-hover:text-emerald-800">Optimistický scénář</h3>
             <div className="space-y-2">
               <div>
                 <p className="text-xs text-gray-500">FIRE věk</p>
@@ -73,7 +73,7 @@ const RetirementResultsSummary: React.FC<RetirementResultsSummaryProps> = ({ res
             <div className="mb-4 flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 mx-auto group-hover:bg-violet-200 transition-all duration-300 hover-scale">
               <Clock className="h-6 w-6 text-violet-700 transition-transform duration-300 group-hover:scale-110" />
             </div>
-            <h3 className="text-base font-semibold text-gray-900 mb-2 transition-colors group-hover:text-violet-800">Realistický scénář</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2 transition-colors group-hover:text-violet-800">Realistický scénář</h3>
             <div className="space-y-2">
               <div>
                 <p className="text-xs text-gray-500">FIRE věk</p>
@@ -98,7 +98,7 @@ const RetirementResultsSummary: React.FC<RetirementResultsSummaryProps> = ({ res
             <div className="mb-4 flex items-center justify-center rounded-full bg-red-100 w-12 h-12 mx-auto group-hover:bg-red-200 transition-all duration-300 hover-scale">
               <TrendingDown className="h-6 w-6 text-red-700 transition-transform duration-300 group-hover:scale-110" />
             </div>
-            <h3 className="text-base font-semibold text-gray-900 mb-2 transition-colors group-hover:text-red-800">Pesimistický scénář</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2 transition-colors group-hover:text-red-800">Pesimistický scénář</h3>
             <div className="space-y-2">
               <div>
                 <p className="text-xs text-gray-500">FIRE věk</p>

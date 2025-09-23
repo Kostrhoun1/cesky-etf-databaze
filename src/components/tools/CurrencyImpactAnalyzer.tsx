@@ -53,17 +53,19 @@ const CurrencyImpactAnalyzer: React.FC = () => {
   const isAllocationValid = Math.abs(totalAllocation - 100) < 0.1;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="grid md:grid-cols-2 gap-4">
         {/* Portfolio základna */}
-        <div className="border rounded-lg p-4 bg-blue-25">
-          <div className="flex items-center gap-2 mb-3">
-            <TrendingUp className="h-4 w-4 text-blue-600" />
-            <h3 className="font-semibold">Portfolio základna</h3>
+        <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.2s]">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
+              <TrendingUp className="h-5 w-5 text-violet-700" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Portfolio základna</h3>
           </div>
           <div className="space-y-3">
             <div>
-              <Label htmlFor="portfolioValue">Celková hodnota portfolia (Kč)</Label>
+              <Label htmlFor="portfolioValue" className="">Celková hodnota portfolia (Kč)</Label>
               <Input
                 id="portfolioValue"
                 type="number"
@@ -75,7 +77,7 @@ const CurrencyImpactAnalyzer: React.FC = () => {
               />
             </div>
             <div>
-              <Label htmlFor="investmentHorizon">Investiční horizont (roky)</Label>
+              <Label htmlFor="investmentHorizon" className="">Investiční horizont (roky)</Label>
               <Input
                 id="investmentHorizon"
                 type="number"
@@ -90,14 +92,16 @@ const CurrencyImpactAnalyzer: React.FC = () => {
         </div>
 
         {/* Aktuální kurzy */}
-        <div className="border rounded-lg p-4 bg-green-25">
-          <div className="flex items-center gap-2 mb-3">
-            <DollarSign className="h-4 w-4 text-green-600" />
-            <h3 className="font-semibold">Aktuální kurzy</h3>
+        <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.4s]">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
+              <DollarSign className="h-5 w-5 text-emerald-700" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Aktuální kurzy</h3>
           </div>
           <div className="space-y-3">
             <div>
-              <Label htmlFor="currentUsdCzk">USD/CZK kurz</Label>
+              <Label htmlFor="currentUsdCzk" className="">USD/CZK kurz</Label>
               <Input
                 id="currentUsdCzk"
                 type="number"
@@ -110,7 +114,7 @@ const CurrencyImpactAnalyzer: React.FC = () => {
               />
             </div>
             <div>
-              <Label htmlFor="currentEurCzk">EUR/CZK kurz</Label>
+              <Label htmlFor="currentEurCzk" className="">EUR/CZK kurz</Label>
               <Input
                 id="currentEurCzk"
                 type="number"
@@ -122,23 +126,27 @@ const CurrencyImpactAnalyzer: React.FC = () => {
                 className="h-10"
               />
             </div>
-            <div className="bg-green-100 p-2 rounded text-xs text-green-800">
-              <strong>Tip:</strong> Zadejte aktuální kurzy nebo je upravte pro analýzu různých scénářů.
+            <div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200">
+              <p className="text-xs text-emerald-800">
+                <strong>Tip:</strong> Zadejte aktuální kurzy nebo je upravte pro analýzu různých scénářů.
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Měnová expozice */}
-      <div className="border rounded-lg p-4 bg-purple-25">
-        <div className="flex items-center gap-2 mb-3">
-          <Euro className="h-4 w-4 text-purple-600" />
-          <h3 className="font-semibold">Měnová expozice portfolia</h3>
+      <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.6s]">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center justify-center rounded-full bg-blue-100 w-10 h-10 group-hover:bg-blue-200 transition-colors hover-scale">
+            <Euro className="h-5 w-5 text-blue-700" />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-800 transition-colors">Měnová expozice portfolia</h3>
         </div>
         <div className="space-y-3">
           <div className="grid md:grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="usdAllocation">USD alokace (%)</Label>
+              <Label htmlFor="usdAllocation" className="">USD alokace (%)</Label>
               <Input
                 id="usdAllocation"
                 type="number"
@@ -150,7 +158,7 @@ const CurrencyImpactAnalyzer: React.FC = () => {
               />
             </div>
             <div>
-              <Label htmlFor="eurAllocation">EUR alokace (%)</Label>
+              <Label htmlFor="eurAllocation" className="">EUR alokace (%)</Label>
               <Input
                 id="eurAllocation"
                 type="number"
@@ -162,7 +170,7 @@ const CurrencyImpactAnalyzer: React.FC = () => {
               />
             </div>
             <div>
-              <Label htmlFor="czkAllocation">CZK alokace (%)</Label>
+              <Label htmlFor="czkAllocation" className="">CZK alokace (%)</Label>
               <Input
                 id="czkAllocation"
                 type="number"
@@ -182,8 +190,8 @@ const CurrencyImpactAnalyzer: React.FC = () => {
               Například: SXR8 (EUR fond kupující US akcie) = 100% USD expozice
             </p>
           </div>
-          <div className="flex items-center justify-between p-2 bg-purple-100 rounded-lg">
-            <span className="font-medium">Celková expozice:</span>
+          <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <span className="font-medium text-blue-800">Celková expozice:</span>
             <span className={`font-bold ${isAllocationValid ? 'text-green-600' : 'text-red-600'}`}>
               {totalAllocation.toFixed(1)}%
             </span>
@@ -197,8 +205,11 @@ const CurrencyImpactAnalyzer: React.FC = () => {
       </div>
 
 
-      <Button onClick={handleCalculate} className="w-full">
-        <Calculator className="mr-2 h-4 w-4" />
+      <Button 
+        onClick={handleCalculate} 
+        className="w-full hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 animate-fade-in [animation-delay:0.8s]"
+      >
+        <Calculator className="mr-2 h-5 w-5" />
         Analyzovat kurzový dopad
       </Button>
       

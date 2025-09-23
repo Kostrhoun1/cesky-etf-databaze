@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calculator, TrendingUp, DollarSign, Calendar, Info, BarChart3 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Calculator, TrendingUp, DollarSign, Calendar, Info, BarChart3, Percent } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
 interface LoanData {
@@ -106,7 +108,7 @@ const ConsumerLoanCalculator: React.FC = () => {
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <Calculator className="h-5 w-5 text-violet-600" />
-            <CardTitle className="text-lg">
+            <CardTitle className="text-2xl">
               Kalkulačka spotřebitelského úvěru
             </CardTitle>
           </div>
@@ -116,97 +118,68 @@ const ConsumerLoanCalculator: React.FC = () => {
         </CardHeader>
         
         <CardContent>
-          <div className="grid lg:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4 mb-4">
             {/* Input Section */}
-            <div className="border rounded-lg p-4 bg-violet-25">
-              <div className="flex items-center gap-2 mb-3">
-                <DollarSign className="h-4 w-4 text-violet-600" />
-                <h3 className="font-semibold">Parametry úvěru</h3>
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.2s]">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
+                  <DollarSign className="h-5 w-5 text-violet-700" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Parametry úvěru</h3>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div>
-                  <label className="block font-medium text-gray-700 mb-1">
-                    Výše úvěru: {loanAmount?.toLocaleString()} Kč
-                  </label>
-                  <input
-                    type="range"
-                    min="50000"
-                    max="2000000"
-                    step="10000"
-                    value={loanAmount || 0}
-                    onChange={(e) => setLoanAmount(Number(e.target.value))}
-                    className="w-full h-2 bg-violet-200 rounded-lg appearance-none cursor-pointer slider"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>50 000 Kč</span>
-                    <span>2 000 000 Kč</span>
-                  </div>
-                  <input
+                  <Label htmlFor="loanAmount">Výše úvěru (Kč)</Label>
+                  <Input
+                    id="loanAmount"
                     type="number"
                     value={loanAmount || ''}
                     onChange={(e) => setLoanAmount(Number(e.target.value) || 0)}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center h-10"
-                    placeholder="Zadejte výši úvěru"
+                    placeholder="500 000"
                     min="50000"
                     max="2000000"
+                    step="10000"
+                    className="h-10"
                   />
+                  <p className="text-xs text-gray-600 mt-1">
+                    Rozsah: 50 000 - 2 000 000 Kč
+                  </p>
                 </div>
 
                 <div>
-                  <label className="block font-medium text-gray-700 mb-1">
-                    Úroková sazba: {interestRate}% p.a.
-                  </label>
-                  <input
-                    type="range"
-                    min="3"
-                    max="25"
-                    step="0.1"
-                    value={interestRate || 0}
-                    onChange={(e) => setInterestRate(Number(e.target.value))}
-                    className="w-full h-2 bg-violet-200 rounded-lg appearance-none cursor-pointer slider"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>3%</span>
-                    <span>25%</span>
-                  </div>
-                  <input
+                  <Label htmlFor="interestRate">Úroková sazba (%)</Label>
+                  <Input
+                    id="interestRate"
                     type="number"
                     value={interestRate || ''}
                     onChange={(e) => setInterestRate(Number(e.target.value) || 0)}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center h-10"
-                    placeholder="Zadejte úrokovou sazbu"
+                    placeholder="8.5"
                     min="3"
                     max="25"
                     step="0.1"
+                    className="h-10"
                   />
+                  <p className="text-xs text-gray-600 mt-1">
+                    Typicky 6-15% ročně pro spotřebitelské úvěry
+                  </p>
                 </div>
 
                 <div>
-                  <label className="block font-medium text-gray-700 mb-1">
-                    Doba splatnosti: {loanPeriod} let
-                  </label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="10"
-                    step="1"
-                    value={loanPeriod || 0}
-                    onChange={(e) => setLoanPeriod(Number(e.target.value))}
-                    className="w-full h-2 bg-violet-200 rounded-lg appearance-none cursor-pointer slider"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>1 rok</span>
-                    <span>10 let</span>
-                  </div>
-                  <input
+                  <Label htmlFor="loanPeriod">Doba splatnosti (roky)</Label>
+                  <Input
+                    id="loanPeriod"
                     type="number"
                     value={loanPeriod || ''}
                     onChange={(e) => setLoanPeriod(Math.min(10, Math.max(1, Number(e.target.value) || 0)))}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center h-10"
-                    placeholder="Zadejte dobu splatnosti"
+                    placeholder="5"
                     min="1"
                     max="10"
+                    step="1"
+                    className="h-10"
                   />
+                  <p className="text-xs text-gray-600 mt-1">
+                    Obvykle 1-7 let pro spotřebitelské úvěry
+                  </p>
                 </div>
               </div>
             </div>
@@ -251,29 +224,59 @@ const ConsumerLoanCalculator: React.FC = () => {
               </div>
             )}
           </div>
-          
-          {/* Rozbalovací předpoklady */}
-          <details className="mt-4 border border-gray-200 rounded-lg">
-            <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
-              <span className="font-semibold text-gray-900">📋 Předpoklady kalkulačky úvěru</span>
-            </summary>
-            <div className="p-3 border-t border-gray-200">
-              <ul className="text-xs text-gray-700 space-y-1">
-                <li>• <strong>Anuitní splácení:</strong> Konstantní měsíční splátka po celou dobu úvěru</li>
-                <li>• <strong>Úroky:</strong> Počítány z aktuálního zůstatku dluhu každý měsíc</li>
-                <li>• <strong>Úmor jistiny:</strong> Postupně roste, zatímco úroky klesají</li>
-                <li>• <strong>Poplatky:</strong> Nejsou v kalkulaci zahrnuty (jednorázové i průběžné)</li>
-                <li>• <strong>Předčasné splacení:</strong> Není uvažováno v tomto výpočtu</li>
-                <li>• <strong>Bonita klienta:</strong> Ovlivňuje skutečnou úrokovou sazbu u bank</li>
-              </ul>
-            </div>
-          </details>
+
+          <Button 
+            onClick={() => {}} 
+            className="w-full hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 mb-4 animate-fade-in [animation-delay:0.6s]"
+          >
+            <Calculator className="mr-2 h-5 w-5" />
+            Spočítat úvěr
+          </Button>
           
         </CardContent>
       </Card>
 
       {summary && (
         <>
+          {/* Results Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white">
+              <CardContent className="p-6 text-center">
+                <div className="mb-4 flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 mx-auto group-hover:bg-emerald-200 transition-colors hover-scale">
+                  <DollarSign className="h-6 w-6 text-emerald-700" />
+                </div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-emerald-800 transition-colors">Měsíční splátka</h4>
+                <p className="text-2xl font-bold text-emerald-600">
+                  {Math.round(summary.monthlyPayment).toLocaleString()} Kč
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white">
+              <CardContent className="p-6 text-center">
+                <div className="mb-4 flex items-center justify-center rounded-full bg-blue-100 w-12 h-12 mx-auto group-hover:bg-blue-200 transition-colors hover-scale">
+                  <Calculator className="h-6 w-6 text-blue-700" />
+                </div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-800 transition-colors">Celkem zaplatíte</h4>
+                <p className="text-2xl font-bold text-blue-600">
+                  {Math.round(summary.totalPayments).toLocaleString()} Kč
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white">
+              <CardContent className="p-6 text-center">
+                <div className="mb-4 flex items-center justify-center rounded-full bg-red-100 w-12 h-12 mx-auto group-hover:bg-red-200 transition-colors hover-scale">
+                  <Percent className="h-6 w-6 text-red-700" />
+                </div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-red-800 transition-colors">Přeplatek úvěru</h4>
+                <p className="text-2xl font-bold text-red-600">
+                  {Math.round(summary.totalInterest).toLocaleString()} Kč
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+          
           {/* Charts Section */}
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Debt Progress Chart */}

@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '@/components/Layout';
-import RetirementPlanner from '@/components/tools/RetirementPlanner';
+import FireCalculator from '@/components/tools/RetirementPlanner';
 import SEOHead from '@/components/SEO/SEOHead';
 import FAQSection from '@/components/SEO/FAQSection';
 import InternalLinking from '@/components/SEO/InternalLinking';
@@ -8,7 +8,7 @@ import StructuredData from '@/components/SEO/StructuredData';
 import { Card, CardContent } from '@/components/ui/card';
 import { PiggyBank, Target, TrendingUp, AlertTriangle } from 'lucide-react';
 
-const RetirementPlannerPage: React.FC = () => {
+const FireCalculatorPage: React.FC = () => {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -91,7 +91,7 @@ const RetirementPlannerPage: React.FC = () => {
         </div>
 
         {/* Samotná kalkulačka - přesunuta na začátek pro lepší UX */}
-        <RetirementPlanner />
+        <FireCalculator />
 
         {/* Co je FIRE a 4% rule */}
         <div className="mt-16 border-transparent shadow-none hover:shadow-md transition-shadow duration-200 bg-white rounded-2xl p-8 mb-12">
@@ -220,4 +220,4 @@ const RetirementPlannerPage: React.FC = () => {
   );
 };
 
-export default RetirementPlannerPage;
+export default FireCalculatorPage;

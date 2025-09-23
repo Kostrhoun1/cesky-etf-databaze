@@ -36,9 +36,9 @@ const NetSalaryCalculator: React.FC = () => {
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <Calculator className="h-5 w-5 text-violet-600" />
-            <CardTitle className="text-lg">Kalkulačka čisté mzdy 2025</CardTitle>
+            <CardTitle className="text-2xl">Kalkulačka čisté mzdy 2025</CardTitle>
           </div>
-          <CardDescription className="text-sm">
+          <CardDescription className="">
             Spočítejte si čistou mzdu podle aktuální české legislativy pro rok 2025
           </CardDescription>
         </CardHeader>
@@ -50,10 +50,10 @@ const NetSalaryCalculator: React.FC = () => {
                 <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
                   <Banknote className="h-5 w-5 text-violet-700" />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Základní údaje</h3>
+                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Základní údaje</h3>
               </div>
               <div>
-                <Label htmlFor="grossSalary" className="text-sm">Hrubá mzda (Kč/měsíc)</Label>
+                <Label htmlFor="grossSalary" className="">Hrubá mzda (Kč/měsíc)</Label>
                 <Input
                   id="grossSalary"
                   type="number"
@@ -75,7 +75,7 @@ const NetSalaryCalculator: React.FC = () => {
                 <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
                   <Users className="h-5 w-5 text-emerald-700" />
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Slevy a pojištění</h3>
+                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Slevy a pojištění</h3>
               </div>
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
@@ -86,7 +86,7 @@ const NetSalaryCalculator: React.FC = () => {
                     onChange={(e) => setIsPensioner(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="isPensioner" className="text-sm">Pracující důchodce</Label>
+                  <Label htmlFor="isPensioner" className="">Pracující důchodce</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <input
@@ -96,11 +96,11 @@ const NetSalaryCalculator: React.FC = () => {
                     onChange={(e) => setHasChildren(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="hasChildren" className="text-sm">Mám děti</Label>
+                  <Label htmlFor="hasChildren" className="">Mám děti</Label>
                 </div>
                 {hasChildren && (
                   <div>
-                    <Label htmlFor="numberOfChildren" className="text-sm">Počet dětí</Label>
+                    <Label htmlFor="numberOfChildren" className="">Počet dětí</Label>
                     <Input
                       id="numberOfChildren"
                       type="number"
@@ -120,7 +120,7 @@ const NetSalaryCalculator: React.FC = () => {
                     onChange={(e) => setHasDisability(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="hasDisability" className="text-sm">Invalidita/ZTP</Label>
+                  <Label htmlFor="hasDisability" className="">Invalidita/ZTP</Label>
                 </div>
               </div>
             </div>
