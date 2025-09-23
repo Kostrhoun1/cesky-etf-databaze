@@ -136,11 +136,11 @@ const WhereToBuyETFs = () => {
       </div>
 
       {/* Key Factors Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-3xl mb-8 shadow-2xl">
-              <Shield className="w-10 h-10" />
+            <div className="flex items-center justify-center rounded-full bg-violet-100 w-20 h-20 mx-auto mb-8 hover:bg-violet-200 transition-colors hover-scale">
+              <Shield className="w-10 h-10 text-violet-700" />
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Na co se zaměřit při výběru brokera
@@ -160,21 +160,26 @@ const WhereToBuyETFs = () => {
                 orange: 'from-orange-500 to-red-600 border-orange-100'
               };
               
+              const iconColorMap = {
+                emerald: 'emerald-700',
+                blue: 'violet-700',
+                purple: 'emerald-700',
+                orange: 'violet-700'
+              };
+              
               return (
-                <Card key={index} className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 group text-center p-6">
-                  <div className={`w-16 h-16 bg-gradient-to-br ${colorClasses[item.color]} text-white rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
-                    <Icon className="w-8 h-8" />
+                <div key={index} className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in text-center" style={{animationDelay: `${0.2 + index * 0.1}s`}}>
+                  <div className={`flex items-center justify-center rounded-full ${item.color === 'emerald' || item.color === 'purple' ? 'bg-emerald-100 group-hover:bg-emerald-200' : 'bg-violet-100 group-hover:bg-violet-200'} w-16 h-16 mx-auto mb-6 transition-colors hover-scale`}>
+                    <Icon className={`w-8 h-8 text-${iconColorMap[item.color]}`} />
                   </div>
-                  <CardHeader className="p-0 mb-4">
-                    <CardTitle className="text-xl font-bold text-gray-900 mb-2">{item.title}</CardTitle>
-                    <div className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium inline-block">
+                  <div className="mb-4">
+                    <h3 className={`text-xl font-bold text-gray-900 mb-2 group-hover:${item.color === 'emerald' || item.color === 'purple' ? 'text-emerald-800' : 'text-violet-800'} transition-colors`}>{item.title}</h3>
+                    <div className={`text-sm ${item.color === 'emerald' || item.color === 'purple' ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700'} px-3 py-1 rounded-full font-medium inline-block`}>
                       {item.highlight}
                     </div>
-                  </CardHeader>
-                  <CardContent className="p-0">
-                    <p className="text-gray-600 leading-relaxed">{item.description}</p>
-                  </CardContent>
-                </Card>
+                  </div>
+                  <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                </div>
               );
             })}
           </div>
@@ -187,11 +192,11 @@ const WhereToBuyETFs = () => {
       </div>
 
       {/* Tips Section */}
-      <section className="py-20 bg-gradient-to-br from-indigo-50 to-blue-50">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-3xl mb-8 shadow-2xl">
-              <Users className="w-10 h-10" />
+            <div className="flex items-center justify-center rounded-full bg-emerald-100 w-20 h-20 mx-auto mb-8 hover:bg-emerald-200 transition-colors hover-scale">
+              <Users className="w-10 h-10 text-emerald-700" />
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Tipy pro začátečníky
@@ -224,27 +229,25 @@ const WhereToBuyETFs = () => {
                 icon: "🌱"
               }
             ].map((tip, index) => (
-              <Card key={index} className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 group p-6">
-                <CardContent className="p-0">
-                  <div className="flex items-start gap-4">
-                    <div className="text-3xl">{tip.icon}</div>
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                        {tip.title}
-                      </h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        {tip.description}
-                      </p>
-                    </div>
+              <div key={index} className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in" style={{animationDelay: `${0.2 + index * 0.1}s`}}>
+                <div className="flex items-start gap-4">
+                  <div className="text-3xl">{tip.icon}</div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-emerald-800 transition-colors">
+                      {tip.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {tip.description}
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
           
           <div className="text-center">
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
+              <Button asChild size="lg" className="hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-8 py-4 text-lg font-semibold">
                 <Link to="/tipy/jak-zacit-investovat-do-etf">
                   <ArrowRight className="w-5 h-5 mr-2" />
                   Jak začít s ETF investicemi
@@ -253,7 +256,7 @@ const WhereToBuyETFs = () => {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-semibold"
+                className="hover-scale border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50 px-8 py-4 text-lg font-semibold"
                 onClick={() => {
                   document.getElementById('porovnani')?.scrollIntoView({ 
                     behavior: 'smooth',
@@ -270,9 +273,12 @@ const WhereToBuyETFs = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
+            <div className="flex items-center justify-center rounded-full bg-violet-100 w-20 h-20 mx-auto mb-8 hover:bg-violet-200 transition-colors hover-scale">
+              <span className="text-2xl">❓</span>
+            </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Často kladené otázky o koupi ETF
             </h2>
@@ -281,7 +287,8 @@ const WhereToBuyETFs = () => {
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto space-y-6">
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.2s]">
+            <div className="max-w-4xl mx-auto space-y-6">
             {[
               {
                 question: "Kde koupit ETF v České republice?",
@@ -308,10 +315,10 @@ const WhereToBuyETFs = () => {
                 answer: "Většina brokerů neumožňuje částečné akcie, ale nabízejí spořící plány už od 25€ měsíčně. Trading 212 umožňuje nákup frakcí akcií/ETF už od 1€."
               }
             ].map((faq, index) => (
-              <details key={index} className="group border border-gray-200 rounded-lg">
-                <summary className="flex justify-between items-center w-full px-6 py-4 text-left bg-gray-50 cursor-pointer hover:bg-gray-100 rounded-lg group-open:rounded-b-none transition-colors">
-                  <span className="font-semibold text-lg text-gray-900">{faq.question}</span>
-                  <svg className="w-5 h-5 text-gray-500 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <details key={index} className="group border border-gray-200 rounded-lg hover:border-violet-200 transition-colors">
+                <summary className="flex justify-between items-center w-full px-6 py-4 text-left bg-gray-50 cursor-pointer hover:bg-violet-50 rounded-lg group-open:rounded-b-none transition-colors">
+                  <span className="font-semibold text-lg text-gray-900 group-hover:text-violet-800">{faq.question}</span>
+                  <svg className="w-5 h-5 text-gray-500 group-hover:text-violet-600 transition-all group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
@@ -320,37 +327,54 @@ const WhereToBuyETFs = () => {
                 </div>
               </details>
             ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* SEO Content Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto prose prose-lg">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Kde koupit ETF - kompletní průvodce pro české investory</h2>
-            
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">🌍 Online brokeři (doporučeno)</h3>
-                <ul className="space-y-2 text-gray-700">
-                  <li>• <strong>DEGIRO</strong> - ETF zdarma, nízké poplatky</li>
-                  <li>• <strong>XTB</strong> - 0% poplatky do 100k EUR</li>
-                  <li>• <strong>Trading 212</strong> - kompletně zdarma</li>
-                  <li>• <strong>Interactive Brokers</strong> - profesionální platforma</li>
-                </ul>
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.2s]">
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 group-hover:bg-emerald-200 transition-colors hover-scale">
+                  <span className="text-2xl">📚</span>
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 group-hover:text-emerald-800 transition-colors">Kde koupit ETF - kompletní průvodce pro české investory</h2>
               </div>
               
-              <div className="bg-white p-6 rounded-lg shadow-lg">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">🏦 České banky a instituce</h3>
-                <ul className="space-y-2 text-gray-700">
-                  <li>• <strong>Fio e-Broker</strong> - český broker, vyšší poplatky</li>
-                  <li>• <strong>Česká spořitelna</strong> - omezený výběr ETF</li>
-                  <li>• <strong>Komerční banka</strong> - premium služby</li>
-                  <li>• <strong>ČSOB</strong> - tradičné bankovnictví</li>
-                </ul>
+              <div className="grid md:grid-cols-2 gap-8 mb-8">
+                <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-6 card-hover">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
+                      <span className="text-xl">🌍</span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Online brokeři (doporučeno)</h3>
+                  </div>
+                  <ul className="space-y-2 text-gray-700">
+                    <li>• <strong>DEGIRO</strong> - ETF zdarma, nízké poplatky</li>
+                    <li>• <strong>XTB</strong> - 0% poplatky do 100k EUR</li>
+                    <li>• <strong>Trading 212</strong> - kompletně zdarma</li>
+                    <li>• <strong>Interactive Brokers</strong> - profesionální platforma</li>
+                  </ul>
+                </div>
+                
+                <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-violet-50 to-purple-50 rounded-lg p-6 card-hover">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
+                      <span className="text-xl">🏦</span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">České banky a instituce</h3>
+                  </div>
+                  <ul className="space-y-2 text-gray-700">
+                    <li>• <strong>Fio e-Broker</strong> - český broker, vyšší poplatky</li>
+                    <li>• <strong>Česká spořitelna</strong> - omezený výběr ETF</li>
+                    <li>• <strong>Komerční banka</strong> - premium služby</li>
+                    <li>• <strong>ČSOB</strong> - tradičné bankovnictví</li>
+                  </ul>
+                </div>
               </div>
-            </div>
 
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Jak vybrat nejlepšího brokera pro ETF?</h3>
             
@@ -359,13 +383,18 @@ const WhereToBuyETFs = () => {
               <strong>Kde koupit ETF</strong> závisí na vašich investičních cílech, výši investic a preferencích ohledně služeb.
             </p>
 
-            <div className="bg-blue-50 border-l-4 border-blue-400 p-6 mb-8">
-              <h4 className="font-semibold text-blue-900 mb-3">💡 Tip pro začátečníky</h4>
-              <p className="text-blue-800">
-                Pokud si nejste jisti, kde koupit ETF, začněte s DEGIRO nebo XTB. Oba brokeři nabízejí 
-                nízké poplatky, široký výběr ETF a jsou vhodní pro české investory.
-              </p>
-            </div>
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg p-6 card-hover mb-8">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex items-center justify-center rounded-full bg-white/20 w-10 h-10 group-hover:bg-white/30 transition-colors hover-scale">
+                    <span className="text-xl">💡</span>
+                  </div>
+                  <h4 className="font-semibold text-white">Tip pro začátečníky</h4>
+                </div>
+                <p className="text-white opacity-90">
+                  Pokud si nejste jisti, kde koupit ETF, začněte s DEGIRO nebo XTB. Oba brokeři nabízejí 
+                  nízké poplatky, široký výběr ETF a jsou vhodní pro české investory.
+                </p>
+              </div>
 
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Porovnání nákladů na koupi ETF</h3>
             
@@ -416,6 +445,7 @@ const WhereToBuyETFs = () => {
               Všichni doporučení brokeři poskytují daňové reporty pro české investory.
             </p>
 
+            </div>
           </div>
         </div>
       </section>

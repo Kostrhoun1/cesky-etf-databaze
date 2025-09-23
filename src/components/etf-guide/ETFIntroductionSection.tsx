@@ -1,131 +1,135 @@
-
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Scale, Target, Play, ShoppingBasket, TrendingUp, Globe } from 'lucide-react';
+import { Scale, Target, TrendingUp, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ETFIntroductionSection: React.FC = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="animate-fade-in">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-3xl mb-8 shadow-2xl">
-              <Scale className="w-10 h-10" />
+    <section>
+      <div className="animate-fade-in">
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center rounded-full bg-emerald-100 w-16 h-16 mx-auto mb-6 hover:bg-emerald-200 transition-colors hover-scale">
+            <Scale className="w-8 h-8 text-emerald-700" />
+          </div>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Co jsou ETF fondy?</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            ETF = Exchange Traded Fund = Investiční nástroj pro pasivní investování
+          </p>
+        </div>
+
+        {/* Jednoduchá definice */}
+        <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.2s] mb-8">
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 group-hover:text-emerald-800 transition-colors">ETF jednoduše vysvětleno</h3>
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <p className="text-lg text-gray-700 mb-4">
+                <strong className="text-emerald-600">ETF fond je jako nákupní košík</strong> plný akcií nebo dluhopisů. 
+                Místo kupování jednotlivých akcií (Apple, Microsoft, Google...) koupíte celý "košík" najednou.
+              </p>
+              <p className="text-lg text-gray-700 mb-4">
+                Jedním nákupem tak automaticky investujete do <strong>stovek společností současně</strong>. 
+                To je podstata pasivního investování.
+              </p>
+              <div className="bg-white rounded-lg p-4 border-l-4 border-emerald-500">
+                <p className="text-sm text-gray-600 font-medium">💡 Příklad:</p>
+                <p className="text-gray-700">Koupíte 1 ETF za 10.000 Kč → automaticky vlastníte kousky Apple, Microsoft, Google a 497 dalších firem</p>
+              </div>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Co je to ETF?</h2>
-            <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              ETF = Exchange Traded Fund<br />
-              <span className="text-lg text-gray-500">Jednoduché vysvětlení za 2 minuty</span>
+            
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover">
+              <h4 className="text-xl font-bold text-gray-900 mb-4">Nejpopulárnější ETF:</h4>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Link to="/etf/vwce" className="text-gray-700 hover:text-emerald-600 transition-colors"><strong>VWCE</strong> - Celý svět</Link>
+                  <span className="text-emerald-600 text-sm font-semibold">3800+ firem</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <Link to="/etf/cspx" className="text-gray-700 hover:text-emerald-600 transition-colors"><strong>CSPX</strong> - S&P 500</Link>
+                  <span className="text-emerald-600 text-sm font-semibold">500 US firem</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <Link to="/etf/iwda" className="text-gray-700 hover:text-emerald-600 transition-colors"><strong>IWDA</strong> - Vyspělé země</Link>
+                  <span className="text-emerald-600 text-sm font-semibold">1600+ firem</span>
+                </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <Link to="/srovnani-etf" className="text-emerald-600 hover:text-emerald-700 font-medium text-sm transition-colors">
+                  → Porovnat všechny ETF fondy
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Pasivní vs Aktivní investování */}
+        <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.4s] mb-8">
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 group-hover:text-violet-800 transition-colors">ETF = Pasivní investování</h3>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Shield className="w-6 h-6 text-emerald-600" />
+                <h4 className="text-lg font-bold text-emerald-800">Pasivní investování (ETF)</h4>
+              </div>
+              <ul className="space-y-2 text-gray-700">
+                <li>✅ Sleduje index (např. S&P 500)</li>
+                <li>✅ Nízké poplatky (0,05-0,5% ročně)</li>
+                <li>✅ Automatická diverzifikace</li>
+                <li>✅ Žádné rozhodování o jednotlivých akciích</li>
+                <li>✅ Dlouhodobě lepší výsledky</li>
+              </ul>
+            </div>
+            <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-lg p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Target className="w-6 h-6 text-red-600" />
+                <h4 className="text-lg font-bold text-red-800">Aktivní investování</h4>
+              </div>
+              <ul className="space-y-2 text-gray-700">
+                <li>❌ Snaha "porazit" trh</li>
+                <li>❌ Vysoké poplatky (1-3% ročně)</li>
+                <li>❌ Nutnost výběru akcií</li>
+                <li>❌ Časově náročné</li>
+                <li>❌ 90% aktivních fondů prohrává s indexem</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-6 text-center">
+            <p className="text-lg text-gray-700">
+              <strong className="text-emerald-600">ETF fondy jsou ideální pro pasivní investory</strong> - 
+              nastavíte a necháte běžet dlouhodobě.
             </p>
           </div>
-          
-          {/* Analogy Section */}
-          <div className="mb-16">
-            <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-0 shadow-xl overflow-hidden">
-              <CardContent className="p-8 md:p-12">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                  <div>
-                    <div className="flex items-center mb-6">
-                      <ShoppingBasket className="w-8 h-8 text-blue-600 mr-3" />
-                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900">Představte si nákupní košík</h3>
-                    </div>
-                    <div className="prose prose-lg max-w-none text-gray-700">
-                      <p className="text-lg leading-relaxed mb-6">
-                        ETF je jako <strong className="text-blue-600">velký nákupní košík plný různých akcií</strong>. 
-                        Místo toho, abyste kupovali každou akcii zvlášť (Apple, Microsoft, Google...), 
-                        koupíte si celý košík najednou.
-                      </p>
-                      <p className="text-lg leading-relaxed">
-                        Jedním kliknutím tak vlastníte kousek <strong>stovek nebo tisíců společností</strong>. 
-                        Je to nejjednodušší způsob, jak diverzifikovat investice.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-white rounded-2xl p-8 shadow-lg border-2 border-blue-100">
-                    <h4 className="text-xl font-bold text-gray-900 mb-4">Praktický příklad:</h4>
-                    <div className="space-y-3">
-                      <div className="flex items-center">
-                        <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
-                        <span className="text-gray-700">1 ETF = 500 největších US firem</span>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                        <span className="text-gray-700">Cena: ~$400 (10 000 Kč)</span>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
-                        <span className="text-gray-700">Poplatek: 0,03% ročně</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        </div>
+
+        {/* Klíčové výhody pro začátečníky */}
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.5s] text-center">
+            <div className="flex items-center justify-center rounded-full bg-emerald-100 w-16 h-16 group-hover:bg-emerald-200 transition-colors hover-scale mx-auto mb-4">
+              <TrendingUp className="w-8 h-8 text-emerald-700" />
+            </div>
+            <h4 className="text-lg font-bold text-gray-900 group-hover:text-emerald-800 transition-colors mb-3">Jednoduché na pochopení</h4>
+            <p className="text-gray-600 text-sm">
+              ETF pro začátečníky - žádná složitá analýza akcií, stačí vybrat jeden fond
+            </p>
           </div>
 
-          {/* Key Benefits Grid */}
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 group">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-                  <TrendingUp className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Okamžitá diverzifikace</h3>
-                <p className="text-gray-600">
-                  Jedním nákupem investujete do stovek firem napříč různými sektory a regiony
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 group">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-                  <Target className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Nízké poplatky</h3>
-                <p className="text-gray-600">
-                  Většina ETF má poplatky pod 0,5% ročně - mnohem méně než aktivní fondy
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 group">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-                  <Globe className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Snadné obchodování</h3>
-                <p className="text-gray-600">
-                  Kupuje a prodává se jako akcie - jednoduše, rychle, během obchodních hodin
-                </p>
-              </CardContent>
-            </Card>
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.6s] text-center">
+            <div className="flex items-center justify-center rounded-full bg-violet-100 w-16 h-16 group-hover:bg-violet-200 transition-colors hover-scale mx-auto mb-4">
+              <Target className="w-8 h-8 text-violet-700" />
+            </div>
+            <h4 className="text-lg font-bold text-gray-900 group-hover:text-violet-800 transition-colors mb-3">Nízké poplatky</h4>
+            <p className="text-gray-600 text-sm">
+              Většina ETF má poplatky pod 0,3% ročně - výrazně méně než aktivní fondy
+            </p>
           </div>
 
-          {/* YouTube Video Section */}
-          <Card className="bg-white border-0 shadow-2xl overflow-hidden">
-            <CardContent className="p-8 md:p-12">
-              <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-2xl mb-6 shadow-lg">
-                  <Play className="w-8 h-8" />
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Vysvětlení ETF ve videu</h3>
-                <p className="text-gray-600 text-lg">Podívejte se na praktické vysvětlení ETF fondů za 5 minut</p>
-              </div>
-              
-              <div className="aspect-video max-w-4xl mx-auto">
-                <iframe
-                  className="w-full h-full rounded-xl shadow-2xl"
-                  src="https://www.youtube.com/embed/-mBZSFto4Kk"
-                  title="Co jsou ETF fondy?"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.7s] text-center">
+            <div className="flex items-center justify-center rounded-full bg-emerald-100 w-16 h-16 group-hover:bg-emerald-200 transition-colors hover-scale mx-auto mb-4">
+              <Shield className="w-8 h-8 text-emerald-700" />
+            </div>
+            <h4 className="text-lg font-bold text-gray-900 group-hover:text-emerald-800 transition-colors mb-3">Bezpečná diverzifikace</h4>
+            <p className="text-gray-600 text-sm">
+              Investice rozložená do stovek firem snižuje riziko krachu jednotlivých akcií
+            </p>
+          </div>
         </div>
       </div>
     </section>

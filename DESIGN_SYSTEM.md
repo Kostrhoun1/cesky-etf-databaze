@@ -93,7 +93,7 @@ Tento design system je vytvořen na základě homepage (`/src/components/home/`)
     <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
       <Icon className="h-5 w-5 text-violet-700" />
     </div>
-    <h3 className="text-base font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Nadpis formuláře</h3>
+    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Nadpis formuláře</h3>
   </div>
   {/* Formulářové prvky */}
 </div>
@@ -160,16 +160,19 @@ Tento design system je vytvořen na základě homepage (`/src/components/home/`)
 
 ### Nadpisy
 ```css
-/* Hero nadpis */
+/* Hero nadpis (hlavní stránky) */
 text-4xl md:text-6xl font-bold tracking-tight
+
+/* Hlavní nadpis kalkulačky (CardTitle) */
+text-2xl font-semibold text-gray-900
 
 /* Sekce nadpis */  
 text-2xl font-bold text-gray-800
 
-/* Card nadpis */
-text-base font-semibold text-gray-900
+/* Card nadpis (formulářové sekce) */
+text-xl font-semibold text-gray-900
 
-/* Podnádpis */
+/* Podnádpis (výsledky) */
 text-lg font-semibold text-gray-900
 ```
 

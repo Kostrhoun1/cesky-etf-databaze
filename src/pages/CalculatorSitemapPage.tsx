@@ -78,8 +78,8 @@ const CalculatorSitemapPage: React.FC = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero sekce */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
             📊 Aktualizováno pro rok 2025
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -92,35 +92,40 @@ const CalculatorSitemapPage: React.FC = () => {
         </div>
 
         {/* Proč naše kalkulačky */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Proč jsou naše kalkulačky nejlepší?</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-white text-xl">✓</span>
+        <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.2s] mb-8">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 group-hover:bg-emerald-200 transition-colors hover-scale">
+              <span className="text-2xl">🏆</span>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 group-hover:text-emerald-800 transition-colors">Proč jsou naše kalkulačky nejlepší?</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover">
+              <div className="flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 group-hover:bg-emerald-200 transition-colors hover-scale mb-4">
+                <span className="text-xl">✓</span>
               </div>
-              <h3 className="text-lg font-semibold mb-2">Aktuální data 2025</h3>
-              <p className="text-gray-700">
+              <h3 className="text-lg font-semibold mb-2 text-gray-900 group-hover:text-emerald-800 transition-colors">Aktuální data 2025</h3>
+              <p className="text-gray-600">
                 Všechny sazby, daňové změny a legislativa aktualizovaná pro rok 2025. 
                 Žádná zastaralá data.
               </p>
             </div>
-            <div>
-              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-white text-xl">🎯</span>
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover">
+              <div className="flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 group-hover:bg-violet-200 transition-colors hover-scale mb-4">
+                <span className="text-xl">🎯</span>
               </div>
-              <h3 className="text-lg font-semibold mb-2">Přesné výpočty</h3>
-              <p className="text-gray-700">
+              <h3 className="text-lg font-semibold mb-2 text-gray-900 group-hover:text-violet-800 transition-colors">Přesné výpočty</h3>
+              <p className="text-gray-600">
                 Matematicky správné algoritmy ověřené finančními experty. 
                 Stejná přesnost jako používají banky.
               </p>
             </div>
-            <div>
-              <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4">
-                <span className="text-white text-xl">🆓</span>
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover">
+              <div className="flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 group-hover:bg-emerald-200 transition-colors hover-scale mb-4">
+                <span className="text-xl">🆓</span>
               </div>
-              <h3 className="text-lg font-semibold mb-2">Zdarma navždy</h3>
-              <p className="text-gray-700">
+              <h3 className="text-lg font-semibold mb-2 text-gray-900 group-hover:text-emerald-800 transition-colors">Zdarma navždy</h3>
+              <p className="text-gray-600">
                 Všechny nástroje jsou a zůstanou zdarma. Žádné skryté poplatky, 
                 registrace nebo omezení.
               </p>
@@ -131,36 +136,34 @@ const CalculatorSitemapPage: React.FC = () => {
         {/* Samotný hub s kalkulačkami */}
         <CalculatorHub />
 
-        {/* Social sharing */}
-        <SocialSharing
-          url="https://etfpruvodce.cz/kalkulacky"
-          title="Finanční kalkulačky 2025 - Hypotéka, úvěry, mzda"
-          description="Kompletní přehled finančních kalkulaček 2025. Hypoteční kalkulačka, čistá mzda, spotřebitelské úvěry, investiční nástroje. Vše zdarma s aktuálními daty."
-          className="mt-16"
-        />
 
         {/* Často kladené otázky */}
-        <div className="bg-white rounded-2xl border p-8 mt-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Často kladené otázky</h2>
+        <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.6s] mt-16">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 group-hover:bg-violet-200 transition-colors hover-scale">
+              <span className="text-2xl">❓</span>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 group-hover:text-violet-800 transition-colors">Často kladené otázky</h2>
+          </div>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div>
-                <h3 className="font-semibold mb-2">Jsou kalkulačky aktuální pro rok 2025?</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="text-lg font-semibold mb-2 text-gray-900">Jsou kalkulačky aktuální pro rok 2025?</h3>
+                <p className="text-gray-600">
                   Ano, všechny nástroje jsou pravidelně aktualizovány s nejnovějšími sazbami, 
                   daňovými změnami a legislativními úpravami pro rok 2025.
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Je používání kalkulaček zdarma?</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="text-lg font-semibold mb-2 text-gray-900">Je používání kalkulaček zdarma?</h3>
+                <p className="text-gray-600">
                   Všechny kalkulačky jsou zcela zdarma bez jakýchkoli omezení. 
                   Nepotřebujete registraci ani předplatné.
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Jak přesné jsou výpočty?</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="text-lg font-semibold mb-2 text-gray-900">Jak přesné jsou výpočty?</h3>
+                <p className="text-gray-600">
                   Používáme stejné matematické vzorce jako banky a finanční instituce. 
                   Výsledky jsou kontrolovány finančními experty.
                 </p>
@@ -168,22 +171,22 @@ const CalculatorSitemapPage: React.FC = () => {
             </div>
             <div className="space-y-6">
               <div>
-                <h3 className="font-semibold mb-2">Lze kalkulačky používat na mobilu?</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="text-lg font-semibold mb-2 text-gray-900">Lze kalkulačky používat na mobilu?</h3>
+                <p className="text-gray-600">
                   Ano, všechny nástroje jsou plně responzivní a fungují perfektně 
                   na mobilních telefonech a tabletech.
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Ukládáte naše data?</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="text-lg font-semibold mb-2 text-gray-900">Ukládáte naše data?</h3>
+                <p className="text-gray-600">
                   Ne, všechny výpočty probíhají přímo ve vašem prohlížeči. 
                   Žádná data se neukládají ani neodesílají.
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Máte i pokročilé nástroje?</h3>
-                <p className="text-gray-600 text-sm">
+                <h3 className="text-lg font-semibold mb-2 text-gray-900">Máte i pokročilé nástroje?</h3>
+                <p className="text-gray-600">
                   Ano, nabízíme i Monte Carlo simulace, analýzu měnových rizik 
                   a další pokročilé nástroje pro zkušené investory.
                 </p>

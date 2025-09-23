@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -135,296 +134,242 @@ const ETFPoplatky: React.FC = () => {
         schema={schema}
       />
 
-      {/* Hero sekce */}
-      <div className="bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="inline-flex items-center bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-medium mb-8 border border-white/20">
-              <Calculator className="w-4 h-4 mr-2" />
-              Kalkulačka ETF poplatků 2025
-            </div>
-            
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
-              ETF <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">poplatky</span> srovnání
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed mb-12">
-              Spočítejte si skutečné náklady investování do ETF. Porovnejte TER poplatky, broker fees a najděte nejlevnější způsob investování.
-            </p>
-
-            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-3xl mb-3">📊</div>
-                <h3 className="font-semibold mb-2">TER kalkulačka</h3>
-                <p className="text-sm text-blue-200">Spočítejte dopad poplatků</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-3xl mb-3">💰</div>
-                <h3 className="font-semibold mb-2">Srovnání brokerů</h3>
-                <p className="text-sm text-blue-200">Najděte nejlevnější cestů</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-3xl mb-3">🔍</div>
-                <h3 className="font-semibold mb-2">Skryté náklady</h3>
-                <p className="text-sm text-blue-200">Na co si dát pozor</p>
-              </div>
-            </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Úvodní sekce - kompaktní */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">ETF poplatky srovnání 2025</h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">Spočítejte si skutečné náklady investování do ETF. Porovnejte TER poplatky, broker fees a najděte nejlevnější způsob investování.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/srovnani-etf" className="hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-8 py-4 text-lg font-semibold rounded-lg inline-block transition-all">
+              Najít ETF s nejnižšími poplatky
+            </Link>
+            <Link to="/kde-koupit-etf" className="hover-scale border-2 border-emerald-500 text-emerald-700 hover:bg-emerald-50 px-8 py-4 text-lg font-semibold rounded-lg inline-block transition-all">
+              Porovnat brokery
+            </Link>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
-        
-        {/* Rychlé intro */}
-        <section className="text-center mb-8">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Spočítejte si dopad poplatků na vaše investice
-            </h2>
-            <p className="text-lg text-gray-600">
-              Poplatky můžou za 20 let "sníst" až 15% vašich výnosů. Použijte kalkulačku a zjistěte, kolik skutečně zaplatíte.
-            </p>
-          </div>
-        </section>
-
-        {/* TER Kalkulačka */}
-        <section className="bg-gradient-to-br from-violet-50 to-blue-50 rounded-3xl p-8 shadow-lg">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <Calculator className="w-4 h-4 mr-2" />
-              Kalkulačka ETF poplatků
+        <div className="space-y-12">
+          {/* TER Kalkulačka */}
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl p-8 card-hover animate-fade-in">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center rounded-full bg-violet-100 w-16 h-16 mx-auto mb-6 hover:bg-violet-200 transition-colors hover-scale">
+                <Calculator className="w-8 h-8 text-violet-700" />
+              </div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Kalkulačka ETF poplatků</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">Zadejte parametry vaší investice a uvidíte přesný dopad TER poplatků na vaše portfolio</p>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              🧮 Vypočítejte si náklady investování
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Zadejte parametry vaší investice a uvidíte přesný dopad TER poplatků na vaše portfolio
-            </p>
-          </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Vstupní parametry */}
-            <Card className="border-violet-200 shadow-sm">
-              <CardHeader className="bg-gradient-to-r from-violet-50 to-purple-50">
-                <CardTitle className="flex items-center gap-2 text-violet-800">
-                  <Calculator className="w-5 h-5" />
-                  Parametry investice
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6 mt-6">
-                <div>
-                  <Label htmlFor="initial">Počáteční investice (€)</Label>
-                  <Input
-                    id="initial"
-                    type="number"
-                    value={investedAmount}
-                    onChange={(e) => setInvestedAmount(Number(e.target.value))}
-                    className="mt-2"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="monthly">Měsíční příspěvek (€)</Label>
-                  <Input
-                    id="monthly"
-                    type="number"
-                    value={monthlyContribution}
-                    onChange={(e) => setMonthlyContribution(Number(e.target.value))}
-                    className="mt-2"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="period">Doba investování (roky)</Label>
-                  <Input
-                    id="period"
-                    type="number"
-                    value={investmentPeriod}
-                    onChange={(e) => setInvestmentPeriod(Number(e.target.value))}
-                    className="mt-2"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="ter">TER poplatek (%)</Label>
-                  <Input
-                    id="ter"
-                    type="number"
-                    step="0.01"
-                    value={selectedTER}
-                    onChange={(e) => setSelectedTER(Number(e.target.value))}
-                    className="mt-2"
-                  />
-                  <p className="text-sm text-gray-500 mt-1">Běžné rozmezí: 0.05% - 0.70%</p>
-                </div>
-
-                {/* Rychlé TER volby */}
-                <div>
-                  <Label>Rychlá volba TER:</Label>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {[0.07, 0.15, 0.22, 0.35, 0.65, 1.0].map((ter) => (
-                      <Button
-                        key={ter}
-                        variant={selectedTER === ter ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setSelectedTER(ter)}
-                      >
-                        {ter}%
-                      </Button>
-                    ))}
+            <div className="grid lg:grid-cols-2 gap-8">
+              {/* Vstupní parametry */}
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.2s]">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 group-hover:bg-violet-200 transition-colors hover-scale">
+                    <Calculator className="w-6 h-6 text-violet-700" />
                   </div>
+                  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-violet-800 transition-colors">Parametry investice</h3>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Výsledky */}
-            <Card className="border-blue-200 shadow-sm">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50">
-                <CardTitle className="flex items-center gap-2 text-blue-800">
-                  <TrendingDown className="w-5 h-5" />
-                  Výsledky výpočtu
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6 mt-6">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <p className="text-sm text-blue-600 font-medium">Celkem investováno</p>
-                    <p className="text-2xl font-bold text-blue-900">{formatCurrency(totalInvested)}</p>
+                <div className="space-y-6">
+                  <div>
+                    <Label htmlFor="initial">Počáteční investice (€)</Label>
+                    <Input
+                      id="initial"
+                      type="number"
+                      value={investedAmount}
+                      onChange={(e) => setInvestedAmount(Number(e.target.value))}
+                      className="mt-2"
+                    />
                   </div>
                   
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <p className="text-sm text-green-600 font-medium">Hodnota portfolia</p>
-                    <p className="text-2xl font-bold text-green-900">{formatCurrency(finalValue)}</p>
+                  <div>
+                    <Label htmlFor="monthly">Měsíční příspěvek (€)</Label>
+                    <Input
+                      id="monthly"
+                      type="number"
+                      value={monthlyContribution}
+                      onChange={(e) => setMonthlyContribution(Number(e.target.value))}
+                      className="mt-2"
+                    />
                   </div>
                   
-                  <div className="bg-red-50 p-4 rounded-lg">
-                    <p className="text-sm text-red-600 font-medium">Celkové poplatky</p>
-                    <p className="text-2xl font-bold text-red-900">{formatCurrency(totalFees)}</p>
+                  <div>
+                    <Label htmlFor="period">Doba investování (roky)</Label>
+                    <Input
+                      id="period"
+                      type="number"
+                      value={investmentPeriod}
+                      onChange={(e) => setInvestmentPeriod(Number(e.target.value))}
+                      className="mt-2"
+                    />
                   </div>
                   
-                  <div className="bg-orange-50 p-4 rounded-lg">
-                    <p className="text-sm text-orange-600 font-medium">Navíc oproti 0.05% TER</p>
-                    <p className="text-2xl font-bold text-orange-900">{formatCurrency(feeDifference)}</p>
+                  <div>
+                    <Label htmlFor="ter">TER poplatek (%)</Label>
+                    <Input
+                      id="ter"
+                      type="number"
+                      step="0.01"
+                      value={selectedTER}
+                      onChange={(e) => setSelectedTER(Number(e.target.value))}
+                      className="mt-2"
+                    />
+                    <p className="text-sm text-gray-500 mt-1">Běžné rozmezí: 0.05% - 0.70%</p>
                   </div>
-                </div>
 
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold text-yellow-800">Vliv poplatků na výnosy</h4>
-                      <p className="text-sm text-yellow-700 mt-1">
-                        Za {investmentPeriod} let zaplatíte na poplatcích celkem <strong>{formatCurrency(totalFees)}</strong>. 
-                        To představuje <strong>{((totalFees / totalInvested) * 100).toFixed(1)}%</strong> z celkové investice.
-                      </p>
+                  {/* Rychlé TER volby */}
+                  <div>
+                    <Label>Rychlá volba TER:</Label>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {[0.07, 0.15, 0.22, 0.35, 0.65, 1.0].map((ter) => (
+                        <Button
+                          key={ter}
+                          variant={selectedTER === ter ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSelectedTER(ter)}
+                        >
+                          {ter}%
+                        </Button>
+                      ))}
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="text-center">
-                  <p className="text-sm text-gray-600 mb-4">Předpokládaný roční výnos: 7% | Poplatky snižují konečný výnos</p>
-                  <Link to="/srovnani-etf">
-                    <Button className="w-full bg-violet-600 hover:bg-violet-700">
-                      Najít ETF s nejnižšími poplatky
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
+              {/* Výsledky */}
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.4s]">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 group-hover:bg-emerald-200 transition-colors hover-scale">
+                    <TrendingDown className="w-6 h-6 text-emerald-700" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-emerald-800 transition-colors">Výsledky výpočtu</h3>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <p className="text-sm text-blue-600 font-medium">Celkem investováno</p>
+                      <p className="text-2xl font-bold text-blue-900">{formatCurrency(totalInvested)}</p>
+                    </div>
+                    
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <p className="text-sm text-green-600 font-medium">Hodnota portfolia</p>
+                      <p className="text-2xl font-bold text-green-900">{formatCurrency(finalValue)}</p>
+                    </div>
+                    
+                    <div className="bg-red-50 p-4 rounded-lg">
+                      <p className="text-sm text-red-600 font-medium">Celkové poplatky</p>
+                      <p className="text-2xl font-bold text-red-900">{formatCurrency(totalFees)}</p>
+                    </div>
+                    
+                    <div className="bg-orange-50 p-4 rounded-lg">
+                      <p className="text-sm text-orange-600 font-medium">Navíc oproti 0.05% TER</p>
+                      <p className="text-2xl font-bold text-orange-900">{formatCurrency(feeDifference)}</p>
+                    </div>
+                  </div>
 
-        {/* Srovnání TER poplatků */}
-        <section className="bg-white rounded-2xl p-8 shadow-sm border">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              📋 Srovnání poplatků
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+                      <div>
+                        <h4 className="font-semibold text-yellow-800">Vliv poplatků na výnosy</h4>
+                        <p className="text-sm text-yellow-700 mt-1">
+                          Za {investmentPeriod} let zaplatíte na poplatcích celkem <strong>{formatCurrency(totalFees)}</strong>. 
+                          To představuje <strong>{((totalFees / totalInvested) * 100).toFixed(1)}%</strong> z celkové investice.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600 mb-4">Předpokládaný roční výnos: 7% | Poplatky snižují konečný výnos</p>
+                    <Link to="/srovnani-etf" className="hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-lg font-semibold transition-all w-full text-center inline-block">
+                      Najít ETF s nejnižšími poplatky
+                      <ArrowRight className="w-4 h-4 ml-2 inline" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              TER poplatky populárních ETF
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Porovnejte poplatky nejoblíbenějších ETF fondů a najděte ty nejlevnější
-            </p>
           </div>
+
+          {/* Srovnání TER poplatků */}
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.6s]">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center rounded-full bg-emerald-100 w-16 h-16 mx-auto mb-6 hover:bg-emerald-200 transition-colors hover-scale">
+                <DollarSign className="w-8 h-8 text-emerald-700" />
+              </div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">TER poplatky populárních ETF</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">Porovnejte poplatky nejoblíbenějších ETF fondů a najděte ty nejlevnější</p>
+            </div>
           
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse bg-white rounded-lg shadow-sm border border-gray-200">
-              <thead>
-                <tr className="bg-gray-50">
-                  <th className="border border-gray-200 p-4 text-left font-semibold">ETF</th>
-                  <th className="border border-gray-200 p-4 text-center font-semibold">Ticker</th>
-                  <th className="border border-gray-200 p-4 text-center font-semibold">TER</th>
-                  <th className="border border-gray-200 p-4 text-center font-semibold">Kategorie</th>
-                  <th className="border border-gray-200 p-4 text-center font-semibold">Akce</th>
-                </tr>
-              </thead>
-              <tbody>
-                {etfFeeComparison.map((etf, index) => (
-                  <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-25"}>
-                    <td className="border border-gray-200 p-4 font-medium">{etf.name}</td>
-                    <td className="border border-gray-200 p-4 text-center">
-                      <code className="bg-gray-100 px-2 py-1 rounded">{etf.ticker}</code>
-                    </td>
-                    <td className="border border-gray-200 p-4 text-center">
-                      <span className={etf.ter <= 0.15 ? "text-green-600 font-semibold" : etf.ter <= 0.35 ? "text-yellow-600" : "text-red-600"}>
-                        {etf.ter}%
-                      </span>
-                    </td>
-                    <td className="border border-gray-200 p-4 text-center">
-                      <Badge 
-                        className={
-                          etf.color === 'green' ? 'bg-green-100 text-green-800' :
-                          etf.color === 'yellow' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }
-                      >
-                        {etf.category}
-                      </Badge>
-                    </td>
-                    <td className="border border-gray-200 p-4 text-center">
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => setSelectedTER(etf.ter)}
-                      >
-                        Vyzkoušet
-                      </Button>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse bg-white rounded-lg shadow-sm border border-gray-200">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="border border-gray-200 p-4 text-left font-semibold">ETF</th>
+                    <th className="border border-gray-200 p-4 text-center font-semibold">Ticker</th>
+                    <th className="border border-gray-200 p-4 text-center font-semibold">TER</th>
+                    <th className="border border-gray-200 p-4 text-center font-semibold">Kategorie</th>
+                    <th className="border border-gray-200 p-4 text-center font-semibold">Akce</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        {/* Srovnání broker poplatků */}
-        <section className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-              🏦 Broker poplatky
+                </thead>
+                <tbody>
+                  {etfFeeComparison.map((etf, index) => (
+                    <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-25"}>
+                      <td className="border border-gray-200 p-4 font-medium">{etf.name}</td>
+                      <td className="border border-gray-200 p-4 text-center">
+                        <code className="bg-gray-100 px-2 py-1 rounded">{etf.ticker}</code>
+                      </td>
+                      <td className="border border-gray-200 p-4 text-center">
+                        <span className={etf.ter <= 0.15 ? "text-green-600 font-semibold" : etf.ter <= 0.35 ? "text-yellow-600" : "text-red-600"}>
+                          {etf.ter}%
+                        </span>
+                      </td>
+                      <td className="border border-gray-200 p-4 text-center">
+                        <Badge 
+                          className={
+                            etf.color === 'green' ? 'bg-green-100 text-green-800' :
+                            etf.color === 'yellow' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                          }
+                        >
+                          {etf.category}
+                        </Badge>
+                      </td>
+                      <td className="border border-gray-200 p-4 text-center">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => setSelectedTER(etf.ter)}
+                        >
+                          Vyzkoušet
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Poplatky brokerů za nákup ETF
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Správný výběr brokera vám může ušetřit stovky eur ročně na poplatcích
-            </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {brokerFees.map((broker, index) => (
-              <Card key={index} className={broker.highlight ? "ring-2 ring-blue-500" : ""}>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    {broker.broker}
+
+          {/* Srovnání broker poplatků */}
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.8s]">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center rounded-full bg-emerald-100 w-16 h-16 mx-auto mb-6 hover:bg-emerald-200 transition-colors hover-scale">
+                <Info className="w-8 h-8 text-emerald-700" />
+              </div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Poplatky brokerů za nákup ETF</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">Správný výběr brokera vám může ušetřit stovky eur ročně na poplatcích</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {brokerFees.map((broker, index) => (
+                <div key={index} className={`border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-6 card-hover ${broker.highlight ? 'ring-2 ring-emerald-500' : ''}`} style={{animationDelay: `${1.0 + index * 0.1}s`}}>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-emerald-800 transition-colors">{broker.broker}</h3>
                     {broker.highlight && (
-                      <Badge className="bg-blue-100 text-blue-800">Doporučeno</Badge>
+                      <Badge className="bg-emerald-100 text-emerald-800">Doporučeno</Badge>
                     )}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                  </div>
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Poplatek za nákup:</span>
@@ -438,68 +383,78 @@ const ETFPoplatky: React.FC = () => {
                       {broker.notes}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+              ))}
+            </div>
           </div>
-        </section>
 
-        {/* Skryté náklady */}
-        <section>
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            🔍 Skryté náklady při investování do ETF
-          </h2>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-red-600">⚠️ Pozor na tyto náklady</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold">Měnové konverze</h4>
-                  <p className="text-sm text-gray-600">0.1% - 0.5% při převodu CZK na EUR/USD</p>
+          {/* Skryté náklady */}
+          <div className="animate-fade-in">
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center rounded-full bg-violet-100 w-16 h-16 mx-auto mb-6 hover:bg-violet-200 transition-colors hover-scale">
+                <AlertTriangle className="w-8 h-8 text-violet-700" />
+              </div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Skryté náklady při investování do ETF</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">Na co si dát pozor a jak minimalizovat všechny náklady</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:1.2s]">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex items-center justify-center rounded-full bg-red-100 w-12 h-12 group-hover:bg-red-200 transition-colors hover-scale">
+                    <AlertTriangle className="w-6 h-6 text-red-700" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-red-800 transition-colors">Pozor na tyto náklady</h3>
                 </div>
-                <div>
-                  <h4 className="font-semibold">Bid-ask spread</h4>
-                  <p className="text-sm text-gray-600">Rozdíl mezi nákupní a prodejní cenou</p>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Měnové konverze</h4>
+                    <p className="text-gray-600">0.1% - 0.5% při převodu CZK na EUR/USD</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Bid-ask spread</h4>
+                    <p className="text-gray-600">Rozdíl mezi nákupní a prodejní cenou</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Tracking error</h4>
+                    <p className="text-gray-600">Odchylka ETF od sledovaného indexu</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Daně u dividendových ETF</h4>
+                    <p className="text-gray-600">Srážkové daně snižují výnosy</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-semibold">Tracking error</h4>
-                  <p className="text-sm text-gray-600">Odchylka ETF od sledovaného indexu</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold">Daně u dividendových ETF</h4>
-                  <p className="text-sm text-gray-600">Srážkové daně snižují výnosy</p>
-                </div>
-              </CardContent>
-            </Card>
+              </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-green-600">💡 Jak minimalizovat náklady</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold">Vyberte ETF s nízkým TER</h4>
-                  <p className="text-sm text-gray-600">Pod 0.25% pro broad market ETF</p>
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:1.4s]">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 group-hover:bg-emerald-200 transition-colors hover-scale">
+                    <Info className="w-6 h-6 text-emerald-700" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-emerald-800 transition-colors">Jak minimalizovat náklady</h3>
                 </div>
-                <div>
-                  <h4 className="font-semibold">Použijte brokers s ETF zdarma</h4>
-                  <p className="text-sm text-gray-600">DEGIRO, XTB, Trading 212</p>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Vyberte ETF s nízkým TER</h4>
+                    <p className="text-gray-600">Pod 0.25% pro broad market ETF</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Použijte brokers s ETF zdarma</h4>
+                    <p className="text-gray-600">DEGIRO, XTB, Trading 212</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Akumulační ETF</h4>
+                    <p className="text-gray-600">Bez dividend fees a daňově výhodnější</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Pravidelné investování</h4>
+                    <p className="text-gray-600">DCA snižuje dopad timing risk</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-semibold">Akumulační ETF</h4>
-                  <p className="text-sm text-gray-600">Bez dividend fees a daňově výhodnější</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold">Pravidelné investování</h4>
-                  <p className="text-sm text-gray-600">DCA snižuje dopad timing risk</p>
-                </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
-        </section>
+        </div>
 
         {/* FAQ sekce */}
         <FAQSection 

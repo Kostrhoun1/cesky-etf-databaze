@@ -87,7 +87,7 @@ const BreadcrumbNav: React.FC = () => {
         'uverova-kalkulacka': 'Spotřebitelský úvěr',
         'cisty-plat-2025': 'Čistý plat 2025',
         'investicni-kalkulacka': 'Investiční kalkulačka',
-        'penzijni-planovac': 'Penzijní plánovač',
+        'fire-kalkulacka': 'FIRE kalkulačka',
         'nouzova-rezerva': 'Nouzová rezerva',
         'kalkulacka-poplatku-etf': 'ETF poplatky',
         'monte-carlo-simulator': 'Monte Carlo simulátor',

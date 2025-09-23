@@ -68,7 +68,7 @@ export class SitemapGenerator {
       priority: 0.7
     },
     {
-      url: `${this.baseUrl}/kalkulacky/penzijni-planovac`,
+      url: `${this.baseUrl}/kalkulacky/fire-kalkulacka`,
       changefreq: 'monthly',
       priority: 0.7
     },

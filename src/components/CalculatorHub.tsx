@@ -17,7 +17,7 @@ const CalculatorHub: React.FC = () => {
     {
       title: 'Hypoteční kalkulačka',
       description: 'Spočítejte si hypoteční splátky a celkové náklady na bydlení',
-      icon: <Home className="h-8 w-8 text-blue-600" />,
+      icon: <Home className="h-6 w-6 text-violet-700" />,
       href: '/kalkulacky/hypotecni-kalkulacka',
       difficulty: 'Snadná',
       category: 'finance',
@@ -25,7 +25,7 @@ const CalculatorHub: React.FC = () => {
     {
       title: 'Spotřebitelský úvěr',
       description: 'Kalkulačka splátek spotřebitelského úvěru a celkových nákladů',
-      icon: <CreditCard className="h-8 w-8 text-orange-600" />,
+      icon: <CreditCard className="h-6 w-6 text-emerald-700" />,
       href: '/kalkulacky/uverova-kalkulacka',
       difficulty: 'Snadná',
       category: 'finance',
@@ -33,7 +33,7 @@ const CalculatorHub: React.FC = () => {
     {
       title: 'Čistý plat 2025',
       description: 'Výpočet čisté mzdy podle aktuální české legislativy',
-      icon: <Calculator className="h-8 w-8 text-green-600" />,
+      icon: <Calculator className="h-6 w-6 text-violet-700" />,
       href: '/kalkulacky/cisty-plat-2025',
       difficulty: 'Snadná',
       category: 'finance',
@@ -41,23 +41,23 @@ const CalculatorHub: React.FC = () => {
     {
       title: 'Investiční kalkulačka',
       description: 'DCA strategie a compound interest výpočty pro ETF investice',
-      icon: <TrendingUp className="h-8 w-8 text-purple-600" />,
+      icon: <TrendingUp className="h-6 w-6 text-emerald-700" />,
       href: '/kalkulacky/investicni-kalkulacka',
       difficulty: 'Střední',
       category: 'investment'
     },
     {
-      title: 'Penzijní plánovač',
-      description: '4% withdrawal rule a FIRE plánování pro předčasný důchod',
-      icon: <PiggyBank className="h-8 w-8 text-indigo-600" />,
-      href: '/kalkulacky/penzijni-planovac',
+      title: 'FIRE kalkulačka',
+      description: '4% withdrawal rule a FIRE plánování pro finanční nezávislost',
+      icon: <PiggyBank className="h-6 w-6 text-violet-700" />,
+      href: '/kalkulacky/fire-kalkulacka',
       difficulty: 'Střední',
       category: 'investment'
     },
     {
       title: 'Nouzová rezerva',
       description: 'Optimální velikost emergency fund podle vaší situace',
-      icon: <Shield className="h-8 w-8 text-cyan-600" />,
+      icon: <Shield className="h-6 w-6 text-emerald-700" />,
       href: '/kalkulacky/nouzova-rezerva',
       difficulty: 'Snadná',
       category: 'finance'
@@ -65,7 +65,7 @@ const CalculatorHub: React.FC = () => {
     {
       title: 'ETF poplatky',
       description: 'Analýza dopadu TER a dalších poplatků na dlouhodobé výnosy',
-      icon: <Target className="h-8 w-8 text-red-600" />,
+      icon: <Target className="h-6 w-6 text-violet-700" />,
       href: '/kalkulacky/kalkulacka-poplatku-etf',
       difficulty: 'Střední',
       category: 'investment'
@@ -73,7 +73,7 @@ const CalculatorHub: React.FC = () => {
     {
       title: 'Monte Carlo simulátor',
       description: 'Pokročilá simulace portfolia na základě historických dat',
-      icon: <BarChart className="h-8 w-8 text-violet-600" />,
+      icon: <BarChart className="h-6 w-6 text-emerald-700" />,
       href: '/kalkulacky/monte-carlo-simulator',
       difficulty: 'Pokročilá',
       category: 'advanced'
@@ -81,7 +81,7 @@ const CalculatorHub: React.FC = () => {
     {
       title: 'Měnový dopad',
       description: 'Analýza kurzového rizika a hedging strategií pro ETF',
-      icon: <DollarSign className="h-8 w-8 text-yellow-600" />,
+      icon: <DollarSign className="h-6 w-6 text-violet-700" />,
       href: '/kalkulacky/kurzovy-dopad-etf',
       difficulty: 'Pokročilá',
       category: 'advanced'
@@ -118,7 +118,7 @@ const CalculatorHub: React.FC = () => {
     <div className="space-y-12">
       {/* Kalkulačky podle kategorií */}
       {Object.entries(categorizedCalculators).map(([category, calcs]) => (
-        <div key={category}>
+        <div key={category} className="animate-fade-in" style={{animationDelay: `${0.2 + Object.keys(categorizedCalculators).indexOf(category) * 0.1}s`}}>
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               {getCategoryTitle(category)}
@@ -130,68 +130,82 @@ const CalculatorHub: React.FC = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {calcs.map((calc, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow group">
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-2">
+              <div key={index} className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover" style={{animationDelay: `${0.4 + index * 0.1}s`}}>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 group-hover:bg-violet-200 transition-colors hover-scale">
                     {calc.icon}
-                    <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
-                      {calc.title}
-                    </CardTitle>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 mb-4">{calc.description}</p>
-                  <div className="flex justify-end items-center text-sm text-gray-500 mb-4">
-                    <span className={`px-2 py-1 rounded ${
-                      calc.difficulty === 'Snadná' ? 'bg-green-100 text-green-800' :
-                      calc.difficulty === 'Střední' ? 'bg-yellow-100 text-yellow-800' :
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">
+                      {calc.title}
+                    </h3>
+                    <span className={`inline-block px-2 py-1 text-xs font-semibold rounded mt-1 ${
+                      calc.difficulty === 'Snadná' ? 'bg-emerald-100 text-emerald-800' :
+                      calc.difficulty === 'Střední' ? 'bg-amber-100 text-amber-800' :
                       'bg-red-100 text-red-800'
                     }`}>
                       {calc.difficulty}
                     </span>
                   </div>
-                  <Link
-                    to={calc.href}
-                    className="inline-block w-full text-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-                  >
+                </div>
+                
+                <p className="text-gray-600 mb-4">{calc.description}</p>
+                
+                <Link to={calc.href}>
+                  <button className="w-full hover-scale bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold py-3 rounded-lg transition-all">
                     Spustit kalkulačku
-                  </Link>
-                </CardContent>
-              </Card>
+                  </button>
+                </Link>
+              </div>
             ))}
           </div>
         </div>
       ))}
 
       {/* SEO text pro kalkulačky */}
-      <div className="bg-gray-50 rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          Proč používat naše finanční kalkulačky?
-        </h2>
+      <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.8s]">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 group-hover:bg-violet-200 transition-colors hover-scale">
+            <span className="text-2xl">💎</span>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 group-hover:text-violet-800 transition-colors">
+            Proč používat naše finanční kalkulačky?
+          </h2>
+        </div>
         <div className="grid md:grid-cols-2 gap-8">
-          <div>
-            <h3 className="text-lg font-semibold mb-3 text-blue-800">
-              Aktuální data 2025
-            </h3>
-            <p className="text-gray-700 mb-4">
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
+                <span className="text-xl">📅</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">
+                Aktuální data 2025
+              </h3>
+            </div>
+            <p className="text-gray-600 mb-4">
               Všechny naše kalkulačky používají nejnovější sazby, daňové změny a legislativní úpravy 
               platné pro rok 2025. Hypoteční sazby, daně z příjmů, pojistné - vše je aktuální.
             </p>
-            <ul className="space-y-2 text-gray-700">
+            <ul className="space-y-2 text-gray-600">
               <li>• <strong>Daňové sazby:</strong> Aktuální slevy a sazby daně z příjmů</li>
               <li>• <strong>Úrokové sazby:</strong> Současné sazby hypoték a úvěrů</li>
               <li>• <strong>Pojistné:</strong> Zdravotní a sociální pojištění 2025</li>
             </ul>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-3 text-blue-800">
-              Komplexní finanční plánování
-            </h3>
-            <p className="text-gray-700 mb-4">
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
+                <span className="text-xl">📊</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">
+                Komplexní finanční plánování
+              </h3>
+            </div>
+            <p className="text-gray-600 mb-4">
               Od základních výpočtů po pokročilé investiční strategie. Naše nástroje pokrývají 
               celé spektrum finančního plánování - od hypotéky po FIRE movement.
             </p>
-            <ul className="space-y-2 text-gray-700">
+            <ul className="space-y-2 text-gray-600">
               <li>• <strong>Základní výpočty:</strong> Mzda, úvěry, hypotéky</li>
               <li>• <strong>Investiční plánování:</strong> ETF, DCA, compound interest</li>
               <li>• <strong>Pokročilé analýzy:</strong> Monte Carlo, měnová rizika</li>

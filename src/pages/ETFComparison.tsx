@@ -77,30 +77,45 @@ const ETFComparison: React.FC = () => {
         <ETFComparisonContainer onShowDetailedComparison={handleShowDetailedComparison} />
         
         {/* SEO optimalizovaný obsah */}
-        <div className="mt-16 space-y-12">
+        <div className="mt-16 space-y-8">
           {/* Co je ETF srovnání */}
-          <section className="bg-white rounded-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Co je ETF srovnání a proč je důležité?</h2>
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.2s]">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 group-hover:bg-violet-200 transition-colors hover-scale">
+                <span className="text-2xl">📊</span>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 group-hover:text-violet-800 transition-colors">Co je ETF srovnání a proč je důležité?</h2>
+            </div>
             <div className="prose max-w-none">
-              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+              <p className="text-lg text-gray-600 leading-relaxed mb-4">
                 <strong>ETF srovnání</strong> je klíčový nástroj pro každého českého investora, který chce najít <strong>nejlepší ETF fondy</strong> pro své portfolio. 
                 Náš pokročilý nástroj pro <strong>porovnání ETF fondů</strong> umožňuje filtrovat a analyzovat více než <strong>3500 ETF fondů</strong> podle kritérií, 
                 které jsou nejdůležitější pro vaše investiční cíle.
               </p>
-              <p className="text-gray-700 mb-4">
+              <p className="text-gray-600 mb-4">
                 Při <strong>srovnání ETF</strong> je důležité porovnávat nejen <strong>TER poplatky</strong>, ale také výkonnost, riziko, velikost fondu 
                 a dostupnost u českých brokerů jako je <strong>DEGIRO</strong>, <strong>XTB</strong> nebo <strong>Interactive Brokers</strong>.
               </p>
             </div>
-          </section>
+          </div>
 
           {/* Jak používat ETF srovnání */}
-          <section className="bg-gray-50 rounded-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Jak používat náš ETF srovnání nástroj</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">1. Filtrace podle kategorií</h3>
-                <ul className="space-y-2 text-gray-700">
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.4s]">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 group-hover:bg-emerald-200 transition-colors hover-scale">
+                <span className="text-2xl">🎯</span>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 group-hover:text-emerald-800 transition-colors">Jak používat náš ETF srovnání nástroj</h2>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
+                    <span className="text-xl">1</span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Filtrace podle kategorií</h3>
+                </div>
+                <ul className="space-y-2 text-gray-600">
                   <li>• <strong>Americké ETF</strong> - S&P 500, NASDAQ, Russell fondy</li>
                   <li>• <strong>Evropské ETF</strong> - STOXX 600, FTSE Europe fondy</li>
                   <li>• <strong>Světové ETF</strong> - MSCI World, FTSE All-World</li>
@@ -108,9 +123,14 @@ const ETFComparison: React.FC = () => {
                   <li>• <strong>Komoditní ETF</strong> - Zlato, ropu, broad commodities</li>
                 </ul>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">2. Pokročilé filtry</h3>
-                <ul className="space-y-2 text-gray-700">
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
+                    <span className="text-xl">2</span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Pokročilé filtry</h3>
+                </div>
+                <ul className="space-y-2 text-gray-600">
                   <li>• <strong>TER poplatky</strong> - Najděte nejlevnější ETF</li>
                   <li>• <strong>Výkonnost</strong> - 1Y, 3Y, 5Y historické výnosy</li>
                   <li>• <strong>Velikost fondu</strong> - Minimální assets under management</li>
@@ -118,77 +138,108 @@ const ETFComparison: React.FC = () => {
                 </ul>
               </div>
             </div>
-          </section>
+          </div>
 
           {/* Výhody našeho ETF srovnání */}
-          <section className="bg-white rounded-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Proč používat náš ETF srovnání nástroj?</h2>
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.6s]">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 group-hover:bg-violet-200 transition-colors hover-scale">
+                <span className="text-2xl">⭐</span>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 group-hover:text-violet-800 transition-colors">Proč používat náš ETF srovnání nástroj?</h2>
+            </div>
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="text-4xl mb-4">🇨🇿</div>
-                <h3 className="text-lg font-semibold mb-2">Česky lokalizováno</h3>
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover text-center">
+                <div className="flex items-center justify-center rounded-full bg-emerald-100 w-16 h-16 group-hover:bg-emerald-200 transition-colors hover-scale mx-auto mb-4">
+                  <span className="text-2xl">🇨🇿</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2 text-gray-900 group-hover:text-emerald-800 transition-colors">Česky lokalizováno</h3>
                 <p className="text-gray-600">Speciálně připraveno pro české investory s českými brokery a daňovými aspekty</p>
               </div>
-              <div className="text-center">
-                <div className="text-4xl mb-4">⚡</div>
-                <h3 className="text-lg font-semibold mb-2">Rychlé a přesné</h3>
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover text-center">
+                <div className="flex items-center justify-center rounded-full bg-violet-100 w-16 h-16 group-hover:bg-violet-200 transition-colors hover-scale mx-auto mb-4">
+                  <span className="text-2xl">⚡</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2 text-gray-900 group-hover:text-violet-800 transition-colors">Rychlé a přesné</h3>
                 <p className="text-gray-600">Okamžité filtrování a srovnání tisíců ETF fondů v reálném čase</p>
               </div>
-              <div className="text-center">
-                <div className="text-4xl mb-4">📊</div>
-                <h3 className="text-lg font-semibold mb-2">Detailní analýza</h3>
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover text-center">
+                <div className="flex items-center justify-center rounded-full bg-emerald-100 w-16 h-16 group-hover:bg-emerald-200 transition-colors hover-scale mx-auto mb-4">
+                  <span className="text-2xl">📊</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2 text-gray-900 group-hover:text-emerald-800 transition-colors">Detailní analýza</h3>
                 <p className="text-gray-600">Porovnání výkonnosti, rizika, poplatků a dalších klíčových metrik</p>
               </div>
             </div>
-          </section>
+          </div>
 
           {/* Nejoblíbenější ETF kategorie */}
-          <section className="bg-violet-50 rounded-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Nejoblíbenější ETF kategorie pro srovnání</h2>
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.6s]">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 group-hover:bg-violet-200 transition-colors hover-scale">
+                <span className="text-2xl">⭐</span>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 group-hover:text-violet-800 transition-colors">Nejoblíbenější ETF kategorie pro srovnání</h2>
+            </div>
             <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-xl font-semibold text-violet-900 mb-4">Top americké ETF pro srovnání</h3>
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
+                    <span className="text-xl">🇺🇸</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Top americké ETF pro srovnání</h3>
+                </div>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center bg-white p-3 rounded">
-                    <span className="font-medium">S&P 500 ETF (CSPX, VOO)</span>
+                  <div className="flex justify-between items-center bg-gray-50 p-3 rounded hover:bg-emerald-50 transition-colors">
+                    <span className="font-medium text-gray-900">S&P 500 ETF (CSPX, VOO)</span>
                     <span className="text-sm text-gray-600">TER od 0.03%</span>
                   </div>
-                  <div className="flex justify-between items-center bg-white p-3 rounded">
-                    <span className="font-medium">NASDAQ ETF (QQQ, EQQQ)</span>
+                  <div className="flex justify-between items-center bg-gray-50 p-3 rounded hover:bg-emerald-50 transition-colors">
+                    <span className="font-medium text-gray-900">NASDAQ ETF (QQQ, EQQQ)</span>
                     <span className="text-sm text-gray-600">TER od 0.30%</span>
                   </div>
-                  <div className="flex justify-between items-center bg-white p-3 rounded">
-                    <span className="font-medium">US Total Market (VTI, ITOT)</span>
+                  <div className="flex justify-between items-center bg-gray-50 p-3 rounded hover:bg-emerald-50 transition-colors">
+                    <span className="font-medium text-gray-900">US Total Market (VTI, ITOT)</span>
                     <span className="text-sm text-gray-600">TER od 0.03%</span>
                   </div>
                 </div>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-violet-900 mb-4">Top světové ETF pro srovnání</h3>
+              <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
+                    <span className="text-xl">🌍</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Top světové ETF pro srovnání</h3>
+                </div>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center bg-white p-3 rounded">
-                    <span className="font-medium">MSCI World (IWDA, SWDA)</span>
+                  <div className="flex justify-between items-center bg-gray-50 p-3 rounded hover:bg-violet-50 transition-colors">
+                    <span className="font-medium text-gray-900">MSCI World (IWDA, SWDA)</span>
                     <span className="text-sm text-gray-600">TER od 0.20%</span>
                   </div>
-                  <div className="flex justify-between items-center bg-white p-3 rounded">
-                    <span className="font-medium">FTSE All-World (VWCE)</span>
+                  <div className="flex justify-between items-center bg-gray-50 p-3 rounded hover:bg-violet-50 transition-colors">
+                    <span className="font-medium text-gray-900">FTSE All-World (VWCE)</span>
                     <span className="text-sm text-gray-600">TER 0.22%</span>
                   </div>
-                  <div className="flex justify-between items-center bg-white p-3 rounded">
-                    <span className="font-medium">MSCI ACWI (SSAC, SPYI)</span>
+                  <div className="flex justify-between items-center bg-gray-50 p-3 rounded hover:bg-violet-50 transition-colors">
+                    <span className="font-medium text-gray-900">MSCI ACWI (SSAC, SPYI)</span>
                     <span className="text-sm text-gray-600">TER od 0.20%</span>
                   </div>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
 
           {/* FAQ sekce */}
-          <section className="bg-white rounded-lg p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Často kladené otázky o ETF srovnání</h2>
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-2xl p-8 card-hover animate-fade-in [animation-delay:0.8s]">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 group-hover:bg-violet-200 transition-colors hover-scale">
+                <span className="text-2xl">❓</span>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 group-hover:text-violet-800 transition-colors">Často kladené otázky o ETF srovnání</h2>
+            </div>
             <div className="space-y-6">
               <details className="group border-b border-gray-200 pb-4">
-                <summary className="font-semibold text-lg cursor-pointer text-gray-900 hover:text-violet-600">
+                <summary className="font-semibold text-lg cursor-pointer text-gray-900 hover:text-violet-600 transition-colors">
                   Jak najít nejlevnější ETF pomocí srovnání?
                 </summary>
                 <div className="mt-3 text-gray-700">
@@ -198,7 +249,7 @@ const ETFComparison: React.FC = () => {
               </details>
 
               <details className="group border-b border-gray-200 pb-4">
-                <summary className="font-semibold text-lg cursor-pointer text-gray-900 hover:text-violet-600">
+                <summary className="font-semibold text-lg cursor-pointer text-gray-900 hover:text-violet-600 transition-colors">
                   Které ETF jsou dostupné zdarma na DEGIRO?
                 </summary>
                 <div className="mt-3 text-gray-700">
@@ -208,7 +259,7 @@ const ETFComparison: React.FC = () => {
               </details>
 
               <details className="group border-b border-gray-200 pb-4">
-                <summary className="font-semibold text-lg cursor-pointer text-gray-900 hover:text-violet-600">
+                <summary className="font-semibold text-lg cursor-pointer text-gray-900 hover:text-violet-600 transition-colors">
                   Jak porovnat výkonnost ETF za různá období?
                 </summary>
                 <div className="mt-3 text-gray-700">
@@ -218,7 +269,7 @@ const ETFComparison: React.FC = () => {
               </details>
 
               <details className="group border-b border-gray-200 pb-4">
-                <summary className="font-semibold text-lg cursor-pointer text-gray-900 hover:text-violet-600">
+                <summary className="font-semibold text-lg cursor-pointer text-gray-900 hover:text-violet-600 transition-colors">
                   Kolik ETF mohu porovnat současně?
                 </summary>
                 <div className="mt-3 text-gray-700">
@@ -228,7 +279,7 @@ const ETFComparison: React.FC = () => {
               </details>
 
               <details className="group border-b border-gray-200 pb-4">
-                <summary className="font-semibold text-lg cursor-pointer text-gray-900 hover:text-violet-600">
+                <summary className="font-semibold text-lg cursor-pointer text-gray-900 hover:text-violet-600 transition-colors">
                   Jsou americké ETF lepší než evropské ETF?
                 </summary>
                 <div className="mt-3 text-gray-700">
@@ -237,23 +288,28 @@ const ETFComparison: React.FC = () => {
                 </div>
               </details>
             </div>
-          </section>
+          </div>
 
           {/* Call to Action */}
-          <section className="bg-gradient-to-r from-violet-600 to-purple-600 rounded-lg p-8 text-center text-white">
-            <h2 className="text-3xl font-bold mb-4">Začněte s ETF srovnáním ještě dnes</h2>
+          <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl p-8 card-hover animate-fade-in [animation-delay:1.0s] text-center text-white">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="flex items-center justify-center rounded-full bg-white/20 w-12 h-12 group-hover:bg-white/30 transition-colors hover-scale">
+                <span className="text-2xl">🚀</span>
+              </div>
+              <h2 className="text-2xl font-bold">Začněte s ETF srovnáním ještě dnes</h2>
+            </div>
             <p className="text-xl mb-6 opacity-90">
               Najděte nejlepší ETF fondy pro vaše investiční cíle pomocí našeho pokročilého srovnání nástroje.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/tipy/nejlepsi-etf-2025" className="bg-white text-violet-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+              <a href="/tipy/nejlepsi-etf-2025" className="hover-scale bg-white text-violet-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
                 Nejlepší ETF 2025
               </a>
-              <a href="/kde-koupit-etf" className="bg-violet-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-violet-800 transition-colors">
+              <a href="/kde-koupit-etf" className="hover-scale bg-violet-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-violet-800 transition-colors border border-white/20">
                 Kde koupit ETF
               </a>
             </div>
-          </section>
+          </div>
         </div>
       </div>
     </Layout>

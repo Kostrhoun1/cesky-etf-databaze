@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import HomePage from "./pages/HomePage";
 import ETFComparison from "./pages/ETFComparison";
@@ -17,7 +17,7 @@ import InvestmentCalculatorPage from "./pages/calculators/InvestmentCalculatorPa
 import FeeCalculatorPage from "./pages/calculators/FeeCalculatorPage";
 import ETFPoplatky from "./pages/ETFPoplatky";
 import MonteCarloSimulatorPage from "./pages/calculators/MonteCarloSimulatorPage";
-import RetirementPlannerPage from "./pages/calculators/RetirementPlannerPage";
+import FireCalculatorPage from "./pages/calculators/RetirementPlannerPage";
 import EmergencyFundCalculatorPage from "./pages/calculators/EmergencyFundCalculatorPage";
 import CurrencyImpactAnalyzerPage from "./pages/calculators/CurrencyImpactAnalyzerPage";
 import NetSalaryCalculatorPage from "./pages/calculators/NetSalaryCalculatorPage";
@@ -77,12 +77,12 @@ function App() {
             <Route path="/interactive-brokers-recenze" element={<InteractiveBrokersReview />} />
             <Route path="/fio-ebroker-recenze" element={<FioReview />} />
             <Route path="/trading212-recenze" element={<Trading212Review />} />
-            <Route path="/nastroje" element={<Tools />} />
+            <Route path="/nastroje" element={<Navigate to="/kalkulacky" replace />} />
             <Route path="/kalkulacky" element={<CalculatorSitemapPage />} />
             <Route path="/kalkulacky/investicni-kalkulacka" element={<InvestmentCalculatorPage />} />
             <Route path="/kalkulacky/kalkulacka-poplatku-etf" element={<FeeCalculatorPage />} />
             <Route path="/kalkulacky/monte-carlo-simulator" element={<MonteCarloSimulatorPage />} />
-            <Route path="/kalkulacky/penzijni-planovac" element={<RetirementPlannerPage />} />
+            <Route path="/kalkulacky/fire-kalkulacka" element={<FireCalculatorPage />} />
             <Route path="/kalkulacky/nouzova-rezerva" element={<EmergencyFundCalculatorPage />} />
             <Route path="/kalkulacky/kurzovy-dopad-etf" element={<CurrencyImpactAnalyzerPage />} />
             <Route path="/kalkulacky/cisty-plat-2025" element={<NetSalaryCalculatorPage />} />

@@ -364,8 +364,8 @@ const ETFProDuchod: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild className="bg-violet-600 hover:bg-violet-700">
-                <Link to="/kalkulacky/penzijni-planovac">
-                  Důchodová kalkulačka
+                <Link to="/kalkulacky/fire-kalkulacka">
+                  FIRE kalkulačka
                 </Link>
               </Button>
               <Button asChild variant="outline" className="border-violet-200 text-violet-700 hover:bg-violet-50">

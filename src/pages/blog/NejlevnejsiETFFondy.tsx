@@ -216,92 +216,88 @@ const NejlevnejsiETFFondy: React.FC = () => {
       category="Optimalizace"
     >
       {/* Hero sekce s hlavními benefity */}
-      <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-green-600 rounded-2xl p-8 mb-12 text-white overflow-hidden">
+      <div className="relative bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 rounded-2xl p-6 mb-8 text-white overflow-hidden animate-fade-in">
         <div className="absolute inset-0 bg-black/20 rounded-2xl"></div>
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
-            <Sparkles className="w-8 h-8 text-yellow-300" />
-            <h1 className="text-3xl font-bold">Najděte nejlevnější ETF za pár sekund</h1>
+            <Sparkles className="w-7 h-7 text-yellow-300" />
+            <h1 className="text-2xl md:text-3xl font-bold">Najděte nejlevnější ETF za pár sekund</h1>
           </div>
-          <p className="text-xl text-blue-100 mb-6">
+          <p className="text-lg text-emerald-100 mb-6">
             Živá data z 3,600+ ETF. Ušetřete tisíce korun ročně díky správné volbě TER poplatků.
           </p>
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+          <div className="grid md:grid-cols-3 gap-3">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 card-hover">
               <div className="flex items-center gap-2 mb-2">
-                <Eye className="w-5 h-5 text-yellow-300" />
-                <span className="font-semibold">Živé srovnání</span>
+                <Eye className="w-4 h-4 text-yellow-300" />
+                <span className="font-semibold text-sm">Živé srovnání</span>
               </div>
-              <p className="text-sm text-blue-100">Aktuální data přímo z databáze</p>
+              <p className="text-xs text-emerald-100">Aktuální data přímo z databáze</p>
             </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 card-hover">
               <div className="flex items-center gap-2 mb-2">
-                <Calculator className="w-5 h-5 text-yellow-300" />
-                <span className="font-semibold">Kalkulačka úspor</span>
+                <Calculator className="w-4 h-4 text-yellow-300" />
+                <span className="font-semibold text-sm">Kalkulačka úspor</span>
               </div>
-              <p className="text-sm text-blue-100">Spočítejte si dopad TER na portfolio</p>
+              <p className="text-xs text-emerald-100">Spočítejte si dopad TER na portfolio</p>
             </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3 card-hover">
               <div className="flex items-center gap-2 mb-2">
-                <Filter className="w-5 h-5 text-yellow-300" />
-                <span className="font-semibold">Smart filtry</span>
+                <Filter className="w-4 h-4 text-yellow-300" />
+                <span className="font-semibold text-sm">Smart filtry</span>
               </div>
-              <p className="text-sm text-blue-100">Najděte ETF podle regionu a stylu</p>
+              <p className="text-xs text-emerald-100">Najděte ETF podle regionu a stylu</p>
             </div>
           </div>
         </div>
       </div>
       {/* Klíčové metriky */}
-      <div className="mb-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-          <TrendingUp className="w-6 h-6 text-blue-600" />
+      <div className="mb-8">
+        <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-emerald-600" />
           Klíčové metriky trhu
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
-            <Star className="w-8 h-8 mb-4 text-yellow-300" />
-            <div className="text-3xl font-bold mb-1">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 p-4 text-white shadow-lg hover:shadow-xl transition-all duration-200 card-hover animate-fade-in [animation-delay:0.1s]">
+            <Star className="w-6 h-6 mb-3 text-yellow-300" />
+            <div className="text-2xl font-bold mb-1">
               {cheapestETFs[0]?.ter_percent || "0.03%"}
             </div>
             <div className="text-emerald-100 text-sm font-medium">Nejnižší TER</div>
-            <div className="text-emerald-200 text-xs mt-2">
+            <div className="text-emerald-200 text-xs mt-1">
               {cheapestETFs[0]?.ticker || "Načítá..."}
             </div>
           </div>
 
-          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
-            <BarChart3 className="w-8 h-8 mb-4 text-blue-200" />
-            <div className="text-3xl font-bold mb-1">
+          <div className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 p-4 text-white shadow-lg hover:shadow-xl transition-all duration-200 card-hover animate-fade-in [animation-delay:0.2s]">
+            <BarChart3 className="w-6 h-6 mb-3 text-cyan-200" />
+            <div className="text-2xl font-bold mb-1">
               3,600+
             </div>
-            <div className="text-blue-100 text-sm font-medium">ETF v databázi</div>
-            <div className="text-blue-200 text-xs mt-2">
+            <div className="text-cyan-100 text-sm font-medium">ETF v databázi</div>
+            <div className="text-cyan-200 text-xs mt-1">
               Neustále aktualizováno
             </div>
           </div>
 
-          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
-            <Target className="w-8 h-8 mb-4 text-purple-200" />
-            <div className="text-3xl font-bold mb-1">
+          <div className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-teal-500 to-emerald-600 p-4 text-white shadow-lg hover:shadow-xl transition-all duration-200 card-hover animate-fade-in [animation-delay:0.3s]">
+            <Target className="w-6 h-6 mb-3 text-teal-200" />
+            <div className="text-2xl font-bold mb-1">
               {cheapestETFs.filter(etf => etf.ter_numeric <= 0.2).length}
             </div>
-            <div className="text-purple-100 text-sm font-medium">Fondů pod 0.2%</div>
-            <div className="text-purple-200 text-xs mt-2">
+            <div className="text-teal-100 text-sm font-medium">Fondů pod 0.2%</div>
+            <div className="text-teal-200 text-xs mt-1">
               Ultra levné TER
             </div>
           </div>
 
-          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-500 to-red-500 p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10"></div>
-            <Zap className="w-8 h-8 mb-4 text-orange-200" />
-            <div className="text-3xl font-bold mb-1">
+          <div className="group relative overflow-hidden rounded-lg bg-gradient-to-br from-emerald-600 to-green-600 p-4 text-white shadow-lg hover:shadow-xl transition-all duration-200 card-hover animate-fade-in [animation-delay:0.4s]">
+            <Zap className="w-6 h-6 mb-3 text-green-200" />
+            <div className="text-2xl font-bold mb-1">
               {cheapestETFs[0] ? Math.round((1.5 - cheapestETFs[0].ter_numeric) * 25000).toLocaleString() : '36,000'}
             </div>
-            <div className="text-orange-100 text-sm font-medium">Kč ročně</div>
-            <div className="text-orange-200 text-xs mt-2">
+            <div className="text-emerald-100 text-sm font-medium">Kč ročně</div>
+            <div className="text-emerald-200 text-xs mt-1">
               úspora vs aktivní fond
             </div>
           </div>
@@ -309,18 +305,18 @@ const NejlevnejsiETFFondy: React.FC = () => {
       </div>
 
       {/* Kompaktní kalkulačka */}
-      <div className="mb-12">
-        <Card>
-          <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+      <div className="mb-8">
+        <Card className="shadow-lg hover:shadow-xl transition-shadow duration-200 animate-fade-in [animation-delay:0.5s]">
+          <CardHeader className="bg-gradient-to-r from-emerald-50 to-teal-50 pb-3">
             <CardTitle className="text-xl font-bold flex items-center gap-2">
-              <Calculator className="w-5 h-5 text-blue-600" />
+              <Calculator className="w-5 h-5 text-emerald-600" />
               Kalkulačka dopadu TER poplatků
             </CardTitle>
             <p className="text-sm text-gray-600 mt-2">
               Změňte parametry a uvidíte dopad různých TER na portfolio za {investmentYears} let
             </p>
           </CardHeader>
-          <CardContent className="p-6">
+          <CardContent className="p-4">
           
             {/* Kompaktní ovládací panel */}
             <div className="bg-slate-50 rounded-lg p-4 mb-6">

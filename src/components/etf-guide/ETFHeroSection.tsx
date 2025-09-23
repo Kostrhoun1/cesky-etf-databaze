@@ -44,13 +44,13 @@ const ETFHeroSection: React.FC = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            <Button asChild size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
+            <Button asChild size="lg" className="hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-8 py-4 text-lg font-semibold">
               <Link to="/srovnani-etf">
                 <TrendingUp className="w-5 h-5 mr-2" />
                 Porovnat ETF fondy
               </Link>
             </Button>
-            <Button asChild size="lg" className="bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/20 px-8 py-4 text-lg font-semibold">
+            <Button asChild size="lg" className="hover-scale bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/20 px-8 py-4 text-lg font-semibold">
               <Link to="/kalkulacky">
                 <Calculator className="w-5 h-5 mr-2" />
                 Investiční kalkulačky

@@ -356,95 +356,86 @@ const WhatAreETFs: React.FC = () => {
             </div>
           </section>
 
-          {/* 6. Jak začít investovat do ETF */}
+          {/* 6. Jak začít investovat do ETF - 3 jednoduché kroky */}
           <section className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Jak začít investovat do ETF fondů - krok za krokem</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Jak začít investovat do ETF - 3 jednoduché kroky</h2>
             
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div className="space-y-6">
-                <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">1</div>
-                    <h3 className="text-xl font-bold">Vyberte brokera</h3>
-                  </div>
-                  <p className="mb-4">Otevřete si účet u regulovaného brokera. Doporučujeme:</p>
-                  <div className="space-y-2">
-                    <Link to="/trading212-recenze" className="block bg-white/10 rounded-lg p-3 hover:bg-white/20 transition-colors">
-                      <span className="font-semibold">Trading 212</span> - 0% poplatky na ETF
-                    </Link>
-                    <Link to="/xtb-recenze" className="block bg-white/10 rounded-lg p-3 hover:bg-white/20 transition-colors">
-                      <span className="font-semibold">XTB</span> - do 100k€ bez poplatků
-                    </Link>
-                    <Link to="/degiro-recenze" className="block bg-white/10 rounded-lg p-3 hover:bg-white/20 transition-colors">
-                      <span className="font-semibold">DEGIRO</span> - nízké poplatky
-                    </Link>
-                  </div>
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
+              {/* Krok 1: Vyberte si ETF */}
+              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-8 border border-emerald-200 text-center flex flex-col">
+                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-2xl font-bold text-emerald-700">1</span>
                 </div>
-                
-                <div className="bg-gradient-to-r from-blue-500 to-violet-600 text-white rounded-xl p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">2</div>
-                    <h3 className="text-xl font-bold">Vyberte ETF strategii</h3>
-                  </div>
-                  <p className="mb-4">Pro začátečníky doporučujeme:</p>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between items-center">
-                      <span>🌍 100% VWCE</span>
-                      <span className="bg-white/20 px-2 py-1 rounded">Nejjednodušší</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>🇺🇸 80% CSPX + 🌍 20% VFEM</span>
-                      <span className="bg-white/20 px-2 py-1 rounded">Pokročilí</span>
-                    </div>
-                  </div>
-                </div>
+                <h3 className="text-xl font-bold text-emerald-900 mb-4">Vyberte si ETF</h3>
+                <p className="text-emerald-800 mb-6 flex-grow">
+                  Porovnejte ETF fondy podle poplatků, výnosů a oblastí investování. Najděte si ty nejlepší pro vaše portfolio.
+                </p>
+                <Link to="/srovnani-etf" className="block bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 text-sm font-semibold rounded-lg transition-all mt-auto">
+                  🔍 Porovnat ETF fondy
+                </Link>
               </div>
               
-              <div className="space-y-6">
-                <div className="bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-xl p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">3</div>
-                    <h3 className="text-xl font-bold">Stanovte rozpočet</h3>
-                  </div>
-                  <p className="mb-4">S kolika začít:</p>
-                  <div className="space-y-3">
-                    <div className="bg-white/10 rounded-lg p-3">
-                      <div className="font-semibold mb-1">Jednorázově: 5.000-50.000 Kč</div>
-                      <div className="text-sm opacity-90">Pokud máte naspořeno</div>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-3">
-                      <div className="font-semibold mb-1">Měsíčně: 1.000-10.000 Kč</div>
-                      <div className="text-sm opacity-90">Doporučený přístup</div>
-                    </div>
-                  </div>
+              {/* Krok 2: Rozhodněte se kolik investovat */}
+              <div className="bg-gradient-to-br from-blue-50 to-violet-50 rounded-xl p-8 border border-blue-200 text-center flex flex-col">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-2xl font-bold text-blue-700">2</span>
                 </div>
-                
-                <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">4</div>
-                    <h3 className="text-xl font-bold">Proveďte nákup</h3>
-                  </div>
-                  <p className="mb-4">V trading aplikaci:</p>
-                  <div className="space-y-2 text-sm">
-                    <div>1. Najděte ETF (např. VWCE)</div>
-                    <div>2. Zadejte částku</div>
-                    <div>3. Zvolte Market order</div>
-                    <div>4. Potvrďte nákup</div>
-                  </div>
+                <h3 className="text-xl font-bold text-blue-900 mb-4">Rozhodněte se kolik investovat</h3>
+                <p className="text-blue-800 mb-6 flex-grow">
+                  Spočítejte si, kolik investovat měsíčně a jaké můžete očekávat výnosy při různých strategiích.
+                </p>
+                <Link to="/kalkulacky/investicni-kalkulacka" className="block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-sm font-semibold rounded-lg transition-all mt-auto">
+                  💰 Spočítejte výnosy
+                </Link>
+              </div>
+              
+              {/* Krok 3: Vyberte si brokera a pravidelně investujte */}
+              <div className="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl p-8 border border-violet-200 text-center flex flex-col">
+                <div className="w-16 h-16 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-2xl font-bold text-violet-700">3</span>
                 </div>
+                <h3 className="text-xl font-bold text-violet-900 mb-4">Vyberte si brokera a pravidelně investujte</h3>
+                <p className="text-violet-800 mb-6 flex-grow">
+                  Kde a jak koupit ETF? Porovnejte poplatky, funkce a dostupné ETF u různých brokerů.
+                </p>
+                <Link to="/kde-koupit-etf" className="block bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 text-sm font-semibold rounded-lg transition-all mt-auto">
+                  🏦 Srovnání brokerů
+                </Link>
               </div>
             </div>
             
-            <div className="bg-emerald-50 rounded-lg p-6 border border-emerald-200">
-              <h3 className="font-bold text-lg text-emerald-900 mb-3">🎯 Doporučený postup pro začátečníky</h3>
-              <p className="text-emerald-800 mb-4">
-                Začněte s <strong>Trading 212</strong>, investujte <strong>měsíčně 3000 Kč do VWCE</strong> a držte minimálně <strong>5 let</strong>. 
-                Toto je nejjednodušší a nejefektivnější způsob pasivního investování.
-              </p>
-              <Link to="/kalkulacky/investicni-kalkulacka" className="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-emerald-700 transition-colors">
-                <span>Spočítejte si výnosy</span>
-                <span>→</span>
-              </Link>
+            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-8 border border-emerald-200">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🎯</span>
+                </div>
+                <h3 className="font-bold text-xl text-emerald-900 mb-3">Nejjednodušší start pro začátečníky</h3>
+                <p className="text-emerald-800 mb-6">
+                  Pokud se nechcete zabývat výběrem a chcete začít jednoduše, máme pro vás osvědčenou kombinaci:
+                </p>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div className="bg-white rounded-lg p-4 border border-emerald-200">
+                  <h4 className="font-semibold text-emerald-900 mb-2">📈 Doporučený ETF</h4>
+                  <p className="text-sm text-emerald-800 mb-3">
+                    <strong>VWCE</strong> - nejpopulárnější ETF pokrývající celý svět
+                  </p>
+                  <Link to="/etf/IE00BK5BQT80" className="text-xs bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-3 py-2 rounded-lg transition-all inline-block">
+                    Podrobnosti o VWCE →
+                  </Link>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-emerald-200">
+                  <h4 className="font-semibold text-emerald-900 mb-2">🏦 Doporučený broker</h4>
+                  <p className="text-sm text-emerald-800 mb-3">
+                    <strong>XTB</strong> - česká podpora a nulové poplatky
+                  </p>
+                  <Link to="/xtb-recenze" className="text-xs bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-3 py-2 rounded-lg transition-all inline-block">
+                    Recenze XTB →
+                  </Link>
+                </div>
+              </div>
+              
             </div>
           </section>
 

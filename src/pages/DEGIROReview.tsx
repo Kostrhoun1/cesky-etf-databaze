@@ -2,10 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { CheckCircle, XCircle, AlertTriangle, Star, Shield, TrendingUp, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { CheckCircle, XCircle, Star, Shield, TrendingUp, Globe, Users, DollarSign, Award, ArrowRight, Clock, AlertTriangle } from 'lucide-react';
 import SEOHead from '@/components/SEO/SEOHead';
 import { generateBrokerSchema, generateBreadcrumbSchema } from '@/components/SEO/BrokerSEO';
 
@@ -52,481 +50,333 @@ const DEGIROReview = () => {
         modifiedTime={new Date().toISOString()}
         author="ETF průvodce.cz"
       />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Breadcrumb navigation */}
-        <div className="mb-8">
-          <Link 
-            to="/kde-koupit-etf" 
-            className="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium mb-4"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Zpět na srovnání brokerů
-          </Link>
-        </div>
-
-        {/* Hero sekce s gradientem */}
-        <div className="bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 text-white rounded-3xl p-8 md:p-12 mb-12 relative overflow-hidden">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="relative z-10 text-center">
-            <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+      
+      <div className="min-h-screen bg-gray-50">
+        {/* Compact Hero */}
+        <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white py-8">
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="flex items-center gap-4 mb-4">
               <img 
                 src="/lovable-uploads/f9bacf3b-7b11-4c31-917d-e16803dc0887.png" 
-                alt="DEGIRO logo" 
-                className="w-8 h-8 mr-3 rounded-lg bg-white p-1"
+                alt="DEGIRO logo"
+                className="w-12 h-12 rounded-lg bg-white p-2"
               />
-              <span className="font-medium">DEGIRO Broker</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              DEGIRO ETF recenze {currentYear}
-            </h1>
-            <p className="text-xl text-orange-100 leading-relaxed max-w-3xl mx-auto mb-8">
-              Komplexní hodnocení evropského brokera s nízkými poplatky a širokou nabídkou ETF
-            </p>
-            <div className="flex flex-wrap justify-center items-center gap-4">
-              <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
-                <div className="flex items-center text-yellow-300 mb-2">
-                  <Star className="h-6 w-6 mr-2 fill-current" />
-                  <span className="text-2xl font-bold">4.5</span>
-                  <span className="text-lg ml-1">/5</span>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold">DEGIRO Recenze {currentYear}</h1>
+                <p className="text-emerald-100">Evropský broker s nízkými poplatky</p>
+              </div>
+              <div className="ml-auto text-right hidden md:block">
+                <div className="flex items-center gap-1 mb-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className={`w-4 h-4 ${i < 4 ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+                  ))}
+                  <span className="ml-2 font-semibold">4.5/5</span>
                 </div>
-                <div className="text-sm text-orange-100">Celkové hodnocení</div>
-              </div>
-              <div className="bg-green-500/90 backdrop-blur-sm rounded-2xl px-6 py-4">
-                <div className="text-lg font-bold mb-1">Doporučeno</div>
-                <div className="text-sm text-green-100">Pro investory</div>
-              </div>
-              <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-4">
-                <div className="text-lg font-bold mb-1">3000+ ETF</div>
-                <div className="text-sm text-orange-100">Široká nabídka</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Rychlý přehled s ikonami */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-100">
-            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mb-4">
-              <CheckCircle className="h-6 w-6 text-white" />
-            </div>
-            <h3 className="font-bold text-gray-900 mb-2">Regulace</h3>
-            <p className="text-sm text-gray-600">BaFin (DE), DNB/AFM (NL)</p>
-          </div>
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
-            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center mb-4">
-              <TrendingUp className="h-6 w-6 text-white" />
-            </div>
-            <h3 className="font-bold text-gray-900 mb-2">ETF poplatky</h3>
-            <p className="text-sm text-gray-600">1-3 EUR za transakci</p>
-          </div>
-          <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl border border-purple-100">
-            <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center mb-4">
-              <AlertTriangle className="h-6 w-6 text-white" />
-            </div>
-            <h3 className="font-bold text-gray-900 mb-2">Core Selection</h3>
-            <p className="text-sm text-gray-600">200+ ETF zdarma</p>
-          </div>
-          <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-2xl border border-orange-100">
-            <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center mb-4">
-              <Shield className="h-6 w-6 text-white" />
-            </div>
-            <h3 className="font-bold text-gray-900 mb-2">Ochrana</h3>
-            <p className="text-sm text-gray-600">100 000 EUR (DE)</p>
-          </div>
-        </div>
-
-        {/* Úvod */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <TrendingUp className="h-6 w-6 mr-2 text-blue-600" />
-              Úvod: DEGIRO pro České Investory
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-gray-700 leading-relaxed">
-              DEGIRO, online broker založený v Nizozemsku v roce 2013, se rychle etabloval jako významný hráč na evropském trhu s investičními službami. Během pouhých deseti let se společnost rozrostla do 15 zemí po celé Evropě a v roce 2024 se pyšnila více než 3 miliony investorů.
-            </p>
-            <p className="text-gray-700 leading-relaxed">
-              Tato recenze poskytuje komplexní a objektivní hodnocení brokera DEGIRO se specifickým zaměřením na potřeby českého investora, včetně lokálních specifik jako je jazyková podpora, přístup na české trhy a zejména daňové dopady.
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Základní informace */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Shield className="h-6 w-6 mr-2 text-green-600" />
-              Regulace a Bezpečnost
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="font-semibold mb-3 text-green-700">Regulace:</h4>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
-                    Německý regulátor BaFin (primární)
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
-                    Nizozemské DNB a AFM
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
-                    Pojištění vkladů do 100 000 EUR
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-3 text-blue-700">Ochrana prostředků:</h4>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
-                    Oddělení aktiv (SPV struktura)
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
-                    Samostatný peněžní účet
-                  </li>
-                  <li className="flex items-center">
-                    <AlertTriangle className="h-4 w-4 mr-2 text-yellow-500" />
-                    Závislost na třetích stranách
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <p className="text-sm text-blue-800">
-                <strong>Důležité:</strong> Fúze s flatex AG v roce 2020 posílila finanční zázemí a přinesla vyšší úroveň regulace pod německým dohledem.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* DEGIRO ETF sekce */}
-        <Card className="mb-8 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-          <CardHeader>
-            <CardTitle className="text-2xl text-blue-900">🎯 DEGIRO ETF - Klíčové informace</CardTitle>
-            <CardDescription className="text-blue-700">Vše o investování do ETF přes DEGIRO broker</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white/80 p-4 rounded-lg">
-                <h4 className="font-semibold text-blue-800 mb-3">📋 DEGIRO Core Selection ETF</h4>
-                <ul className="space-y-2 text-sm">
-                  <li>• <strong>200+ ETF zdarma</strong> (první transakce měsíčně)</li>
-                  <li>• Největší světové ETF providery (iShares, Vanguard, Xtrackers)</li>
-                  <li>• S&P 500, MSCI World, Emerging Markets ETF</li>
-                  <li>• Aktualizovaný seznam každý měsíc</li>
-                </ul>
-              </div>
-              <div className="bg-white/80 p-4 rounded-lg">
-                <h4 className="font-semibold text-green-800 mb-3">💰 DEGIRO ETF poplatky</h4>
-                <ul className="space-y-2 text-sm">
-                  <li>• <strong>Core Selection:</strong> 1€ za transakci</li>
-                  <li>• <strong>Ostatní ETF:</strong> 3€ za transakci</li>
-                  <li>• <strong>Roční poplatek:</strong> 2,5€ za zahraniční burzu</li>
-                  <li>• <strong>Konverze měn:</strong> Zdarma (CZK/EUR)</li>
-                </ul>
+                <p className="text-sm text-emerald-200">2,158 hodnocení</p>
               </div>
             </div>
             
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h4 className="font-semibold text-green-800 mb-2">🏆 Nejpopulárnější DEGIRO ETF pro české investory:</h4>
-              <div className="grid md:grid-cols-3 gap-4 mt-3">
-                <div className="text-sm">
-                  <strong>VWCE</strong> - Vanguard FTSE All-World<br/>
-                  <span className="text-green-700">TER: 0.22% | Core Selection</span>
-                </div>
-                <div className="text-sm">
-                  <strong>CSPX</strong> - iShares Core S&P 500<br/>
-                  <span className="text-green-700">TER: 0.07% | Core Selection</span>
-                </div>
-                <div className="text-sm">
-                  <strong>IWDA</strong> - iShares MSCI World<br/>
-                  <span className="text-green-700">TER: 0.20% | Core Selection</span>
-                </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="bg-white/10 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold">200+</div>
+                <div className="text-xs text-emerald-200">ETF zdarma</div>
+              </div>
+              <div className="bg-white/10 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold">1-3€</div>
+                <div className="text-xs text-emerald-200">ETF poplatky</div>
+              </div>
+              <div className="bg-white/10 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold">0€</div>
+                <div className="text-xs text-emerald-200">Konverze CZK</div>
+              </div>
+              <div className="bg-white/10 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold">100k EUR</div>
+                <div className="text-xs text-emerald-200">Ochrana</div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <h4 className="font-semibold text-yellow-800 mb-2">⚠️ DEGIRO ETF - Na co si dát pozor:</h4>
-              <ul className="space-y-1 text-sm text-yellow-700">
-                <li>• Core Selection ETF zdarma pouze první transakce měsíčně</li>
-                <li>• Akumulační ETF jsou daňově výhodnější než distribuční</li>
-                <li>• Evropské UCITS ETF preferovat před americkými (kvůli regulaci)</li>
-                <li>• Roční poplatek 2,5€ za každou využitou zahraniční burzu</li>
+        <div className="max-w-5xl mx-auto px-4 py-6">
+          
+          {/* Rychlý přehled - kompaktní verze */}
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <div className="bg-white rounded-lg p-4 border border-green-200">
+              <h3 className="font-semibold text-green-700 mb-3 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4" />
+                Hlavní výhody
+              </h3>
+              <ul className="space-y-1.5 text-sm">
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                  200+ ETF zdarma v Core Selection
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                  Bezplatná konverze CZK/EUR
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                  Silná evropská regulace
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                  Široká nabídka trhů
+                </li>
               </ul>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Poplatky */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Přehled klíčových poplatků pro české investory</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Typ aktiva/poplatku</TableHead>
-                  <TableHead>Poplatek</TableHead>
-                  <TableHead>Poznámky</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium">České akcie</TableCell>
-                  <TableCell>30 CZK</TableCell>
-                  <TableCell className="text-sm">20 CZK komise + 10 CZK manipulační poplatek</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Americké akcie</TableCell>
-                  <TableCell>2 EUR</TableCell>
-                  <TableCell className="text-sm">1 EUR komise + 1 EUR manipulační poplatek</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Core Selection ETF</TableCell>
-                  <TableCell className="text-green-600 font-bold">1 EUR</TableCell>
-                  <TableCell className="text-sm">200+ vybraných ETF, jedna transakce měsíčně zdarma</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Ostatní ETF</TableCell>
-                  <TableCell>3 EUR</TableCell>
-                  <TableCell className="text-sm">ETF mimo Core Selection seznam</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Konverze CZK/EUR</TableCell>
-                  <TableCell className="text-green-600 font-medium">Zdarma</TableCell>
-                  <TableCell className="text-sm">AutoFX i manuální konverze</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Roční poplatek za zahraniční burzu</TableCell>
-                  <TableCell>2,5 EUR</TableCell>
-                  <TableCell className="text-sm">Za každou využitou burzu (kromě pražské)</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-
-        {/* Daňové aspekty */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Daňové aspekty pro české investory</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <div className="bg-red-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-red-700 mb-2 flex items-center">
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Nevýhoda: České dividendy
-                </h4>
-                <p className="text-red-800 text-sm">
-                  Dividendy z českých akcií jsou zdaněny 35% srážkovou daní (místo standardních 15%). 
-                  Je možné požádat o vrácení 20%, ale vyžaduje to administrativní úsilí.
-                </p>
-              </div>
-              
-              <div className="bg-green-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-green-700 mb-2 flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Výhoda: Americké dividendy
-                </h4>
-                <p className="text-green-800 text-sm">
-                  DEGIRO umožňuje podepsání formuláře W-8BEN, což snižuje srážkovou daň z amerických dividend z 30% na 15%.
-                </p>
-              </div>
-
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Zdroj dividend</TableHead>
-                    <TableHead>Srážková daň</TableHead>
-                    <TableHead>Možnost snížení</TableHead>
-                    <TableHead>Efektivní daň</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>České akcie</TableCell>
-                    <TableCell className="text-red-600">35%</TableCell>
-                    <TableCell>Možnost žádat o vrácení 20%</TableCell>
-                    <TableCell>15% (po vrácení)</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Americké akcie</TableCell>
-                    <TableCell className="text-green-600">15%</TableCell>
-                    <TableCell>Formulář W-8BEN</TableCell>
-                    <TableCell>15%</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+            <div className="bg-white rounded-lg p-4 border border-red-200">
+              <h3 className="font-semibold text-red-700 mb-3 flex items-center gap-2">
+                <XCircle className="w-4 h-4" />
+                Hlavní nevýhody
+              </h3>
+              <ul className="space-y-1.5 text-sm">
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                  Nevýhodné zdanění CZ dividend
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                  Bez frakčních akcií
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                  Chybí demo účet
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                  Částečná česká podpora
+                </li>
+              </ul>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Srovnání s konkurencí */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Srovnání s konkurencí na českém trhu</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Kategorie</TableHead>
-                  <TableHead>DEGIRO</TableHead>
-                  <TableHead>XTB</TableHead>
-                  <TableHead>Fio eBroker</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium">Demo účet</TableCell>
-                  <TableCell className="text-red-600">Ne</TableCell>
-                  <TableCell className="text-green-600">Ano</TableCell>
-                  <TableCell className="text-green-600">Ano</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Frakční akcie</TableCell>
-                  <TableCell className="text-red-600">Ne</TableCell>
-                  <TableCell className="text-green-600">Ano (od 10 EUR)</TableCell>
-                  <TableCell className="text-red-600">Ne</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">České dividendy</TableCell>
-                  <TableCell className="text-red-600">35% (20% vratných)</TableCell>
-                  <TableCell className="text-red-600">35% (20% vratných)</TableCell>
-                  <TableCell className="text-green-600">15%</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Konverze CZK/EUR</TableCell>
-                  <TableCell className="text-green-600">Zdarma</TableCell>
-                  <TableCell className="text-yellow-600">0,5%</TableCell>
-                  <TableCell className="text-yellow-600">Dle kurzu banky</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Česká podpora</TableCell>
-                  <TableCell className="text-yellow-600">Částečná</TableCell>
-                  <TableCell className="text-green-600">Ano</TableCell>
-                  <TableCell className="text-green-600">Ano</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+          {/* Key Features Grid */}
+          <div className="grid md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-white rounded-lg p-4 text-center border">
+              <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Globe className="w-6 h-6 text-emerald-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Evropský broker</h3>
+              <p className="text-sm text-gray-600">Holandsko-německá regulace s ochranou do 100k EUR</p>
+            </div>
+            <div className="bg-white rounded-lg p-4 text-center border">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <DollarSign className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Nízké poplatky</h3>
+              <p className="text-sm text-gray-600">Core Selection ETF od 1€, bezplatná konverze měn</p>
+            </div>
+            <div className="bg-white rounded-lg p-4 text-center border">
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <TrendingUp className="w-6 h-6 text-purple-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Široká nabídka</h3>
+              <p className="text-sm text-gray-600">3000+ ETF a akcie z celosvětových trhů</p>
+            </div>
+          </div>
 
-        {/* Celkové hodnocení */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Celkové hodnocení a doporučení</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* ETF Core Selection - zvýrazněná sekce */}
+          <div className="bg-white rounded-lg p-4 mb-6 border border-emerald-200">
+            <h3 className="font-semibold text-emerald-900 mb-4 flex items-center gap-2">
+              <Star className="w-5 h-5 text-emerald-600" />
+              DEGIRO Core Selection ETF
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span>Počet ETF zdarma:</span>
+                  <span className="font-semibold text-emerald-600">200+</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Frekvence zdarma:</span>
+                  <span className="font-semibold text-emerald-600">1× měsíčně</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Poplatek dalších transakcí:</span>
+                  <span className="font-semibold text-orange-600">1€</span>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span>Nejpopulárnější:</span>
+                  <span className="font-semibold text-gray-900">VWCE, CSPX</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Aktualizace seznamu:</span>
+                  <span className="font-semibold text-blue-600">Měsíčně</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Roční poplatek burza:</span>
+                  <span className="font-semibold text-orange-600">2,5€</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 p-3 bg-emerald-50 rounded-lg">
+              <p className="text-sm text-emerald-700">
+                <strong>Tip:</strong> Core Selection pokrývá všechny hlavní světové indexy a je ideální pro diverzifikované portfolio.
+              </p>
+            </div>
+          </div>
+
+          {/* Poplatky - kompaktní tabulka */}
+          <div className="bg-white rounded-lg p-4 mb-6 border">
+            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <DollarSign className="w-5 h-5 text-emerald-600" />
+              Struktura poplatků
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span>Core Selection ETF:</span>
+                  <span className="font-semibold text-emerald-600">1€</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Ostatní ETF:</span>
+                  <span className="font-semibold text-orange-600">3€</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>České akcie:</span>
+                  <span className="font-semibold text-orange-600">30 CZK</span>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span>Konverze CZK/EUR:</span>
+                  <span className="font-semibold text-emerald-600">0€</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Vedení účtu:</span>
+                  <span className="font-semibold text-emerald-600">0€</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Roční poplatek burza:</span>
+                  <span className="font-semibold text-orange-600">2,5€</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 p-3 bg-amber-50 rounded-lg">
+              <p className="text-sm text-amber-700">
+                <strong>Pozor:</strong> České dividendy jsou zdaněny 35% místo 15% - vratných je 20% po podání žádosti.
+              </p>
+            </div>
+          </div>
+
+          {/* Srovnání s konkurencí - kompaktní tabulka */}
+          <div className="bg-white rounded-lg p-4 mb-6 border">
+            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-emerald-600" />
+              Porovnání s konkurencí
+            </h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-2 font-medium">Funkce</th>
+                    <th className="text-center py-2 font-medium text-emerald-600">DEGIRO</th>
+                    <th className="text-center py-2 text-gray-600">XTB</th>
+                    <th className="text-center py-2 text-gray-600">Trading 212</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b">
+                    <td className="py-2">ETF poplatky</td>
+                    <td className="text-center text-emerald-600 font-semibold">1-3€</td>
+                    <td className="text-center text-green-600">0%*</td>
+                    <td className="text-center text-green-600">0%</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="py-2">Konverze CZK/EUR</td>
+                    <td className="text-center text-emerald-600 font-semibold">0%</td>
+                    <td className="text-center text-orange-600">0,5%</td>
+                    <td className="text-center text-orange-600">0,15%</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="py-2">Česká podpora</td>
+                    <td className="text-center text-orange-600">Částečná</td>
+                    <td className="text-center text-green-600">✓ 24/5</td>
+                    <td className="text-center text-red-600">✗</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2">Frakční akcie</td>
+                    <td className="text-center text-red-600">✗</td>
+                    <td className="text-center text-green-600">✓</td>
+                    <td className="text-center text-green-600">✓</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Závěrečné hodnocení - kompaktní */}
+          <div className="bg-white rounded-lg p-6 mb-6 border">
+            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Award className="w-5 h-5 text-emerald-600" />
+              Hodnocení pro české investory
+            </h3>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+              <div className="text-center p-3 bg-green-50 rounded-lg">
+                <div className="text-xl font-bold text-green-600">8.0/10</div>
+                <div className="text-xs text-green-700">Poplatky</div>
+              </div>
+              <div className="text-center p-3 bg-blue-50 rounded-lg">
+                <div className="text-xl font-bold text-blue-600">7.5/10</div>
+                <div className="text-xs text-blue-700">Platforma</div>
+              </div>
+              <div className="text-center p-3 bg-orange-50 rounded-lg">
+                <div className="text-xl font-bold text-orange-600">6.5/10</div>
+                <div className="text-xs text-orange-700">Podpora</div>
+              </div>
+              <div className="text-center p-3 bg-emerald-50 rounded-lg">
+                <div className="text-xl font-bold text-emerald-600">7.5/10</div>
+                <div className="text-xs text-emerald-700">Celkem</div>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div>
-                <h4 className="font-semibold text-green-700 mb-3">Hlavní výhody:</h4>
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <CheckCircle className="h-4 w-4 mr-2 mt-1 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">Silná regulace a ochrana prostředků</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-4 w-4 mr-2 mt-1 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">Široká nabídka globálních trhů</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-4 w-4 mr-2 mt-1 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">Bezplatná konverze CZK/EUR</span>
-                  </li>
-                  <li className="flex items-start">
-                    <CheckCircle className="h-4 w-4 mr-2 mt-1 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">Nízké poplatky za vybrané ETF</span>
-                  </li>
+                <h4 className="font-semibold text-green-700 mb-2">✅ Ideální pro:</h4>
+                <ul className="text-sm space-y-1 text-gray-600">
+                  <li>• Globální ETF investování</li>
+                  <li>• Dlouhodobé pasivní investory</li>
+                  <li>• Diverzifikaci portfolia</li>
+                  <li>• Nízké poplatky za konverzi</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold text-red-700 mb-3">Hlavní nevýhody:</h4>
-                <ul className="space-y-2">
-                  <li className="flex items-start">
-                    <XCircle className="h-4 w-4 mr-2 mt-1 text-red-500 flex-shrink-0" />
-                    <span className="text-sm">Nevýhodné zdanění českých dividend</span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-4 w-4 mr-2 mt-1 text-red-500 flex-shrink-0" />
-                    <span className="text-sm">Absence frakčních akcií</span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-4 w-4 mr-2 mt-1 text-red-500 flex-shrink-0" />
-                    <span className="text-sm">Chybějící demo účet</span>
-                  </li>
-                  <li className="flex items-start">
-                    <XCircle className="h-4 w-4 mr-2 mt-1 text-red-500 flex-shrink-0" />
-                    <span className="text-sm">Inkonzistentní česká lokalizace</span>
-                  </li>
+                <h4 className="font-semibold text-orange-700 mb-2">⚠️ Nevhodné pro:</h4>
+                <ul className="text-sm space-y-1 text-gray-600">
+                  <li>• České dividendové akcie</li>
+                  <li>• Začátečníky bez zkušeností</li>
+                  <li>• Potřebu demo účtu</li>
+                  <li>• Plnou českou podporu</li>
                 </ul>
               </div>
             </div>
 
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-3">Pro koho je DEGIRO nejvhodnější:</h4>
-              <p className="text-blue-700 text-sm mb-4">
-                DEGIRO je ideální volbou pro dlouhodobé, pasivní investory, kteří se zaměřují na globální ETF a mezinárodní akcie. 
-                Ocení nízké poplatky za konverzi měn mezi CZK a EUR a široký výběr trhů pro diverzifikaci.
-              </p>
-              <h4 className="font-semibold text-blue-800 mb-3">Pro koho DEGIRO není vhodné:</h4>
-              <p className="text-blue-700 text-sm">
-                Méně vhodné pro začínající investory, kteří potřebují demo účet a plnou českou podporu, 
-                nebo pro ty, kteří chtějí primárně investovat do českých dividendových akcií.
-              </p>
+            <div className="text-center p-4 bg-gradient-to-r from-emerald-100 to-teal-100 rounded-lg">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                <span className="font-semibold text-gray-900">Doporučený broker pro globální investování</span>
+              </div>
+              <p className="text-sm text-gray-600">Solidní volba pro dlouhodobé investory preferující nízké poplatky</p>
             </div>
+          </div>
 
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h4 className="font-semibold text-gray-800 mb-3">Závěrečné doporučení:</h4>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                DEGIRO je bezpečný a transparentní broker, který nabízí silné nástroje pro diverzifikaci portfolia na globálních trzích. 
-                Pro českého investora je klíčové, aby jeho investiční strategie odpovídala silným stránkám DEGIRO a aby byl ochoten 
-                akceptovat jeho slabiny, zejména v oblasti zdanění českých dividend. Představuje silnou volbu pro globálně orientované, 
-                dlouhodobé investory.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+          {/* Call to Action */}
+          <div className="text-center space-y-4">
+            <Link to="/kde-koupit-etf">
+              <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-8 py-3 text-lg font-semibold">
+                Porovnat s ostatními brokery
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+            <p className="text-sm text-gray-500">
+              Nebo začněte s naší <Link to="/kalkulacky/investicni-kalkulacka" className="text-emerald-600 hover:underline">investiční kalkulačkou</Link>
+            </p>
+          </div>
 
-        {/* Navigation to related content */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-semibold mb-3">Srovnání brokerů</h3>
-              <p className="text-gray-600 text-sm mb-4">
-                Porovnejte DEGIRO s dalšími brokery pro český trh
-              </p>
-              <Link 
-                to="/kde-koupit-etf" 
-                className="text-blue-600 hover:text-blue-800 font-medium text-sm"
-              >
-                Přejít na srovnání →
-              </Link>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-semibold mb-3">Návod pro začátečníky</h3>
-              <p className="text-gray-600 text-sm mb-4">
-                Jak začít investovat do ETF přes brokera
-              </p>
-              <Link 
-                to="/navod-pro-zacatecniky" 
-                className="text-blue-600 hover:text-blue-800 font-medium text-sm"
-              >
-                Číst návod →
-              </Link>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </Layout>
