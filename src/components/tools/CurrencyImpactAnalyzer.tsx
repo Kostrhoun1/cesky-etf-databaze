@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -54,344 +53,155 @@ const CurrencyImpactAnalyzer: React.FC = () => {
   const isAllocationValid = Math.abs(totalAllocation - 100) < 0.1;
 
   return (
-    <div className="space-y-8">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            <DollarSign className="h-8 w-8 text-green-600" />
+    <div className="space-y-4">
+      <div className="grid md:grid-cols-2 gap-4">
+        {/* Portfolio základna */}
+        <div className="border rounded-lg p-4 bg-blue-25">
+          <div className="flex items-center gap-2 mb-3">
+            <TrendingUp className="h-4 w-4 text-blue-600" />
+            <h3 className="font-semibold">Portfolio základna</h3>
+          </div>
+          <div className="space-y-3">
             <div>
-              <CardTitle className="text-2xl">Analýza kurzového dopadu</CardTitle>
-              <CardDescription>
-                Analyzujte vliv kurzových změn na vaše ETF portfolio a optimalizujte měnové riziko
-              </CardDescription>
+              <Label htmlFor="portfolioValue">Celková hodnota portfolia (Kč)</Label>
+              <Input
+                id="portfolioValue"
+                type="number"
+                value={portfolioValue || ''}
+                onChange={(e) => setPortfolioValue(Number(e.target.value) || 0)}
+                min="10000"
+                step="50000"
+                className="h-10"
+              />
+            </div>
+            <div>
+              <Label htmlFor="investmentHorizon">Investiční horizont (roky)</Label>
+              <Input
+                id="investmentHorizon"
+                type="number"
+                value={investmentHorizon || ''}
+                onChange={(e) => setInvestmentHorizon(Number(e.target.value) || 0)}
+                min="1"
+                max="30"
+                className="h-10"
+              />
             </div>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Portfolio základna */}
-            <Card className="bg-blue-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5" />
-                  Portfolio základna
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="portfolioValue">Celková hodnota portfolia (Kč)</Label>
-                  <Input
-                    id="portfolioValue"
-                    type="number"
-                    value={portfolioValue || ''}
-                    onChange={(e) => setPortfolioValue(Number(e.target.value) || 0)}
-                    min="10000"
-                    step="50000"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="investmentHorizon">Investiční horizont (roky)</Label>
-                  <Input
-                    id="investmentHorizon"
-                    type="number"
-                    value={investmentHorizon || ''}
-                    onChange={(e) => setInvestmentHorizon(Number(e.target.value) || 0)}
-                    min="1"
-                    max="30"
-                  />
-                </div>
-              </CardContent>
-            </Card>
+        </div>
 
-            {/* Aktuální kurzy */}
-            <Card className="bg-green-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">Aktuální kurzy</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="currentUsdCzk">USD/CZK kurz</Label>
-                  <Input
-                    id="currentUsdCzk"
-                    type="number"
-                    value={currentUsdCzk || ''}
-                    onChange={(e) => setCurrentUsdCzk(Number(e.target.value) || 0)}
-                    min="15"
-                    max="35"
-                    step="0.1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="currentEurCzk">EUR/CZK kurz</Label>
-                  <Input
-                    id="currentEurCzk"
-                    type="number"
-                    value={currentEurCzk || ''}
-                    onChange={(e) => setCurrentEurCzk(Number(e.target.value) || 0)}
-                    min="20"
-                    max="30"
-                    step="0.1"
-                  />
-                </div>
-                <div className="bg-green-100 p-3 rounded-lg">
-                  <p className="text-sm text-green-800">
-                    <strong>Tip:</strong> Zadejte aktuální kurzy nebo je upravte pro analýzu různých scénářů.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+        {/* Aktuální kurzy */}
+        <div className="border rounded-lg p-4 bg-green-25">
+          <div className="flex items-center gap-2 mb-3">
+            <DollarSign className="h-4 w-4 text-green-600" />
+            <h3 className="font-semibold">Aktuální kurzy</h3>
           </div>
-
-          {/* Měnová expozice */}
-          <Card className="bg-purple-50">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg">Měnová expozice portfolia (podle podkladových aktiv)</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid md:grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="usdAllocation" className="flex items-center gap-2">
-                    <DollarSign className="h-4 w-4" />
-                    USD alokace (%)
-                  </Label>
-                  <Input
-                    id="usdAllocation"
-                    type="number"
-                    value={usdAllocation || ''}
-                    onChange={(e) => setUsdAllocation(Number(e.target.value) || 0)}
-                    min="0"
-                    max="100"
-                  />
-                  <p className="text-xs text-gray-600 mt-1">
-                    US akcie v jakémkoliv ETF - viz <a href="/srovnani-etf" className="text-blue-600 hover:underline">srovnání amerických ETF</a> (<a href="/etf/cspx" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CSPX</a>, VTI, SPY)
-                  </p>
-                </div>
-                <div>
-                  <Label htmlFor="eurAllocation" className="flex items-center gap-2">
-                    <Euro className="h-4 w-4" />
-                    EUR alokace (%)
-                  </Label>
-                  <Input
-                    id="eurAllocation"
-                    type="number"
-                    value={eurAllocation || ''}
-                    onChange={(e) => setEurAllocation(Number(e.target.value) || 0)}
-                    min="0"
-                    max="100"
-                  />
-                  <p className="text-xs text-gray-600 mt-1">
-                    Evropské akcie - další možnosti v <a href="/nastroje" className="text-blue-600 hover:underline">investičních nástrojích</a> (<a href="/etf/eunl" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">EUNL</a>, SX5E, EXSA)
-                  </p>
-                </div>
-                <div>
-                  <Label htmlFor="czkAllocation">CZK alokace (%)</Label>
-                  <Input
-                    id="czkAllocation"
-                    type="number"
-                    value={czkAllocation || ''}
-                    onChange={(e) => setCzkAllocation(Number(e.target.value) || 0)}
-                    min="0"
-                    max="100"
-                  />
-                  <p className="text-xs text-gray-600 mt-1">
-                    CZ dluhopisy, spořicí účty
-                  </p>
-                </div>
-              </div>
-              <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
-                <p className="text-sm text-amber-800 mb-2">
-                  <strong>⚠️ Důležité:</strong> Zadejte expozici podle <strong>podkladových aktiv</strong>, ne podle měny fondu!
-                </p>
-                <p className="text-xs text-amber-700">
-                  Například: <a href="/etf/cspx" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CSPX</a> (EUR fond kupující US akcie) = 100% USD expozice
-                </p>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-purple-100 rounded-lg">
-                <span className="font-medium">Celková expozice:</span>
-                <span className={`font-bold ${isAllocationValid ? 'text-green-600' : 'text-red-600'}`}>
-                  {totalAllocation.toFixed(1)}%
-                </span>
-              </div>
-              {!isAllocationValid && (
-                <p className="text-sm text-red-600">
-                  ⚠️ Celková expozice by měla být 100%. Automaticky se normalizuje při výpočtu.
-                </p>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Carry Cost rychlý přehled + rozbalitelná sekce */}
-          <Card className="bg-orange-50 border-orange-200">
-            <CardContent className="p-4">
-              {/* Základní přehled carry cost - vždy viditelný */}
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold text-orange-800 mb-3 flex items-center gap-2">
-                  <Shield className="h-5 w-5" />
-                  Hedged ETF náklady
-                  <div className="flex items-center gap-1 text-sm text-orange-600 ml-auto">
-                    <Info className="h-4 w-4" />
-                    Carry + TER
-                  </div>
-                </h3>
-                
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div className="bg-white p-3 rounded-lg border border-orange-200">
-                    <p className="text-xs text-gray-600 mb-1">Unhedged (CSPX)</p>
-                    <p className="font-bold text-blue-600">{unhedgedTer.toFixed(2)}%</p>
-                  </div>
-                  <div className="bg-white p-3 rounded-lg border border-orange-200">
-                    <p className="text-xs text-gray-600 mb-1">Hedged (CSHG)</p>
-                    <p className="font-bold text-orange-600">
-                      {(hedgedTer + Math.max(0, usdInterestRate - eurInterestRate)).toFixed(2)}%
-                    </p>
-                  </div>
-                  <div className="bg-white p-3 rounded-lg border border-orange-200">
-                    <p className="text-xs text-gray-600 mb-1">Rozdíl</p>
-                    <p className="font-bold text-red-600">
-                      +{((hedgedTer + Math.max(0, usdInterestRate - eurInterestRate)) - unhedgedTer).toFixed(2)}%
-                    </p>
-                  </div>
-                </div>
-                
-                <p className="text-sm text-orange-700 text-center mt-3">
-                  Na {portfolioValue.toLocaleString()} Kč = <strong>+{(portfolioValue * ((hedgedTer + Math.max(0, usdInterestRate - eurInterestRate)) - unhedgedTer) / 100).toLocaleString()} Kč</strong> ročně za hedging
-                </p>
-              </div>
-
-              {/* Rozbalitelná pokročilá sekce */}
-              <div className="border-t border-orange-200 pt-4">
-                <Button
-                  variant="ghost"
-                  onClick={() => setShowCarryCost(!showCarryCost)}
-                  className="w-full flex items-center justify-center gap-2 text-orange-700 hover:bg-orange-100"
-                >
-                  {showCarryCost ? (
-                    <>
-                      <ChevronUp className="h-4 w-4" />
-                      Skrýt pokročilé nastavení
-                    </>
-                  ) : (
-                    <>
-                      <ChevronDown className="h-4 w-4" />
-                      Upravit úrokové sazby a TER
-                    </>
-                  )}
-                </Button>
-
-                {showCarryCost && (
-                  <div className="mt-4 space-y-4">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="bg-white p-3 rounded-lg border border-orange-200">
-                        <h4 className="font-medium text-orange-800 mb-3">Úrokové sazby</h4>
-                        <div className="space-y-2">
-                          <div>
-                            <Label htmlFor="usdRate" className="text-sm">USD Fed ({usdInterestRate}%)</Label>
-                            <Input
-                              id="usdRate"
-                              type="range"
-                              min="0"
-                              max="10"
-                              step="0.25"
-                              value={usdInterestRate}
-                              onChange={(e) => setUsdInterestRate(Number(e.target.value))}
-                              className="w-full"
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="eurRate" className="text-sm">EUR ECB ({eurInterestRate}%)</Label>
-                            <Input
-                              id="eurRate"
-                              type="range"
-                              min="0"
-                              max="10"
-                              step="0.25"
-                              value={eurInterestRate}
-                              onChange={(e) => setEurInterestRate(Number(e.target.value))}
-                              className="w-full"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="bg-white p-3 rounded-lg border border-orange-200">
-                        <h4 className="font-medium text-orange-800 mb-3">TER porovnání</h4>
-                        <div className="space-y-2">
-                          <div>
-                            <Label htmlFor="unhedgedTer" className="text-sm">Unhedged TER ({unhedgedTer}%)</Label>
-                            <Input
-                              id="unhedgedTer"
-                              type="range"
-                              min="0"
-                              max="1"
-                              step="0.01"
-                              value={unhedgedTer}
-                              onChange={(e) => setUnhedgedTer(Number(e.target.value))}
-                              className="w-full"
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="hedgedTer" className="text-sm">Hedged TER ({hedgedTer}%)</Label>
-                            <Input
-                              id="hedgedTer"
-                              type="range"
-                              min="0"
-                              max="1"
-                              step="0.01"
-                              value={hedgedTer}
-                              onChange={(e) => setHedgedTer(Number(e.target.value))}
-                              className="w-full"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-white p-3 rounded-lg border border-orange-200">
-                      <h4 className="font-medium text-orange-800 mb-2 flex items-center gap-2">
-                        <Calculator className="h-4 w-4" />
-                        Výpočet carry cost
-                      </h4>
-                      <p className="text-sm text-orange-700">
-                        Carry = USD sazba - EUR sazba = {usdInterestRate}% - {eurInterestRate}% = 
-                        <span className={`font-bold ml-1 ${(usdInterestRate - eurInterestRate) > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                          {(usdInterestRate - eurInterestRate) > 0 ? '-' : '+'}{Math.abs(usdInterestRate - eurInterestRate).toFixed(2)}%
-                        </span>
-                      </p>
-                      <p className="text-xs text-orange-600 mt-1">
-                        {(usdInterestRate - eurInterestRate) > 0 
-                          ? 'Negativní carry = dodatečný náklad' 
-                          : 'Pozitivní carry = dodatečný příjem'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Button onClick={handleCalculate} className="w-full mt-4 h-9 text-sm">
-            Analyzovat kurzový dopad
-          </Button>
-          
-          {/* Rozbalovací předpoklady */}
-          <details className="mt-4 border border-gray-200 rounded-lg">
-            <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
-              <span className="font-semibold text-gray-900 text-sm">📋 Předpoklady analýzy měnového dopadu</span>
-            </summary>
-            <div className="p-3 border-t border-gray-200">
-              <ul className="text-xs text-gray-700 space-y-1">
-                <li>• <strong>Měnová expozice:</strong> Počítána podle podkladových aktiv, ne podle měny fondu</li>
-                <li>• <strong>Hedging náklady:</strong> TER rozdíl + carry cost (úrokové diferenciály)</li>
-                <li>• <strong>Kurzy:</strong> Použity pro analýzu volatility a dopadů na portfolio</li>
-                <li>• <strong>Carry cost:</strong> Dynamický, mění se s úrokovými sazbami centrálních bank</li>
-                <li>• <strong>Volatilita:</strong> Historická data negarantují budoucí výkonnost</li>
-              </ul>
+          <div className="space-y-3">
+            <div>
+              <Label htmlFor="currentUsdCzk">USD/CZK kurz</Label>
+              <Input
+                id="currentUsdCzk"
+                type="number"
+                value={currentUsdCzk || ''}
+                onChange={(e) => setCurrentUsdCzk(Number(e.target.value) || 0)}
+                min="15"
+                max="35"
+                step="0.1"
+                className="h-10"
+              />
             </div>
-          </details>
-          
-        </CardContent>
-      </Card>
+            <div>
+              <Label htmlFor="currentEurCzk">EUR/CZK kurz</Label>
+              <Input
+                id="currentEurCzk"
+                type="number"
+                value={currentEurCzk || ''}
+                onChange={(e) => setCurrentEurCzk(Number(e.target.value) || 0)}
+                min="20"
+                max="30"
+                step="0.1"
+                className="h-10"
+              />
+            </div>
+            <div className="bg-green-100 p-2 rounded text-xs text-green-800">
+              <strong>Tip:</strong> Zadejte aktuální kurzy nebo je upravte pro analýzu různých scénářů.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Měnová expozice */}
+      <div className="border rounded-lg p-4 bg-purple-25">
+        <div className="flex items-center gap-2 mb-3">
+          <Euro className="h-4 w-4 text-purple-600" />
+          <h3 className="font-semibold">Měnová expozice portfolia</h3>
+        </div>
+        <div className="space-y-3">
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <Label htmlFor="usdAllocation">USD alokace (%)</Label>
+              <Input
+                id="usdAllocation"
+                type="number"
+                value={usdAllocation || ''}
+                onChange={(e) => setUsdAllocation(Number(e.target.value) || 0)}
+                min="0"
+                max="100"
+                className="h-10"
+              />
+            </div>
+            <div>
+              <Label htmlFor="eurAllocation">EUR alokace (%)</Label>
+              <Input
+                id="eurAllocation"
+                type="number"
+                value={eurAllocation || ''}
+                onChange={(e) => setEurAllocation(Number(e.target.value) || 0)}
+                min="0"
+                max="100"
+                className="h-10"
+              />
+            </div>
+            <div>
+              <Label htmlFor="czkAllocation">CZK alokace (%)</Label>
+              <Input
+                id="czkAllocation"
+                type="number"
+                value={czkAllocation || ''}
+                onChange={(e) => setCzkAllocation(Number(e.target.value) || 0)}
+                min="0"
+                max="100"
+                className="h-10"
+              />
+            </div>
+          </div>
+          <div className="bg-amber-50 border border-amber-200 p-3 rounded-lg">
+            <p className="text-sm text-amber-800 mb-1">
+              <strong>⚠️ Důležité:</strong> Zadejte expozici podle <strong>podkladových aktiv</strong>, ne podle měny fondu!
+            </p>
+            <p className="text-xs text-amber-700">
+              Například: SXR8 (EUR fond kupující US akcie) = 100% USD expozice
+            </p>
+          </div>
+          <div className="flex items-center justify-between p-2 bg-purple-100 rounded-lg">
+            <span className="font-medium">Celková expozice:</span>
+            <span className={`font-bold ${isAllocationValid ? 'text-green-600' : 'text-red-600'}`}>
+              {totalAllocation.toFixed(1)}%
+            </span>
+          </div>
+          {!isAllocationValid && (
+            <p className="text-sm text-red-600">
+              ⚠️ Celková expozice by měla být 100%. Automaticky se normalizuje při výpočtu.
+            </p>
+          )}
+        </div>
+      </div>
+
+
+      <Button onClick={handleCalculate} className="w-full">
+        <Calculator className="mr-2 h-4 w-4" />
+        Analyzovat kurzový dopad
+      </Button>
+      
 
       {results && (
         <CurrencyImpactResults results={results} />

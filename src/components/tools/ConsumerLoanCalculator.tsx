@@ -121,11 +121,11 @@ const ConsumerLoanCalculator: React.FC = () => {
             <div className="border rounded-lg p-4 bg-violet-25">
               <div className="flex items-center gap-2 mb-3">
                 <DollarSign className="h-4 w-4 text-violet-600" />
-                <h3 className="font-semibold text-sm">Parametry úvěru</h3>
+                <h3 className="font-semibold">Parametry úvěru</h3>
               </div>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block font-medium text-gray-700 mb-1">
                     Výše úvěru: {loanAmount?.toLocaleString()} Kč
                   </label>
                   <input
@@ -145,7 +145,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                     type="number"
                     value={loanAmount || ''}
                     onChange={(e) => setLoanAmount(Number(e.target.value) || 0)}
-                    className="mt-2 w-full px-3 py-1 border border-gray-300 rounded-md text-center h-9 text-sm"
+                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center h-10"
                     placeholder="Zadejte výši úvěru"
                     min="50000"
                     max="2000000"
@@ -153,7 +153,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block font-medium text-gray-700 mb-1">
                     Úroková sazba: {interestRate}% p.a.
                   </label>
                   <input
@@ -173,7 +173,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                     type="number"
                     value={interestRate || ''}
                     onChange={(e) => setInterestRate(Number(e.target.value) || 0)}
-                    className="mt-2 w-full px-3 py-1 border border-gray-300 rounded-md text-center h-9 text-sm"
+                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center h-10"
                     placeholder="Zadejte úrokovou sazbu"
                     min="3"
                     max="25"
@@ -182,7 +182,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block font-medium text-gray-700 mb-1">
                     Doba splatnosti: {loanPeriod} let
                   </label>
                   <input
@@ -202,7 +202,7 @@ const ConsumerLoanCalculator: React.FC = () => {
                     type="number"
                     value={loanPeriod || ''}
                     onChange={(e) => setLoanPeriod(Math.min(10, Math.max(1, Number(e.target.value) || 0)))}
-                    className="mt-2 w-full px-3 py-1 border border-gray-300 rounded-md text-center h-9 text-sm"
+                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center h-10"
                     placeholder="Zadejte dobu splatnosti"
                     min="1"
                     max="10"
@@ -216,7 +216,7 @@ const ConsumerLoanCalculator: React.FC = () => {
               <div className="border rounded-lg p-4 bg-gray-25">
                 <div className="flex items-center gap-2 mb-3">
                   <TrendingUp className="h-4 w-4 text-violet-600" />
-                  <h3 className="font-semibold text-sm">Výsledky výpočtu</h3>
+                  <h3 className="font-semibold">Výsledky výpočtu</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
@@ -255,7 +255,7 @@ const ConsumerLoanCalculator: React.FC = () => {
           {/* Rozbalovací předpoklady */}
           <details className="mt-4 border border-gray-200 rounded-lg">
             <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
-              <span className="font-semibold text-gray-900 text-sm">📋 Předpoklady kalkulačky úvěru</span>
+              <span className="font-semibold text-gray-900">📋 Předpoklady kalkulačky úvěru</span>
             </summary>
             <div className="p-3 border-t border-gray-200">
               <ul className="text-xs text-gray-700 space-y-1">
@@ -386,7 +386,7 @@ const ConsumerLoanCalculator: React.FC = () => {
           {/* Umořovací tabulka */}
           <details className="border border-gray-200 rounded-lg bg-white">
             <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
-              <span className="font-semibold text-gray-900 text-sm">📊 Detailní umořovací tabulka (klikněte pro rozbalení)</span>
+              <span className="font-semibold text-gray-900">📊 Detailní umořovací tabulka (klikněte pro rozbalení)</span>
             </summary>
             <div className="p-3 border-t border-gray-200 max-h-96 overflow-y-auto">
               <div className="overflow-x-auto">

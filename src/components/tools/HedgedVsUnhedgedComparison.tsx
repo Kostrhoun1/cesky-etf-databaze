@@ -34,15 +34,11 @@ const HedgedVsUnhedgedComparison: React.FC = () => {
   useEffect(() => {
     const fetchETFComparisons = async () => {
       try {
-        // Načíst známé páry unhedged/hedged ETF
+        // Srovnání S&P 500 ETF (zajištěné vs nezajištěné)
         const pairs = [
           { 
-            unhedged: 'IE000D3BWBR2', // iShares S&P 500 Swap UCITS ETF USD (Dist)
-            hedged: 'IE000Z3S26J2'   // iShares S&P 500 Swap UCITS ETF EUR Hedged (Acc)
-          },
-          { 
-            unhedged: 'IE00B4L5Y983', // iShares Core MSCI World UCITS ETF USD (Acc)
-            hedged: 'IE00BKBF6H24'   // iShares Core MSCI World UCITS ETF EUR Hedged (Dist)
+            unhedged: 'IE00B5BMR087', // iShares Core S&P 500 UCITS ETF (CSP1) - nezajištěné
+            hedged: 'IE00B3ZW0K18'   // iShares Core S&P 500 UCITS ETF EUR Hedged (CSPX) - zajištěné
           }
         ];
 
@@ -112,11 +108,19 @@ const HedgedVsUnhedgedComparison: React.FC = () => {
     <div className="bg-white rounded-2xl border p-8 mb-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
         <Shield className="h-6 w-6 text-blue-600" />
-        Skutečné srovnání: Hedged vs Unhedged ETF
+        Srovnání: CSP1 vs IBCF (zajištěné S&P 500 ETF)
       </h2>
-      <p className="text-gray-600 mb-6">
-        Live data z naší databáze - porovnání stejných indexů v zajištěné a nezajištěné variantě
-      </p>
+      <div className="mb-6">
+        <p className="text-gray-600 mb-3">
+          Konkrétní srovnání stejného indexu (S&P 500) v nezajištěné a EUR-zajištěné variantě.
+        </p>
+        <div className="bg-red-50 border border-red-200 p-3 rounded-lg">
+          <p className="text-sm text-red-800">
+            <strong>⚠️ Důležité:</strong> Hedged ETF zajišťují pouze EUR vůči USD. 
+            <strong>ETF fondy zajištěné proti CZK neexistují!</strong> Pro české investory zůstává EUR/CZK riziko.
+          </p>
+        </div>
+      </div>
 
       <div className="space-y-6">
         {comparisons.map((comparison, index) => {
@@ -142,155 +146,122 @@ const HedgedVsUnhedgedComparison: React.FC = () => {
                 </div>
               </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-6">
-                {/* Unhedged verze */}
-                <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-blue-800 flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4" />
-                      Nezajištěná (Unhedged)
-                    </h3>
-                    <a 
-                      href={`/etf/${comparison.unhedged.isin.toLowerCase()}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  </div>
-                  <div className="space-y-2">
-                    <div>
-                      <p className="font-medium text-blue-900">
-                        {comparison.unhedged.name}
-                      </p>
-                      <p className="text-sm text-blue-700">
-                        ISIN: {comparison.unhedged.isin}
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
-                      <div>
-                        <p className="text-blue-600">TER:</p>
-                        <p className="font-bold">{comparison.unhedged.ter_numeric?.toFixed(2)}%</p>
-                      </div>
-                      <div>
-                        <p className="text-blue-600">Velikost:</p>
-                        <p className="font-bold">€{formatSize(comparison.unhedged.fund_size_numeric)}</p>
-                      </div>
-                      <div>
-                        <p className="text-blue-600">YTD:</p>
-                        <p className={`font-bold ${getReturnColor(comparison.unhedged.return_ytd)}`}>
-                          {formatPercentage(comparison.unhedged.return_ytd)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-blue-600">1 rok:</p>
-                        <p className={`font-bold ${getReturnColor(comparison.unhedged.return_1y)}`}>
-                          {formatPercentage(comparison.unhedged.return_1y)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-blue-600">3 roky:</p>
-                        <p className={`font-bold ${getReturnColor(comparison.unhedged.return_3y)}`}>
-                          {formatPercentage(comparison.unhedged.return_3y)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-blue-600">5 let:</p>
-                        <p className={`font-bold ${getReturnColor(comparison.unhedged.return_5y)}`}>
-                          {formatPercentage(comparison.unhedged.return_5y)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Hedged verze */}
-                <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-orange-800 flex items-center gap-2">
-                      <Shield className="h-4 w-4" />
-                      EUR Zajištěná (Hedged)
-                    </h3>
-                    <a 
-                      href={`/etf/${comparison.hedged.isin.toLowerCase()}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-orange-600 hover:text-orange-800"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  </div>
-                  <div className="space-y-2">
-                    <div>
-                      <p className="font-medium text-orange-900">
-                        {comparison.hedged.name}
-                      </p>
-                      <p className="text-sm text-orange-700">
-                        ISIN: {comparison.hedged.isin}
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
-                      <div>
-                        <p className="text-orange-600">TER:</p>
-                        <p className="font-bold">{comparison.hedged.ter_numeric?.toFixed(2)}%</p>
-                      </div>
-                      <div>
-                        <p className="text-orange-600">Velikost:</p>
-                        <p className="font-bold">€{formatSize(comparison.hedged.fund_size_numeric)}</p>
-                      </div>
-                      <div>
-                        <p className="text-orange-600">YTD:</p>
-                        <p className={`font-bold ${getReturnColor(comparison.hedged.return_ytd)}`}>
-                          {formatPercentage(comparison.hedged.return_ytd)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-orange-600">1 rok:</p>
-                        <p className={`font-bold ${getReturnColor(comparison.hedged.return_1y)}`}>
-                          {formatPercentage(comparison.hedged.return_1y)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-orange-600">3 roky:</p>
-                        <p className={`font-bold ${getReturnColor(comparison.hedged.return_3y)}`}>
-                          {formatPercentage(comparison.hedged.return_3y)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-orange-600">5 let:</p>
-                        <p className={`font-bold ${getReturnColor(comparison.hedged.return_5y)}`}>
-                          {formatPercentage(comparison.hedged.return_5y)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Rozdíly a analýza */}
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg border">
-                <h4 className="font-semibold text-gray-800 mb-3">Klíčové rozdíly:</h4>
-                <div className="grid md:grid-cols-3 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-600">TER rozdíl:</p>
-                    <p className="font-bold text-red-600">
-                      +{((comparison.hedged.ter_numeric || 0) - (comparison.unhedged.ter_numeric || 0)).toFixed(2)}%
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">YTD rozdíl:</p>
-                    <p className={`font-bold ${getReturnColor((comparison.hedged.return_ytd || 0) - (comparison.unhedged.return_ytd || 0))}`}>
-                      {formatPercentage((comparison.hedged.return_ytd || 0) - (comparison.unhedged.return_ytd || 0))}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">1Y rozdíl:</p>
-                    <p className={`font-bold ${getReturnColor((comparison.hedged.return_1y || 0) - (comparison.unhedged.return_1y || 0))}`}>
-                      {formatPercentage((comparison.hedged.return_1y || 0) - (comparison.unhedged.return_1y || 0))}
-                    </p>
-                  </div>
-                </div>
+              {/* Kompaktní srovnávací tabulka */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left py-2 font-medium text-gray-700">Metrika</th>
+                      <th className="text-center py-2">
+                        <div className="flex items-center justify-center gap-1">
+                          <TrendingUp className="h-3 w-3 text-blue-600" />
+                          <span className="text-blue-800 font-medium">CSP1</span>
+                          <a 
+                            href={`/etf/${comparison.unhedged.isin}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </div>
+                        <div className="text-xs text-blue-600 font-normal">Nezajištěný</div>
+                      </th>
+                      <th className="text-center py-2">
+                        <div className="flex items-center justify-center gap-1">
+                          <Shield className="h-3 w-3 text-orange-600" />
+                          <span className="text-orange-800 font-medium">IBCF</span>
+                          <a 
+                            href={`/etf/${comparison.hedged.isin}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-orange-600 hover:text-orange-800"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </div>
+                        <div className="text-xs text-orange-600 font-normal">EUR zajištěný</div>
+                      </th>
+                      <th className="text-center py-2 font-medium text-gray-700">Rozdíl</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b">
+                      <td className="py-2 font-medium">TER</td>
+                      <td className="text-center py-2">
+                        <span className="font-bold text-blue-900">
+                          {comparison.unhedged.ter_numeric?.toFixed(2)}%
+                        </span>
+                      </td>
+                      <td className="text-center py-2">
+                        <span className="font-bold text-orange-900">
+                          {comparison.hedged.ter_numeric?.toFixed(2)}%
+                        </span>
+                      </td>
+                      <td className="text-center py-2 text-red-600 font-semibold">
+                        +{((comparison.hedged.ter_numeric || 0) - (comparison.unhedged.ter_numeric || 0)).toFixed(2)}%
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-2 font-medium">Velikost</td>
+                      <td className="text-center py-2 font-bold text-blue-900">
+                        €{formatSize(comparison.unhedged.fund_size_numeric)}
+                      </td>
+                      <td className="text-center py-2 font-bold text-orange-900">
+                        €{formatSize(comparison.hedged.fund_size_numeric)}
+                      </td>
+                      <td className="text-center py-2 text-gray-500">-</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-2 font-medium">YTD</td>
+                      <td className={`text-center py-2 font-bold ${getReturnColor(comparison.unhedged.return_ytd)}`}>
+                        {formatPercentage(comparison.unhedged.return_ytd)}
+                      </td>
+                      <td className={`text-center py-2 font-bold ${getReturnColor(comparison.hedged.return_ytd)}`}>
+                        {formatPercentage(comparison.hedged.return_ytd)}
+                      </td>
+                      <td className={`text-center py-2 font-semibold ${getReturnColor((comparison.hedged.return_ytd || 0) - (comparison.unhedged.return_ytd || 0))}`}>
+                        {formatPercentage((comparison.hedged.return_ytd || 0) - (comparison.unhedged.return_ytd || 0))}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-2 font-medium">1 rok</td>
+                      <td className={`text-center py-2 font-bold ${getReturnColor(comparison.unhedged.return_1y)}`}>
+                        {formatPercentage(comparison.unhedged.return_1y)}
+                      </td>
+                      <td className={`text-center py-2 font-bold ${getReturnColor(comparison.hedged.return_1y)}`}>
+                        {formatPercentage(comparison.hedged.return_1y)}
+                      </td>
+                      <td className={`text-center py-2 font-semibold ${getReturnColor((comparison.hedged.return_1y || 0) - (comparison.unhedged.return_1y || 0))}`}>
+                        {formatPercentage((comparison.hedged.return_1y || 0) - (comparison.unhedged.return_1y || 0))}
+                      </td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-2 font-medium">3 roky</td>
+                      <td className={`text-center py-2 font-bold ${getReturnColor(comparison.unhedged.return_3y)}`}>
+                        {formatPercentage(comparison.unhedged.return_3y)}
+                      </td>
+                      <td className={`text-center py-2 font-bold ${getReturnColor(comparison.hedged.return_3y)}`}>
+                        {formatPercentage(comparison.hedged.return_3y)}
+                      </td>
+                      <td className={`text-center py-2 font-semibold ${getReturnColor((comparison.hedged.return_3y || 0) - (comparison.unhedged.return_3y || 0))}`}>
+                        {formatPercentage((comparison.hedged.return_3y || 0) - (comparison.unhedged.return_3y || 0))}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 font-medium">5 let</td>
+                      <td className={`text-center py-2 font-bold ${getReturnColor(comparison.unhedged.return_5y)}`}>
+                        {formatPercentage(comparison.unhedged.return_5y)}
+                      </td>
+                      <td className={`text-center py-2 font-bold ${getReturnColor(comparison.hedged.return_5y)}`}>
+                        {formatPercentage(comparison.hedged.return_5y)}
+                      </td>
+                      <td className={`text-center py-2 font-semibold ${getReturnColor((comparison.hedged.return_5y || 0) - (comparison.unhedged.return_5y || 0))}`}>
+                        {formatPercentage((comparison.hedged.return_5y || 0) - (comparison.unhedged.return_5y || 0))}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </CardContent>
           </Card>
@@ -309,11 +280,19 @@ const HedgedVsUnhedgedComparison: React.FC = () => {
         )}
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p className="text-sm text-blue-800">
-          <strong>💡 Interpretace:</strong> Hedged verze eliminuje EUR/USD volatilitu, ale má vyšší náklady (TER + carry cost). 
-          Výkonnostní rozdíly ukazují dopad měnových pohybů na nezajištěnou verzi.
-        </p>
+      <div className="mt-6 space-y-3">
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-800">
+            <strong>💡 Interpretace rozdílů:</strong> IBCF (hedged) eliminuje EUR/USD volatilitu, ale má vyšší náklady. 
+            Výkonnostní rozdíly ukazují dopad měnových pohybů na CSP1 (unhedged).
+          </p>
+        </div>
+        <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p className="text-sm text-yellow-800">
+            <strong>⚠️ Limitace hedgingu:</strong> IBCF zajišťuje pouze EUR/USD, pro Čechy zůstává EUR/CZK riziko. 
+            Rozdíly ve výkonnosti ukazují, zda se hedging vyplatil v daném období.
+          </p>
+        </div>
       </div>
     </div>
   );

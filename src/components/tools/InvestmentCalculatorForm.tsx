@@ -43,35 +43,35 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
         <div className="border rounded-lg p-4 bg-violet-25">
           <div className="flex items-center gap-2 mb-3">
             <TrendingUp className="h-4 w-4 text-violet-600" />
-            <h3 className="font-semibold text-sm">Investiční parametry</h3>
+            <h3 className="font-semibold">Investiční parametry</h3>
           </div>
           <div className="space-y-3">
             <div>
-              <Label htmlFor="initial" className="text-sm">Jednorázová investice (Kč)</Label>
+              <Label htmlFor="initial">Jednorázová investice (Kč)</Label>
               <Input
                 id="initial"
                 type="number"
                 value={initialInvestment || ''}
                 onChange={(e) => setInitialInvestment(Number(e.target.value) || 0)}
                 placeholder="0"
-                className="h-9 text-sm"
+                className="h-10"
               />
             </div>
             <div>
-              <Label htmlFor="recurring" className="text-sm">Pravidelná investice (Kč)</Label>
+              <Label htmlFor="recurring">Pravidelná investice (Kč)</Label>
               <Input
                 id="recurring"
                 type="number"
                 value={recurringInvestment || ''}
                 onChange={(e) => setRecurringInvestment(Number(e.target.value) || 0)}
                 placeholder="5000"
-                className="h-9 text-sm"
+                className="h-10"
               />
             </div>
             <div>
-              <Label htmlFor="frequency" className="text-sm">Frekvence investování</Label>
+              <Label htmlFor="frequency">Frekvence investování</Label>
               <Select value={recurringFrequency} onValueChange={setRecurringFrequency}>
-                <SelectTrigger id="frequency" className="h-9 text-sm">
+                <SelectTrigger id="frequency" className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -87,11 +87,11 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
         <div className="border rounded-lg p-4 bg-gray-25">
           <div className="flex items-center gap-2 mb-3">
             <Percent className="h-4 w-4 text-violet-600" />
-            <h3 className="font-semibold text-sm">Parametry výnosu a času</h3>
+            <h3 className="font-semibold">Parametry výnosu a času</h3>
           </div>
           <div className="space-y-3">
             <div>
-              <Label htmlFor="return" className="text-sm">Průměrný roční výnos (%)</Label>
+              <Label htmlFor="return">Průměrný roční výnos (%)</Label>
               <Input
                 id="return"
                 type="number"
@@ -99,11 +99,11 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
                 onChange={(e) => setAverageReturn(Number(e.target.value) || 0)}
                 placeholder="7"
                 step="0.1"
-                className="h-9 text-sm"
+                className="h-10"
               />
             </div>
             <div>
-              <Label htmlFor="period" className="text-sm">Investiční horizont (roky)</Label>
+              <Label htmlFor="period">Investiční horizont (roky)</Label>
               <Input
                 id="period"
                 type="number"
@@ -112,11 +112,11 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
                 placeholder="20"
                 min="1"
                 max="50"
-                className="h-9 text-sm"
+                className="h-10"
               />
             </div>
             <div>
-              <Label htmlFor="tax" className="text-sm">Daňová sazba (%)</Label>
+              <Label htmlFor="tax">Daňová sazba (%)</Label>
               <Input
                 id="tax"
                 type="number"
@@ -126,14 +126,14 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
                 min="0"
                 max="50"
                 step="0.1"
-                className="h-9 text-sm"
+                className="h-10"
               />
             </div>
           </div>
         </div>
       </div>
 
-      <Button onClick={onCalculate} className="w-full h-9 text-sm">
+      <Button onClick={onCalculate} className="w-full">
         <Calculator className="mr-2 h-4 w-4" />
         Vypočítat investiční růst
       </Button>

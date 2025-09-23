@@ -239,7 +239,7 @@ const FeeCalculatorPage: React.FC = () => {
               {/* Parametry investice - kompaktní */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div>
-                  <Label htmlFor="initial" className="text-sm">Počáteční investice (Kč)</Label>
+                  <Label htmlFor="initial">Počáteční investice (Kč)</Label>
                   <Input
                     id="initial"
                     type="number"
@@ -247,11 +247,11 @@ const FeeCalculatorPage: React.FC = () => {
                     max="50000000"
                     value={investedAmount}
                     onChange={(e) => setInvestedAmount(Math.max(0, Number(e.target.value)))}
-                    className="mt-1 h-9"
+                    className="mt-1 h-10"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="monthly" className="text-sm">Měsíční příspěvek (Kč)</Label>
+                  <Label htmlFor="monthly">Měsíční příspěvek (Kč)</Label>
                   <Input
                     id="monthly"
                     type="number"
@@ -259,11 +259,11 @@ const FeeCalculatorPage: React.FC = () => {
                     max="1000000"
                     value={monthlyContribution}
                     onChange={(e) => setMonthlyContribution(Math.max(0, Number(e.target.value)))}
-                    className="mt-1 h-9"
+                    className="mt-1 h-10"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="period" className="text-sm">Doba (roky)</Label>
+                  <Label htmlFor="period">Doba (roky)</Label>
                   <Input
                     id="period"
                     type="number"
@@ -271,11 +271,11 @@ const FeeCalculatorPage: React.FC = () => {
                     max="50"
                     value={investmentPeriod}
                     onChange={(e) => setInvestmentPeriod(Math.max(1, Math.min(50, Number(e.target.value))))}
-                    className="mt-1 h-9"
+                    className="mt-1 h-10"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="return" className="text-sm">Očekávaný výnos (%)</Label>
+                  <Label htmlFor="return">Očekávaný výnos (%)</Label>
                   <Input
                     id="return"
                     type="number"
@@ -284,7 +284,7 @@ const FeeCalculatorPage: React.FC = () => {
                     max="30"
                     value={expectedReturn}
                     onChange={(e) => setExpectedReturn(Math.max(0, Math.min(30, Number(e.target.value))))}
-                    className="mt-1 h-9"
+                    className="mt-1 h-10"
                   />
                 </div>
               </div>
@@ -300,7 +300,7 @@ const FeeCalculatorPage: React.FC = () => {
                   
                   <div className="space-y-3">
                     <div>
-                      <Label htmlFor="etf-ter" className="text-sm">TER poplatek (%)</Label>
+                      <Label htmlFor="etf-ter">TER poplatek (%)</Label>
                       <Input
                         id="etf-ter"
                         type="number"
@@ -309,7 +309,7 @@ const FeeCalculatorPage: React.FC = () => {
                         max="5"
                         value={etfTER}
                         onChange={(e) => setEtfTER(Math.max(0, Math.min(5, Number(e.target.value))))}
-                        className="mt-1 h-9"
+                        className="mt-1 h-10"
                       />
                     </div>
                     
@@ -335,7 +335,7 @@ const FeeCalculatorPage: React.FC = () => {
                   
                   <div className="space-y-3">
                     <div>
-                      <Label htmlFor="active-ter" className="text-sm">TER poplatek (%)</Label>
+                      <Label htmlFor="active-ter">TER poplatek (%)</Label>
                       <Input
                         id="active-ter"
                         type="number"
@@ -344,7 +344,7 @@ const FeeCalculatorPage: React.FC = () => {
                         max="5"
                         value={activeTER}
                         onChange={(e) => setActiveTER(Math.max(0, Math.min(5, Number(e.target.value))))}
-                        className="mt-1 h-9"
+                        className="mt-1 h-10"
                       />
                     </div>
                     
@@ -421,13 +421,13 @@ const FeeCalculatorPage: React.FC = () => {
                 <>
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="text-center p-4 bg-violet-50 rounded-lg">
-                      <h4 className="text-sm font-semibold text-violet-800 mb-1">Více peněz v kapse</h4>
+                      <h4 className="font-semibold text-violet-800 mb-1">Více peněz v kapse</h4>
                       <p className="text-2xl font-bold text-violet-900">{formatCurrency(valueDifference)}</p>
                       <p className="text-xs text-violet-700 mt-1">S ETF budete mít více</p>
                     </div>
                     
                     <div className="text-center p-4 bg-violet-50 rounded-lg">
-                      <h4 className="text-sm font-semibold text-violet-800 mb-1">Ušetřené poplatky</h4>
+                      <h4 className="font-semibold text-violet-800 mb-1">Ušetřené poplatky</h4>
                       <p className="text-2xl font-bold text-violet-900">{formatCurrency(feeDifference)}</p>
                       <p className="text-xs text-violet-700 mt-1">Méně na poplatcích</p>
                     </div>

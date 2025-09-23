@@ -137,11 +137,11 @@ const MortgageCalculator: React.FC = () => {
             <div className="border rounded-lg p-4 bg-violet-25">
               <div className="flex items-center gap-2 mb-3">
                 <Home className="h-4 w-4 text-violet-600" />
-                <h3 className="font-semibold text-sm">Parametry hypotéky</h3>
+                <h3 className="font-semibold">Parametry hypotéky</h3>
               </div>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block font-medium text-gray-700 mb-2">
                     Hodnota nemovitosti: {propertyValue?.toLocaleString()} Kč
                   </label>
                   <input
@@ -174,7 +174,7 @@ const MortgageCalculator: React.FC = () => {
                         setLoanAmount(Math.round(newValue * 0.8));
                       }
                     }}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center"
+                    className="mt-2 w-full px-3 py-2 h-10 border border-gray-300 rounded-md text-center"
                     placeholder="Zadejte hodnotu nemovitosti"
                     min="1000000"
                     max="15000000"
@@ -182,7 +182,7 @@ const MortgageCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block font-medium text-gray-700 mb-2">
                     Výše úvěru: {loanAmount?.toLocaleString()} Kč (LTV: {ltv.toFixed(1)}%)
                   </label>
                   <input
@@ -210,7 +210,7 @@ const MortgageCalculator: React.FC = () => {
                         setLoanAmount(Math.min(propertyValue, Math.max(0, value)));
                       }
                     }}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center"
+                    className="mt-2 w-full px-3 py-2 h-10 border border-gray-300 rounded-md text-center"
                     placeholder="Zadejte výši úvěru"
                     min="0"
                     max={propertyValue}
@@ -249,7 +249,7 @@ const MortgageCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block font-medium text-gray-700 mb-2">
                     Úroková sazba: {interestRate}% p.a.
                   </label>
                   <input
@@ -269,7 +269,7 @@ const MortgageCalculator: React.FC = () => {
                     type="number"
                     value={interestRate || ''}
                     onChange={(e) => setInterestRate(Number(e.target.value) || 0)}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center"
+                    className="mt-2 w-full px-3 py-2 h-10 border border-gray-300 rounded-md text-center"
                     placeholder="Zadejte úrokovou sazbu"
                     min="2"
                     max="12"
@@ -278,7 +278,7 @@ const MortgageCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block font-medium text-gray-700 mb-2">
                     Doba splatnosti: {loanPeriod} let
                   </label>
                   <input
@@ -298,7 +298,7 @@ const MortgageCalculator: React.FC = () => {
                     type="number"
                     value={loanPeriod || ''}
                     onChange={(e) => setLoanPeriod(Math.min(30, Math.max(5, Number(e.target.value) || 0)))}
-                    className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md text-center"
+                    className="mt-2 w-full px-3 py-2 h-10 border border-gray-300 rounded-md text-center"
                     placeholder="Zadejte dobu splatnosti"
                     min="5"
                     max="30"

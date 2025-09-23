@@ -102,11 +102,11 @@ const EmergencyFundCalculator: React.FC = () => {
           <div className="border rounded-lg p-4 bg-violet-25 mb-4">
             <div className="flex items-center gap-2 mb-3">
               <Banknote className="h-4 w-4 text-violet-600" />
-              <h3 className="font-semibold text-sm">Finanční situace</h3>
+              <h3 className="font-semibold">Finanční situace</h3>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
-                <Label htmlFor="monthlyExpenses" className="text-sm">Měsíční výdaje (Kč)</Label>
+                <Label htmlFor="monthlyExpenses">Měsíční výdaje (Kč)</Label>
                 <Input
                   id="monthlyExpenses"
                   type="number"
@@ -114,11 +114,11 @@ const EmergencyFundCalculator: React.FC = () => {
                   onChange={(e) => setMonthlyExpenses(Number(e.target.value) || 0)}
                   min="10000"
                   step="5000"
-                  className="mt-1 h-9"
+                  className="mt-1 h-10"
                 />
               </div>
               <div>
-                <Label htmlFor="familySize" className="text-sm">Počet závislých</Label>
+                <Label htmlFor="familySize">Počet závislých</Label>
                 <Input
                   id="familySize"
                   type="number"
@@ -126,11 +126,11 @@ const EmergencyFundCalculator: React.FC = () => {
                   onChange={(e) => setFamilySize(Number(e.target.value) || 0)}
                   min="1"
                   max="10"
-                  className="mt-1 h-9"
+                  className="mt-1 h-10"
                 />
               </div>
               <div>
-                <Label htmlFor="currentSavings" className="text-sm">Současné úspory (Kč)</Label>
+                <Label htmlFor="currentSavings">Současné úspory (Kč)</Label>
                 <Input
                   id="currentSavings"
                   type="number"
@@ -138,11 +138,11 @@ const EmergencyFundCalculator: React.FC = () => {
                   onChange={(e) => setCurrentSavings(Number(e.target.value) || 0)}
                   min="0"
                   step="10000"
-                  className="mt-1 h-9"
+                  className="mt-1 h-10"
                 />
               </div>
               <div>
-                <Label htmlFor="monthlySavingCapacity" className="text-sm">Měsíční spoření (Kč)</Label>
+                <Label htmlFor="monthlySavingCapacity">Měsíční spoření (Kč)</Label>
                 <Input
                   id="monthlySavingCapacity"
                   type="number"
@@ -150,7 +150,7 @@ const EmergencyFundCalculator: React.FC = () => {
                   onChange={(e) => setMonthlySavingCapacity(Number(e.target.value) || 0)}
                   min="0"
                   step="1000"
-                  className="mt-1 h-9"
+                  className="mt-1 h-10"
                 />
               </div>
             </div>
@@ -160,15 +160,15 @@ const EmergencyFundCalculator: React.FC = () => {
           <div className="border rounded-lg p-4 bg-gray-25 mb-4">
             <div className="flex items-center gap-2 mb-3">
               <AlertTriangle className="h-4 w-4 text-violet-600" />
-              <h3 className="font-semibold text-sm">Riziková situace</h3>
+              <h3 className="font-semibold">Riziková situace</h3>
             </div>
             <div className="space-y-3">
               {/* Základní faktory v řadě */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 <div>
-                  <Label htmlFor="jobStability" className="text-sm">Stabilita zaměstnání</Label>
+                  <Label htmlFor="jobStability">Stabilita zaměstnání</Label>
                   <Select value={jobStability} onValueChange={(value: 'stable' | 'moderate' | 'unstable') => setJobStability(value)}>
-                    <SelectTrigger className="h-9">
+                    <SelectTrigger className="h-10">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -180,9 +180,9 @@ const EmergencyFundCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <Label className="text-sm">Typ smlouvy</Label>
+                  <Label>Typ smlouvy</Label>
                   <Select value={contractType} onValueChange={(value) => setContractType(value as any)}>
-                    <SelectTrigger className="h-9">
+                    <SelectTrigger className="h-10">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -194,9 +194,9 @@ const EmergencyFundCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <Label className="text-sm">Věk</Label>
+                  <Label>Věk</Label>
                   <Select value={ageGroup} onValueChange={(value) => setAgeGroup(value as any)}>
-                    <SelectTrigger className="h-9">
+                    <SelectTrigger className="h-10">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -208,9 +208,9 @@ const EmergencyFundCalculator: React.FC = () => {
                 </div>
 
                 <div>
-                  <Label className="text-sm">Vzdělání</Label>
+                  <Label>Vzdělání</Label>
                   <Select value={education} onValueChange={(value) => setEducation(value as any)}>
-                    <SelectTrigger className="h-9">
+                    <SelectTrigger className="h-10">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -232,7 +232,7 @@ const EmergencyFundCalculator: React.FC = () => {
                     onChange={(e) => setHasSecondIncome(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="hasSecondIncome" className="text-sm">💰 Druhý příjem</Label>
+                  <Label htmlFor="hasSecondIncome">💰 Druhý příjem</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <input
@@ -242,7 +242,7 @@ const EmergencyFundCalculator: React.FC = () => {
                     onChange={(e) => setHasDebt(e.target.checked)}
                     className="rounded"
                   />
-                  <Label htmlFor="hasDebt" className="text-sm">🏠 Mám dluhy</Label>
+                  <Label htmlFor="hasDebt">🏠 Mám dluhy</Label>
                 </div>
               </div>
             </div>
@@ -251,7 +251,7 @@ const EmergencyFundCalculator: React.FC = () => {
           <Button 
             onClick={handleCalculate} 
             className="w-full mb-4" 
-            size="sm"
+            className="h-10"
           >
             <Shield className="mr-2 h-4 w-4" />
             Vypočítat nouzovou rezervu
@@ -342,10 +342,10 @@ const EmergencyFundCalculator: React.FC = () => {
           {/* Rozbalovací předpoklady */}
           <details className="border border-gray-200 rounded-lg">
             <summary className="p-3 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
-              <span className="font-semibold text-gray-900 text-sm">📋 Předpoklady kalkulačky nouzové rezervy</span>
+              <span className="font-semibold text-gray-900">📋 Předpoklady kalkulačky nouzové rezervy</span>
             </summary>
             <div className="p-3 border-t border-gray-200">
-              <h4 className="font-semibold mb-2 text-gray-900 text-sm">📊 Výpočet velikosti rezervy</h4>
+              <h4 className="font-semibold mb-2 text-gray-900">📊 Výpočet velikosti rezervy</h4>
               <div className="grid md:grid-cols-2 gap-3 mb-3 text-xs">
                 <div>
                   <h5 className="font-semibold mb-1">Základní velikost podle stability:</h5>
@@ -366,7 +366,7 @@ const EmergencyFundCalculator: React.FC = () => {
                 </div>
               </div>
               
-              <h4 className="font-semibold mb-2 text-gray-900 text-sm">💰 Doporučené umístění rezervy (2025)</h4>
+              <h4 className="font-semibold mb-2 text-gray-900">💰 Doporučené umístění rezervy (2025)</h4>
               <div className="grid md:grid-cols-2 gap-3 mb-3 text-xs">
                 <div>
                   <h5 className="font-semibold mb-1">Spořicí účty CZK (70%):</h5>
@@ -388,7 +388,7 @@ const EmergencyFundCalculator: React.FC = () => {
                 </div>
               </div>
               
-              <h4 className="font-semibold mb-2 text-gray-900 text-sm">⚙️ Zjednodušení a omezení</h4>
+              <h4 className="font-semibold mb-2 text-gray-900">⚙️ Zjednodušení a omezení</h4>
               <ul className="text-xs text-gray-700 space-y-1">
                 <li>• <strong>Maximální rezerva:</strong> Omezeno na 12 měsíců (i když výpočet dává více)</li>
                 <li>• <strong>Minimální rezerva:</strong> Minimálně 3 měsíce ve všech případech</li>

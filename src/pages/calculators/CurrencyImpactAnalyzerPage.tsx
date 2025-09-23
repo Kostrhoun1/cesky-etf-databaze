@@ -1,4 +1,5 @@
 import React, { Suspense, lazy } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEO/SEOHead';
 import StructuredData from '@/components/SEO/StructuredData';
@@ -63,10 +64,10 @@ const CurrencyImpactAnalyzerPage: React.FC = () => {
   return (
     <Layout>
       <SEOHead
-        title="Kalkulačka kurzového dopadu ETF 2025 ⚡ Měnové riziko USD/EUR/CZK | ETF průvodce.cz"
-        description="🎯 Spočítejte kurzový dopad ETF za 2 min. CSPX má 100% USD riziko! EUR hedged ≠ CZK hedged. Monte Carlo analýza + 5 reálných scénářů. Optimalizace pro ČR."
+        title="Kalkulačka kurzového dopadu ETF 2025 | Měnové riziko ETF | ETF průvodce.cz"
+        description="✅ Bezplatná kalkulačka kurzového dopadu ETF. Analyzujte měnové riziko CSPX, VWCE a hedged ETF. Spočítejte dopad kurzových změn na vaše portfolio za 2 minuty."
         canonical="https://etfpruvodce.cz/kalkulacky/kurzovy-dopad-etf"
-        keywords="kalkulačka kurzový dopad ETF, měnové riziko CSPX VWCE, USD CZK kurz ETF, EUR hedged vs unhedged, currency hedging CZK 2025, ETF expozice USD EUR"
+        keywords="kalkulačka kurzový dopad ETF, měnové riziko ETF, CSPX hedging, EUR hedged ETF, USD CZK kurz, currency hedging kalkulačka 2025"
         schema={calculatorSchema}
         ogImage="https://etfpruvodce.cz/og-kurzovy-dopad-etf.jpg"
       />
@@ -80,311 +81,197 @@ const CurrencyImpactAnalyzerPage: React.FC = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        {/* SERP-first shrnutí s intent formulemi */}
-        <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-8">
-          <div className="max-w-5xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">
-              Analýza kurzového dopadu ETF 2025 🎯
-            </h1>
-            <div className="bg-white p-4 rounded-lg border mb-4">
-              <h2 className="text-lg font-semibold text-green-800 mb-3">📊 5-bodové shrnutí pro rychlé rozhodnutí:</h2>
-              <div className="grid md:grid-cols-5 gap-3 text-sm">
-                <div className="bg-red-50 p-3 rounded text-center">
-                  <div className="font-bold text-red-700">⚠️ Klíčové</div>
-                  <div className="text-red-600">Měna fondu ≠ měna expozice</div>
-                </div>
-                <div className="bg-blue-50 p-3 rounded text-center">
-                  <div className="font-bold text-blue-700">💰 USD ETF</div>
-                  <div className="text-blue-600">CSPX má 100% USD riziko</div>
-                </div>
-                <div className="bg-orange-50 p-3 rounded text-center">
-                  <div className="font-bold text-orange-700">🛡️ Hedging</div>
-                  <div className="text-orange-600">EUR hedged ≠ CZK hedged</div>
-                </div>
-                <div className="bg-purple-50 p-3 rounded text-center">
-                  <div className="font-bold text-purple-700">📈 Dopad</div>
-                  <div className="text-purple-600">20% kurz = 20% portfolio</div>
-                </div>
-                <div className="bg-green-50 p-3 rounded text-center">
-                  <div className="font-bold text-green-700">🔧 Řešení</div>
-                  <div className="text-green-600">Analýza + optimalizace</div>
-                </div>
-              </div>
-            </div>
-            <p className="text-lg text-gray-700 text-center mb-6">
-              <strong>Výsledek za 2 minuty:</strong> Spočítejte kurzový dopad ETF portfolia a optimalizujte 
-              <a href="/srovnani-etf" className="text-blue-600 hover:underline font-semibold"> výběr nejlepších ETF fondů</a> podle měnové expozice.
-            </p>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
-              <p className="text-blue-800 mb-3">
-                <strong>Před analýzou doporučujeme:</strong> Seznamte se s <a href="/nastroje" className="text-blue-600 hover:underline font-semibold">kompletním portfoliem investičních nástrojů</a> a prostudujte si <a href="/tipy/nejlepsi-etf-na-americke-akcie" className="text-blue-600 hover:underline font-semibold">příručku pro výběr amerických ETF</a> s hedging strategiemi.
-              </p>
-            </div>
+        {/* Hero sekce */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <DollarSign className="w-4 h-4" />
+            Analýza kurzového dopadu
           </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Kurzový dopad ETF
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
+            Analyzujte vliv kurzových změn na ETF portfolio a optimalizujte měnové riziko.
+          </p>
         </div>
 
-        {/* Samotný analyzátor - hned na začátku s Suspense (CWV optimalizace) */}
-        <Suspense 
-          fallback={
-            <div className="bg-white rounded-2xl border p-8 animate-pulse">
-              <div className="h-8 bg-gray-200 rounded mb-4"></div>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="h-48 bg-gray-100 rounded"></div>
-                <div className="h-48 bg-gray-100 rounded"></div>
-              </div>
-              <div className="h-12 bg-blue-100 rounded mt-6"></div>
-            </div>
-          }
-        >
-          <CurrencyImpactAnalyzer />
-        </Suspense>
+        {/* Samotná kalkulačka */}
+        <CurrencyImpactAnalyzer />
 
-        {/* Klíčová informace o měnové expozici */}
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6 mt-12 mb-8">
-          <div className="flex items-start gap-4">
-            <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
-            <div>
-              <h2 className="text-xl font-semibold text-red-800 mb-2">⚠️ Klíčové: Měna fondu ≠ Měna expozice!</h2>
-              <p className="text-red-700 mb-3">
-                <strong>CSPX je EUR fond, ale má 100% USD expozici!</strong> Kupuje americké akcie, takže vaše výnosy závisí na USD/CZK kurzu, ne EUR/CZK.
-              </p>
-              <p className="text-red-700 mb-3">
-                <strong>VWCE je EUR fond s globální expozicí!</strong> ~60% USA (USD), ~30% Evropa (EUR), ~10% Asie (mix měn).
-              </p>
-              <p className="text-red-700">
-                <strong>Pouze EUR hedged verze</strong> (např. CSHG) eliminují EUR/USD riziko. EUR/CZK riziko zůstává!
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Nová sekce: Analýza hedging nákladů */}
-        <div className="bg-orange-50 border border-orange-200 rounded-xl p-6 mb-8">
-          <div className="flex items-start gap-4">
-            <Shield className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
-            <div>
-              <h2 className="text-xl font-semibold text-orange-800 mb-4">💰 Skutečné náklady hedged ETF</h2>
-              <p className="text-orange-700 mb-4">
-                <strong>Hedging není zadarmo!</strong> U EUR-hedged fondů nejde jen o vyšší TER. 
-                Celkové náklady = <strong>TER + Carry Cost + Rollování forwardů</strong>
-              </p>
-              
-              <div className="bg-white rounded-lg p-4 mb-4">
-                <h3 className="font-semibold text-orange-800 mb-3">Carry Cost vysvětlení:</h3>
-                <div className="text-sm text-orange-700 space-y-2">
-                  <p><strong>Carry = rozdíl krátkých úrokových sazeb</strong></p>
-                  <p>• Když USD sazby &gt; EUR sazby → negativní carry (náklad)</p>
-                  <p>• Když EUR sazby &gt; USD sazby → pozitivní carry (příjem)</p>
-                  <p>• Aktuálně (2024/25): USD Fed ~5.5%, EUR ECB ~4.5% = -1% carry ročně</p>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4 text-sm">
-                <div className="bg-white p-3 rounded-lg border border-orange-200">
-                  <h4 className="font-semibold text-orange-800 mb-2">CSPX (Unhedged)</h4>
-                  <p className="text-orange-700">• TER: 0.07% ročně</p>
-                  <p className="text-orange-700">• Carry cost: 0%</p>
-                  <p className="text-orange-700">• <strong>Celkem: 0.07%</strong></p>
-                  <p className="text-orange-700">• Měnové riziko: plné USD/EUR</p>
-                </div>
-                <div className="bg-white p-3 rounded-lg border border-orange-200">
-                  <h4 className="font-semibold text-orange-800 mb-2">CSHG (EUR Hedged)</h4>
-                  <p className="text-orange-700">• TER: 0.10% ročně</p>
-                  <p className="text-orange-700">• Carry cost: ~-1.0% ročně*</p>
-                  <p className="text-orange-700">• <strong>Celkem: ~1.10%</strong></p>
-                  <p className="text-orange-700">• Měnové riziko: jen EUR/CZK</p>
-                </div>
-              </div>
-
-              <p className="text-xs text-orange-600 mt-3">
-                *Carry cost se mění s úrokovými sazbami. Při zúžení spreadu USD-EUR se snižuje.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Live srovnání hedged vs unhedged ETF z databáze */}
-        <Suspense 
-          fallback={
-            <div className="bg-white rounded-2xl border p-8 mb-8 animate-pulse">
-              <div className="h-8 bg-gray-200 rounded mb-6 w-1/3"></div>
-              <div className="space-y-4">
-                <div className="h-32 bg-gray-100 rounded"></div>
-                <div className="h-32 bg-gray-100 rounded"></div>
-              </div>
-            </div>
-          }
-        >
-          <HedgedVsUnhedgedComparison />
-        </Suspense>
-
-        {/* Pokročilé zajištění proti CZK */}
-        <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-8">
-          <h3 className="text-lg font-semibold text-slate-800 mb-4">Pokročilé metody zajištění proti CZK</h3>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-semibold text-slate-700 mb-3">Institucionální nástroje</h4>
-              <div className="space-y-3 text-sm text-slate-600">
-                <div className="bg-white p-3 rounded-lg border">
-                  <p className="font-medium text-slate-800">Currency Forward/SWAP kontrakty</p>
-                  <p>Dostupnost: Prime Brokerage (IBKR Pro, Saxo Capital Markets)</p>
-                  <p>Minimální objem: obvykle 50 000+ EUR/USD</p>
-                </div>
-                <div className="bg-white p-3 rounded-lg border">
-                  <p className="font-medium text-slate-800">OTC deriváty na CZK</p>
-                  <p>Poskytovatelé: velké investiční banky (DB, JPM, CS)</p>
-                  <p>Přístup: institucionální a HNWI klienti</p>
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold text-slate-700 mb-3">Retail alternativy</h4>
-              <div className="space-y-3 text-sm text-slate-600">
-                <div className="bg-white p-3 rounded-lg border">
-                  <p className="font-medium text-slate-800">Forex short CZK pozice</p>
-                  <p>Platformy: MetaTrader, cTrader, TradingView</p>
-                  <p>Páry: EUR/CZK short, USD/CZK short</p>
-                </div>
-                <div className="bg-white p-3 rounded-lg border">
-                  <p className="font-medium text-slate-800">CFD na měnové páry</p>
-                  <p>Brokeři: XTB, Plus500, eToro</p>
-                  <p>Leverage: 1:30 (retail), nákladnější než hedging</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-            <div className="flex items-start gap-3">
-              <span className="text-amber-600 text-lg">⚠️</span>
-              <div>
-                <p className="font-semibold text-amber-800 mb-1">Upozornění pro pokročilé investory</p>
-                <p className="text-sm text-amber-700">
-                  Měnové zajištění vyžaduje aktivní správu pozic, pochopení derivátových nástrojů a řízení rizika. 
-                  Nepřesné zajištění může vyvolat dodatečné ztráty. Vhodné pouze pro sofistikované investory 
-                  s dostatečným kapitálem a odbornými znalostmi.
+        {/* Jak funguje kurzové riziko */}
+        <div className="mt-16">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">Jak funguje kurzové riziko ETF?</h2>
+          <div className="grid md:grid-cols-4 gap-6 mb-12">
+            <Card>
+              <CardContent className="p-6 text-center">
+                <AlertTriangle className="w-12 h-12 text-red-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Měna vs Expozice</h3>
+                <p className="text-gray-600 text-sm">
+                  SXR8 je EUR fond, ale má 100% USD expozici
                 </p>
-              </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6 text-center">
+                <TrendingUp className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Kurzový dopad</h3>
+                <p className="text-gray-600 text-sm">
+                  20% změna kurzu = 20% změna výnosů
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6 text-center">
+                <Shield className="w-12 h-12 text-orange-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">EUR Hedging</h3>
+                <p className="text-gray-600 text-sm">
+                  Eliminuje EUR/USD riziko, ne EUR/CZK
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6 text-center">
+                <DollarSign className="w-12 h-12 text-green-600 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Hedging náklady</h3>
+                <p className="text-gray-600 text-sm">
+                  TER + Carry Cost = skutečné náklady
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Jednoduché vysvětlení */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Jak minimalizovat kurzové riziko?</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-blue-800">Dlouhodobé investice</h3>
+              <p className="text-gray-700 mb-4">
+                Nejefektivnější způsob je <strong>pravidelné investování (DCA)</strong>. 
+                Postupně nakupujete za různé kurzy, což vyrovnává výkyvy.
+              </p>
+              <ul className="space-y-2 text-gray-700">
+                <li>• <strong>Dollar Cost Averaging:</strong> snižuje kurzové riziko</li>
+                <li>• <strong>Čas:</strong> dlouhodobě se kurzy stabilizují</li>
+                <li>• <strong>Jednoduchost:</strong> žádné složité strategie</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-blue-800">Krátkodobé investice</h3>
+              <p className="text-gray-700 mb-4">
+                U investic do 3 let je kurzové riziko významné. 
+                Zvažte hedged ETF nebo vyšší podíl domácích investic.
+              </p>
+              <ul className="space-y-2 text-gray-700">
+                <li>• <strong>Hedged ETF:</strong> eliminují část kurzového rizika</li>
+                <li>• <strong>Náklady:</strong> hedging stojí ~1% ročně navíc</li>
+                <li>• <strong>CZK investice:</strong> žádné kurzové riziko</li>
+              </ul>
             </div>
           </div>
         </div>
 
+        {/* Srovnání hedged vs unhedged ETF */}
+        <HedgedVsUnhedgedComparison />
 
-        {/* FAQ sekce s lazy loading */}
-        <Suspense 
-          fallback={
-            <div className="bg-white rounded-2xl border p-8 animate-pulse mt-16">
-              <div className="h-6 bg-gray-200 rounded mb-6 w-1/3"></div>
-              <div className="space-y-4">
-                {[1,2,3,4].map(i => (
-                  <div key={i} className="h-16 bg-gray-100 rounded"></div>
-                ))}
-              </div>
-            </div>
-          }
-        >
-          <FAQSection
+
+        {/* FAQ sekce */}
+        <FAQSection
           title="Často kladené otázky o kurzovém dopadu ETF"
           faqs={[
             {
-              question: "Proč měna fondu není to samé jako měnová expozice?",
-              answer: "Měna fondu je jen technická záležitost - můžete koupit CSPX za eura, ale stále kupujete americké akcie. Vaše výnosy závisí na USD/CZK kurzu, ne EUR/CZK! Měnová expozice vzniká z podkladových aktiv - kam fond investuje peníze."
+              question: "Jak velký je kurzový dopad na ETF výnosy?",
+              answer: "Kurzový dopad je přímý - při změně kurzu o 20% se vaše výnosy změní o stejných 20%. Proto je důležité rozumět měnové expozici vašeho portfolia. Například pokud máte 100% americké akcie a USD oslabí o 15% vůči CZK, vaše portfolio v korunách poklesne o 15% bez ohledu na výkonnost akcií."
             },
             {
-              question: "Jak fungují EUR hedged ETF verze?",
-              answer: "EUR hedged ETF (např. CSHG) používají deriváty k eliminaci rizika mezi EUR a USD. Pokud kupuje americké akcie, zajistí si, že změny USD/EUR kurzu neovlivní výnosy v eurech. ALE pro české investory stále zůstává EUR/CZK riziko!"
+              question: "Jak nejlépe minimalizovat kurzové riziko pro české investory?",
+              answer: "Pro dlouhodobé investice (10+ let) je nejefektivnější pravidelné investování (DCA), které vyrovnává kurzové výkyvy v čase. Pro krátkodobé investice do 3 let zvažte vyšší podíl domácích investic nebo EUR hedged ETF, ale uvědomte si vyšší náklady."
             },
             {
-              question: "Existují ETF zajištěné proti CZK?",
-              answer: "NE! ETF zajištěné proti CZK neexistují. Dostupné jsou pouze EUR zajištěné ETF, které eliminují EUR/USD riziko. Pro zajištění proti CZK musíte použít currency SWAP kontrakty, forex pozice nebo futures - což vyžaduje pokročilé znalosti."
+              question: "Co je to měnová expozice a jak ji zjistím?",
+              answer: "Měnová expozice závisí na podkladových aktivech ETF, ne na měně obchodování. SXR8 je EUR fond, ale má 100% USD expozici, protože investuje do amerických akcií. VWCE má ~60% USD, ~30% EUR expozici podle regionálního rozložení. Informace najdete ve fact sheetu ETF."
             },
             {
-              question: "Jsou EUR zajištěné ETF dražší?",
-              answer: "Ano, a je to dražší než jen rozdíl v TER! CSPX má TER 0,07%, CSHG má 0,10%. ALE skutečné náklady hedgingu zahrnují i carry cost = rozdíl úrokových sazeb. Aktuálně USD sazby ~5.5%, EUR ~4.5% = další -1% ročně. Celkové náklady CSHG: ~1.10% vs 0.07% u CSPX."
+              question: "Jsou hedged ETF dražší a vyplatí se?",
+              answer: "Ano, hedged ETF stojí výrazně více - místo 0,07% až ~1,10% ročně kvůli TER + carry cost. Pro české investory navíc neřeší EUR/CZK riziko, jen EUR/USD. Vyplatí se hlavně při krátkodobém investování nebo při očekávání posílení domácí měny."
             },
             {
-              question: "Co je to carry cost u hedged ETF?",
-              answer: "Carry cost = implicitní náklad/příjem z rozdílu úrokových sazeb měn. Hedged ETF používají forwardy, kde je automaticky zabudován rozdíl sazeb. Když USD sazby > EUR sazby (jako nyní), carry je negativní = dodatečný náklad ~1% ročně. Když se sazby obrátí, může být carry pozitivní."
+              question: "Existují ETF zajištěné proti české koruně?",
+              answer: "NE! ETF zajištěné proti CZK neexistují. Dostupné jsou pouze EUR zajištěné ETF (např. IBCF), které eliminují EUR/USD riziko. Pro české investory zůstává EUR/CZK riziko u všech zahraničních ETF."
             },
             {
-              question: "Jak velký dopad má kurz na výnosy z ETF?",
-              answer: "Kurzový dopad může být obrovský! Při změně kurzu o 20% se vaše výnosy změní o stejných 20%. Příklad: CSPX rostl o 10% v USD, ale CZK posílila o 15% vůči USD - váš výnos v korunách je -5%! Proto je klíčové chápat skutečnou měnovou expozici."
+              question: "Jaké jsou alternativy k hedged ETF pro zajištění proti CZK?",
+              answer: "Pro pokročilé investory existují měnové forwardy nebo SWAP kontrakty, ale to je velmi pokročilá záležitost vyžadující institucionální přístup. Retail investoři mohou použít forex pozice (EUR/CZK, USD/CZK short), ale je to složité a nákladné."
             },
             {
-              question: "Jak se můžu zajistit proti CZK?",
-              answer: "1) Currency SWAP kontrakty u pokročilých brokerů (IBKR, XTB), 2) Krátké CZK pozice přes forex, 3) CZK futures (omezená dostupnost). Varování: Vyžaduje pokročilé znalosti derivátů a správu rizika. Není vhodné pro začátečníky."
+              question: "Jak funguje Dollar Cost Averaging (DCA) proti kurzovému riziku?",
+              answer: "DCA znamená pravidelné investování stejné částky bez ohledu na kurz. Když je kurz vysoký, nakoupíte méně podílů, když je nízký, více podílů. Dlouhodobě to vyrovnává průměrnou nákupní cenu a minimalizuje dopad špatného timingu. Ideální pro investiční horizonty 10+ let."
             },
             {
-              question: "Jak se orientovat v měnové expozici ETF?",
-              answer: "1) Nesledujte měnu fondu, ale podkladová aktiva. 2) US akcie = USD expozice bez ohledu na to, že fond je v EUR. 3) EUR hedged verze eliminují jen EUR/USD riziko, ne EUR/CZK. 4) Pro Čechy je každý zahraniční ETF kurzově rizikový."
+              question: "Které ETF mají nejnižší kurzové riziko pro Čechy?",
+              answer: "Nejnižší kurzové riziko mají české dluhopisy a spořicí účty (0% kurzové riziko). Z ETF pak evropské akciové ETF (EUNL) s ~70% EUR expozicí. Globální ETF (VWCE) mají smíšenou expozici, nejvyšší riziko mají čistě americké ETF (CSP1) se 100% USD expozicí."
+            },
+            {
+              question: "Kdy se kurzové změny promítnou do ETF ceny?",
+              answer: "Kurzové změny se promítají okamžitě do tržní ceny ETF během obchodního dne. ETF obchodované na evropských burzách v EUR reagují na změny EUR/USD kurzu v reálném čase. NAV (čistá hodnota aktiv) se přepočítává denně po uzavření amerických trhů."
+            },
+            {
+              question: "Jak poznat měnovou expozici ETF před koupí?",
+              answer: "Podívejte se do fact sheetu ETF na regionální rozložení nebo top holdings. Americké akcie = USD expozice, evropské = EUR expozice. Pozor: MSCI World má ~70% USA, takže především USD riziko. Vždy kontrolujte podkladová aktiva, ne jen název nebo měnu obchodování."
             }
           ]}
           className="mt-16"
         />
-        </Suspense>
 
-        {/* Související nástroje s rozšířenými hub odkazy a lazy loading */}
-        <Suspense 
-          fallback={
-            <div className="bg-white rounded-2xl border p-8 animate-pulse mt-16">
-              <div className="h-6 bg-gray-200 rounded mb-6 w-1/4"></div>
-              <div className="grid md:grid-cols-2 gap-4">
-                {[1,2,3,4,5,6].map(i => (
-                  <div key={i} className="h-20 bg-gray-100 rounded"></div>
-                ))}
-              </div>
-            </div>
-          }
-        >
-          <InternalLinking
+        {/* CTA sekce */}
+        <div className="mt-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold mb-3">📊 Najděte nejlepší ETF pro vaše portfolio</h3>
+            <p className="text-blue-100 mb-4">
+              Porovnejte ETF fondy podle TER, výkonnosti a měnového rizika. Najděte ideální mix pro své investiční cíle.
+            </p>
+            <Link 
+              to="/srovnani-etf"
+              className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors inline-block"
+            >
+              Srovnat ETF fondy
+            </Link>
+          </div>
+        </div>
+
+        {/* Související nástroje */}
+        <InternalLinking
           relatedLinks={[
             {
-              title: "Srovnání ETF fondů - Hedged vs Unhedged",
+              title: "Srovnání ETF fondů",
               href: "/srovnani-etf",
-              description: "Najděte hedged a unhedged varianty ETF s detailní analýzou TER a tracking error"
+              description: "Najděte hedged a unhedged varianty ETF"
             },
             {
-              title: "Investiční kalkulačka s kurzovými dopady",
+              title: "Investiční kalkulačka",
               href: "/kalkulacky/investicni-kalkulacka",
-              description: "Spočítejte si celkové výnosy včetně kurzových změn a inflace"
+              description: "Spočítejte si výnosy z pravidelného investování"
             },
             {
-              title: "Monte Carlo simulátor portfoliových rizik",
+              title: "Monte Carlo simulátor",
               href: "/kalkulacky/monte-carlo-simulator",
-              description: "Pokročilá analýza portfoliových rizik včetně měnových fluktuací"
+              description: "Analýza portfoliových rizik"
             },
             {
-              title: "Nejlepší ETF na americké akcie 2025",
+              title: "Nejlepší ETF 2025",
               href: "/tipy/nejlepsi-etf-na-americke-akcie",
-              description: "USD ETF a jejich hedging varianty - CSPX vs CSHG analýza"
+              description: "Doporučené ETF fondy pro české investory"
             },
             {
-              title: "Kompletní přehled investičních nástrojů",
+              title: "Všechny nástroje",
               href: "/nastroje",
-              description: "Všechny kalkulačky, simulátory a analytické nástroje na jednom místě"
-            },
-            {
-              title: "ETF strategie pro české investory",
-              href: "/tipy",
-              description: "Praktické rady pro měnové zajištění a optimalizaci portfolia"
-            },
-            {
-              title: "Kalkulačka ETF poplatků a nákladů",
-              href: "/kalkulacky/etf-poplatky",
-              description: "Spočítejte si skutečné náklady ETF včetně skrytých poplatků"
-            },
-            {
-              title: "Portfolio rebalancing kalkulačka",
-              href: "/kalkulacky/portfolio-rebalancing",
-              description: "Optimalizujte rozložení portfolia s ohledem na měnové riziko"
+              description: "Kompletní přehled kalkulaček"
             }
           ]}
           title="Související kalkulačky a nástroje"
           className="mt-16"
         />
-        </Suspense>
       </div>
     </Layout>
   );

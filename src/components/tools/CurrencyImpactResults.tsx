@@ -131,7 +131,7 @@ const CurrencyImpactResults: React.FC<CurrencyImpactResultsProps> = ({ results }
               <div key={index} className="border border-gray-200 rounded-lg p-3">
                 <div className="flex items-center justify-between mb-2">
                   <div>
-                    <h4 className="font-semibold text-sm">{scenario.name}</h4>
+                    <h4 className="font-semibold">{scenario.name}</h4>
                     <p className="text-xs text-gray-600">{scenario.description}</p>
                   </div>
                   <div className="text-right">
@@ -202,12 +202,12 @@ const CurrencyImpactResults: React.FC<CurrencyImpactResultsProps> = ({ results }
           
           <div className="mt-3 p-3 bg-white rounded-lg border">
             <p className="text-xs text-gray-700">
-              <strong>Klíčové pozorování:</strong> {
+              <strong>Obecné doporučení:</strong> {
                 totalExposure / totalPortfolio > 0.7 
-                  ? "Vysoká kurzová expozice - zvažte EUR hedged ETF pro snížení volatility"
+                  ? "Vysoká kurzová expozice. Pro dlouhodobé investice je nejlepší strategie pravidelné nákupy (DCA), které minimalizují kurzové riziko."
                   : totalExposure / totalPortfolio > 0.3
-                  ? "Střední kurzová expozice - vyvážené portfolio s mírným kurzovým rizikem"
-                  : "Nízká kurzová expozice - převážně domácí nebo zajištěné investice"
+                  ? "Střední kurzová expozice. Pravidelné investování pomáhá vyrovnat kurzové výkyvy v čase."
+                  : "Nízká kurzová expozice. Portfolio má minimální závislost na kurzových změnách."
               }
             </p>
           </div>

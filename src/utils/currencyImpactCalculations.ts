@@ -126,12 +126,12 @@ export const calculateCurrencyImpact = (params: CurrencyImpactParams): CurrencyI
     
     const totalImpact = usdImpact + eurImpact;
     
-    scenario.portfolioImpact = (totalImpact / portfolioValue) * 100;
+    scenario.portfolioImpact = portfolioValue > 0 ? (totalImpact / portfolioValue) * 100 : 0;
     scenario.portfolioValueCzk = portfolioValue + totalImpact;
   });
 
   // Vylepšené rizikové metriky s reálnými volatilitami
-  const currencyExposure = (unhedgedUsd + unhedgedEur) / portfolioValue;
+  const currencyExposure = portfolioValue > 0 ? (unhedgedUsd + unhedgedEur) / portfolioValue : 0;
   
   // Historické volatility: CZK/USD ~12%, CZK/EUR ~8%, korelace ~0.6
   const usdVolatility = 0.12;
@@ -165,14 +165,14 @@ export const calculateCurrencyImpact = (params: CurrencyImpactParams): CurrencyI
       period: 'COVID-19 krize 2020 (březen)',
       usdCzkImpact: -22, // USD oslabil z 23 na 27 CZK
       eurCzkImpact: -15, // EUR oslabil z 25 na 28.5 CZK
-      totalPortfolioImpact: currentUnhedgedExposure > 0 ? 
+      totalPortfolioImpact: (currentUnhedgedExposure > 0 && portfolioValue > 0) ? 
         (unhedgedUsd * -0.22 + unhedgedEur * -0.15) / portfolioValue * 100 : 0
     },
     bestCase: {
       period: 'CNB intervence 2017',
       usdCzkImpact: 18, // Ukončení oslabování, CZK posílila
       eurCzkImpact: 12,
-      totalPortfolioImpact: currentUnhedgedExposure > 0 ? 
+      totalPortfolioImpact: (currentUnhedgedExposure > 0 && portfolioValue > 0) ? 
         (unhedgedUsd * 0.18 + unhedgedEur * 0.12) / portfolioValue * 100 : 0
     },
     averageImpact: currencyExposure * 100 * 0.08 // 8% roční volatilita na expozici

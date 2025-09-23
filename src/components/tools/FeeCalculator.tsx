@@ -99,7 +99,7 @@ const FeeCalculator: React.FC = () => {
             updateScenario={updateScenario}
           />
 
-          <Button onClick={handleCalculate} className="w-full md:w-auto">
+          <Button onClick={handleCalculate} className="w-full md:w-auto h-10">
             Vypočítat dopad poplatků
           </Button>
 
