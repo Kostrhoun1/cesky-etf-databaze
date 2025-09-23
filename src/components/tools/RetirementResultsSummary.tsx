@@ -1,14 +1,23 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, AlertCircle, TrendingUp, TrendingDown, Clock } from 'lucide-react';
-import { RetirementData } from '@/utils/retirementCalculations';
+import { CheckCircle, XCircle, AlertCircle, TrendingUp, TrendingDown, Clock, AlertTriangle, Calculator } from 'lucide-react';
+import { FireData, calculateFire } from '@/utils/retirementCalculations';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface RetirementResultsSummaryProps {
-  results: RetirementData;
+  results: FireData;
+  originalParams?: {
+    currentAge: number;
+    currentSavings: number;
+    monthlySavings: number;
+    monthlyExpensesInFire: number;
+    inflationRate: number;
+    investmentStrategy: 'conservative' | 'moderate' | 'aggressive';
+  };
 }
 
-const RetirementResultsSummary: React.FC<RetirementResultsSummaryProps> = ({ results }) => {
+const RetirementResultsSummary: React.FC<RetirementResultsSummaryProps> = ({ results, originalParams }) => {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('cs-CZ', {
       style: 'currency',
@@ -22,224 +31,284 @@ const RetirementResultsSummary: React.FC<RetirementResultsSummaryProps> = ({ res
     return new Intl.NumberFormat('cs-CZ').format(Math.round(num));
   };
 
-  const getSecurityStatus = () => {
-    if (results.isFinanciallySecure && results.yearsMoneyWillLast >= 30) {
-      return {
-        icon: <CheckCircle className="h-5 w-5 text-green-500" />,
-        text: "Finančně zabezpečený",
-        color: "bg-green-50 border-green-200",
-        textColor: "text-green-800"
-      };
-    } else if (results.yearsMoneyWillLast >= 20) {
-      return {
-        icon: <AlertCircle className="h-5 w-5 text-yellow-500" />,
-        text: "Částečně zabezpečený",
-        color: "bg-yellow-50 border-yellow-200",
-        textColor: "text-yellow-800"
-      };
-    } else {
-      return {
-        icon: <XCircle className="h-5 w-5 text-red-500" />,
-        text: "Nedostatečné úspory",
-        color: "bg-red-50 border-red-200",
-        textColor: "text-red-800"
-      };
-    }
-  };
-
-  const securityStatus = getSecurityStatus();
 
   return (
     <div className="space-y-6">
-      {/* Hlavní výsledek */}
-      <Card className={`${securityStatus.color} border-2`}>
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            {securityStatus.icon}
-            <CardTitle className={`text-xl ${securityStatus.textColor}`}>
-              {securityStatus.text}
-            </CardTitle>
+      {/* Nadpis výsledků */}
+      <div className="text-center mb-8 animate-fade-in [animation-delay:0.2s]">
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">📊 Výsledky FIRE analýzy</h2>
+        <p className="text-gray-600">Pravděpodobnostní scénáře vaší cesty k finanční nezávislosti</p>
+      </div>
+      
+      {/* Detailní scénáře - Card komponenty s animacemi jako na homepage */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Optimistický scénář */}
+        <Card className="border-transparent shadow-none hover:shadow-xl transition-all duration-300 group bg-white card-hover animate-fade-in [animation-delay:0.2s]">
+          <div className="p-6 text-center">
+            <div className="mb-4 flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 mx-auto group-hover:bg-emerald-200 transition-all duration-300 hover-scale">
+              <TrendingUp className="h-6 w-6 text-emerald-700 transition-transform duration-300 group-hover:scale-110" />
+            </div>
+            <h3 className="text-base font-semibold text-gray-900 mb-2 transition-colors group-hover:text-emerald-800">Optimistický scénář</h3>
+            <div className="space-y-2">
+              <div>
+                <p className="text-xs text-gray-500">FIRE věk</p>
+                <p className="text-xl font-bold text-emerald-700 transition-all duration-300 group-hover:text-emerald-600 group-hover:scale-105">
+                  {results.scenarios.optimistic.fireAge ? `${results.scenarios.optimistic.fireAge} let` : 'Nedosaženo'}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Portfolio</p>
+                <p className="text-sm text-gray-700">
+                  {formatCurrency(results.scenarios.optimistic.fireAmount)}
+                </p>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400 mt-3 group-hover:text-emerald-500 transition-colors">20% pravděpodobnost</p>
           </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-gray-600">Úspory při odchodu do penze</p>
-              <p className="text-2xl font-bold">{formatCurrency(results.totalSavingsAtRetirement)}</p>
-              <p className="text-sm text-gray-500">
-                Reálná kupní síla: {formatCurrency(results.realPurchasingPower)}
-              </p>
+        </Card>
+        
+        {/* Realistický scénář */}
+        <Card className="border-transparent shadow-none hover:shadow-xl transition-all duration-300 group bg-white card-hover animate-fade-in [animation-delay:0.3s]">
+          <div className="p-6 text-center">
+            <div className="mb-4 flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 mx-auto group-hover:bg-violet-200 transition-all duration-300 hover-scale">
+              <Clock className="h-6 w-6 text-violet-700 transition-transform duration-300 group-hover:scale-110" />
             </div>
-            <div>
-              <p className="text-sm text-gray-600">Měsíční příjem v penzi</p>
-              <p className="text-2xl font-bold">{formatCurrency(results.monthlyIncomeInRetirement)}</p>
-              <p className="text-sm text-gray-500">
-                Peníze vydrží {results.yearsMoneyWillLast} let
-              </p>
+            <h3 className="text-base font-semibold text-gray-900 mb-2 transition-colors group-hover:text-violet-800">Realistický scénář</h3>
+            <div className="space-y-2">
+              <div>
+                <p className="text-xs text-gray-500">FIRE věk</p>
+                <p className="text-xl font-bold text-violet-700 transition-all duration-300 group-hover:text-violet-600 group-hover:scale-105">
+                  {results.scenarios.realistic.fireAge ? `${results.scenarios.realistic.fireAge} let` : 'Nedosaženo'}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Portfolio</p>
+                <p className="text-sm text-gray-700">
+                  {formatCurrency(results.scenarios.realistic.fireAmount)}
+                </p>
+              </div>
             </div>
+            <p className="text-xs text-gray-400 mt-3 group-hover:text-violet-500 transition-colors">60% pravděpodobnost</p>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Detailní výsledky */}
-      <div className="grid md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-600" />
-              Investiční růst
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm text-gray-600">Celkové příspěvky</p>
-                <p className="font-semibold">{formatCurrency(results.summary.totalContributed)}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Investiční zisky</p>
-                <p className="font-semibold text-green-600">
-                  +{formatCurrency(results.summary.investmentGains)}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Výnos z investic</p>
-                <p className="font-semibold">
-                  {((results.summary.investmentGains / results.summary.totalContributed) * 100).toFixed(1)}%
-                </p>
-              </div>
-            </div>
-          </CardContent>
         </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <TrendingDown className="h-4 w-4 text-red-600" />
-              Dopad inflace
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
+        
+        {/* Pesimistický scénář */}
+        <Card className="border-transparent shadow-none hover:shadow-xl transition-all duration-300 group bg-white card-hover animate-fade-in [animation-delay:0.4s]">
+          <div className="p-6 text-center">
+            <div className="mb-4 flex items-center justify-center rounded-full bg-red-100 w-12 h-12 mx-auto group-hover:bg-red-200 transition-all duration-300 hover-scale">
+              <TrendingDown className="h-6 w-6 text-red-700 transition-transform duration-300 group-hover:scale-110" />
+            </div>
+            <h3 className="text-base font-semibold text-gray-900 mb-2 transition-colors group-hover:text-red-800">Pesimistický scénář</h3>
+            <div className="space-y-2">
               <div>
-                <p className="text-sm text-gray-600">Nominální hodnota</p>
-                <p className="font-semibold">{formatCurrency(results.totalSavingsAtRetirement)}</p>
+                <p className="text-xs text-gray-500">FIRE věk</p>
+                <p className="text-xl font-bold text-red-700 transition-all duration-300 group-hover:text-red-600 group-hover:scale-105">
+                  {results.scenarios.pessimistic.fireAge ? `${results.scenarios.pessimistic.fireAge} let` : 'Nedosaženo'}
+                </p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Reálná hodnota</p>
-                <p className="font-semibold">{formatCurrency(results.realPurchasingPower)}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Ztráta inflací</p>
-                <p className="font-semibold text-red-600">
-                  -{formatCurrency(results.summary.inflationImpact)}
+                <p className="text-xs text-gray-500">Portfolio</p>
+                <p className="text-sm text-gray-700">
+                  {formatCurrency(results.scenarios.pessimistic.fireAmount)}
                 </p>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <Clock className="h-4 w-4 text-blue-600" />
-              Pravděpodobnost úspěchu
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm text-gray-600">Úspěšnost strategie</p>
-                <div className="flex items-center gap-2">
-                  <p className="text-2xl font-bold">{results.summary.successProbability.toFixed(0)}%</p>
-                  <Badge variant={results.summary.successProbability > 80 ? "default" : results.summary.successProbability > 60 ? "secondary" : "destructive"}>
-                    {results.summary.successProbability > 80 ? "Vysoká" : results.summary.successProbability > 60 ? "Střední" : "Nízká"}
-                  </Badge>
-                </div>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Vydrží peníze</p>
-                <p className="font-semibold">{results.yearsMoneyWillLast} let</p>
-              </div>
-            </div>
-          </CardContent>
+            <p className="text-xs text-gray-400 mt-3 group-hover:text-red-500 transition-colors">20% pravděpodobnost</p>
+          </div>
         </Card>
       </div>
 
-      {/* Doporučení */}
-      {!results.isFinanciallySecure && (
-        <Card className="bg-blue-50 border-blue-200">
-          <CardHeader>
-            <CardTitle className="text-lg text-blue-800">💡 Doporučení pro zlepšení</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <p className="font-medium text-blue-800">Doporučené měsíční spoření:</p>
-                <p className="text-xl font-bold text-blue-900">
-                  {formatCurrency(results.recommendedMonthlySavings)}
-                </p>
-                <p className="text-sm text-blue-600">
-                  Pro dosažení finančního zabezpečení v penzi
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-4 mt-4">
-                <div>
-                  <h4 className="font-semibold text-blue-800 mb-2">Možnosti zvýšení úspor:</h4>
-                  <ul className="text-sm text-blue-700 space-y-1">
-                    <li>• Zvýšit měsíční spoření</li>
-                    <li>• Prodloužit období spoření</li>
-                    <li>• Optimalizovat investiční strategii</li>
-                    <li>• Snížit výdaje v penzi</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-blue-800 mb-2">Alternativní strategie:</h4>
-                  <ul className="text-sm text-blue-700 space-y-1">
-                    <li>• Odložit odchod do penze o 2-5 let</li>
-                    <li>• Kombinovat s I. nebo II. pilířem</li>
-                    <li>• Uvažovat o příjmu z nemovitostí</li>
-                    <li>• Částečné pokračování v práci</li>
-                  </ul>
-                </div>
-              </div>
+
+      {/* Simulace zlepšení - konkrétní scénáře */}
+      {originalParams && (
+        <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 bg-white rounded-2xl p-8 animate-fade-in [animation-delay:0.8s]">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center justify-center rounded-full bg-violet-100 w-12 h-12">
+              <Calculator className="h-6 w-6 text-violet-700" />
             </div>
-          </CardContent>
-        </Card>
+            <h3 className="text-2xl font-bold text-gray-900">💡 Jak urychlit FIRE?</h3>
+          </div>
+          
+          {(() => {
+            // Graf 1: Vliv měsíčního spoření na FIRE věk
+            const savingsData = [];
+            for (let multiplier = 0.5; multiplier <= 2.0; multiplier += 0.1) {
+              const monthlySavings = Math.round(originalParams.monthlySavings * multiplier);
+              const result = calculateFire({
+                ...originalParams,
+                monthlySavings
+              });
+              savingsData.push({
+                savings: monthlySavings,
+                years: result.scenarios.realistic.yearsToFire || 99,
+                fireAge: result.scenarios.realistic.fireAge || 99
+              });
+            }
+            
+            // Graf 2: Vliv měsíčních výdajů na FIRE věk
+            const expensesData = [];
+            for (let multiplier = 0.6; multiplier <= 1.4; multiplier += 0.05) {
+              const monthlyExpenses = Math.round(originalParams.monthlyExpensesInFire * multiplier);
+              const result = calculateFire({
+                ...originalParams,
+                monthlyExpensesInFire: monthlyExpenses
+              });
+              expensesData.push({
+                expenses: monthlyExpenses,
+                years: result.scenarios.realistic.yearsToFire || 99,
+                fireAge: result.scenarios.realistic.fireAge || 99
+              });
+            }
+            
+            return (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Graf spoření */}
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    📈 Vliv měsíčního spoření na FIRE věk
+                  </h4>
+                  <div className="h-80 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-4">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={savingsData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#d1fae5" strokeOpacity={0.8} />
+                        <XAxis 
+                          dataKey="savings"
+                          tickFormatter={(value) => `${Math.round(value/1000)}k`}
+                          label={{ value: 'Měsíční spoření (Kč)', position: 'insideBottom', offset: -10, style: { fontSize: '12px', fontWeight: 'bold', fill: '#059669' } }}
+                          tick={{ fontSize: 11, fill: '#047857' }}
+                          axisLine={{ stroke: '#10b981', strokeWidth: 2 }}
+                          tickLine={{ stroke: '#10b981' }}
+                        />
+                        <YAxis 
+                          dataKey="fireAge"
+                          label={{ value: 'FIRE věk', angle: -90, position: 'insideLeft', style: { fontSize: '12px', fontWeight: 'bold', fill: '#059669' } }}
+                          tick={{ fontSize: 11, fill: '#047857' }}
+                          axisLine={{ stroke: '#10b981', strokeWidth: 2 }}
+                          tickLine={{ stroke: '#10b981' }}
+                        />
+                        <Tooltip 
+                          formatter={(value: number, name: string) => [
+                            name === 'fireAge' ? `${value} let` : `${value} let`,
+                            name === 'fireAge' ? 'FIRE věk' : 'Roky do FIRE'
+                          ]}
+                          labelFormatter={(value: number) => `Spoření: ${formatCurrency(value)}`}
+                          contentStyle={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            border: 'none',
+                            borderRadius: '12px',
+                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                            fontSize: '14px',
+                            padding: '12px 16px'
+                          }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="fireAge"
+                          stroke="#10b981"
+                          strokeWidth={3}
+                          dot={{ r: 4, fill: '#10b981', strokeWidth: 2, stroke: '#ffffff' }}
+                          activeDot={{ r: 6, fill: '#059669', strokeWidth: 3, stroke: '#ffffff' }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <p className="text-sm text-emerald-700 mt-2 text-center">
+                    Aktuální spoření: <strong>{formatCurrency(originalParams.monthlySavings)}</strong>
+                  </p>
+                </div>
+                
+                {/* Graf výdajů */}
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    💰 Vliv cílových výdajů na FIRE věk
+                  </h4>
+                  <div className="h-80 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={expensesData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#dbeafe" strokeOpacity={0.8} />
+                        <XAxis 
+                          dataKey="expenses"
+                          tickFormatter={(value) => `${Math.round(value/1000)}k`}
+                          label={{ value: 'Cílové měsíční výdaje (Kč)', position: 'insideBottom', offset: -10, style: { fontSize: '12px', fontWeight: 'bold', fill: '#1d4ed8' } }}
+                          tick={{ fontSize: 11, fill: '#1e40af' }}
+                          axisLine={{ stroke: '#3b82f6', strokeWidth: 2 }}
+                          tickLine={{ stroke: '#3b82f6' }}
+                        />
+                        <YAxis 
+                          dataKey="fireAge"
+                          label={{ value: 'FIRE věk', angle: -90, position: 'insideLeft', style: { fontSize: '12px', fontWeight: 'bold', fill: '#1d4ed8' } }}
+                          tick={{ fontSize: 11, fill: '#1e40af' }}
+                          axisLine={{ stroke: '#3b82f6', strokeWidth: 2 }}
+                          tickLine={{ stroke: '#3b82f6' }}
+                        />
+                        <Tooltip 
+                          formatter={(value: number, name: string) => [
+                            name === 'fireAge' ? `${value} let` : `${value} let`,
+                            name === 'fireAge' ? 'FIRE věk' : 'Roky do FIRE'
+                          ]}
+                          labelFormatter={(value: number) => `Výdaje: ${formatCurrency(value)}`}
+                          contentStyle={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            border: 'none',
+                            borderRadius: '12px',
+                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                            fontSize: '14px',
+                            padding: '12px 16px'
+                          }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="fireAge"
+                          stroke="#3b82f6"
+                          strokeWidth={3}
+                          dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#ffffff' }}
+                          activeDot={{ r: 6, fill: '#1d4ed8', strokeWidth: 3, stroke: '#ffffff' }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <p className="text-sm text-blue-700 mt-2 text-center">
+                    Aktuální cíl: <strong>{formatCurrency(originalParams.monthlyExpensesInFire)}</strong>
+                  </p>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
       )}
 
-      {/* Úspěšný plán */}
-      {results.isFinanciallySecure && (
-        <Card className="bg-green-50 border-green-200">
-          <CardHeader>
-            <CardTitle className="text-lg text-green-800">🎉 Gratulujeme! Váš penzijní plán je na dobré cestě</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-green-700">
-              Při současném spoření a investiční strategii budete mít dostatečné prostředky na pohodlnou penzi. 
-              Nezapomeňte pravidelně revidovat a upravovat svůj plán podle změn v životě.
+      {/* Úspěšný plán - hero styl */}
+      {(results.scenarios.realistic.fireAge && results.scenarios.realistic.yearsToFire && results.scenarios.realistic.yearsToFire <= 20) && (
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 to-transparent"></div>
+          <div className="relative z-10 p-6 text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <CheckCircle className="h-8 w-8 text-white" />
+              <h3 className="text-xl font-bold text-white">Váš FIRE plán je na dobré cestě!</h3>
+            </div>
+            <p className="text-emerald-100 mb-6">
+              Při současném spoření dosáhnete finanční nezávislosti za {results.scenarios.realistic.yearsToFire} let.
             </p>
-            <div className="mt-4 grid md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
               <div>
-                <h4 className="font-semibold text-green-800 mb-2">Další optimalizace:</h4>
-                <ul className="text-sm text-green-700 space-y-1">
+                <h4 className="font-semibold text-white mb-2">Další optimalizace:</h4>
+                <ul className="text-emerald-100 space-y-1">
                   <li>• Pravidelně rebalancovat portfolio</li>
                   <li>• Sledovat změny v daňové legislativě</li>
-                  <li>• Zvažovat inflaci a úrokové sazby</li>
+                  <li>• Zvažovat dopad inflace</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold text-green-800 mb-2">Bezpečnostní rezerva:</h4>
-                <ul className="text-sm text-green-700 space-y-1">
-                  <li>• Máte {results.yearsMoneyWillLast} let pokrytí</li>
-                  <li>• Pravděpodobnost úspěchu: {results.summary.successProbability.toFixed(0)}%</li>
-                  <li>• Možnost snížit spoření nebo zvýšit výdaje</li>
+                <h4 className="font-semibold text-white mb-2">Váš FIRE úspěch:</h4>
+                <ul className="text-emerald-100 space-y-1">
+                  <li>• FIRE věk: {results.scenarios.realistic.fireAge} let</li>
+                  <li>• Průměrný věk: {Math.round(results.averageFireAge)} let</li>
+                  <li>• Flexibilní přístup možný</li>
                 </ul>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
     </div>
   );
