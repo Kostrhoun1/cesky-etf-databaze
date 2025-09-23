@@ -40,10 +40,12 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
     <div className="space-y-4">
       <div className="grid md:grid-cols-2 gap-4">
         {/* Investiční parametry */}
-        <div className="border rounded-lg p-4 bg-violet-25">
-          <div className="flex items-center gap-2 mb-3">
-            <TrendingUp className="h-4 w-4 text-violet-600" />
-            <h3 className="font-semibold">Investiční parametry</h3>
+        <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.2s]">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
+              <TrendingUp className="h-5 w-5 text-violet-700" />
+            </div>
+            <h3 className="text-base font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Investiční parametry</h3>
           </div>
           <div className="space-y-3">
             <div>
@@ -84,10 +86,12 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
         </div>
         
         {/* Parametry výnosu a času */}
-        <div className="border rounded-lg p-4 bg-gray-25">
-          <div className="flex items-center gap-2 mb-3">
-            <Percent className="h-4 w-4 text-violet-600" />
-            <h3 className="font-semibold">Parametry výnosu a času</h3>
+        <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.4s]">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center justify-center rounded-full bg-emerald-100 w-10 h-10 group-hover:bg-emerald-200 transition-colors hover-scale">
+              <Percent className="h-5 w-5 text-emerald-700" />
+            </div>
+            <h3 className="text-base font-semibold text-gray-900 group-hover:text-emerald-800 transition-colors">Parametry výnosu a času</h3>
           </div>
           <div className="space-y-3">
             <div>
@@ -133,8 +137,8 @@ const InvestmentCalculatorForm: React.FC<InvestmentCalculatorFormProps> = ({
         </div>
       </div>
 
-      <Button onClick={onCalculate} className="w-full">
-        <Calculator className="mr-2 h-4 w-4" />
+      <Button onClick={onCalculate} className="w-full hover-scale bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3 animate-fade-in [animation-delay:0.6s]">
+        <Calculator className="mr-2 h-5 w-5" />
         Vypočítat investiční růst
       </Button>
     </div>

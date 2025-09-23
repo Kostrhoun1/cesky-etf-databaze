@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { TrendingUp, PiggyBank, Target } from 'lucide-react';
 import { CalculationData } from '@/utils/investmentCalculations';
 
 interface InvestmentResultsSummaryProps {
@@ -18,24 +20,39 @@ const InvestmentResultsSummary: React.FC<InvestmentResultsSummaryProps> = ({ res
   return (
     <div className="pt-6 border-t">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <h4 className="font-semibold text-blue-900">Celkem investováno</h4>
-          <p className="text-2xl font-bold text-blue-600">
-            {formatNumber(finalResult.totalInvested)} Kč
-          </p>
-        </div>
-        <div className="bg-green-50 p-4 rounded-lg">
-          <h4 className="font-semibold text-green-900">Čistý výnos (po dani)</h4>
-          <p className="text-2xl font-bold text-green-600">
-            {formatNumber(finalResult.netGain)} Kč
-          </p>
-        </div>
-        <div className="bg-purple-50 p-4 rounded-lg">
-          <h4 className="font-semibold text-purple-900">Celková hodnota portfolia</h4>
-          <p className="text-2xl font-bold text-purple-600">
-            {formatNumber(finalResult.netValue)} Kč
-          </p>
-        </div>
+        <Card className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white">
+          <CardContent className="p-6 text-center">
+            <div className="mb-4 flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 mx-auto group-hover:bg-violet-200 transition-colors hover-scale">
+              <PiggyBank className="h-6 w-6 text-violet-700" />
+            </div>
+            <h4 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-violet-800 transition-colors">Celkem investováno</h4>
+            <p className="text-2xl font-bold text-violet-600">
+              {formatNumber(finalResult.totalInvested)} Kč
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white">
+          <CardContent className="p-6 text-center">
+            <div className="mb-4 flex items-center justify-center rounded-full bg-emerald-100 w-12 h-12 mx-auto group-hover:bg-emerald-200 transition-colors hover-scale">
+              <TrendingUp className="h-6 w-6 text-emerald-700" />
+            </div>
+            <h4 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-emerald-800 transition-colors">Čistý výnos (po dani)</h4>
+            <p className="text-2xl font-bold text-emerald-600">
+              {formatNumber(finalResult.netGain)} Kč
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white">
+          <CardContent className="p-6 text-center">
+            <div className="mb-4 flex items-center justify-center rounded-full bg-violet-100 w-12 h-12 mx-auto group-hover:bg-violet-200 transition-colors hover-scale">
+              <Target className="h-6 w-6 text-violet-700" />
+            </div>
+            <h4 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-violet-800 transition-colors">Celková hodnota portfolia</h4>
+            <p className="text-2xl font-bold text-violet-600">
+              {formatNumber(finalResult.netValue)} Kč
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

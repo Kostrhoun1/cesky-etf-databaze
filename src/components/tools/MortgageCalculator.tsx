@@ -134,10 +134,12 @@ const MortgageCalculator: React.FC = () => {
         <CardContent>
           <div className="grid lg:grid-cols-2 gap-4">
             {/* Input Section */}
-            <div className="border rounded-lg p-4 bg-violet-25">
-              <div className="flex items-center gap-2 mb-3">
-                <Home className="h-4 w-4 text-violet-600" />
-                <h3 className="font-semibold">Parametry hypotéky</h3>
+            <div className="border-transparent shadow-none hover:shadow-md transition-shadow duration-200 group bg-white rounded-lg p-6 card-hover animate-fade-in [animation-delay:0.2s]">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-center rounded-full bg-violet-100 w-10 h-10 group-hover:bg-violet-200 transition-colors hover-scale">
+                  <Home className="h-5 w-5 text-violet-700" />
+                </div>
+                <h3 className="text-base font-semibold text-gray-900 group-hover:text-violet-800 transition-colors">Parametry hypotéky</h3>
               </div>
               <div className="space-y-4">
                 <div>
