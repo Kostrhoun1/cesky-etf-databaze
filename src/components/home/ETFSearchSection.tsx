@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useETFSearchData } from '@/hooks/useETFSearchData';
 import { useETFTableLogic } from '@/hooks/useETFTableLogic';
 import { useETFComparison } from '@/hooks/useETFComparison';
@@ -11,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 
 const ETFSearchSection: React.FC = () => {
+  const navigate = useNavigate();
   const { etfs, categories, totalETFCount, isLoading, isLoadingComplete } = useETFSearchData();
   const {
     searchTerm,
@@ -149,7 +151,7 @@ const ETFSearchSection: React.FC = () => {
                           <Button
                             onClick={() => {
                               // Navigate to comparison with selected ETFs
-                              window.location.href = '/srovnani-etf';
+                              navigate('/srovnani-etf');
                             }}
                             className="bg-violet-600 hover:bg-violet-700 text-white px-6"
                           >
@@ -157,7 +159,7 @@ const ETFSearchSection: React.FC = () => {
                           </Button>
                         )}
                         <Button
-                          onClick={() => window.location.href = '/srovnani-etf'}
+                          onClick={() => navigate('/srovnani-etf')}
                           variant={selectedETFs.length > 0 ? "outline" : "default"}
                           className={selectedETFs.length > 0 ? "border-violet-200 text-violet-700 hover:bg-violet-50" : "bg-violet-600 hover:bg-violet-700 text-white px-6"}
                         >

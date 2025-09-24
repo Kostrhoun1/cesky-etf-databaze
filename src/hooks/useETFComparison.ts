@@ -1,11 +1,37 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { ETFListItem, ETF } from '@/types/etf';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
+const STORAGE_KEY = 'etf-comparison-selected';
+
 export const useETFComparison = () => {
   const [selectedETFs, setSelectedETFs] = useState<ETF[]>([]);
   const { toast } = useToast();
+
+  // Load selected ETFs from localStorage on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsedETFs = JSON.parse(stored);
+        if (Array.isArray(parsedETFs)) {
+          setSelectedETFs(parsedETFs);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading selected ETFs from storage:', error);
+    }
+  }, []);
+
+  // Save to localStorage whenever selectedETFs changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedETFs));
+    } catch (error) {
+      console.error('Error saving selected ETFs to storage:', error);
+    }
+  }, [selectedETFs]);
 
   const fetchFullETFData = async (isin: string): Promise<ETF | null> => {
     try {
