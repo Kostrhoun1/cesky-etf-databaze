@@ -33,7 +33,7 @@ const DEGIROReview = () => {
       "bestRating": "5",
       "worstRating": "1"
     },
-    "reviewCount": 1247,
+    "reviewCount": 1,
     "author": {
       "@type": "Organization",
       "name": "ETF průvodce.cz",

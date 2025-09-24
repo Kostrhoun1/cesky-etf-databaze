@@ -46,7 +46,7 @@ const generateBrokerSchema = (brokerName?: string) => {
         "bestRating": "5",
         "worstRating": "1"
       },
-      "reviewCount": 1247,
+      "reviewCount": 1,
       "datePublished": `${currentYear}-01-01`,
       "dateModified": new Date().toISOString().split('T')[0],
       "publisher": {
