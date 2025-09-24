@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { TrendingUp, BarChart3, CheckCircle, AlertTriangle, Users, ExternalLink, ArrowLeft, Home } from 'lucide-react';
+import { TrendingUp, BarChart3, CheckCircle, AlertTriangle, Users, ExternalLink, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface ETFData {
@@ -115,31 +115,15 @@ const PortfolioStrategyDetail: React.FC<PortfolioStrategyDetailProps> = ({ strat
 
   return (
     <div className="bg-white">
-      {/* Breadcrumb Navigation */}
+      {/* Back Button only */}
       <div className="bg-gray-50 border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <nav className="flex items-center space-x-2 text-sm">
-            <Link to="/" className="text-gray-500 hover:text-violet-600 flex items-center gap-1">
-              <Home className="w-4 h-4" />
-              Domů
+          <Button asChild variant="outline" size="sm" className="border-gray-300 text-gray-600 hover:bg-gray-100">
+            <Link to="/portfolio-strategie">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Zpět na přehled strategií
             </Link>
-            <span className="text-gray-400">/</span>
-            <Link to="/portfolio-strategie" className="text-gray-500 hover:text-violet-600">
-              Portfolio Strategie
-            </Link>
-            <span className="text-gray-400">/</span>
-            <span className="text-gray-900 font-medium">{strategy.name}</span>
-          </nav>
-          
-          {/* Back Button */}
-          <div className="mt-3">
-            <Button asChild variant="outline" size="sm" className="border-gray-300 text-gray-600 hover:bg-gray-100">
-              <Link to="/portfolio-strategie">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Zpět na přehled strategií
-              </Link>
-            </Button>
-          </div>
+          </Button>
         </div>
       </div>
 
