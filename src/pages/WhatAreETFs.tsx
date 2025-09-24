@@ -110,8 +110,8 @@ const WhatAreETFs: React.FC = () => {
               
               <div>
                 <img 
-                  src="/images/etf-mapa-diverzifikace.png" 
-                  alt="Mapa světové geografické diverzifikace ETF fondů podle regionů" 
+                  src="/images/vwce-svetova-diverzifikace.png" 
+                  alt="Světová diverzifikace ETF VWCE - geografické rozdělení investic podle regionů" 
                   className="w-full rounded-lg shadow-lg"
                 />
               </div>
