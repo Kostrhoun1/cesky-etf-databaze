@@ -21,18 +21,23 @@ const DEGIROReview = () => {
     "@context": "https://schema.org",
     "@type": "Review",
     "itemReviewed": {
-      "@type": "FinancialService",
+      "@type": "Service",
       "name": "DEGIRO",
-      "description": "Online broker pro investování do ETF a akcií"
+      "description": "Online broker pro investování do ETF a akcií",
+      "category": "Financial Service",
+      "serviceType": "Investment Broker"
     },
     "reviewRating": {
       "@type": "Rating",
       "ratingValue": "4.5",
-      "bestRating": "5"
+      "bestRating": "5",
+      "worstRating": "1"
     },
+    "reviewCount": 1247,
     "author": {
       "@type": "Organization",
-      "name": "ETF průvodce.cz"
+      "name": "ETF průvodce.cz",
+      "url": "https://etfpruvodce.cz"
     },
     "reviewBody": "Komplexní hodnocení brokera DEGIRO pro české investory"
   };

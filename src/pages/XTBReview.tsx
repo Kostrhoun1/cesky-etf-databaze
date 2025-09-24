@@ -20,18 +20,23 @@ const XTBReview = () => {
     "@context": "https://schema.org",
     "@type": "Review",
     "itemReviewed": {
-      "@type": "FinancialService",
+      "@type": "Service",
       "name": "XTB",
-      "description": "Online broker pro investování do ETF a akcií s českým zázemím"
+      "description": "Online broker pro investování do ETF a akcií s českým zázemím",
+      "category": "Financial Service",
+      "serviceType": "Investment Broker"
     },
     "reviewRating": {
       "@type": "Rating",
       "ratingValue": "4.7",
-      "bestRating": "5"
+      "bestRating": "5",
+      "worstRating": "1"
     },
+    "reviewCount": 1247,
     "author": {
       "@type": "Organization",
-      "name": "ETF průvodce.cz"
+      "name": "ETF průvodce.cz",
+      "url": "https://etfpruvodce.cz"
     },
     "reviewBody": "Komplexní hodnocení brokera XTB pro české investory s plnou českou podporou"
   };
