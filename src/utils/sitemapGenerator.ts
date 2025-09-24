@@ -163,6 +163,7 @@ export class SitemapGenerator {
 
   async getETFUrls(): Promise<SitemapUrl[]> {
     try {
+      console.log('Fetching ETFs for sitemap...');
       const { data: etfs, error } = await supabase
         .from('etf_funds')
         .select('isin, updated_at, name')
@@ -173,6 +174,8 @@ export class SitemapGenerator {
         return [];
       }
 
+      console.log(`Found ${etfs?.length || 0} ETFs for sitemap`);
+      
       return etfs?.map(etf => ({
         url: `${this.baseUrl}/etf/${etf.isin}`,
         lastmod: etf.updated_at ? new Date(etf.updated_at).toISOString().split('T')[0] : undefined,
