@@ -4,6 +4,7 @@ import { useETFSearchData } from '@/hooks/useETFSearchData';
 import { useETFTableLogic } from '@/hooks/useETFTableLogic';
 import { useETFComparison } from '@/hooks/useETFComparison';
 import ETFSimpleTable from '@/components/ETFSimpleTable';
+import ETFComparisonPanel from '@/components/ETFComparisonPanel';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
@@ -151,7 +152,7 @@ const ETFSearchSection: React.FC = () => {
                           <Button
                             onClick={() => {
                               // Navigate to comparison with selected ETFs
-                              navigate('/srovnani-etf');
+                              navigate('/srovnani-etf?compare=true');
                             }}
                             className="bg-violet-600 hover:bg-violet-700 text-white px-6"
                           >
@@ -174,6 +175,18 @@ const ETFSearchSection: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Fixed comparison panel that appears when ETFs are selected */}
+      <ETFComparisonPanel
+        selectedETFs={selectedETFs}
+        onRemoveETF={removeETFFromComparison}
+        onClearAll={clearComparison}
+        onShowComparison={() => {
+          console.log('Homepage - navigating to detailed comparison with ETFs:', selectedETFs.map(e => e.name));
+          console.log('Homepage - localStorage before navigation:', localStorage.getItem('etf-comparison-selected'));
+          navigate('/srovnani-etf?compare=true');
+        }}
+      />
     </section>
   );
 };

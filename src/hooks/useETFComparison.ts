@@ -7,6 +7,7 @@ const STORAGE_KEY = 'etf-comparison-selected';
 
 export const useETFComparison = () => {
   const [selectedETFs, setSelectedETFs] = useState<ETF[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
   const { toast } = useToast();
 
   // Load selected ETFs from localStorage on mount
@@ -22,16 +23,19 @@ export const useETFComparison = () => {
     } catch (error) {
       console.error('Error loading selected ETFs from storage:', error);
     }
+    setIsInitialized(true);
   }, []);
 
-  // Save to localStorage whenever selectedETFs changes
+  // Save to localStorage whenever selectedETFs changes (but only after initialization)
   useEffect(() => {
+    if (!isInitialized) return; // Don't save until we've loaded initial data
+    
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedETFs));
     } catch (error) {
       console.error('Error saving selected ETFs to storage:', error);
     }
-  }, [selectedETFs]);
+  }, [selectedETFs, isInitialized]);
 
   const fetchFullETFData = async (isin: string): Promise<ETF | null> => {
     try {

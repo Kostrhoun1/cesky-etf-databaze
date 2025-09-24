@@ -1,14 +1,55 @@
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import ETFDetailedComparison from '@/components/ETFDetailedComparison';
 import ETFComparisonContainer from '@/components/comparison/ETFComparisonContainer';
 import { ETF } from '@/types/etf';
 import SEOHead from '@/components/SEO/SEOHead';
 
+const STORAGE_KEY = 'etf-comparison-selected';
+
 const ETFComparison: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [showDetailedComparison, setShowDetailedComparison] = useState(false);
   const [selectedETFsForComparison, setSelectedETFsForComparison] = useState<ETF[]>([]);
+
+  // Check if we should show detailed comparison based on URL param and localStorage
+  useEffect(() => {
+    const shouldCompare = searchParams.get('compare') === 'true';
+    console.log('ETFComparison useEffect - shouldCompare:', shouldCompare);
+    
+    if (shouldCompare) {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        console.log('ETFComparison useEffect - stored:', stored);
+        
+        if (stored) {
+          const parsedETFs = JSON.parse(stored);
+          console.log('ETFComparison useEffect - parsedETFs:', parsedETFs.length);
+          
+          if (Array.isArray(parsedETFs) && parsedETFs.length >= 2) {
+            console.log('ETFComparison useEffect - showing detailed comparison with ETFs:', parsedETFs.map(e => e.name));
+            setSelectedETFsForComparison(parsedETFs);
+            setShowDetailedComparison(true);
+            
+            // Remove the URL parameter after showing comparison
+            setSearchParams(prev => {
+              const newParams = new URLSearchParams(prev);
+              newParams.delete('compare');
+              return newParams;
+            });
+          } else {
+            console.log('ETFComparison useEffect - not enough ETFs for comparison:', parsedETFs.length);
+          }
+        } else {
+          console.log('ETFComparison useEffect - no stored ETFs found');
+        }
+      } catch (error) {
+        console.error('Error loading selected ETFs from storage for detailed comparison:', error);
+      }
+    }
+  }, [searchParams, setSearchParams]);
 
   const webAppSchema = {
     "@context": "https://schema.org",
