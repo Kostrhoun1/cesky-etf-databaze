@@ -135,7 +135,7 @@ class MarketHeatmapGenerator:
             filename = f"market_heatmap_{timestamp}.json"
         
         # Uložit do ETF složky pro frontend
-        output_path = os.path.join("/Users/tomaskostrhoun/Documents/ETF/src/data", filename)
+        output_path = os.path.join("/Users/tomaskostrhoun/Documents/ETF/public/data", filename)
         
         # Vytvořit složku pokud neexistuje
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
