@@ -145,12 +145,14 @@ const StatCard: React.FC<{ label: string; value: string | number; color: string 
 );
 
 const InfographicsGenerator: React.FC = () => {
-  const [infographicMode, setInfographicMode] = useState<'performance' | 'ter' | 'heatmap'>('performance');
+  console.log('InfographicsGenerator component loaded');
+  
+  const [infographicMode, setInfographicMode] = useState<'performance' | 'ter' | 'heatmap'>('heatmap');
   const [category, setCategory] = useState<string>('Akcie');
   const [period, setPeriod] = useState<string>('3y');
   const [index, setIndex] = useState<string>('sp500');
   const [terMode, setTerMode] = useState<'category' | 'index'>('category');
-  const [heatmapPeriod, setHeatmapPeriod] = useState<'1d' | 'wtd' | 'mtd' | 'ytd' | '1y' | '3y' | '5y' | '10y'>('1d');
+  const [heatmapPeriod, setHeatmapPeriod] = useState<'1d' | 'wtd' | 'mtd' | 'ytd' | '1y' | '3y' | '5y' | '10y'>('1y');
   const [heatmapData, setHeatmapData] = useState<any>(null);
   
   const { fetchETFs } = useETFData();
@@ -363,11 +365,26 @@ const InfographicsGenerator: React.FC = () => {
     if (infographicMode === 'heatmap') {
       const loadHeatmapData = async () => {
         try {
-          const response = await fetch(`/data/market_heatmap_${heatmapPeriod}.json`);
+          const url = `/data/market_heatmap_${heatmapPeriod}.json`;
+          console.log('🔥 Loading heatmap data from:', url);
+          const response = await fetch(url);
+          console.log('📊 Response status:', response.status, response.statusText);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
           const data = await response.json();
+          console.log('✅ Heatmap data loaded successfully:', {
+            period: data.metadata?.period,
+            sectorsCount: Object.keys(data.sectors || {}).length,
+            regionsCount: Object.keys(data.regions || {}).length,
+            assetClassesCount: Object.keys(data.asset_classes || {}).length
+          });
           setHeatmapData(data);
         } catch (error) {
-          console.error('Chyba při načítání heatmap dat:', error);
+          console.error('❌ Chyba při načítání heatmap dat:', error);
+          console.error('URL was:', `/data/market_heatmap_${heatmapPeriod}.json`);
         }
       };
       loadHeatmapData();
@@ -377,12 +394,15 @@ const InfographicsGenerator: React.FC = () => {
 
 
   const renderContent = () => {
+    console.log('InfographicsGenerator renderContent - loading:', loading, 'etfs:', etfs?.length);
+    
     if (loading) {
       return (
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
             <Sparkles className="w-8 h-8 text-violet-600 animate-spin mx-auto mb-4" />
             <p className="text-gray-600">Načítám ETF data...</p>
+            <p className="text-xs text-gray-400 mt-2">Debug: loading={String(loading)}</p>
           </div>
         </div>
       );
@@ -391,7 +411,10 @@ const InfographicsGenerator: React.FC = () => {
     if (!etfs || etfs.length === 0) {
       return (
         <div className="flex items-center justify-center h-full">
-          <p className="text-gray-600">Žádná data k dispozici</p>
+          <div className="text-center">
+            <p className="text-gray-600">Žádná data k dispozici</p>
+            <p className="text-xs text-gray-400 mt-2">Debug: etfs={etfs?.length || 'null/undefined'}</p>
+          </div>
         </div>
       );
     }
