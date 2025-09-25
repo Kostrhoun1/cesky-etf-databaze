@@ -983,6 +983,11 @@ const InfographicsGenerator: React.FC = () => {
           </div>
         </div>
 
+        {/* Hlavní obsah infografiky */}
+        <div className="mb-12">
+          {renderContent()}
+        </div>
+
         {/* Nové Twitter/X infografiky */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold mb-6 text-center">🎨 Infografiky pro X/Twitter</h2>
