@@ -1,256 +1,256 @@
 {
   "metadata": {
     "period": "mtd",
-    "generated_at": "2026-01-15T10:38:00.247178",
+    "generated_at": "2026-01-20T04:38:34.113042",
     "data_source": "Yahoo Finance"
   },
   "sectors": {
     "Technology": {
       "symbol": "XLK",
-      "performance": 0.28,
-      "current_price": 144.7,
+      "performance": 0.91,
+      "current_price": 145.62,
       "currency": "USD",
       "name": "State Street Technology Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:00.695232"
+      "last_updated": "2026-01-20T04:38:34.604524"
     },
     "Healthcare": {
       "symbol": "XLV",
-      "performance": 1.51,
-      "current_price": 157.86,
+      "performance": 0.15,
+      "current_price": 155.74,
       "currency": "USD",
       "name": "State Street Health Care Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:01.055187"
+      "last_updated": "2026-01-20T04:38:35.085295"
     },
     "Financials": {
       "symbol": "XLF",
-      "performance": -1.42,
-      "current_price": 54.15,
+      "performance": -0.89,
+      "current_price": 54.44,
       "currency": "USD",
       "name": "State Street Financial Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:01.401520"
+      "last_updated": "2026-01-20T04:38:35.646264"
     },
     "Energy": {
       "symbol": "XLE",
-      "performance": 5.28,
-      "current_price": 48.06,
+      "performance": 4.47,
+      "current_price": 47.69,
       "currency": "USD",
       "name": "State Street Energy Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:04.228849"
+      "last_updated": "2026-01-20T04:38:36.173307"
     },
     "Utilities": {
       "symbol": "XLU",
-      "performance": -0.02,
-      "current_price": 43.17,
+      "performance": 0.49,
+      "current_price": 43.39,
       "currency": "USD",
       "name": "State Street Utilities Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:04.567700"
+      "last_updated": "2026-01-20T04:38:36.668161"
     },
     "Consumer Staples": {
       "symbol": "XLP",
-      "performance": 5.84,
-      "current_price": 82.23,
+      "performance": 5.69,
+      "current_price": 82.11,
       "currency": "USD",
       "name": "State Street Consumer Staples Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:04.912828"
+      "last_updated": "2026-01-20T04:38:37.166153"
     },
     "Consumer Discretionary": {
       "symbol": "XLY",
-      "performance": 3.3,
-      "current_price": 122.25,
+      "performance": 3.34,
+      "current_price": 122.3,
       "currency": "USD",
       "name": "State Street Consumer Discretionary Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:05.271498"
+      "last_updated": "2026-01-20T04:38:37.649735"
     },
     "Industrials": {
       "symbol": "XLI",
-      "performance": 3.98,
-      "current_price": 164.27,
+      "performance": 5.65,
+      "current_price": 166.9,
       "currency": "USD",
       "name": "State Street Industrial Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:05.621916"
+      "last_updated": "2026-01-20T04:38:38.134291"
     },
     "Materials": {
       "symbol": "XLB",
-      "performance": 5.7,
-      "current_price": 48.75,
+      "performance": 5.55,
+      "current_price": 48.68,
       "currency": "USD",
       "name": "State Street Materials Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:05.952823"
+      "last_updated": "2026-01-20T04:38:38.645642"
     },
     "Real Estate": {
       "symbol": "XLRE",
-      "performance": 2.5,
-      "current_price": 41.39,
+      "performance": 4.53,
+      "current_price": 42.21,
       "currency": "USD",
       "name": "State Street Real Estate Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:06.374722"
+      "last_updated": "2026-01-20T04:38:39.111898"
     },
     "Communication Services": {
       "symbol": "XLC",
-      "performance": -0.22,
-      "current_price": 116.64,
+      "performance": -1.48,
+      "current_price": 115.17,
       "currency": "USD",
       "name": "State Street Communication Services Select Sector SPDR ETF",
-      "last_updated": "2026-01-15T10:38:06.698987"
+      "last_updated": "2026-01-20T04:38:39.586622"
     }
   },
   "regions": {
     "USA": {
       "symbol": "VTI",
-      "performance": 1.39,
-      "current_price": 341.0,
+      "performance": 1.65,
+      "current_price": 341.85,
       "currency": "USD",
       "name": "Vanguard Total Stock Market Index Fund ETF Shares",
-      "last_updated": "2026-01-15T10:38:07.084764"
+      "last_updated": "2026-01-20T04:38:40.125707"
     },
     "Europe": {
       "symbol": "VGK",
-      "performance": 1.84,
-      "current_price": 86.12,
+      "performance": 1.9,
+      "current_price": 86.17,
       "currency": "USD",
       "name": "Vanguard FTSE Europe ETF",
-      "last_updated": "2026-01-15T10:38:07.418917"
+      "last_updated": "2026-01-20T04:38:40.605591"
     },
     "Japan": {
       "symbol": "EWJ",
-      "performance": 4.56,
-      "current_price": 85.04,
+      "performance": 5.1,
+      "current_price": 85.48,
       "currency": "USD",
       "name": "iShares MSCI Japan ETF",
-      "last_updated": "2026-01-15T10:38:07.767417"
+      "last_updated": "2026-01-20T04:38:41.151834"
     },
     "China": {
       "symbol": "FXI",
-      "performance": 0.55,
-      "current_price": 40.04,
+      "performance": -1.31,
+      "current_price": 39.3,
       "currency": "USD",
       "name": "iShares China Large-Cap ETF",
-      "last_updated": "2026-01-15T10:38:08.111320"
+      "last_updated": "2026-01-20T04:38:41.623407"
     },
     "Emerging Markets": {
       "symbol": "VWO",
-      "performance": 2.09,
-      "current_price": 56.08,
+      "performance": 1.95,
+      "current_price": 56.0,
       "currency": "USD",
       "name": "Vanguard Emerging Markets Stock Index Fund",
-      "last_updated": "2026-01-15T10:38:08.496884"
+      "last_updated": "2026-01-20T04:38:42.098664"
     },
     "Developed Markets": {
       "symbol": "VEA",
-      "performance": 2.64,
-      "current_price": 64.87,
+      "performance": 3.07,
+      "current_price": 65.14,
       "currency": "USD",
       "name": "Vanguard FTSE Developed Markets Index Fund ETF Shares",
-      "last_updated": "2026-01-15T10:38:08.901094"
+      "last_updated": "2026-01-20T04:38:42.572516"
     },
     "Asia Pacific": {
       "symbol": "VPL",
-      "performance": 3.86,
-      "current_price": 95.34,
+      "performance": 4.89,
+      "current_price": 96.29,
       "currency": "USD",
       "name": "Vanguard FTSE Pacific Index Fund ETF Shares",
-      "last_updated": "2026-01-15T10:38:09.229909"
+      "last_updated": "2026-01-20T04:38:43.044876"
     }
   },
   "asset_classes": {
     "US Stocks": {
       "symbol": "VTI",
-      "performance": 1.39,
-      "current_price": 341.0,
+      "performance": 1.65,
+      "current_price": 341.85,
       "currency": "USD",
       "name": "Vanguard Total Stock Market Index Fund ETF Shares",
-      "last_updated": "2026-01-15T10:38:09.570630"
+      "last_updated": "2026-01-20T04:38:43.372079"
     },
     "International Stocks": {
       "symbol": "VTIAX",
-      "performance": 2.51,
-      "current_price": 42.09,
+      "performance": 2.87,
+      "current_price": 42.24,
       "currency": "USD",
       "name": "Vanguard Total Intl Stock Index Admiral",
-      "last_updated": "2026-01-15T10:38:09.891338"
+      "last_updated": "2026-01-20T04:38:43.835812"
     },
     "Bonds": {
       "symbol": "BND",
-      "performance": 0.53,
-      "current_price": 74.43,
+      "performance": 0.22,
+      "current_price": 74.2,
       "currency": "USD",
       "name": "Vanguard Total Bond Market Index Fund",
-      "last_updated": "2026-01-15T10:38:10.228877"
+      "last_updated": "2026-01-20T04:38:44.365299"
     },
     "REITs": {
       "symbol": "VNQ",
-      "performance": 2.65,
-      "current_price": 90.87,
+      "performance": 4.63,
+      "current_price": 92.62,
       "currency": "USD",
       "name": "Vanguard Real Estate Index Fund ETF Shares",
-      "last_updated": "2026-01-15T10:38:10.558932"
+      "last_updated": "2026-01-20T04:38:44.900246"
     },
     "Commodities": {
       "symbol": "DJP",
-      "performance": 5.23,
-      "current_price": 39.64,
+      "performance": 3.98,
+      "current_price": 39.17,
       "currency": "USD",
       "name": "iPath Bloomberg Commodity Index Total Return(SM) ETN",
-      "last_updated": "2026-01-15T10:38:10.910602"
+      "last_updated": "2026-01-20T04:38:45.357454"
     },
     "Gold": {
       "symbol": "GLD",
-      "performance": 6.94,
-      "current_price": 425.94,
+      "performance": 5.78,
+      "current_price": 421.29,
       "currency": "USD",
       "name": "SPDR Gold Shares",
-      "last_updated": "2026-01-15T10:38:11.227405"
+      "last_updated": "2026-01-20T04:38:45.826551"
     },
     "Bitcoin": {
       "symbol": "BTC-USD",
-      "performance": 9.07,
-      "current_price": 96778.03,
+      "performance": 3.99,
+      "current_price": 92275.86,
       "currency": "USD",
       "name": "Bitcoin USD",
-      "last_updated": "2026-01-15T10:38:11.526459"
+      "last_updated": "2026-01-20T04:38:46.277394"
     },
     "Oil": {
       "symbol": "USO",
-      "performance": 5.29,
-      "current_price": 72.61,
+      "performance": 3.9,
+      "current_price": 71.65,
       "currency": "USD",
       "name": "United States Oil Fund, LP",
-      "last_updated": "2026-01-15T10:38:11.880315"
+      "last_updated": "2026-01-20T04:38:46.734835"
     }
   },
   "summary_stats": {
     "best_performers": {
       "sectors": [
         "Consumer Staples",
-        5.84
+        5.69
       ],
       "regions": [
         "Japan",
-        4.56
+        5.1
       ],
       "asset_classes": [
-        "Bitcoin",
-        9.07
+        "Gold",
+        5.78
       ]
     },
     "worst_performers": {
       "sectors": [
-        "Financials",
-        -1.42
+        "Communication Services",
+        -1.48
       ],
       "regions": [
         "China",
-        0.55
+        -1.31
       ],
       "asset_classes": [
         "Bonds",
-        0.53
+        0.22
       ]
     },
     "category_averages": {
-      "sectors": 2.43,
-      "regions": 2.42,
-      "asset_classes": 4.2
+      "sectors": 2.58,
+      "regions": 2.46,
+      "asset_classes": 3.38
     }
   }
 }
