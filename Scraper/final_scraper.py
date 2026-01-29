@@ -13,6 +13,7 @@ KOMPLETNÍ FUNKCIONALITA:
 - ✅ Error handling a retry mechanismus
 - ✅ Progress monitoring a statistiky
 - ✅ Export do Excel, JSON a CSV
+- ✅ Automatická aktualizace webu po dokončení
 - 🔧 OPRAVA: Unicode/emoji problémů pro Windows
 
 INSTALACE ZÁVISLOSTÍ:
@@ -39,6 +40,14 @@ import sys
 from dataclasses import dataclass
 from etf_rating import calculate_etf_rating
 from market_heatmap_generator import MarketHeatmapGenerator
+from scraper_currency_integration import CurrencyPerformanceIntegrator
+
+# Potlačení warningů
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", message=".*urllib3.*OpenSSL.*")
+warnings.filterwarnings("ignore", message=".*pseudo class.*contains.*deprecated.*")
 
 # Ochrana proti uspávání počítače (macOS/Linux)
 try:
@@ -88,6 +97,53 @@ except ImportError:
     SUPABASE_AVAILABLE = False
 
 # ================================
+# WEBHOOK FUNKCIONALITA PRO AUTOMATICKOU AKTUALIZACI WEBU
+# ========================================================
+
+def trigger_website_refresh():
+    """
+    Zavolá webhook pro aktualizaci homepage po dokončení scrapingu
+    """
+    try:
+        # URL webhook endpointu
+        webhook_url = "https://www.etfpruvodce.cz/api/revalidate"
+        
+        # Pro development (localhost) 
+        # webhook_url = "http://localhost:3000/api/revalidate"
+        
+        # Secret key pro zabezpečení (musí odpovídat REVALIDATE_SECRET ve Vercelu)
+        secret_key = "etf_rebuild_x7Km9pQ2vL8n"
+        
+        # Payload
+        payload = {
+            "secret": secret_key,
+            "source": "scraper",
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        safe_log("info", "🔄 Triggering website refresh...")
+        
+        # Zavolej webhook
+        response = requests.post(
+            webhook_url, 
+            json=payload,
+            timeout=30,
+            headers={'Content-Type': 'application/json'}
+        )
+        
+        if response.status_code == 200:
+            result = response.json()
+            safe_log("info", f"✅ Website refresh successful: {result.get('message')}")
+            safe_log("info", f"📅 Timestamp: {result.get('timestamp')}")
+        else:
+            safe_log("error", f"❌ Website refresh failed: {response.status_code}")
+            safe_log("error", f"Response: {response.text}")
+            
+    except requests.exceptions.RequestException as e:
+        safe_log("error", f"❌ Network error during website refresh: {e}")
+    except Exception as e:
+        safe_log("error", f"❌ Unexpected error during website refresh: {e}")
+
 # PRODUCTION KONFIGURACE
 # ================================
 PRODUCTION_MODE = True
@@ -97,6 +153,8 @@ RETRY_DELAY = 30  # sekund
 TRANSLATE_DESCRIPTIONS = True and GOOGLETRANS_AVAILABLE  # Zapnuto s deep-translator
 SAVE_HTML = False  # Pro production vypnuto kvůli místu
 DEBUG_MODE = False
+VERBOSE_MODE = False  # Méně výstupů na terminál - jen progress 
+AUTO_CLEANUP = True  # Automatické mazání checkpointů po dokončení
 EXTRACT_EXCHANGE_DATA = True
 EXTRACT_DIVIDEND_DATA = True  # NOVÉ: Extrakce dividendových dat
 AUTO_UPLOAD_TO_DB = True and SUPABASE_AVAILABLE  # NOVÉ: Automatické nahrávání do databáze
@@ -151,12 +209,22 @@ console_handler.setFormatter(SafeFormatter('%(asctime)s - %(levelname)s - %(mess
 
 # Nastavení loggeru
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+if VERBOSE_MODE:
+    logger.setLevel(logging.DEBUG)
+    console_handler.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.INFO)  # Povolím INFO zprávy pro progress
+    console_handler.setLevel(logging.INFO)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
 def safe_log(level: str, message: str):
     """Bezpečná logging funkce která odstraní problematické znaky pro Windows"""
+    
+    # V non-verbose módu zobrazuj jen důležité zprávy
+    if not VERBOSE_MODE and level == 'debug':
+        return
+    
     # Filtruj spam zprávy ale nech důležité info
     if level in ['debug', 'info'] and 'EXCHANGE:' in message:
         return
@@ -284,10 +352,42 @@ class ETFDataComplete:
         self.return_2022 = None
         self.return_2023 = None
         self.return_2024 = None
-        
+        self.return_2025 = None
+
         # Performance - inception (celková životnost)
         self.return_inception = None
         self.performance_last_updated = None
+        
+        # Currency Performance - CZK (přepočteno z EUR)
+        self.return_1m_czk = None
+        self.return_3m_czk = None
+        self.return_6m_czk = None
+        self.return_ytd_czk = None
+        self.return_1y_czk = None
+        self.return_3y_czk = None
+        self.return_5y_czk = None
+        self.return_2021_czk = None
+        self.return_2022_czk = None
+        self.return_2023_czk = None
+        self.return_2024_czk = None
+        self.return_2025_czk = None
+
+        # Currency Performance - USD (přepočteno z EUR)
+        self.return_1m_usd = None
+        self.return_3m_usd = None
+        self.return_6m_usd = None
+        self.return_ytd_usd = None
+        self.return_1y_usd = None
+        self.return_3y_usd = None
+        self.return_5y_usd = None
+        self.return_2021_usd = None
+        self.return_2022_usd = None
+        self.return_2023_usd = None
+        self.return_2024_usd = None
+        self.return_2025_usd = None
+
+        # Metadata
+        self.currency_performance_updated_at = None
         
         # Risk metriky
         self.volatility_1y = None
@@ -416,7 +516,40 @@ class ETFDataComplete:
             'return_2022': self.return_2022,
             'return_2023': self.return_2023,
             'return_2024': self.return_2024,
+            'return_2025': self.return_2025,
             'return_inception': self.return_inception,
+            
+            # Currency Performance - CZK
+            'return_1m_czk': self.return_1m_czk,
+            'return_3m_czk': self.return_3m_czk,
+            'return_6m_czk': self.return_6m_czk,
+            'return_ytd_czk': self.return_ytd_czk,
+            'return_1y_czk': self.return_1y_czk,
+            'return_3y_czk': self.return_3y_czk,
+            'return_5y_czk': self.return_5y_czk,
+            'return_2021_czk': self.return_2021_czk,
+            'return_2022_czk': self.return_2022_czk,
+            'return_2023_czk': self.return_2023_czk,
+            'return_2024_czk': self.return_2024_czk,
+            'return_2025_czk': self.return_2025_czk,
+
+            # Currency Performance - USD
+            'return_1m_usd': self.return_1m_usd,
+            'return_3m_usd': self.return_3m_usd,
+            'return_6m_usd': self.return_6m_usd,
+            'return_ytd_usd': self.return_ytd_usd,
+            'return_1y_usd': self.return_1y_usd,
+            'return_3y_usd': self.return_3y_usd,
+            'return_5y_usd': self.return_5y_usd,
+            'return_2021_usd': self.return_2021_usd,
+            'return_2022_usd': self.return_2022_usd,
+            'return_2023_usd': self.return_2023_usd,
+            'return_2024_usd': self.return_2024_usd,
+            'return_2025_usd': self.return_2025_usd,
+
+            # Metadata
+            'currency_performance_updated_at': self.currency_performance_updated_at,
+            
             'volatility_1y': self.volatility_1y,
             'volatility_3y': self.volatility_3y,
             'volatility_5y': self.volatility_5y,
@@ -621,6 +754,17 @@ class CompleteProductionScraper:
                 self.supabase = None
         else:
             self.supabase = None
+        
+        # Inicializace Currency Performance Integrator
+        try:
+            self.currency_integrator = CurrencyPerformanceIntegrator()
+            if self.currency_integrator.is_available():
+                safe_log("info", "💱 Currency Performance Integrator inicializován")
+            else:
+                safe_log("warning", "💱 Currency conversion není dostupná")
+        except Exception as e:
+            safe_log("warning", f"💱 Currency integrator chyba: {e}")
+            self.currency_integrator = None
     
     def load_isins_from_csv(self, csv_file: str) -> List[str]:
         """Načte ISIN kódy z CSV souboru"""
@@ -729,6 +873,40 @@ class CompleteProductionScraper:
         completed = sum(1 for etf in checkpoint if etf.scraping_status in ['success', 'error', 'not_found'])
         return completed == expected_count
     
+    def cleanup_checkpoints(self):
+        """Smaže všechny checkpoint soubory po dokončení scrapingu"""
+        try:
+            if not os.path.exists(CHECKPOINTS_DIR):
+                return
+            
+            checkpoint_files = [f for f in os.listdir(CHECKPOINTS_DIR) if f.endswith('.json')]
+            
+            if not checkpoint_files:
+                safe_log("info", "🧹 CLEANUP: Žádné checkpoint soubory k mazání")
+                return
+            
+            deleted_count = 0
+            for filename in checkpoint_files:
+                filepath = os.path.join(CHECKPOINTS_DIR, filename)
+                try:
+                    os.remove(filepath)
+                    deleted_count += 1
+                except Exception as e:
+                    safe_log("error", f"❌ CLEANUP: Chyba při mazání {filename}: {e}")
+            
+            safe_log("info", f"🧹 CLEANUP: Smazáno {deleted_count} checkpoint souborů")
+            
+            # Pokus o smazání prázdné složky checkpoints
+            try:
+                if not os.listdir(CHECKPOINTS_DIR):
+                    os.rmdir(CHECKPOINTS_DIR)
+                    safe_log("info", "🧹 CLEANUP: Smazána prázdná složka checkpoints")
+            except:
+                pass  # Nevadí, pokud se nepodaří
+                
+        except Exception as e:
+            safe_log("error", f"❌ CLEANUP: Chyba při čištění checkpointů: {e}")
+    
     def scrape_etf_complete_with_retry(self, isin: str, max_retries: int = MAX_RETRIES) -> ETFDataComplete:
         """KOMPLETNÍ scraping s retry mechanismem + DIVIDENDY"""
         etf = ETFDataComplete(isin)
@@ -784,6 +962,19 @@ class CompleteProductionScraper:
                 etf.scraping_status = "success"
                 etf.retry_count = attempt
                 
+                # NOVÉ: Currency Performance Conversion
+                if (self.currency_integrator and self.currency_integrator.is_available() and 
+                    hasattr(etf, 'return_1y') and etf.return_1y is not None):
+                    safe_log("debug", f"💱 Přidávám currency performance pro {isin}")
+                    currency_success = self.currency_integrator.enhance_etf_with_currency_performance(etf)
+                    
+                    if currency_success:
+                        safe_log("debug", f"✅ Currency performance úspěšně přidána pro {isin}")
+                    else:
+                        safe_log("debug", f"⚠️ Currency performance selhala pro {isin}")
+                else:
+                    safe_log("debug", f"⏭️ Přeskakuji currency conversion pro {isin} (no performance data)")
+                
                 # ROZŠÍŘENÝ LOG s dividendovými informacemi
                 div_info = f"| Yield: {etf.current_dividend_yield or 'N/A'}" if etf.current_dividend_yield else ""
                 safe_log("debug", f"OK: {isin}: {(etf.name[:30] + '...') if etf.name else 'No name'} | {etf.region} | ({etf.total_exchanges} exchanges) {div_info}")
@@ -809,7 +1000,8 @@ class CompleteProductionScraper:
     
     def process_batch(self, batch_id: int, batch_isins: List[str], resume: bool = False) -> List[ETFDataComplete]:
         """Zpracuje jeden batch ETF s KOMPLETNÍMI daty"""
-        safe_log("info", f"BATCH: Processing batch {batch_id} ({len(batch_isins)} ETFs)")
+        if VERBOSE_MODE:
+            safe_log("info", f"BATCH: Processing batch {batch_id} ({len(batch_isins)} ETFs)")
         
         # Pokus o načtení checkpointu
         if resume:
@@ -907,7 +1099,11 @@ class CompleteProductionScraper:
                 end_idx = min(start_idx + self.batch_size, len(all_isins))
                 batch_isins = all_isins[start_idx:end_idx]
                 
-                safe_log("info", f"BATCH: {batch_id + 1}/{total_batches}")
+                # Kvalitnější progress indikátor
+                if VERBOSE_MODE:
+                    safe_log("info", f"BATCH: {batch_id + 1}/{total_batches}")
+                else:
+                    safe_log("info", f"📦 Processing batch {batch_id + 1}/{total_batches} ({len(batch_isins)} ETFs)")
                 
                 # Zkontroluj, zda už je batch dokončený
                 if resume and self.is_batch_completed(batch_id, len(batch_isins)):
@@ -927,7 +1123,10 @@ class CompleteProductionScraper:
                     total_processed = min(total_processed, len(all_isins))
                     progress = (total_processed / len(all_isins)) * 100
                     
-                    safe_log("info", f"PROGRESS: {total_processed}/{len(all_isins)} ({progress:.1f}%)")
+                    if VERBOSE_MODE:
+                        safe_log("info", f"PROGRESS: {total_processed}/{len(all_isins)} ({progress:.1f}%)")
+                    else:
+                        safe_log("info", f"✅ Batch completed - Total progress: {total_processed}/{len(all_isins)} ({progress:.1f}%)")
                     
                 except Exception as e:
                     safe_log("error", f"ERROR: Chyba v batch {batch_id}: {e}")
@@ -984,6 +1183,9 @@ class CompleteProductionScraper:
                 upload_success = self.upload_etfs_to_database(successful_etfs)
                 if upload_success:
                     safe_log("info", f"🎉 DATABÁZE: ✅ Automatické nahrávání do databáze dokončeno úspěšně!")
+                    
+                    # NOVÉ: Aktualizuj website po úspěšném uploadu
+                    trigger_website_refresh()
                 else:
                     safe_log("error", f"❌ DATABÁZE: Chyba při automatickém nahrávání do databáze")
             else:
@@ -997,6 +1199,10 @@ class CompleteProductionScraper:
         # NOVÉ: Generování market heatmap dat
         if GENERATE_MARKET_HEATMAP:
             self._generate_market_heatmap_data()
+        
+        # NOVÉ: Automatické mazání checkpointů po dokončení
+        if AUTO_CLEANUP:
+            self.cleanup_checkpoints()
     
     def _upload_file_to_server(self, local_file_path: str, remote_filename: str) -> bool:
         """Nahraje soubor na server pomocí FTP/SFTP/GitHub"""
@@ -1806,19 +2012,32 @@ class CompleteProductionScraper:
         self._extract_index_name(soup, etf)
     
     def _extract_index_name(self, soup: BeautifulSoup, etf: ETFDataComplete):
-        """Extrahuje název indexu"""
+        """Extrahuje název indexu - nejprve z webové stránky, pak z názvu ETF"""
+        
+        # PRIORITA 1: Scrapuj index z webové stránky (už implementováno v _extract_detailed_table_data)
+        # Pokud už máme index_name z tabulek, nepřepisuj ho
+        if etf.index_name and len(etf.index_name) >= 3:
+            return
+        
+        # PRIORITA 2: Fallback - extrakce z názvu ETF
         if etf.name:
             name = etf.name.replace('UCITS ETF', '').replace('ETP', '').replace('ETF', '')
             
             index_patterns = [
                 r'(S&P 500)',
                 r'(MSCI World)',
-                r'(FTSE [\w\s-]+)',
-                r'(NASDAQ [\w\s-]+)',
+                r'(STOXX® Europe 600)',
+                r'(STOXX Europe 600)',
+                r'(EURO STOXX 50)',
+                r'(STOXX [\w\s®©™&-]+)',
+                r'(FTSE [\w\s®©™&-]+)',
+                r'(NASDAQ [\w\s®©™&-]+)',
+                r'(Nasdaq[\s-]100)',   # Specificky pro Nasdaq-100 nebo Nasdaq 100
+                r'(NASDAQ[\s-]100)',   # Specificky pro NASDAQ-100 nebo NASDAQ 100
                 r'(MSCI Europe)',
                 r'(MSCI Emerging Markets)',
-                r'(MSCI [\w\s-]+)',
-                r'(Bloomberg [\w\s-]+)',
+                r'(MSCI [\w\s®©™&-]+)',
+                r'(Bloomberg [\w\s®©™&-]+)',
                 r'(Euro Corporate)',
                 r'(Government Bond)',
                 r'(Bitcoin)',
@@ -1833,15 +2052,85 @@ class CompleteProductionScraper:
                     if 3 <= len(index_name) <= 50:
                         etf.index_name = index_name
                         return
-    
+
+    def _extract_investment_focus_from_html(self, soup: BeautifulSoup) -> Optional[str]:
+        """
+        Extrahuje investment_focus přímo z HTML struktury JustETF.
+        JustETF používá tabulky s <td>Investment focus</td><td>hodnota</td>
+        """
+        # Metoda 1: Hledání v tabulkách - label + hodnota v další buňce
+        tables = soup.find_all('table')
+        for table in tables:
+            rows = table.find_all('tr')
+            for row in rows:
+                cells = row.find_all(['td', 'th'])
+                for i, cell in enumerate(cells):
+                    cell_text = cell.get_text(strip=True).lower()
+                    if 'investment focus' in cell_text and i + 1 < len(cells):
+                        value = cells[i + 1].get_text(strip=True)
+                        if value and len(value) >= 3 and not value.lower().startswith('risk'):
+                            # Validace - musí obsahovat smysluplná slova
+                            valid_keywords = ['equity', 'bond', 'commodity', 'commodities', 'precious',
+                                            'gold', 'silver', 'real estate', 'reit', 'crypto',
+                                            'world', 'united states', 'europe', 'asia', 'emerging',
+                                            'large cap', 'small cap', 'dividend', 'technology',
+                                            'healthcare', 'energy', 'materials', 'metals']
+                            if any(kw in value.lower() for kw in valid_keywords):
+                                return value
+
+        # Metoda 2: Hledání pomocí CSS selektoru pro JustETF strukturu
+        # JustETF někdy používá <div class="val">hodnota</div>
+        try:
+            # Hledej řádek s "Investment focus"
+            for td in soup.find_all('td'):
+                if 'investment focus' in td.get_text(strip=True).lower():
+                    # Najdi hodnotu - buď v následující buňce nebo v child elementu
+                    next_td = td.find_next_sibling('td')
+                    if next_td:
+                        value = next_td.get_text(strip=True)
+                        if value and len(value) >= 3 and not value.lower().startswith('risk'):
+                            return value
+                    # Nebo hodnota v div s class="val"
+                    val_div = td.find_next('div', class_='val')
+                    if val_div:
+                        value = val_div.get_text(strip=True)
+                        if value and len(value) >= 3 and not value.lower().startswith('risk'):
+                            return value
+        except Exception:
+            pass
+
+        # Metoda 3: Regex na celém textu - jako fallback
+        text = soup.get_text()
+        patterns = [
+            r'Investment focus\s*[:\s]*([A-Za-z\s,\(\)/-]+?)(?:\s*Index|\s*Fund|\s*Risk|\s*Strategy|\s*Sustainability|\n)',
+            r'Asset class\s*[:\s]*([A-Za-z\s,\(\)/-]+?)(?:\s*Index|\s*Fund|\s*Risk|\n)',
+        ]
+        for pattern in patterns:
+            match = re.search(pattern, text, re.I)
+            if match:
+                value = match.group(1).strip()
+                # Vyčistit a validovat
+                value = re.sub(r'\s+', ' ', value).strip()
+                if value and 3 <= len(value) <= 100 and not value.lower().startswith('risk'):
+                    return value
+
+        return None
+
     def _extract_detailed_table_data(self, soup: BeautifulSoup, etf: ETFDataComplete):
-        """Extrahuje detailní data z tabulek + CSS selektory pro strategy_risk"""
-        
+        """Extrahuje detailní data z tabulek + CSS selektory pro investment_focus a strategy_risk"""
+
+        # NOVÉ: Extrakce investment_focus z HTML struktury (před regex)
+        # JustETF má strukturu: <td>Investment focus</td><td>Precious Metals, Silver (EUR Hedged)</td>
+        if not etf.investment_focus or etf.investment_focus.startswith('risk'):
+            investment_focus_extracted = self._extract_investment_focus_from_html(soup)
+            if investment_focus_extracted:
+                etf.investment_focus = investment_focus_extracted
+
         # NOVÉ: CSS selektory pro strategy_risk (před regex)
         if not etf.strategy_risk:
             strategy_risk_selectors = [
                 'td:contains("Risk") + td',
-                'td:contains("SRRI") + td', 
+                'td:contains("SRRI") + td',
                 'td:contains("Risk level") + td',
                 'td:contains("Risk rating") + td',
                 'span[class*="risk"]',
@@ -1850,7 +2139,7 @@ class CompleteProductionScraper:
                 '.risk-indicator',
                 '.risk-level'
             ]
-            
+
             for selector in strategy_risk_selectors:
                 try:
                     element = soup.select_one(selector)
@@ -1863,7 +2152,7 @@ class CompleteProductionScraper:
                             break
                 except:
                     continue
-        
+
         # Původní logika
         data_tables = []
         
@@ -1924,6 +2213,16 @@ class CompleteProductionScraper:
                 r'Dividend frequency\s*([A-Za-z\s]+?)(?:\s*Fund|$|\n)',
                 r'Payment frequency\s*([A-Za-z\s]+?)(?:\s*Fund|$|\n)',
                 r'Frequency\s*([A-Za-z\s]+?)(?:\s*Fund|$|\n)',
+            ],
+            'index_name': [
+                r'Index.*?<div.*?val.*?>([^<]+)',  # HTML structure: Index ... <div class="val">Nasdaq 100®</div>
+                r'Index\s*([A-Za-z0-9\s®®©™&\.-]+?)(?:\s*$|\n|[A-Z]{2}\d)',  # Text format
+                r'Benchmark.*?<div.*?val.*?>([^<]+)',
+                r'Benchmark\s*([A-Za-z0-9\s®®©™&\.-]+?)(?:\s*$|\n|[A-Z]{2}\d)',
+                r'Underlying index.*?<div.*?val.*?>([^<]+)',
+                r'Underlying index\s*([A-Za-z0-9\s®®©™&\.-]+?)(?:\s*$|\n|[A-Z]{2}\d)',
+                r'Tracks\s*([A-Za-z0-9\s®®©™&\.-]+?)(?:\s*$|\n|[A-Z]{2}\d)',
+                r'Replicates\s*([A-Za-z0-9\s®®©™&\.-]+?)(?:\s*$|\n|[A-Z]{2}\d)',
             ],
             'investment_focus': [
                 r'Investment focus\s*([A-Za-z\s,\./-]+?)(?:\s*Fund|$|\n)',
@@ -2004,11 +2303,19 @@ class CompleteProductionScraper:
                         if value:
                             etf.distribution_frequency = value
                             break
+                    elif field == 'index_name' and 3 <= len(value) <= 100:
+                        # Čištění index name - zachová speciální znaky jako ®, ©, ™
+                        value = re.sub(r'(Fund|Investment|ETF|UCITS|ETP)(?:\s|$)', '', value, flags=re.I).strip()
+                        # Odstraň trailing data jako "ISIN:" nebo country codes
+                        value = re.sub(r'\s+[A-Z]{2}\d.*$', '', value).strip()
+                        if value and len(value) >= 3:
+                            etf.index_name = value
+                            break
                     elif field == 'investment_focus' and 3 <= len(value) <= 200:
                         value = re.sub(r'(Fund|Investment|ETF)', '', value, flags=re.I).strip()
                         # Odstraň duplicitní slova a vyčistí
                         value = re.sub(r'\b(\w+)\s+\1\b', r'\1', value, flags=re.I)
-                        if value and len(value.split()) >= 2:  # Aspoň 2 slova
+                        if value and len(value.split()) >= 1:  # Změněno z 2 na 1 slovo
                             etf.investment_focus = value
                             break
                     elif field == 'sustainability' and 3 <= len(value) <= 50:
@@ -2067,47 +2374,121 @@ class CompleteProductionScraper:
                     continue
     
     def _categorize_etf(self, etf: ETFDataComplete):
-        """ZJEDNODUŠENÁ kategorizace ETF - prioritně z investment_focus"""
+        """PŘEPRACOVANÁ kategorizace ETF - s vylepšenou detekcí ETC/komodit"""
         name_lower = (etf.name or '').lower()
         index_lower = (etf.index_name or '').lower()
         investment_focus_lower = (etf.investment_focus or '').lower()
-        
-        # 0. PÁKOVÁ ETF DETEKCE - jen z názvu (nejpřesnější)
-        leveraged_keywords = ['leveraged', '2x', '3x', 'ultra', 'leverage']
-        
-        if any(keyword in name_lower for keyword in leveraged_keywords):
+        description_lower = (etf.description_en or '').lower()
+
+        # 0. PÁKOVÁ ETF DETEKCE
+        leveraged_keywords = ['leveraged', '2x', '3x', '4x', '5x', '10x', 'ultra', 'leverage', 'bear', 'short', 'inverse']
+        # "daily" samo o sobě neznamená pákové - musí být v kombinaci s multiplikátorem
+        # "daily hedged" NENÍ pákové, jen "daily leveraged" nebo "2x daily" apod.
+        daily_leveraged_patterns = ['5x long', '3x long', '2x long', '5x short', '3x short', '2x short',
+                                   'daily leveraged', 'daily short', 'daily inverse']
+        if any(keyword in name_lower for keyword in leveraged_keywords) or any(pattern in name_lower for pattern in daily_leveraged_patterns):
             etf.is_leveraged = True
-        
-        # 1. PRIORITNÍ KATEGORIZACE Z INVESTMENT_FOCUS (nejpřesnější)
-        if investment_focus_lower:
-            if 'equity' in investment_focus_lower or 'stock' in investment_focus_lower:
-                etf.category = 'Akcie'
-                return
-            elif 'bond' in investment_focus_lower or 'fixed income' in investment_focus_lower:
-                etf.category = 'Dluhopisy'
-                return
-            elif 'real estate' in investment_focus_lower or 'reit' in investment_focus_lower:
-                etf.category = 'Nemovitosti'
-                return
-            elif 'commodity' in investment_focus_lower or 'commodities' in investment_focus_lower:
-                etf.category = 'Komodity'
-                return
-            elif 'crypto' in investment_focus_lower or 'bitcoin' in investment_focus_lower:
+
+        # ===== PRIORITA 0: NÁZEV - PŘÍMÁ DETEKCE ETC/KOMODIT (nejvyšší priorita) =====
+        # ETC (Exchange Traded Commodities) a fyzické komodity - detekce z názvu
+        etc_commodity_patterns = [
+            'physical gold', 'physical silver', 'physical platinum', 'physical palladium',
+            'physical precious', 'physical metal', 'gold etc', 'silver etc', 'platinum etc',
+            ' etc ', ' etc$', 'gold etp', 'silver etp', 'xetra-gold', 'euwax gold',
+            'wisdomtree gold', 'wisdomtree silver', 'wisdomtree platinum', 'wisdomtree precious',
+            'wisdomtree commodity', 'wisdomtree oil', 'wisdomtree energy',
+            'xtrackers physical', 'invesco physical', 'ishares physical',
+            'amundi physical gold', 'amundi physical silver',
+            'gold bullion', 'silver bullion', 'gold spot', 'silver spot',
+        ]
+        if any(pattern in name_lower for pattern in etc_commodity_patterns):
+            etf.category = 'Komodity'
+            return
+
+        # ===== PRIORITA 1: INVESTMENT_FOCUS (pokud je validní) =====
+        # Zkontroluj, zda investment_focus obsahuje validní data (ne "risk Long-only" apod.)
+        invalid_focus_patterns = ['risk', 'long-only', 'sustainability', 'leverage']
+        is_valid_focus = investment_focus_lower and not any(
+            pattern in investment_focus_lower for pattern in invalid_focus_patterns
+        )
+
+        if is_valid_focus:
+            # 1.1 KRYPTO
+            crypto_focus = ['crypto', 'cryptocurrency', 'cryptocurrencies', 'bitcoin', 'ethereum', 'solana', 'blockchain', 'digital asset']
+            if any(keyword in investment_focus_lower for keyword in crypto_focus):
                 etf.category = 'Krypto'
                 return
-        
-        # 2. FALLBACK NA NÁZEV (pouze pro základní kategorie)
-        if 'crypto' in name_lower or 'bitcoin' in name_lower:
+
+            # 1.2 KOMODITY (před dluhopisy!)
+            commodity_focus = ['commodity', 'commodities', 'gold', 'silver', 'platinum', 'palladium',
+                             'oil', 'energy', 'precious metal', 'precious metals', 'metals',
+                             'agriculture', 'natural gas', 'copper', 'aluminium', 'wheat', 'corn']
+            if any(keyword in investment_focus_lower for keyword in commodity_focus):
+                etf.category = 'Komodity'
+                return
+
+            # 1.3 NEMOVITOSTI
+            reit_focus = ['reit', 'real estate', 'property', 'immobilien', 'real estate investment']
+            if any(keyword in investment_focus_lower for keyword in reit_focus):
+                etf.category = 'Nemovitosti'
+                return
+
+            # 1.4 DLUHOPISY
+            bond_focus = ['bond', 'bonds', 'fixed income', 'treasury', 'government bond', 'corporate bond', 'gilt', 'aggregate']
+            if any(keyword in investment_focus_lower for keyword in bond_focus):
+                etf.category = 'Dluhopisy'
+                return
+
+            # 1.5 AKCIE
+            equity_focus = ['equity', 'equities', 'stock', 'stocks', 'shares']
+            if any(keyword in investment_focus_lower for keyword in equity_focus):
+                etf.category = 'Akcie'
+                return
+
+        # ===== PRIORITA 2: NÁZEV A POPIS (fallback) =====
+        all_text = f"{name_lower} {description_lower} {index_lower}"
+
+        # 2.1 KRYPTO
+        crypto_keywords = ['crypto', 'cryptocurrency', 'bitcoin', 'ethereum', 'solana', 'blockchain', 'digital asset']
+        if any(keyword in all_text for keyword in crypto_keywords):
             etf.category = 'Krypto'
-        elif 'reit' in name_lower or 'real estate' in name_lower:
-            etf.category = 'Nemovitosti'
-        elif 'bond' in name_lower or 'treasury' in name_lower:
-            etf.category = 'Dluhopisy'
-        elif 'gold' in name_lower or 'commodity' in name_lower:
+            return
+
+        # 2.2 KOMODITY (před dluhopisy! - důležité pro ETC s "debt obligation" v popisu)
+        commodity_keywords = ['commodity', 'commodities', 'gold', 'silver', 'platinum', 'palladium',
+                            'oil', 'crude', 'energy commodit', 'precious metal', 'precious metals',
+                            'metals basket', 'agriculture', 'natural gas', 'copper', 'aluminium']
+        if any(keyword in all_text for keyword in commodity_keywords):
             etf.category = 'Komodity'
-        else:
-            # Default pro většinu ETF
+            return
+
+        # 2.3 NEMOVITOSTI
+        reit_keywords = ['reit', 'real estate', 'property']
+        if any(keyword in all_text for keyword in reit_keywords):
+            etf.category = 'Nemovitosti'
+            return
+
+        # 2.4 DLUHOPISY (vyloučit "collateralised debt obligation" které se používá u ETC)
+        # Kontrola, zda "debt" není součástí "collateralised debt obligation"
+        has_bond_keyword = False
+        bond_keywords = ['bond', 'treasury', 'government bond', 'corporate bond', 'fixed income', 'gilt']
+        if any(keyword in all_text for keyword in bond_keywords):
+            has_bond_keyword = True
+        # Speciální kontrola pro "debt" - vyloučit ETC popis
+        if 'debt' in all_text and 'collateralised debt obligation' not in all_text:
+            has_bond_keyword = True
+        if has_bond_keyword:
+            etf.category = 'Dluhopisy'
+            return
+
+        # 2.5 AKCIE
+        equity_keywords = ['equity', 'stock', 'shares']
+        if any(keyword in all_text for keyword in equity_keywords):
             etf.category = 'Akcie'
+            return
+
+        # ===== PRIORITA 3: FALLBACK NA AKCIE =====
+        etf.category = 'Akcie'
     
     def _extract_performance_robust(self, soup: BeautifulSoup, etf: ETFDataComplete):
         """OPRAVENÁ extrakce performance dat - používá tabulkovou strukturu"""
@@ -2157,6 +2538,8 @@ class CompleteProductionScraper:
                             etf.return_2023 = value
                         elif label == '2024':
                             etf.return_2024 = value
+                        elif label == '2025':
+                            etf.return_2025 = value
                         elif 'since inception' in label or label == 'max':
                             etf.return_inception = value
                         elif label == 'ytd':
@@ -3335,6 +3718,35 @@ class CompleteProductionScraper:
             'exchange_10_bloomberg': etf_dict.get('exchange_10_bloomberg', ''),
             'exchange_10_reuters': etf_dict.get('exchange_10_reuters', ''),
             'exchange_10_market_maker': etf_dict.get('exchange_10_market_maker', ''),
+            
+            # Currency Performance - CZK
+            'return_1m_czk': self.safe_numeric(etf_dict.get('return_1m_czk')),
+            'return_3m_czk': self.safe_numeric(etf_dict.get('return_3m_czk')),
+            'return_6m_czk': self.safe_numeric(etf_dict.get('return_6m_czk')),
+            'return_ytd_czk': self.safe_numeric(etf_dict.get('return_ytd_czk')),
+            'return_1y_czk': self.safe_numeric(etf_dict.get('return_1y_czk')),
+            'return_3y_czk': self.safe_numeric(etf_dict.get('return_3y_czk')),
+            'return_5y_czk': self.safe_numeric(etf_dict.get('return_5y_czk')),
+            'return_2021_czk': self.safe_numeric(etf_dict.get('return_2021_czk')),
+            'return_2022_czk': self.safe_numeric(etf_dict.get('return_2022_czk')),
+            'return_2023_czk': self.safe_numeric(etf_dict.get('return_2023_czk')),
+            'return_2024_czk': self.safe_numeric(etf_dict.get('return_2024_czk')),
+            
+            # Currency Performance - USD
+            'return_1m_usd': self.safe_numeric(etf_dict.get('return_1m_usd')),
+            'return_3m_usd': self.safe_numeric(etf_dict.get('return_3m_usd')),
+            'return_6m_usd': self.safe_numeric(etf_dict.get('return_6m_usd')),
+            'return_ytd_usd': self.safe_numeric(etf_dict.get('return_ytd_usd')),
+            'return_1y_usd': self.safe_numeric(etf_dict.get('return_1y_usd')),
+            'return_3y_usd': self.safe_numeric(etf_dict.get('return_3y_usd')),
+            'return_5y_usd': self.safe_numeric(etf_dict.get('return_5y_usd')),
+            'return_2021_usd': self.safe_numeric(etf_dict.get('return_2021_usd')),
+            'return_2022_usd': self.safe_numeric(etf_dict.get('return_2022_usd')),
+            'return_2023_usd': self.safe_numeric(etf_dict.get('return_2023_usd')),
+            'return_2024_usd': self.safe_numeric(etf_dict.get('return_2024_usd')),
+            
+            # Currency Metadata
+            'currency_performance_updated_at': etf_dict.get('currency_performance_updated_at'),
         }
 
     def transform_etf_for_database_no_rating(self, etf: ETFDataComplete):
@@ -3382,7 +3794,37 @@ class CompleteProductionScraper:
             'return_2024': etf_dict.get('return_2024', 0) or 0,
             # Performance - inception
             'return_inception': etf_dict.get('return_inception', 0) or 0,
-            'performance_last_updated': etf_dict.get('performance_last_updated', ''),
+            'performance_last_updated': etf_dict.get('performance_last_updated') or None,
+            
+            # Currency Performance - CZK
+            'return_1m_czk': etf_dict.get('return_1m_czk', 0) or 0,
+            'return_3m_czk': etf_dict.get('return_3m_czk', 0) or 0,
+            'return_6m_czk': etf_dict.get('return_6m_czk', 0) or 0,
+            'return_ytd_czk': etf_dict.get('return_ytd_czk', 0) or 0,
+            'return_1y_czk': etf_dict.get('return_1y_czk', 0) or 0,
+            'return_3y_czk': etf_dict.get('return_3y_czk', 0) or 0,
+            'return_5y_czk': etf_dict.get('return_5y_czk', 0) or 0,
+            'return_2021_czk': etf_dict.get('return_2021_czk', 0) or 0,
+            'return_2022_czk': etf_dict.get('return_2022_czk', 0) or 0,
+            'return_2023_czk': etf_dict.get('return_2023_czk', 0) or 0,
+            'return_2024_czk': etf_dict.get('return_2024_czk', 0) or 0,
+            
+            # Currency Performance - USD
+            'return_1m_usd': etf_dict.get('return_1m_usd', 0) or 0,
+            'return_3m_usd': etf_dict.get('return_3m_usd', 0) or 0,
+            'return_6m_usd': etf_dict.get('return_6m_usd', 0) or 0,
+            'return_ytd_usd': etf_dict.get('return_ytd_usd', 0) or 0,
+            'return_1y_usd': etf_dict.get('return_1y_usd', 0) or 0,
+            'return_3y_usd': etf_dict.get('return_3y_usd', 0) or 0,
+            'return_5y_usd': etf_dict.get('return_5y_usd', 0) or 0,
+            'return_2021_usd': etf_dict.get('return_2021_usd', 0) or 0,
+            'return_2022_usd': etf_dict.get('return_2022_usd', 0) or 0,
+            'return_2023_usd': etf_dict.get('return_2023_usd', 0) or 0,
+            'return_2024_usd': etf_dict.get('return_2024_usd', 0) or 0,
+            
+            # Metadata
+            'currency_performance_updated_at': etf_dict.get('currency_performance_updated_at') or None,
+            
             'volatility_1y': etf_dict.get('volatility_1y', 0) or 0,
             'volatility_3y': etf_dict.get('volatility_3y', 0) or 0,
             'volatility_5y': etf_dict.get('volatility_5y', 0) or 0,
@@ -3619,55 +4061,103 @@ class CompleteProductionScraper:
 
 def main():
     parser = argparse.ArgumentParser(description='JustETF Complete Scraper with Dividends - KOMPLETNÍ VERZE')
-    parser.add_argument('--csv', required=True, help='Cesta k CSV souboru s ISIN kódy')
+    parser.add_argument('--csv', required=False, help='Cesta k CSV souboru s ISIN kódy (povinné kromě --backtest-only)')
     parser.add_argument('--batch-size', type=int, default=50, help='Velikost batch (default: 50)')
     parser.add_argument('--resume', action='store_true', help='Pokračovat v přerušeném scrapingu')
     parser.add_argument('--start-batch', type=int, default=0, help='Začít od konkrétního batch')
-    
+    parser.add_argument('--update-backtest', action='store_true', help='Aktualizovat historická data pro backtest (indexy z Yahoo Finance)')
+    parser.add_argument('--backtest-only', action='store_true', help='Pouze aktualizovat backtest data (přeskočit ETF scraping)')
+
     args = parser.parse_args()
     
-    print("="*80)
-    print("JustETF COMPLETE Production Scraper - VERZE S DIVIDENDY")
-    print("="*80)
-    print("KOMPLETNÍ FUNKCIONALITA:")
-    print("   ✅ Stock exchange data (burzy, tickery, Bloomberg/Reuters)")
-    print("   ✅ Holdings, performance, risk metrics")
-    print("   ✅ České překlady s finančním slovníkem")
-    print("   ✅ Kategorizace ETF (Akcie/Dluhopisy/Krypto/Komodity)")
-    print("   ✅ Automatické určení regionu (US/Evropa/Čína/Rozvíjející se země atd.)")
-    print("   ✅ DIVIDENDOVÉ INFORMACE (Current yield, Last 12 months)")
-    print("   ✅ MARKET HEATMAP generování (Yahoo Finance API)")
-    print("   ✅ Batch processing s checkpointy")
-    print("   ✅ Resume capability")
-    print("   ✅ Unicode/emoji problémů pro Windows (FIX)")
-    print("   ✅ Export do Excel, JSON a CSV formátů")
-    print("="*80)
-    print(f"CSV soubor: {args.csv}")
-    print(f"Batch size: {args.batch_size}")
-    print(f"Resume mode: {args.resume}")
-    print(f"Exchange data: {EXTRACT_EXCHANGE_DATA}")
-    print(f"Dividend data: {EXTRACT_DIVIDEND_DATA}")
-    print(f"Překlady: {TRANSLATE_DESCRIPTIONS}")
-    print(f"Automatické nahrávání do DB: {AUTO_UPLOAD_TO_DB}")
-    print(f"Market heatmap generování: {GENERATE_MARKET_HEATMAP}")
-    print(f"Market heatmap upload na server: {UPLOAD_HEATMAP_TO_SERVER and FTP_AVAILABLE}")
-    print(f"Výstupní složka: {OUTPUT_DIR}")
-    print(f"Export formáty: Excel (.xlsx), JSON (.json), CSV (.csv)")
-    print("="*80)
-    
-    # Log info o server konfiguraci
-    if SERVER_CONFIG_LOADED:
-        print(f"📁 CONFIG: Načtena konfigurace serveru ze server_config.py")
+    # Startup info jen ve verbose módu
+    if VERBOSE_MODE:
+        print("="*80)
+        print("JustETF COMPLETE Production Scraper - VERZE S DIVIDENDY")
+        print("="*80)
+        print("KOMPLETNÍ FUNKCIONALITA:")
+        print("   ✅ Stock exchange data (burzy, tickery, Bloomberg/Reuters)")
+        print("   ✅ Holdings, performance, risk metrics")
+        print("   ✅ České překlady s finančním slovníkem")
+        print("   ✅ Kategorizace ETF (Akcie/Dluhopisy/Krypto/Komodity)")
+        print("   ✅ Automatické určení regionu (US/Evropa/Čína/Rozvíjející se země atd.)")
+        print("   ✅ DIVIDENDOVÉ INFORMACE (Current yield, Last 12 months)")
+        print("   ✅ MARKET HEATMAP generování (Yahoo Finance API)")
+        print("   ✅ Batch processing s checkpointy")
+        print("   ✅ Resume capability")
+        print("   ✅ Unicode/emoji problémů pro Windows (FIX)")
+        print("   ✅ Export do Excel, JSON a CSV formátů")
+        print("="*80)
+        print(f"CSV soubor: {args.csv}")
+        print(f"Batch size: {args.batch_size}")
+        print(f"Resume mode: {args.resume}")
+        print(f"Exchange data: {EXTRACT_EXCHANGE_DATA}")
+        print(f"Dividend data: {EXTRACT_DIVIDEND_DATA}")
+        print(f"Překlady: {TRANSLATE_DESCRIPTIONS}")
+        print(f"Automatické nahrávání do DB: {AUTO_UPLOAD_TO_DB}")
+        print(f"Market heatmap generování: {GENERATE_MARKET_HEATMAP}")
+        print(f"Market heatmap upload na server: {UPLOAD_HEATMAP_TO_SERVER and FTP_AVAILABLE}")
+        print(f"Výstupní složka: {OUTPUT_DIR}")
+        print(f"Export formáty: Excel (.xlsx), JSON (.json), CSV (.csv)")
+        print("="*80)
     else:
-        print(f"⚠️ CONFIG: Používám výchozí konfiguraci serveru. Vytvořte server_config.py pro vlastní nastavení.")
-        print(f"   Example config: server_config_example.py")
+        print(f"🚀 ETF Scraper started - processing {args.csv} with batch size {args.batch_size}")
     
+    # Log info o server konfiguraci jen ve verbose módu
+    if VERBOSE_MODE:
+        if SERVER_CONFIG_LOADED:
+            print(f"📁 CONFIG: Načtena konfigurace serveru ze server_config.py")
+        else:
+            print(f"⚠️ CONFIG: Používám výchozí konfiguraci serveru. Vytvořte server_config.py pro vlastní nastavení.")
+            print(f"   Example config: server_config_example.py")
+    
+    # Backtest-only mode - pouze aktualizace historických dat pro backtest
+    if args.backtest_only:
+        print("=" * 60)
+        print("BACKTEST DATA UPDATE (--backtest-only mode)")
+        print("=" * 60)
+        update_backtest_data()
+        print("\n✅ Backtest data update completed!")
+        return
+
+    # Validace --csv pro normální režim
+    if not args.csv:
+        print("❌ ERROR: --csv je povinný parametr pro ETF scraping!")
+        print("   Použití: python final_scraper.py --csv ISIN.csv")
+        print("   Nebo pro pouze backtest data: python final_scraper.py --backtest-only")
+        return
+
+    # Normální ETF scraping
     scraper = CompleteProductionScraper(batch_size=args.batch_size)
     scraper.run_complete_production_scraping(
         csv_file=args.csv,
         resume=args.resume,
         start_batch=args.start_batch
     )
+
+    # Volitelně aktualizovat backtest data po ETF scrapingu
+    if args.update_backtest:
+        print("\n" + "=" * 60)
+        print("BACKTEST DATA UPDATE (--update-backtest)")
+        print("=" * 60)
+        update_backtest_data()
+        print("\n✅ Backtest data update completed!")
+
+
+def update_backtest_data():
+    """
+    Aktualizuje historická data pro backtest - stahuje indexy z Yahoo Finance.
+    Volá fetch_index_data_yahoo.py jako modul.
+    """
+    try:
+        # Importuj a spusť fetch_index_data_yahoo
+        import fetch_index_data_yahoo
+        fetch_index_data_yahoo.main()
+    except ImportError:
+        print("❌ ERROR: fetch_index_data_yahoo.py nebyl nalezen!")
+        print("   Ujistěte se, že soubor je ve stejné složce jako final_scraper.py")
+    except Exception as e:
+        print(f"❌ ERROR při aktualizaci backtest dat: {e}")
 
 
 if __name__ == "__main__":
